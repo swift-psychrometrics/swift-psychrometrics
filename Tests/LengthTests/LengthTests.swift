@@ -8,6 +8,10 @@ final class LengthTests: XCTestCase {
     XCTAssertEqual(round(Length.feet(75).centimeters), 2286)
     XCTAssertEqual(round(Length.inches(75).centimeters), 191)
     XCTAssertEqual(round(Length.meters(75).centimeters), 7500)
+    
+    var length = Length.centimeters(10)
+    length.centimeters = 20
+    XCTAssertEqual(length.centimeters, 20)
   }
   
   func test_converting_to_feet() {
@@ -15,6 +19,10 @@ final class LengthTests: XCTestCase {
     XCTAssertEqual(round(Length.feet(75).feet), 75)
     XCTAssertEqual(round(Length.inches(75).feet), 6)
     XCTAssertEqual(round(Length.meters(75).feet), 246)
+    
+    var length = Length.feet(10)
+    length.feet = 20
+    XCTAssertEqual(length.feet, 20)
   }
   
   func test_converting_to_inches() {
@@ -22,6 +30,10 @@ final class LengthTests: XCTestCase {
     XCTAssertEqual(round(Length.feet(75).inches), 900)
     XCTAssertEqual(round(Length.inches(75).inches), 75)
     XCTAssertEqual(round(Length.meters(75).inches), 2953)
+    
+    var length = Length.inches(10)
+    length.inches = 20
+    XCTAssertEqual(length.inches, 20)
   }
   
   func test_converting_to_meters() {
@@ -29,6 +41,10 @@ final class LengthTests: XCTestCase {
     XCTAssertEqual(round(Length.feet(75).meters), 23)
     XCTAssertEqual(round(Length.inches(75).meters), 2)
     XCTAssertEqual(round(Length.meters(75).meters), 75)
+    
+    var length = Length.meters(10)
+    length.meters = 20
+    XCTAssertEqual(length.meters, 20)
   }
   
   func test_default_units_are_feet() {
@@ -63,5 +79,44 @@ final class LengthTests: XCTestCase {
     XCTAssertEqual(LengthUnit.meters.symbol, "m")
     XCTAssertEqual(LengthUnit.feet.symbol, "ft")
     XCTAssertEqual(LengthUnit.inches.symbol, "in")
+  }
+  
+  func test_Addition_And_Subtraction() {
+    var length: Length = 10 + 10
+    XCTAssertEqual(length.feet, 20)
+    length -= 10
+    XCTAssertEqual(length.feet, 10)
+  }
+  
+  func test_Multiplication() {
+    var length: Length = 10 * 10
+    XCTAssertEqual(length.feet, 100)
+    length *= 2
+    XCTAssertEqual(length.feet, 200)
+  }
+  
+  func test_Comparable() {
+    XCTAssertTrue(Length.feet(10) > 5)
+  }
+  
+  func test_magnitude() {
+    let length = Length(exactly: 100)!
+    XCTAssertEqual(length.magnitude, Double(100).magnitude)
+  }
+  
+  func test_LengthUnit_lengthKeyPath() {
+    var length: Length = .centimeters(10)
+    XCTAssertEqual(length[keyPath: LengthUnit.centimeters.lengthKeyPath], 10)
+    
+    length = .meters(10)
+    XCTAssertEqual(length[keyPath: LengthUnit.meters.lengthKeyPath], 10)
+    
+    length = .inches(10)
+    XCTAssertEqual(length[keyPath: LengthUnit.inches.lengthKeyPath], 10)
+    
+    
+    length = .feet(10)
+    XCTAssertEqual(length[keyPath: LengthUnit.feet.lengthKeyPath], 10)
+    
   }
 }

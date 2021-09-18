@@ -1,15 +1,15 @@
 import Foundation
 
 /// Represents a unit of length in both SI and IP units.
-public struct Length: Equatable {
+public struct Length: Equatable, Hashable {
 
   /// The default units used for a Length.
   public static var defaultUnits: LengthUnit = .feet
 
-  public var rawValue: Double = 0
-  public var units: LengthUnit = .feet
+  public var rawValue: Double
+  public var units: LengthUnit
 
-  public init(_ value: Double, units: LengthUnit = .feet) {
+  public init(_ value: Double = 0, units: LengthUnit = Self.defaultUnits) {
     self.rawValue = value
     self.units = units
   }
@@ -138,6 +138,49 @@ extension Length: ExpressibleByIntegerLiteral {
   }
 }
 
+extension Length: AdditiveArithmetic {
+  
+  public static func - (lhs: Length, rhs: Length) -> Length {
+    let value = lhs.rawValue - rhs[keyPath: lhs.units.lengthKeyPath]
+    return .init(value, units: lhs.units)
+  }
+  
+  public static func + (lhs: Length, rhs: Length) -> Length {
+    let value = lhs.rawValue + rhs[keyPath: lhs.units.lengthKeyPath]
+    return .init(value, units: lhs.units)
+  }
+}
+
+extension Length: Comparable {
+  public static func < (lhs: Length, rhs: Length) -> Bool {
+    lhs.rawValue < rhs[keyPath: lhs.units.lengthKeyPath]
+  }
+}
+
+extension Length: Numeric {
+  
+  public init?<T>(exactly source: T) where T : BinaryInteger {
+    self.init(Double(source))
+  }
+  
+  public var magnitude: Double.Magnitude {
+    rawValue.magnitude
+  }
+  
+  public static func * (lhs: Length, rhs: Length) -> Length {
+    let value = lhs.rawValue * rhs[keyPath: lhs.units.lengthKeyPath]
+    return .init(value, units: lhs.units)
+  }
+  
+  public static func *= (lhs: inout Length, rhs: Length) {
+    lhs.rawValue *= rhs[keyPath: lhs.units.lengthKeyPath]
+  }
+  
+  public typealias Magnitude = Double.Magnitude
+  
+  
+}
+
 /// Represents unit of measure used in a ``Length``.
 public enum LengthUnit: String, Equatable, Codable, Hashable, CaseIterable {
   case centimeters = "cm"
@@ -146,17 +189,17 @@ public enum LengthUnit: String, Equatable, Codable, Hashable, CaseIterable {
   case inches = "in"
 
   public var symbol: String { rawValue }
-
-  //  public var lengthKeyPath: WritableKeyPath<Length, Double> {
-  //    switch self {
-  //    case .centimeters:
-  //      return \.centimeters
-  //    case .meters:
-  //      return \.meters
-  //    case .feet:
-  //      return \.feet
-  //    case .inches:
-  //      return \.inches
-  //    }
-  //  }
+  
+  public var lengthKeyPath: WritableKeyPath<Length, Double> {
+    switch self {
+    case .centimeters:
+      return \.centimeters
+    case .meters:
+      return \.meters
+    case .feet:
+      return \.feet
+    case .inches:
+      return \.inches
+    }
+  }
 }
