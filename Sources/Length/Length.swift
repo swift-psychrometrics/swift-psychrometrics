@@ -2,13 +2,13 @@ import Foundation
 
 /// Represents a unit of length in both SI and IP units.
 public struct Length: Equatable {
-  
+
   /// The default units used for a Length.
   public static var defaultUnits: LengthUnit = .feet
 
   public var rawValue: Double = 0
   public var units: LengthUnit = .feet
-  
+
   public init(_ value: Double, units: LengthUnit = .feet) {
     self.rawValue = value
     self.units = units
@@ -147,16 +147,16 @@ public enum LengthUnit: String, Equatable, Codable, Hashable, CaseIterable {
 
   public var symbol: String { rawValue }
 
-//  public var lengthKeyPath: WritableKeyPath<Length, Double> {
-//    switch self {
-//    case .centimeters:
-//      return \.centimeters
-//    case .meters:
-//      return \.meters
-//    case .feet:
-//      return \.feet
-//    case .inches:
-//      return \.inches
-//    }
-//  }
+  //  public var lengthKeyPath: WritableKeyPath<Length, Double> {
+  //    switch self {
+  //    case .centimeters:
+  //      return \.centimeters
+  //    case .meters:
+  //      return \.meters
+  //    case .feet:
+  //      return \.feet
+  //    case .inches:
+  //      return \.inches
+  //    }
+  //  }
 }
