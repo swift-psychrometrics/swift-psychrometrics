@@ -17,7 +17,7 @@ public struct WetBulb: Equatable {
   ///   - temperature: The temperature to calculate wet-bulb for.
   ///   - humidity: The relative humidity.
   public init(temperature: Temperature, humidity: RelativeHumidity) {
-    self.input = .init(temperature: temperature, humidity: humidity)
+    self.init(.init(temperature: temperature, humidity: humidity))
   }
 
   /// Access the calculated wet-bulb temperature.
