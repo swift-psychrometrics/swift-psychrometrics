@@ -22,7 +22,7 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         verbose: false
-        files: /tmp/swift-web-utils.lcov
+        files: /tmp/swift-psychrometrics.lcov
       
   ubuntu:
     name: Ubuntu
