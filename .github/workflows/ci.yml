@@ -15,6 +15,14 @@ jobs:
     - uses: actions/checkout@v2
     - name: Run swift tests
       run: make test
+    - name: Make code coverage report.
+      run: make code-cov
+    - name: Upload code coverage to Codecov.io
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        verbose: false
+        files: /tmp/swift-web-utils.lcov
       
   ubuntu:
     name: Ubuntu
