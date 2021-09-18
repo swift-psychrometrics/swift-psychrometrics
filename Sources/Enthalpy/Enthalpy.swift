@@ -5,16 +5,41 @@ import Foundation
 @_exported import Temperature
 
 /// Represents / calculates the enthalpy of moist air.
-public struct Enthalpy: Equatable {
+public struct Enthalpy {
+  
+  public static func partialPressure(for temperature: Temperature, at humidity: RelativeHumidity) -> Double {
+    let rankineTemperature = temperature.rankine
+    let naturalLog = log(rankineTemperature)
+    let exponent =
+      -10440.4 / rankineTemperature - 11.29465 - 0.02702235 * rankineTemperature + 1.289036e-5
+      * pow(rankineTemperature, 2) - 2.478068e-9 * pow(rankineTemperature, 3) + 6.545967
+      * naturalLog
 
-  /// The relative humidity of the air.
-  public var humidity: RelativeHumidity
-
-  /// The pressure of the air.
-  public var pressure: Pressure
-
-  /// The temperature of the air.
-  public var temperature: Temperature
+    return humidity.fraction * exp(exponent)
+  }
+  
+  /// The humidity ratio of the air.
+  public static func humidityRatio(for pressure: Pressure, with partialPressure: Double) -> Double {
+    0.62198 * partialPressure / (pressure.psi - partialPressure)
+  }
+  
+  private var input: Input
+  
+  private enum Input {
+    case raw(Double)
+    case calculate(Temperature, RelativeHumidity, Pressure)
+    
+    var rawValue: Double {
+      switch self {
+      case let .raw(value):
+        return value
+      case let .calculate(temperature, humidity, pressure):
+        let partialPressure = Enthalpy.partialPressure(for: temperature, at: humidity)
+        let humidityRatio = Enthalpy.humidityRatio(for: pressure, with: partialPressure)
+        return 0.24 * temperature.fahrenheit + humidityRatio * (1061 + 0.444 * temperature.fahrenheit)
+      }
+    }
+  }
 
   /// Creates a new ``Enthalpy`` with the given temperature, humidity, and pressure.
   ///
@@ -27,9 +52,7 @@ public struct Enthalpy: Equatable {
     humidity: RelativeHumidity,
     pressure: Pressure
   ) {
-    self.temperature = temperature
-    self.humidity = humidity
-    self.pressure = pressure
+    self.input = .calculate(temperature, humidity, pressure)
   }
 
   /// Creates a new ``Enthalpy`` with the given temperature, humidity, and altitude.
@@ -49,32 +72,71 @@ public struct Enthalpy: Equatable {
       pressure: .init(altitude: altitude)
     )
   }
-
-  /// The partial vapor pressure of the air, based on the temperature and humidity.
-  public var partialPressure: Double {
-    // The partial vapor pressure based on the temperature and humidity set on the instance.
-    let rankineTemperature = temperature.rankine
-    let naturalLog = log(rankineTemperature)
-    let exponent =
-      -10440.4 / rankineTemperature - 11.29465 - 0.02702235 * rankineTemperature + 1.289036e-5
-      * pow(rankineTemperature, 2) - 2.478068e-9 * pow(rankineTemperature, 3) + 6.545967
-      * naturalLog
-
-    return humidity.fraction * exp(exponent)
-  }
-
-  /// The humidity ratio of the air.
-  public var humidityRatio: Double {
-    // Calculate the humidity ratio
-    // based on parameters set on the instance.
-    0.62198 * partialPressure / (pressure.psi - partialPressure)
+  
+  public init(_ value: Double) {
+    self.input = .raw(value)
   }
 
   /// The calculated enthalpy of the air.
   public var rawValue: Double {
-    let temperature = temperature.fahrenheit
-    return 0.24 * temperature + humidityRatio * (1061 + 0.444 * temperature)
+    get { input.rawValue }
+    set { input = .raw(newValue) }
   }
+}
+
+extension Enthalpy: Equatable {
+  public static func == (lhs: Enthalpy, rhs: Enthalpy) -> Bool {
+    lhs.rawValue == rhs.rawValue
+  }
+}
+
+extension Enthalpy: ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: Int) {
+    self.init(Double(value))
+  }
+}
+
+extension Enthalpy: ExpressibleByFloatLiteral {
+  public init(floatLiteral value: Double) {
+    self.init(value)
+  }
+}
+
+extension Enthalpy: Comparable {
+  public static func < (lhs: Enthalpy, rhs: Enthalpy) -> Bool {
+    lhs.rawValue < rhs.rawValue
+  }
+}
+
+extension Enthalpy: AdditiveArithmetic {
+  public static func - (lhs: Enthalpy, rhs: Enthalpy) -> Enthalpy {
+    .init(lhs.rawValue - rhs.rawValue)
+  }
+  
+  public static func + (lhs: Enthalpy, rhs: Enthalpy) -> Enthalpy {
+    .init(lhs.rawValue + rhs.rawValue)
+  }
+}
+
+extension Enthalpy: Numeric {
+  
+  public init?<T>(exactly source: T) where T : BinaryInteger {
+    self.init(Double(source))
+  }
+  
+  public var magnitude: Double.Magnitude {
+    rawValue.magnitude
+  }
+  
+  public static func * (lhs: Enthalpy, rhs: Enthalpy) -> Enthalpy {
+    self.init(lhs.rawValue * rhs.rawValue)
+  }
+  
+  public static func *= (lhs: inout Enthalpy, rhs: Enthalpy) {
+    lhs.rawValue *= rhs.rawValue
+  }
+  
+  public typealias Magnitude = Double.Magnitude
 }
 
 extension Temperature {
