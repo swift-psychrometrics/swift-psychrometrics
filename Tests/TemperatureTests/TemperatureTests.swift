@@ -20,6 +20,10 @@ class TemperatureTests: XCTestCase {
     XCTAssertEqual(round(rankine.fahrenheit), -385)
     
     XCTAssertEqual(Temperature.fahrenheit(75).fahrenheit, 75)
+    
+    var temp = Temperature.fahrenheit(10)
+    temp.fahrenheit = 20
+    XCTAssertEqual(temp.fahrenheit, 20)
   }
   
   func testConversionToCelsius() {
@@ -32,7 +36,10 @@ class TemperatureTests: XCTestCase {
     let rankine = Temperature.rankine(75)
     XCTAssertEqual(round(rankine.celsius), -231)
     
-    XCTAssertEqual(Temperature.celsius(75).celsius, 75)
+    var temp = Temperature.celsius(10)
+    XCTAssertEqual(temp.celsius, 10)
+    temp.celsius = 20
+    XCTAssertEqual(temp.celsius, 20)
   }
 
   func testConversionToKelvin() {
@@ -45,7 +52,10 @@ class TemperatureTests: XCTestCase {
     let rankine = Temperature.rankine(75)
     XCTAssertEqual(round(rankine.kelvin), 42)
     
-    XCTAssertEqual(Temperature.rankine(75).rankine, 75)
+    var temp = Temperature.rankine(10)
+    XCTAssertEqual(temp.rankine, 10)
+    temp.rankine = 20
+    XCTAssertEqual(temp.rankine, 20)
   }
 
   func testConversionToRankine() {
@@ -58,7 +68,10 @@ class TemperatureTests: XCTestCase {
     let kelvin = Temperature.kelvin(75)
     XCTAssertEqual(round(kelvin.rankine), 135)
     
-    XCTAssertEqual(Temperature.kelvin(75).kelvin, 75)
+    var temp = Temperature.kelvin(10)
+    XCTAssertEqual(temp.kelvin, 10)
+    temp.kelvin = 20
+    XCTAssertEqual(temp.kelvin, 20)
   }
   
   func test_numeric_operations() {
@@ -129,5 +142,12 @@ class TemperatureTests: XCTestCase {
     let exactly = Temperature(exactly: 10)
     XCTAssertNotNil(exactly)
     XCTAssertEqual(exactly, .fahrenheit(10))
+  }
+  
+  func test_TemperatureUnit_symbol() {
+    XCTAssertEqual(TemperatureUnit.celsius.symbol, "°C")
+    XCTAssertEqual(TemperatureUnit.fahrenheit.symbol, "°F")
+    XCTAssertEqual(TemperatureUnit.kelvin.symbol, "°K")
+    XCTAssertEqual(TemperatureUnit.rankine.symbol, "°R")
   }
 }

@@ -6,10 +6,14 @@ public struct Length: Equatable, Hashable {
   /// The default units used for a Length.
   public static var defaultUnits: LengthUnit = .feet
 
-  public var rawValue: Double
-  public var units: LengthUnit
+  public private(set) var rawValue: Double
+  
+  public private(set) var units: LengthUnit
 
-  public init(_ value: Double = 0, units: LengthUnit = Self.defaultUnits) {
+  public init(
+    _ value: Double = 0,
+    units: LengthUnit = Self.defaultUnits
+  ) {
     self.rawValue = value
     self.units = units
   }
@@ -178,7 +182,6 @@ extension Length: Numeric {
   
   public typealias Magnitude = Double.Magnitude
   
-  
 }
 
 /// Represents unit of measure used in a ``Length``.
@@ -188,8 +191,10 @@ public enum LengthUnit: String, Equatable, Codable, Hashable, CaseIterable {
   case feet = "ft"
   case inches = "in"
 
+  /// The symbol string for the unit of length.
   public var symbol: String { rawValue }
   
+  /// The key-path on a ``Length`` for the units.
   public var lengthKeyPath: WritableKeyPath<Length, Double> {
     switch self {
     case .centimeters:

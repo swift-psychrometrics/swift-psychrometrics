@@ -115,7 +115,8 @@ let package = Package(
     ),
     .target(
       name: "Temperature",
-      dependencies: []
+      dependencies: [
+      ]
     ),
     .testTarget(
       name: "TemperatureTests",
