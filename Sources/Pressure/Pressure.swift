@@ -7,11 +7,11 @@ public struct Pressure: Hashable {
   
   public static var defaultUnits: PressureUnit = .psi
   
-  public private(set) var rawValue: Double = 0
+  public private(set) var rawValue: Double
   
-  public private(set) var units: PressureUnit = .psi
+  public private(set) var units: PressureUnit
   
-  public init(_ value: Double, units: PressureUnit = Self.defaultUnits) {
+  public init(_ value: Double = 0, units: PressureUnit = Self.defaultUnits) {
     self.rawValue = value
     self.units = units
   }
@@ -252,17 +252,6 @@ public enum PressureUnit: String, Equatable, Hashable, CaseIterable {
       return "psi"
     case .torr:
       return "torr"
-    }
-  }
-
-  public var title: String {
-    switch self {
-    case .atmosphere, .bar, .millibar, .pascals, .torr:
-      return rawValue.capitalized
-    case .inchesWater:
-      return "Inches of Water"
-    case .psi:
-      return "PSI"
     }
   }
 

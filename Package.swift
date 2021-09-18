@@ -17,7 +17,6 @@ let package = Package(
     .library(name: "WetBulb", targets: ["WetBulb"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/sindresorhus/Percentage", from: "1.1.0")
   ],
   targets: [
     .target(
@@ -99,8 +98,13 @@ let package = Package(
     .target(
       name: "RelativeHumidity",
       dependencies: [
-        "Temperature",
-        .product(name: "Percentage", package: "Percentage"),
+        "Temperature"
+      ]
+    ),
+    .testTarget(
+      name: "RelativeHumidityTests",
+      dependencies: [
+        "RelativeHumidity"
       ]
     ),
     .target(

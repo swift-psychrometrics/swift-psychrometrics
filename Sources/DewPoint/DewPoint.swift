@@ -3,7 +3,7 @@ import Foundation
 @_exported import Temperature
 
 /// Represents / calculates the dew-point.
-public struct DewPoint: Equatable {
+public struct DewPoint {
 
   private var input: Input
 
@@ -33,7 +33,7 @@ public struct DewPoint: Equatable {
     input.value
   }
 
-  private enum Input: Equatable {
+  private enum Input {
     case calculate(Temperature, RelativeHumidity)
     case temperature(Temperature)
 
@@ -52,6 +52,60 @@ public struct DewPoint: Equatable {
       }
     }
   }
+}
+
+extension DewPoint: Equatable {
+  public static func == (lhs: DewPoint, rhs: DewPoint) -> Bool {
+    lhs.temperature == rhs.temperature
+  }
+}
+
+extension DewPoint: Comparable {
+  public static func < (lhs: DewPoint, rhs: DewPoint) -> Bool {
+    lhs.temperature < rhs.temperature
+  }
+}
+
+extension DewPoint: ExpressibleByFloatLiteral {
+  public init(floatLiteral value: Double) {
+    self.init(temperature: .init(value))
+  }
+}
+
+extension DewPoint: ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: Int) {
+    self.init(floatLiteral: Double(value))
+  }
+}
+
+extension DewPoint: AdditiveArithmetic {
+  public static func - (lhs: DewPoint, rhs: DewPoint) -> DewPoint {
+    .init(temperature: lhs.temperature - rhs.temperature)
+  }
+  
+  public static func + (lhs: DewPoint, rhs: DewPoint) -> DewPoint {
+    .init(temperature: lhs.temperature + rhs.temperature)
+  }
+}
+
+extension DewPoint: Numeric {
+  public init?<T>(exactly source: T) where T : BinaryInteger {
+    self.init(floatLiteral: Double(source))
+  }
+  
+  public var magnitude: Temperature.Magnitude {
+    temperature.magnitude
+  }
+  
+  public static func * (lhs: DewPoint, rhs: DewPoint) -> DewPoint {
+    .init(temperature: lhs.temperature * rhs.temperature)
+  }
+  
+  public static func *= (lhs: inout DewPoint, rhs: DewPoint) {
+    lhs = .init(temperature: lhs.temperature * rhs.temperature)
+  }
+  
+  public typealias Magnitude = Temperature.Magnitude
 }
 
 extension Temperature {

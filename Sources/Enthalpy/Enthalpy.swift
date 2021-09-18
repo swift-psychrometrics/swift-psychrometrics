@@ -72,8 +72,6 @@ public struct Enthalpy: Equatable {
 
   /// The calculated enthalpy of the air.
   public var rawValue: Double {
-    // Calculte the enthalpy
-    // based on parameters set on the instance.
     let temperature = temperature.fahrenheit
     return 0.24 * temperature + humidityRatio * (1061 + 0.444 * temperature)
   }
