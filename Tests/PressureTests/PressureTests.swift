@@ -28,15 +28,15 @@ final class PressureTests: XCTestCase {
   }
   
   func test_converting_to_pascals() {
-    XCTAssertEqual(Pressure(.inchesWaterColumn(0.4014624496868878)).pascals, 100)
+    XCTAssertEqual(Pressure.inchesWaterColumn(0.4014624496868878).pascals, 100)
   }
   
   func test_converting_to_psig() {
-    XCTAssertEqual(Pressure(.atmosphere(13)).psi, 191.04733444655298)
+    XCTAssertEqual(Pressure.atmosphere(13).psi, 191.04733444655298)
   }
   
   func test_converting_to_torr() {
-    XCTAssertEqual(Pressure(.bar(0.0559953954000001)).torr, 42)
+    XCTAssertEqual(Pressure.bar(0.0559953954000001).torr, 42)
   }
   
   func test_pressure_for_altitude() {

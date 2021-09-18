@@ -1,19 +1,26 @@
 import Foundation
-import RelativeHumidity
-import Temperature
+@_exported import RelativeHumidity
+@_exported import Temperature
 
+/// Represents / calculates the wet-bulb temperature for the given temperature and relative humidity.
 public struct WetBulb: Equatable {
 
-  public var input: Input
+  fileprivate var input: Input
 
-  public init(_ input: Input) {
+  fileprivate init(_ input: Input) {
     self.input = input
   }
 
+  /// Create a new ``WetBulb`` for the given temperature and relative humidity.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature to calculate wet-bulb for.
+  ///   - humidity: The relative humidity.
   public init(temperature: Temperature, humidity: RelativeHumidity) {
     self.input = .init(temperature: temperature, humidity: humidity)
   }
 
+  /// Access the calculated wet-bulb temperature.
   public var temperature: Temperature {
     let celsius = input.temperature.celsius
     let humidity = input.humidity.rawValue
@@ -27,7 +34,7 @@ public struct WetBulb: Equatable {
     return .celsius(value)
   }
 
-  public struct Input: Equatable {
+  fileprivate struct Input: Equatable {
     public var temperature: Temperature
     public var humidity: RelativeHumidity
 
@@ -40,6 +47,10 @@ public struct WetBulb: Equatable {
 
 extension Temperature {
 
+  /// Calculate the wet-bulb temperature for the given relative humidity.
+  ///
+  /// - Parameters:
+  ///   - humidity: The relative humidity.
   public func wetBulb(humidity: RelativeHumidity) -> WetBulb {
     .init(temperature: self, humidity: humidity)
   }

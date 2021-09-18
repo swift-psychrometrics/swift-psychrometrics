@@ -20,54 +20,50 @@ class TemperatureTests: XCTestCase {
     XCTAssertEqual(round(rankine.fahrenheit), -385)
     
     XCTAssertEqual(Temperature.fahrenheit(75).fahrenheit, 75)
-    XCTAssertEqual(Temperature.fahrenheit(75).unit.rawValue, 75)
   }
   
   func testConversionToCelsius() {
-    let fahrenheit = Temperature(.fahrenheit(75.0))
+    let fahrenheit = Temperature.fahrenheit(75.0)
     XCTAssertEqual(round(fahrenheit.celsius), 24)
     
-    let kelvin = Temperature(.kelvin(75))
+    let kelvin = Temperature.kelvin(75)
     XCTAssertEqual(round(kelvin.celsius), -198)
     
-    let rankine = Temperature(.rankine(75))
+    let rankine = Temperature.rankine(75)
     XCTAssertEqual(round(rankine.celsius), -231)
     
-    XCTAssertEqual(Temperature(.celsius(75)).celsius, 75)
-    XCTAssertEqual(Temperature(.celsius(75)).unit.rawValue, 75)
+    XCTAssertEqual(Temperature.celsius(75).celsius, 75)
   }
 
   func testConversionToKelvin() {
-    let fahrenheit = Temperature(.fahrenheit(75.0))
+    let fahrenheit = Temperature.fahrenheit(75.0)
     XCTAssertEqual(round(fahrenheit.kelvin), 297)
 
-    let celsius = Temperature(.celsius(75))
+    let celsius = Temperature.celsius(75)
     XCTAssertEqual(round(celsius.kelvin), 348)
 
-    let rankine = Temperature(.rankine(75))
+    let rankine = Temperature.rankine(75)
     XCTAssertEqual(round(rankine.kelvin), 42)
     
-    XCTAssertEqual(Temperature(.rankine(75)).rankine, 75)
-    XCTAssertEqual(Temperature(.rankine(75)).unit.rawValue, 75)
+    XCTAssertEqual(Temperature.rankine(75).rankine, 75)
   }
 
   func testConversionToRankine() {
-    let fahrenheit = Temperature(.fahrenheit(75.0))
+    let fahrenheit = Temperature.fahrenheit(75.0)
     XCTAssertEqual(round(fahrenheit.rankine), 535)
     
-    let celsius = Temperature(.celsius(75))
+    let celsius = Temperature.celsius(75)
     XCTAssertEqual(round(celsius.rankine), 627)
     
-    let kelvin = Temperature(.kelvin(75))
+    let kelvin = Temperature.kelvin(75)
     XCTAssertEqual(round(kelvin.rankine), 135)
     
-    XCTAssertEqual(Temperature(.kelvin(75)).kelvin, 75)
-    XCTAssertEqual(Temperature(.kelvin(75)).unit.rawValue, 75)
+    XCTAssertEqual(Temperature.kelvin(75).kelvin, 75)
   }
   
   func test_numeric_operations() {
     var temperature: Temperature = 75
-    XCTAssertEqual(temperature.unit, .fahrenheit(75))
+    XCTAssertEqual(temperature.fahrenheit, 75)
     XCTAssertEqual(temperature + 10, Temperature.fahrenheit(85))
     XCTAssertEqual(temperature * 2.0, .fahrenheit(150))
     temperature += 10

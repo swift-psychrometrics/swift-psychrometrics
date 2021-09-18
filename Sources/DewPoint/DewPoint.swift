@@ -1,7 +1,8 @@
 import Foundation
-import RelativeHumidity
-import Temperature
+@_exported import RelativeHumidity
+@_exported import Temperature
 
+/// Represents / calculates the dew-point.
 public struct DewPoint: Equatable {
 
   private var input: Input
@@ -10,14 +11,24 @@ public struct DewPoint: Equatable {
     self.input = input
   }
 
+  /// Creates a new ``DewPoint`` for the given temperature and humidity.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature.
+  ///   - humidity: The relative humidity.
   public init(temperature: Temperature, humidity: RelativeHumidity) {
     self.init(.calculate(temperature, humidity))
   }
 
+  /// Creates a new ``DewPoint`` as the temperaure given.
+  ///
+  /// - Parameters:
+  ///   - temperature: The dew-point temperature to set on the instance.
   public init(temperature: Temperature) {
     self.init(.temperature(temperature))
   }
 
+  /// The dew-point temperature for this instance.
   public var temperature: Temperature {
     input.value
   }
@@ -45,6 +56,10 @@ public struct DewPoint: Equatable {
 
 extension Temperature {
 
+  /// Calculate the ``DewPoint`` of our current value given the humidity.
+  ///
+  /// - Parameters:
+  ///   - humidity: The relative humidity to use to calculate the dew-point.
   public func dewPoint(humidity: RelativeHumidity) -> DewPoint {
     .init(temperature: self, humidity: humidity)
   }

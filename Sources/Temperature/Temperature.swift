@@ -1,48 +1,52 @@
 import Foundation
 
+/// Represents / calculates temperature in SI and IP units as well as scientific / absolute units.
 public struct Temperature: Equatable, Hashable {
 
-  var unit: Unit
+  fileprivate var unit: Unit
 
-  init(_ unit: Unit) {
+  fileprivate init(_ unit: Unit) {
     self.unit = unit
   }
 
-  enum Unit: Equatable, Hashable {
+  fileprivate enum Unit: Equatable, Hashable {
     case celsius(Double)
     case fahrenheit(Double)
     case kelvin(Double)
     case rankine(Double)
-
-    var rawValue: Double {
-      switch self {
-      case let .fahrenheit(value):
-        return value
-      case let .celsius(value):
-        return value
-      case let .rankine(value):
-        return value
-      case let .kelvin(value):
-        return value
-      }
-    }
   }
 }
 
 extension Temperature {
 
+  /// Create a new ``Temperature`` with the given value.
+  ///
+  /// - Parameters:
+  ///   - value: The celsius value of the temperature.
   public static func celsius(_ value: Double) -> Temperature {
     .init(.celsius(value))
   }
 
+  /// Create a new ``Temperature`` with the given value.
+  ///
+  /// - Parameters:
+  ///   - value: The fahrenheit value of the temperature.
   public static func fahrenheit(_ value: Double) -> Temperature {
     .init(.fahrenheit(value))
   }
 
+  /// Create a new ``Temperature`` with the given value.
+  ///
+  /// - Parameters:
+  ///   - value: The kelvin value of the temperature.
   public static func kelvin(_ value: Double) -> Temperature {
     .init(.kelvin(value))
   }
 
+  /// Create a new ``Temperature`` with the given value.
+  ///
+  /// - Parameters:
+  ///   - value: The rankine value of the temperature.
   public static func rankine(_ value: Double) -> Temperature {
     .init(.rankine(value))
   }
@@ -50,6 +54,7 @@ extension Temperature {
 
 extension Temperature {
 
+  /// Access / calculate the temperatre in celsius.
   public var celsius: Double {
     get {
       switch unit {
@@ -68,6 +73,7 @@ extension Temperature {
     }
   }
 
+  /// Access / calculate the temperatre in fahrenheit.
   public var fahrenheit: Double {
     get {
       switch unit {
@@ -86,6 +92,7 @@ extension Temperature {
     }
   }
 
+  /// Access / calculate the temperatre in kelvin.
   public var kelvin: Double {
     get {
       switch unit {
@@ -102,6 +109,7 @@ extension Temperature {
     }
   }
 
+  /// Access / calculate the temperatre in rankine.
   public var rankine: Double {
     get {
       switch unit {
@@ -225,4 +233,29 @@ extension Temperature: Numeric {
   }
 
   public typealias Magnitude = Double.Magnitude
+}
+
+/// Represents the units of measure for a ``Temperature``.
+public enum TemperatureUnit: String, Equatable, CaseIterable, Codable, Hashable {
+  case celsius = "°C"
+  case fahrenheit = "°F"
+  case kelvin = "°K"
+  case rankine = "°R"
+
+  public var symbol: String {
+    rawValue
+  }
+
+  public var temperatureKeyPath: WritableKeyPath<Temperature, Double> {
+    switch self {
+    case .celsius:
+      return \.celsius
+    case .fahrenheit:
+      return \.fahrenheit
+    case .kelvin:
+      return \.kelvin
+    case .rankine:
+      return \.rankine
+    }
+  }
 }

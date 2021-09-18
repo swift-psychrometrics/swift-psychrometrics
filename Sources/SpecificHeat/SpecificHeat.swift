@@ -1,6 +1,7 @@
 import Foundation
-import Temperature
+@_exported import Temperature
 
+/// Represents / calculates the specific heat of water.
 public struct SpecificHeat: Equatable {
 
   var unit: Unit
@@ -9,6 +10,7 @@ public struct SpecificHeat: Equatable {
     case water(Temperature)
   }
 
+  /// The calculated specific heat.
   public var rawValue: Temperature {
     switch unit {
     case let .water(temperature):
@@ -21,6 +23,10 @@ public struct SpecificHeat: Equatable {
     }
   }
 
+  /// Create a new ``SpecificHeat`` for water at the given temperature.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the water.
   public static func water(at temperature: Temperature) -> SpecificHeat {
     .init(unit: .water(temperature))
   }

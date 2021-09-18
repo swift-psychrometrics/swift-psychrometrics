@@ -1,15 +1,27 @@
 import Foundation
-import Length
-import Pressure
-import RelativeHumidity
-import Temperature
+@_exported import Length
+@_exported import Pressure
+@_exported import RelativeHumidity
+@_exported import Temperature
 
+/// Represents / calculates the enthalpy of moist air.
 public struct Enthalpy: Equatable {
 
+  /// The relative humidity of the air.
   public var humidity: RelativeHumidity
+
+  /// The pressure of the air.
   public var pressure: Pressure
+
+  /// The temperature of the air.
   public var temperature: Temperature
 
+  /// Creates a new ``Enthalpy`` with the given temperature, humidity, and pressure.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the air.
+  ///   - humidity: The relative humidity of the air.
+  ///   - pressure: The pressure of the air.
   public init(
     temperature: Temperature,
     humidity: RelativeHumidity,
@@ -20,6 +32,12 @@ public struct Enthalpy: Equatable {
     self.pressure = pressure
   }
 
+  /// Creates a new ``Enthalpy`` with the given temperature, humidity, and altitude.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the air.
+  ///   - humidity: The relative humidity of the air.
+  ///   - altitude: The altitude of the air.
   public init(
     temperature: Temperature,
     humidity: RelativeHumidity,
@@ -32,8 +50,7 @@ public struct Enthalpy: Equatable {
     )
   }
 
-  // Calculate the partial vapor pressure
-  // based on parameters set on the instance.
+  /// The partial vapor pressure of the air, based on the temperature and humidity.
   public var partialPressure: Double {
     // The partial vapor pressure based on the temperature and humidity set on the instance.
     let rankineTemperature = temperature.rankine
@@ -46,16 +63,39 @@ public struct Enthalpy: Equatable {
     return humidity.fraction * exp(exponent)
   }
 
-  // Calculate the humidity ratio
-  // based on parameters set on the instance.
+  /// The humidity ratio of the air.
   public var humidityRatio: Double {
+    // Calculate the humidity ratio
+    // based on parameters set on the instance.
     0.62198 * partialPressure / (pressure.psi - partialPressure)
   }
 
-  // Calculte the enthalpy
-  // based on parameters set on the instance.
+  /// The calculated enthalpy of the air.
   public var rawValue: Double {
+    // Calculte the enthalpy
+    // based on parameters set on the instance.
     let temperature = temperature.fahrenheit
     return 0.24 * temperature + humidityRatio * (1061 + 0.444 * temperature)
+  }
+}
+
+extension Temperature {
+
+  /// Calculates the enthalpy for the temperature at a given relative humidity and altitude.
+  ///
+  /// - Parameters:
+  ///   - humidity: The relative humidity of the air.
+  ///   - altitude: The altitude of the air.
+  public func enthalpy(humidity: RelativeHumidity, altitude: Length) -> Enthalpy {
+    .init(temperature: self, humidity: humidity, altitude: altitude)
+  }
+
+  /// Calculates the enthalpy for the temperature at a given relative humidity and pressure.
+  ///
+  /// - Parameters:
+  ///   - humidity: The relative humidity of the air.
+  ///   - pressure: The pressure of the air.
+  public func enthalpy(humidity: RelativeHumidity, pressure: Pressure) -> Enthalpy {
+    .init(temperature: self, humidity: humidity, pressure: pressure)
   }
 }

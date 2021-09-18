@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    pull_request:
+      branches:
+        - '*'
+jobs:
+  build:
+    name: MacOS
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run swift tests
+      run: make test-swift
+    - name: Make code coverage report.
+      run: make code-cov
+    - name: Upload code coverage to Codecov.io
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        verbose: false
+        files: /tmp/swift-web-utils.lcov
+      
+  ubuntu:
+    name: Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run tests
+      run: make test-linux

@@ -1,8 +1,9 @@
 import Foundation
-import Length
-import Pressure
-import Temperature
+@_exported import Length
+@_exported import Pressure
+@_exported import Temperature
 
+/// Represents / calculates the density of dry-air or water.
 public struct Density: Equatable {
 
   var unit: Unit
@@ -16,6 +17,7 @@ public struct Density: Equatable {
     case water(Temperature)
   }
 
+  /// The calcuated value based on the input.
   public var rawValue: Double {
     switch unit {
 
@@ -28,16 +30,30 @@ public struct Density: Equatable {
     }
   }
 
+  /// Create a new ``Density`` for dry-air given a temperature and pressure.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the air.
+  ///   - pressure: The pressure of the air.
   public static func dryAir(
     at temperature: Temperature, pressure: Pressure = .init(altitude: .seaLevel)
   ) -> Density {
     .init(.dryAir(temperature, pressure))
   }
 
+  /// Create a new ``Density`` for dry-air given a temperature and altitude.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the air.
+  ///   - altitude: The altitude of the air.
   public static func dryAir(at temperature: Temperature, altitude: Length) -> Density {
     .init(.dryAir(temperature, .init(altitude: altitude)))
   }
 
+  /// Create a new ``Density`` for water given a temperature.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the water.
   public static func water(at temperature: Temperature) -> Density {
     .init(.water(temperature))
   }
