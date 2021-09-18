@@ -4,13 +4,13 @@ import Foundation
 
 /// Represents / calculates pressure for different units.
 public struct Pressure: Hashable {
-  
+
   public static var defaultUnits: PressureUnit = .psi
-  
+
   public private(set) var rawValue: Double
-  
+
   public private(set) var units: PressureUnit
-  
+
   public init(_ value: Double = 0, units: PressureUnit = Self.defaultUnits) {
     self.rawValue = value
     self.units = units
@@ -167,14 +167,14 @@ extension Pressure {
 
 // MARK: - Numeric
 extension Pressure: ExpressibleByFloatLiteral {
-  
+
   public init(floatLiteral value: Double) {
     self.init(value)
   }
 }
 
 extension Pressure: ExpressibleByIntegerLiteral {
-  
+
   public init(integerLiteral value: Int) {
     self.init(Double(value))
   }
@@ -197,7 +197,7 @@ extension Pressure: AdditiveArithmetic {
     let value = lhs.rawValue - rhs[keyPath: lhs.units.pressureKeyPath]
     return .init(value, units: lhs.units)
   }
-  
+
   public static func + (lhs: Pressure, rhs: Pressure) -> Pressure {
     let value = lhs.rawValue + rhs[keyPath: lhs.units.pressureKeyPath]
     return .init(value, units: lhs.units)
@@ -205,23 +205,23 @@ extension Pressure: AdditiveArithmetic {
 }
 
 extension Pressure: Numeric {
-  public init?<T>(exactly source: T) where T : BinaryInteger {
+  public init?<T>(exactly source: T) where T: BinaryInteger {
     self.init(Double(source))
   }
-  
+
   public var magnitude: Double.Magnitude {
     rawValue.magnitude
   }
-  
+
   public static func * (lhs: Pressure, rhs: Pressure) -> Pressure {
     let value = lhs.rawValue * rhs[keyPath: lhs.units.pressureKeyPath]
     return .init(value, units: lhs.units)
   }
-  
+
   public static func *= (lhs: inout Pressure, rhs: Pressure) {
     lhs.rawValue *= rhs[keyPath: lhs.units.pressureKeyPath]
   }
-  
+
   public typealias Magnitude = Double.Magnitude
 }
 

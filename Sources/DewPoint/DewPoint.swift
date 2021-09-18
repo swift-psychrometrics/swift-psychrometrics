@@ -82,29 +82,29 @@ extension DewPoint: AdditiveArithmetic {
   public static func - (lhs: DewPoint, rhs: DewPoint) -> DewPoint {
     .init(temperature: lhs.temperature - rhs.temperature)
   }
-  
+
   public static func + (lhs: DewPoint, rhs: DewPoint) -> DewPoint {
     .init(temperature: lhs.temperature + rhs.temperature)
   }
 }
 
 extension DewPoint: Numeric {
-  public init?<T>(exactly source: T) where T : BinaryInteger {
+  public init?<T>(exactly source: T) where T: BinaryInteger {
     self.init(floatLiteral: Double(source))
   }
-  
+
   public var magnitude: Temperature.Magnitude {
     temperature.magnitude
   }
-  
+
   public static func * (lhs: DewPoint, rhs: DewPoint) -> DewPoint {
     .init(temperature: lhs.temperature * rhs.temperature)
   }
-  
+
   public static func *= (lhs: inout DewPoint, rhs: DewPoint) {
     lhs = .init(temperature: lhs.temperature * rhs.temperature)
   }
-  
+
   public typealias Magnitude = Temperature.Magnitude
 }
 

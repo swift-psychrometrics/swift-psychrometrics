@@ -9,7 +9,7 @@ import Foundation
 /// let humidity = 50%
 /// ```
 public struct RelativeHumidity: Equatable {
-  
+
   /// The relative humidity value.
   public var rawValue: Double
 
@@ -49,11 +49,11 @@ extension RelativeHumidity: AdditiveArithmetic {
   public static func - (lhs: RelativeHumidity, rhs: RelativeHumidity) -> RelativeHumidity {
     .init(lhs.rawValue - rhs.rawValue)
   }
-  
+
   public static func + (lhs: RelativeHumidity, rhs: RelativeHumidity) -> RelativeHumidity {
     .init(lhs.rawValue + rhs.rawValue)
   }
-  
+
   public static var zero: RelativeHumidity {
     .init(0)
   }
@@ -66,36 +66,36 @@ extension RelativeHumidity: Comparable {
 }
 
 extension RelativeHumidity: ExpressibleByIntegerLiteral {
-  
+
   public init(integerLiteral value: Int) {
     self.init(Double(value))
   }
 }
 
 extension RelativeHumidity: ExpressibleByFloatLiteral {
-  
+
   public init(floatLiteral value: Double) {
     self.init(value)
   }
 }
 
 extension RelativeHumidity: Numeric {
-  public init?<T>(exactly source: T) where T : BinaryInteger {
+  public init?<T>(exactly source: T) where T: BinaryInteger {
     self.init(Double(source))
   }
-  
+
   public var magnitude: Double.Magnitude {
     rawValue.magnitude
   }
-  
+
   public static func * (lhs: RelativeHumidity, rhs: RelativeHumidity) -> RelativeHumidity {
     .init(lhs.rawValue * rhs.rawValue)
   }
-  
+
   public static func *= (lhs: inout RelativeHumidity, rhs: RelativeHumidity) {
     lhs.rawValue *= rhs.rawValue
   }
-  
+
   public typealias Magnitude = Double.Magnitude
 }
 

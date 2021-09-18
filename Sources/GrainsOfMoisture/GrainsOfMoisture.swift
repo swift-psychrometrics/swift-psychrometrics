@@ -14,29 +14,32 @@ public struct GrainsOfMoisture: Equatable {
 
   /// Constant for the mole weight of air.
   public static let moleWeightAir = 28.85
-  
-  public static func saturationHumidity(vaporPressure: Pressure, ambientPressure: Pressure) -> Double {
+
+  public static func saturationHumidity(vaporPressure: Pressure, ambientPressure: Pressure)
+    -> Double
+  {
     7000 * (Self.moleWeightWater / Self.moleWeightAir) * vaporPressure.psi
       / (ambientPressure.psi - vaporPressure.psi)
   }
-  
+
   private static func calculate(
     _ temperature: Temperature,
     _ humidity: RelativeHumidity,
     _ pressure: Pressure
   ) -> Double {
     let vaporPressure = Pressure.vaporPressure(at: temperature)
-    let saturationHumidity = saturationHumidity(vaporPressure: vaporPressure, ambientPressure: pressure)
+    let saturationHumidity = saturationHumidity(
+      vaporPressure: vaporPressure, ambientPressure: pressure)
     return saturationHumidity * humidity.fraction
   }
-  
+
   /// The calculated grains per pound of air.
   public var rawValue: Double
-  
+
   public init(_ value: Double) {
     self.rawValue = value
   }
-  
+
   /// Create a new ``GrainsOfMoisture`` with the given temperature, humidity, and altitude.
   ///
   /// - Parameters:
@@ -77,14 +80,14 @@ extension GrainsOfMoisture: Comparable {
 }
 
 extension GrainsOfMoisture: ExpressibleByFloatLiteral {
-  
+
   public init(floatLiteral value: Double) {
     self.init(value)
   }
 }
 
 extension GrainsOfMoisture: ExpressibleByIntegerLiteral {
-  
+
   public init(integerLiteral value: Int) {
     self.init(floatLiteral: Double(value))
   }
@@ -94,29 +97,29 @@ extension GrainsOfMoisture: AdditiveArithmetic {
   public static func - (lhs: GrainsOfMoisture, rhs: GrainsOfMoisture) -> GrainsOfMoisture {
     .init(lhs.rawValue - rhs.rawValue)
   }
-  
+
   public static func + (lhs: GrainsOfMoisture, rhs: GrainsOfMoisture) -> GrainsOfMoisture {
     .init(lhs.rawValue + rhs.rawValue)
   }
 }
 
 extension GrainsOfMoisture: Numeric {
-  public init?<T>(exactly source: T) where T : BinaryInteger {
+  public init?<T>(exactly source: T) where T: BinaryInteger {
     self.init(Double(source))
   }
-  
+
   public var magnitude: Double.Magnitude {
     rawValue.magnitude
   }
-  
+
   public static func * (lhs: GrainsOfMoisture, rhs: GrainsOfMoisture) -> GrainsOfMoisture {
     .init(lhs.rawValue * rhs.rawValue)
   }
-  
+
   public static func *= (lhs: inout GrainsOfMoisture, rhs: GrainsOfMoisture) {
     lhs.rawValue *= rhs.rawValue
   }
-  
+
   public typealias Magnitude = Double.Magnitude
 }
 

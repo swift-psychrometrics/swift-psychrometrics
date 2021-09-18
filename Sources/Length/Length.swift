@@ -7,7 +7,7 @@ public struct Length: Equatable, Hashable {
   public static var defaultUnits: LengthUnit = .feet
 
   public private(set) var rawValue: Double
-  
+
   public private(set) var units: LengthUnit
 
   public init(
@@ -143,12 +143,12 @@ extension Length: ExpressibleByIntegerLiteral {
 }
 
 extension Length: AdditiveArithmetic {
-  
+
   public static func - (lhs: Length, rhs: Length) -> Length {
     let value = lhs.rawValue - rhs[keyPath: lhs.units.lengthKeyPath]
     return .init(value, units: lhs.units)
   }
-  
+
   public static func + (lhs: Length, rhs: Length) -> Length {
     let value = lhs.rawValue + rhs[keyPath: lhs.units.lengthKeyPath]
     return .init(value, units: lhs.units)
@@ -162,26 +162,26 @@ extension Length: Comparable {
 }
 
 extension Length: Numeric {
-  
-  public init?<T>(exactly source: T) where T : BinaryInteger {
+
+  public init?<T>(exactly source: T) where T: BinaryInteger {
     self.init(Double(source))
   }
-  
+
   public var magnitude: Double.Magnitude {
     rawValue.magnitude
   }
-  
+
   public static func * (lhs: Length, rhs: Length) -> Length {
     let value = lhs.rawValue * rhs[keyPath: lhs.units.lengthKeyPath]
     return .init(value, units: lhs.units)
   }
-  
+
   public static func *= (lhs: inout Length, rhs: Length) {
     lhs.rawValue *= rhs[keyPath: lhs.units.lengthKeyPath]
   }
-  
+
   public typealias Magnitude = Double.Magnitude
-  
+
 }
 
 /// Represents unit of measure used in a ``Length``.
@@ -193,7 +193,7 @@ public enum LengthUnit: String, Equatable, Codable, Hashable, CaseIterable {
 
   /// The symbol string for the unit of length.
   public var symbol: String { rawValue }
-  
+
   /// The key-path on a ``Length`` for the units.
   public var lengthKeyPath: WritableKeyPath<Length, Double> {
     switch self {

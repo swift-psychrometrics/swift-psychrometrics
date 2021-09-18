@@ -6,8 +6,10 @@ import Foundation
 
 /// Represents / calculates the enthalpy of moist air.
 public struct Enthalpy {
-  
-  public static func partialPressure(for temperature: Temperature, at humidity: RelativeHumidity) -> Double {
+
+  public static func partialPressure(for temperature: Temperature, at humidity: RelativeHumidity)
+    -> Double
+  {
     let rankineTemperature = temperature.rankine
     let naturalLog = log(rankineTemperature)
     let exponent =
@@ -17,18 +19,18 @@ public struct Enthalpy {
 
     return humidity.fraction * exp(exponent)
   }
-  
+
   /// The humidity ratio of the air.
   public static func humidityRatio(for pressure: Pressure, with partialPressure: Double) -> Double {
     0.62198 * partialPressure / (pressure.psi - partialPressure)
   }
-  
+
   private var input: Input
-  
+
   private enum Input {
     case raw(Double)
     case calculate(Temperature, RelativeHumidity, Pressure)
-    
+
     var rawValue: Double {
       switch self {
       case let .raw(value):
@@ -36,7 +38,8 @@ public struct Enthalpy {
       case let .calculate(temperature, humidity, pressure):
         let partialPressure = Enthalpy.partialPressure(for: temperature, at: humidity)
         let humidityRatio = Enthalpy.humidityRatio(for: pressure, with: partialPressure)
-        return 0.24 * temperature.fahrenheit + humidityRatio * (1061 + 0.444 * temperature.fahrenheit)
+        return 0.24 * temperature.fahrenheit + humidityRatio
+          * (1061 + 0.444 * temperature.fahrenheit)
       }
     }
   }
@@ -72,7 +75,7 @@ public struct Enthalpy {
       pressure: .init(altitude: altitude)
     )
   }
-  
+
   public init(_ value: Double) {
     self.input = .raw(value)
   }
@@ -112,30 +115,30 @@ extension Enthalpy: AdditiveArithmetic {
   public static func - (lhs: Enthalpy, rhs: Enthalpy) -> Enthalpy {
     .init(lhs.rawValue - rhs.rawValue)
   }
-  
+
   public static func + (lhs: Enthalpy, rhs: Enthalpy) -> Enthalpy {
     .init(lhs.rawValue + rhs.rawValue)
   }
 }
 
 extension Enthalpy: Numeric {
-  
-  public init?<T>(exactly source: T) where T : BinaryInteger {
+
+  public init?<T>(exactly source: T) where T: BinaryInteger {
     self.init(Double(source))
   }
-  
+
   public var magnitude: Double.Magnitude {
     rawValue.magnitude
   }
-  
+
   public static func * (lhs: Enthalpy, rhs: Enthalpy) -> Enthalpy {
     self.init(lhs.rawValue * rhs.rawValue)
   }
-  
+
   public static func *= (lhs: inout Enthalpy, rhs: Enthalpy) {
     lhs.rawValue *= rhs.rawValue
   }
-  
+
   public typealias Magnitude = Double.Magnitude
 }
 

@@ -2,13 +2,12 @@ import Foundation
 
 /// Represents / calculates temperature in SI and IP units as well as scientific / absolute units.
 public struct Temperature: Equatable, Hashable {
-  
+
   public static var defaultUnits: TemperatureUnit = .fahrenheit
-  
+
   public private(set) var rawValue: Double
   public private(set) var units: TemperatureUnit
-  
-  
+
   public init(_ value: Double, units: TemperatureUnit = Self.defaultUnits) {
     self.rawValue = value
     self.units = units

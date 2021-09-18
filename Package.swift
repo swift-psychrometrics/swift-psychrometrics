@@ -16,8 +16,7 @@ let package = Package(
     .library(name: "Temperature", targets: ["Temperature"]),
     .library(name: "WetBulb", targets: ["WetBulb"]),
   ],
-  dependencies: [
-  ],
+  dependencies: [],
   targets: [
     .target(
       name: "Density",
@@ -119,8 +118,7 @@ let package = Package(
     ),
     .target(
       name: "Temperature",
-      dependencies: [
-      ]
+      dependencies: []
     ),
     .testTarget(
       name: "TemperatureTests",
