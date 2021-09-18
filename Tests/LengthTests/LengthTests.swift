@@ -33,12 +33,35 @@ final class LengthTests: XCTestCase {
   
   func test_default_units_are_feet() {
     let length: Length = 10
-    XCTAssertEqual(length.unit, .feet(10))
+    XCTAssertEqual(length.feet, 10)
     let length2: Length = 10.1
-    XCTAssertEqual(length2.unit, .feet(10.1))
+    XCTAssertEqual(length2.feet, 10.1)
   }
   
   func test_seaLevel() {
-    XCTAssertEqual(Length.seaLevel.unit, .feet(0))
+    XCTAssertEqual(Length.seaLevel.feet, 0)
+  }
+  
+  func test_with_different_default_units() {
+    Length.defaultUnits = .centimeters
+    let centimeters: Length = 100
+    XCTAssertEqual(centimeters.centimeters, 100)
+    
+    Length.defaultUnits = .inches
+    let inches: Length = 100.0
+    XCTAssertEqual(inches.inches, 100)
+    
+    Length.defaultUnits = .meters
+    let meters: Length = 100
+    XCTAssertEqual(meters.meters, 100)
+    
+    Length.defaultUnits = .feet
+  }
+  
+  func test_LengthUnit_symbols() {
+    XCTAssertEqual(LengthUnit.centimeters.symbol, "cm")
+    XCTAssertEqual(LengthUnit.meters.symbol, "m")
+    XCTAssertEqual(LengthUnit.feet.symbol, "ft")
+    XCTAssertEqual(LengthUnit.inches.symbol, "in")
   }
 }

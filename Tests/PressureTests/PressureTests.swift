@@ -40,7 +40,7 @@ final class PressureTests: XCTestCase {
   }
   
   func test_pressure_for_altitude() {
-    let pressure = Pressure(altitude: 1000)
+    let pressure = Pressure(altitude: .feet(1000))
     XCTAssertEqual(round(pressure.psi * 100) / 100, 14.15)
   }
   

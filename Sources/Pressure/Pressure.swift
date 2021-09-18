@@ -77,7 +77,7 @@ extension Pressure {
   /// Create a new ``Pressure`` with the given value.
   ///
   /// - Parameters:
-  ///    - value: The psi value.
+  ///    - value: The psi guage value.
   public static func psi(_ value: Double) -> Pressure {
     .init(.psi(value))
   }
@@ -142,7 +142,7 @@ extension Pressure {
     set { self = .pascals(newValue) }
   }
 
-  /// Access / calculate the pressure as psi.
+  /// Access / calculate the pressure as psi guage.
   public var psi: Double {
     get { self.atmosphere / 0.06804596377991787 }
     set { self = .psi(newValue) }

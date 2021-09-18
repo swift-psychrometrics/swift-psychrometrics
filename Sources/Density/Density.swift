@@ -22,7 +22,7 @@ public struct Density: Equatable {
     switch unit {
 
     case let .dryAir(temperature, pressure):
-      return ((29.0 * (pressure.psi + 14.7)) / (345.23 * temperature.rankine)) * 32.174
+      return ((29.0 * (pressure.psi)) / (345.23 * temperature.rankine)) * 32.174
 
     case let .water(temperature):
       return 62.56 + 3.413 * (pow(10, -4) * temperature.fahrenheit) - 6.255
@@ -47,7 +47,7 @@ public struct Density: Equatable {
   ///   - temperature: The temperature of the air.
   ///   - altitude: The altitude of the air.
   public static func dryAir(at temperature: Temperature, altitude: Length) -> Density {
-    .init(.dryAir(temperature, .init(altitude: altitude)))
+    .dryAir(at: temperature, pressure: .init(altitude: altitude))
   }
 
   /// Create a new ``Density`` for water given a temperature.

@@ -2,18 +2,16 @@ import Foundation
 
 /// Represents a unit of length in both SI and IP units.
 public struct Length: Equatable {
+  
+  /// The default units used for a Length.
+  public static var defaultUnits: LengthUnit = .feet
 
-  var unit: Unit
-
-  init(_ unit: Unit) {
-    self.unit = unit
-  }
-
-  enum Unit: Equatable {
-    case centimeters(Double)
-    case feet(Double)
-    case inches(Double)
-    case meters(Double)
+  public var rawValue: Double = 0
+  public var units: LengthUnit = .feet
+  
+  public init(_ value: Double, units: LengthUnit = .feet) {
+    self.rawValue = value
+    self.units = units
   }
 }
 
@@ -24,7 +22,7 @@ extension Length {
   /// - Parameters:
   ///   - value: The centimeters of the length.
   public static func centimeters(_ value: Double) -> Length {
-    self.init(.centimeters(value))
+    self.init(value, units: .centimeters)
   }
 
   /// Create a new ``Length`` with the given feet value.
@@ -32,7 +30,7 @@ extension Length {
   /// - Parameters:
   ///   - value: The feet of the length.
   public static func feet(_ value: Double) -> Length {
-    self.init(.feet(value))
+    self.init(value, units: .feet)
   }
 
   /// Create a new ``Length`` with the given inches value.
@@ -40,7 +38,7 @@ extension Length {
   /// - Parameters:
   ///   - value: The inches of the length.
   public static func inches(_ value: Double) -> Length {
-    self.init(.inches(value))
+    self.init(value, units: .inches)
   }
 
   /// Create a new ``Length`` with the given meters value.
@@ -48,7 +46,7 @@ extension Length {
   /// - Parameters:
   ///   - value: The meters of the length.
   public static func meters(_ value: Double) -> Length {
-    self.init(.meters(value))
+    self.init(value, units: .meters)
   }
 }
 
@@ -58,15 +56,15 @@ extension Length {
   /// Access / convert the length in centimeters.
   public var centimeters: Double {
     get {
-      switch unit {
-      case let .centimeters(value):
-        return value
-      case let .feet(feet):
-        return feet / 0.032808
-      case let .inches(inches):
-        return inches * 2.54
-      case let .meters(meters):
-        return meters * 100
+      switch units {
+      case .centimeters:
+        return rawValue
+      case .feet:
+        return rawValue / 0.032808
+      case .inches:
+        return rawValue * 2.54
+      case .meters:
+        return rawValue * 100
       }
     }
     set { self = .centimeters(newValue) }
@@ -75,15 +73,15 @@ extension Length {
   /// Access / convert the length in feet.
   public var feet: Double {
     get {
-      switch unit {
-      case let .centimeters(centimeters):
-        return centimeters * 0.032808
-      case let .feet(value):
-        return value
-      case let .inches(inches):
-        return inches / 12
-      case let .meters(meters):
-        return meters * 3.2808
+      switch units {
+      case .centimeters:
+        return rawValue * 0.032808
+      case .feet:
+        return rawValue
+      case .inches:
+        return rawValue / 12
+      case .meters:
+        return rawValue * 3.2808
       }
     }
     set { self = .feet(newValue) }
@@ -92,15 +90,15 @@ extension Length {
   /// Access / convert the length in inches.
   public var inches: Double {
     get {
-      switch unit {
-      case let .centimeters(centimeters):
-        return centimeters * 0.39370
-      case let .feet(feet):
-        return feet * 12
-      case let .inches(value):
-        return value
-      case let .meters(meters):
-        return meters / 0.0254
+      switch units {
+      case .centimeters:
+        return rawValue * 0.39370
+      case .feet:
+        return rawValue * 12
+      case .inches:
+        return rawValue
+      case .meters:
+        return rawValue / 0.0254
       }
     }
     set { self = .inches(newValue) }
@@ -109,38 +107,38 @@ extension Length {
   /// Access / convert the length in meters.
   public var meters: Double {
     get {
-      switch unit {
-      case let .centimeters(centimeters):
-        return centimeters / 100
-      case let .feet(feet):
-        return feet / 3.2808
-      case let .inches(inches):
-        return inches * 0.0254
-      case let .meters(value):
-        return value
+      switch units {
+      case .centimeters:
+        return rawValue / 100
+      case .feet:
+        return rawValue / 3.2808
+      case .inches:
+        return rawValue * 0.0254
+      case .meters:
+        return rawValue
       }
     }
     set { self = .meters(newValue) }
   }
 
   public static var seaLevel: Self {
-    .init(.feet(0))
+    .feet(0)
   }
 }
 
 extension Length: ExpressibleByFloatLiteral {
   public init(floatLiteral value: Double) {
-    self.init(.feet(value))
+    self.init(value, units: Self.defaultUnits)
   }
 }
 
 extension Length: ExpressibleByIntegerLiteral {
   public init(integerLiteral value: Int) {
-    self.init(.feet(Double(value)))
+    self.init(Double(value), units: Self.defaultUnits)
   }
 }
 
-/// Represents a symbol for a unit of length.
+/// Represents unit of measure used in a ``Length``.
 public enum LengthUnit: String, Equatable, Codable, Hashable, CaseIterable {
   case centimeters = "cm"
   case meters = "m"
@@ -149,16 +147,16 @@ public enum LengthUnit: String, Equatable, Codable, Hashable, CaseIterable {
 
   public var symbol: String { rawValue }
 
-  public var lengthKeyPath: WritableKeyPath<Length, Double> {
-    switch self {
-    case .centimeters:
-      return \.centimeters
-    case .meters:
-      return \.meters
-    case .feet:
-      return \.feet
-    case .inches:
-      return \.inches
-    }
-  }
+//  public var lengthKeyPath: WritableKeyPath<Length, Double> {
+//    switch self {
+//    case .centimeters:
+//      return \.centimeters
+//    case .meters:
+//      return \.meters
+//    case .feet:
+//      return \.feet
+//    case .inches:
+//      return \.inches
+//    }
+//  }
 }

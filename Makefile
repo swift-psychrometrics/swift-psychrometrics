@@ -2,7 +2,7 @@ DOCC_BUILD_PATH := /tmp/swift-web-playground-build
 LLVM_PATH := /usr/local/opt/llvm/bin/llvm-cov
 BIN_PATH = $(shell swift build --show-bin-path)
 XCTEST_PATH = $(shell find $(BIN_PATH) -name '*.xctest')
-COV_BIN = $(XCTEST_PATH)/Contents/MacOs/$(shell basename $(XCTEST_PATH) .xctest)
+COV_BIN := .build/debug/swift-psychrometricsPackageTests.xctest/Contents/MacOS/swift-psychrometricsPackageTests
 COV_OUTPUT_PATH = "/tmp/swift-psychrometrics.lcov"
 
 test:
@@ -39,3 +39,9 @@ code-cov:
 		-instr-profile=.build/debug/codecov/default.profdata \
 		-ignore-filename-regex=".build|Tests" \
 		-format lcov > $(COV_OUTPUT_PATH)
+
+code-cov-report: test
+	@xcrun llvm-cov report \
+		$(COV_BIN) \
+		-instr-profile=.build/debug/codecov/default.profdata \
+		-use-color

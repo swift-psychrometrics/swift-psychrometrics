@@ -14,10 +14,20 @@ final class DensityTests: XCTestCase {
   }
   
   func testDensityOfAir() {
-    let density = Density.dryAir(at: .fahrenheit(60), pressure: .psi(0))
+    let density = Density.dryAir(at: .fahrenheit(60), pressure: .psi(14.7))
     XCTAssertEqual(
       round(density.rawValue * 1000) / 1000,
       0.076
     )
+    let density2 = Density.dryAir(at: .fahrenheit(60), altitude: .seaLevel)
+    XCTAssertEqual(
+      round(density2.rawValue * 1000) / 1000,
+      0.076
+    )
+  }
+  
+  func testDensityUnit() {
+    XCTAssertEqual(DensityUnit.dryAir.label, "Dry Air")
+    XCTAssertEqual(DensityUnit.water.label, "Water")
   }
 }

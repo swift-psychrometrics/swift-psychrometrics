@@ -20,4 +20,9 @@ final class DewPointTests: XCTestCase {
     let dewPoint = Temperature.celsius(12.94)
     XCTAssertEqual(round(RelativeHumidity(temperature: temperature, dewPoint: dewPoint).rawValue), 50)
   }
+  
+  func test_DewPoint_without_calculation() {
+    let dewPoint = DewPoint(temperature: .fahrenheit(63))
+    XCTAssertEqual(dewPoint.temperature.fahrenheit, 63)
+  }
 }
