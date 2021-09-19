@@ -1,5 +1,5 @@
-import Foundation
 import Core
+import Foundation
 
 /// Represents / calculates temperature in SI and IP units as well as scientific / absolute units.
 public struct Temperature: Hashable {
@@ -14,21 +14,21 @@ public struct Temperature: Hashable {
 }
 
 extension Temperature {
-  
+
   /// Represents the units of measure for a ``Temperature``.
   public enum Unit: String, Equatable, CaseIterable, Codable, Hashable {
-    
+
     public static var `default`: Self = .fahrenheit
-    
+
     case celsius = "°C"
     case fahrenheit = "°F"
     case kelvin = "°K"
     case rankine = "°R"
-    
+
     public var symbol: String {
       rawValue
     }
-    
+
     public var keyPath: WritableKeyPath<Temperature, Double> {
       switch self {
       case .celsius:

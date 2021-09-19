@@ -1,12 +1,12 @@
-import Foundation
 import Core
+import Foundation
 import Length
 import Temperature
 
 /// Represents / calculates pressure for different units.
 public struct Pressure: Hashable {
 
-//  public static var defaultUnits: Unit = .psi
+  //  public static var defaultUnits: Unit = .psi
 
   public private(set) var rawValue: Double
 
@@ -26,13 +26,13 @@ public struct Pressure: Hashable {
     let pascals = 101325 * pow((1 - 2.25577e-5 * meters), 5.525588)
     self.init(pascals, units: .pascals)
   }
-  
+
   // MARK: - PressureUnit
   /// Represents the different symbols / units of measure for ``Pressure``.
   public enum Unit: String, Equatable, Hashable, CaseIterable {
-    
+
     public static var `default`: Self = .psi
-    
+
     case atmosphere
     case bar
     case inchesWater

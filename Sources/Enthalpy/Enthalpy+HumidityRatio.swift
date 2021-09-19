@@ -1,11 +1,11 @@
 import Foundation
 import Length
-import Temperature
-import RelativeHumidity
 import Pressure
+import RelativeHumidity
+import Temperature
 
 extension Enthalpy {
-  
+
   /// The humidity ratio of the air.
   public static func humidityRatio(
     for totalPressure: Pressure,
@@ -13,7 +13,7 @@ extension Enthalpy {
   ) -> Double {
     0.62198 * partialPressure.psi / (totalPressure.psi - partialPressure.psi)
   }
-  
+
   public static func humidityRatio(
     for temperature: Temperature,
     with humidity: RelativeHumidity,
@@ -24,7 +24,7 @@ extension Enthalpy {
       with: .partialPressure(for: temperature, at: humidity)
     )
   }
-  
+
   public static func humidityRatio(
     for temperature: Temperature,
     with humidity: RelativeHumidity,

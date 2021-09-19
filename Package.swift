@@ -78,7 +78,7 @@ let package = Package(
     .target(
       name: "Length",
       dependencies: [
-        "Core",
+        "Core"
       ]
     ),
     .testTarget(

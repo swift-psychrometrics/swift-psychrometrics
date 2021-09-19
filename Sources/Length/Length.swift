@@ -1,5 +1,5 @@
-import Foundation
 import Core
+import Foundation
 
 /// Represents a unit of length in both SI and IP units.
 public struct Length: Hashable {
@@ -15,12 +15,12 @@ public struct Length: Hashable {
     self.rawValue = value
     self.units = units
   }
-  
+
   /// Represents unit of measure used in a ``Length``.
   public enum Unit: String, Equatable, Codable, Hashable, CaseIterable {
-    
+
     public static var `default`: Self = .feet
-    
+
     case centimeters = "cm"
     case meters = "m"
     case feet = "ft"

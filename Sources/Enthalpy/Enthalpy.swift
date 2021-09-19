@@ -6,7 +6,7 @@ import Temperature
 
 /// Represents / calculates the enthalpy of moist air.
 public struct Enthalpy {
-  
+
   /// The enthalpy of the air based on input state.
   public var rawValue: Double
 

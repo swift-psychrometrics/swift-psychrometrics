@@ -1,4 +1,3 @@
-
 public protocol UnitOfMeasure {
   associatedtype Container
   var keyPath: WritableKeyPath<Container, Double> { get }
