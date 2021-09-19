@@ -59,26 +59,26 @@ final class LengthTests: XCTestCase {
   }
   
   func test_with_different_default_units() {
-    Length.defaultUnits = .centimeters
+    Length.Unit.default = .centimeters
     let centimeters: Length = 100
     XCTAssertEqual(centimeters.centimeters, 100)
     
-    Length.defaultUnits = .inches
+    Length.Unit.default = .inches
     let inches: Length = 100.0
     XCTAssertEqual(inches.inches, 100)
     
-    Length.defaultUnits = .meters
+    Length.Unit.default = .meters
     let meters: Length = 100
     XCTAssertEqual(meters.meters, 100)
     
-    Length.defaultUnits = .feet
+    Length.Unit.default = .feet
   }
   
   func test_LengthUnit_symbols() {
-    XCTAssertEqual(LengthUnit.centimeters.symbol, "cm")
-    XCTAssertEqual(LengthUnit.meters.symbol, "m")
-    XCTAssertEqual(LengthUnit.feet.symbol, "ft")
-    XCTAssertEqual(LengthUnit.inches.symbol, "in")
+    XCTAssertEqual(Length.Unit.centimeters.symbol, "cm")
+    XCTAssertEqual(Length.Unit.meters.symbol, "m")
+    XCTAssertEqual(Length.Unit.feet.symbol, "ft")
+    XCTAssertEqual(Length.Unit.inches.symbol, "in")
   }
   
   func test_Addition_And_Subtraction() {
@@ -99,24 +99,24 @@ final class LengthTests: XCTestCase {
     XCTAssertTrue(Length.feet(10) > 5)
   }
   
-  func test_magnitude() {
-    let length = Length(exactly: 100)!
-    XCTAssertEqual(length.magnitude, Double(100).magnitude)
-  }
+//  func test_magnitude() {
+//    let length = Length(exactly: 100)!
+//    XCTAssertEqual(length.magnitude, Double(100).magnitude)
+//  }
   
   func test_LengthUnit_lengthKeyPath() {
     var length: Length = .centimeters(10)
-    XCTAssertEqual(length[keyPath: LengthUnit.centimeters.lengthKeyPath], 10)
+    XCTAssertEqual(length[keyPath: Length.Unit.centimeters.keyPath], 10)
     
     length = .meters(10)
-    XCTAssertEqual(length[keyPath: LengthUnit.meters.lengthKeyPath], 10)
+    XCTAssertEqual(length[keyPath: Length.Unit.meters.keyPath], 10)
     
     length = .inches(10)
-    XCTAssertEqual(length[keyPath: LengthUnit.inches.lengthKeyPath], 10)
+    XCTAssertEqual(length[keyPath: Length.Unit.inches.keyPath], 10)
     
     
     length = .feet(10)
-    XCTAssertEqual(length[keyPath: LengthUnit.feet.lengthKeyPath], 10)
+    XCTAssertEqual(length[keyPath: Length.Unit.feet.keyPath], 10)
     
   }
 }

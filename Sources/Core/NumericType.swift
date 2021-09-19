@@ -99,4 +99,8 @@ extension NumericWithUnitOfMeasure where Units.Container == Self, Self: RawRepre
   public static func < (lhs: Self, rhs: Self) -> Bool {
     lhs.rawValue < rhs[lhs.units]
   }
+  
+  public static func == (lhs: Self, rhs: Self) -> Bool {
+    lhs.rawValue == rhs[lhs.units]
+  }
 }
