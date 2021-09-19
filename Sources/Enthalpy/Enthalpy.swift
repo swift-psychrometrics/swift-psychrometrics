@@ -1,51 +1,14 @@
 import Foundation
-@_exported import Length
-@_exported import Pressure
-@_exported import RelativeHumidity
-@_exported import Temperature
+import Length
+import Pressure
+import RelativeHumidity
+import Temperature
 
 /// Represents / calculates the enthalpy of moist air.
 public struct Enthalpy {
-
-//  public static func partialPressure(for temperature: Temperature, at humidity: RelativeHumidity)
-//    -> Double
-//  {
-//    let rankineTemperature = temperature.rankine
-//    let naturalLog = log(rankineTemperature)
-//    let exponent =
-//      -10440.4 / rankineTemperature - 11.29465 - 0.02702235 * rankineTemperature + 1.289036e-5
-//      * pow(rankineTemperature, 2) - 2.478068e-9 * pow(rankineTemperature, 3) + 6.545967
-//      * naturalLog
-//
-//    return humidity.fraction * exp(exponent)
-//  }
-
-  /// The humidity ratio of the air.
-  public static func humidityRatio(for pressure: Pressure, with partialPressure: Pressure) -> Double {
-    0.62198 * partialPressure.psi / (pressure.psi - partialPressure.psi)
-  }
-
-  private var input: Input
-
-  private enum Input {
-    case raw(Double)
-    case calculate(Temperature, RelativeHumidity, Pressure)
-
-    var rawValue: Double {
-      switch self {
-      case let .raw(value):
-        return value
-      case let .calculate(temperature, humidity, pressure):
-//        let partialPressure = Enthalpy.partialPressure(for: temperature, at: humidity)
-        let humidityRatio = Enthalpy.humidityRatio(
-          for: pressure,
-          with: .partialPressure(for: temperature, at: humidity)
-        )
-        return 0.24 * temperature.fahrenheit + humidityRatio
-          * (1061 + 0.444 * temperature.fahrenheit)
-      }
-    }
-  }
+  
+  /// The enthalpy of the air based on input state.
+  public var rawValue: Double
 
   /// Creates a new ``Enthalpy`` with the given temperature, humidity, and pressure.
   ///
@@ -54,11 +17,15 @@ public struct Enthalpy {
   ///   - humidity: The relative humidity of the air.
   ///   - pressure: The pressure of the air.
   public init(
-    temperature: Temperature,
-    humidity: RelativeHumidity,
+    for temperature: Temperature,
+    at humidity: RelativeHumidity,
     pressure: Pressure
   ) {
-    self.input = .calculate(temperature, humidity, pressure)
+    self.init(
+      0.24 * temperature.fahrenheit
+        + Enthalpy.humidityRatio(for: temperature, with: humidity, at: pressure)
+        * (1061 + 0.444 * temperature.fahrenheit)
+    )
   }
 
   /// Creates a new ``Enthalpy`` with the given temperature, humidity, and altitude.
@@ -68,25 +35,19 @@ public struct Enthalpy {
   ///   - humidity: The relative humidity of the air.
   ///   - altitude: The altitude of the air.
   public init(
-    temperature: Temperature,
-    humidity: RelativeHumidity,
+    for temperature: Temperature,
+    at humidity: RelativeHumidity,
     altitude: Length = .seaLevel
   ) {
     self.init(
-      temperature: temperature,
-      humidity: humidity,
+      for: temperature,
+      at: humidity,
       pressure: .init(altitude: altitude)
     )
   }
 
   public init(_ value: Double) {
-    self.input = .raw(value)
-  }
-
-  /// The calculated enthalpy of the air.
-  public var rawValue: Double {
-    get { input.rawValue }
-    set { input = .raw(newValue) }
+    self.rawValue = value
   }
 }
 
@@ -95,6 +56,8 @@ extension Enthalpy: Equatable {
     lhs.rawValue == rhs.rawValue
   }
 }
+
+// MARK: - Numeric
 
 extension Enthalpy: ExpressibleByIntegerLiteral {
   public init(integerLiteral value: Int) {
@@ -143,25 +106,4 @@ extension Enthalpy: Numeric {
   }
 
   public typealias Magnitude = Double.Magnitude
-}
-
-extension Temperature {
-
-  /// Calculates the enthalpy for the temperature at a given relative humidity and altitude.
-  ///
-  /// - Parameters:
-  ///   - humidity: The relative humidity of the air.
-  ///   - altitude: The altitude of the air.
-  public func enthalpy(humidity: RelativeHumidity, altitude: Length) -> Enthalpy {
-    .init(temperature: self, humidity: humidity, altitude: altitude)
-  }
-
-  /// Calculates the enthalpy for the temperature at a given relative humidity and pressure.
-  ///
-  /// - Parameters:
-  ///   - humidity: The relative humidity of the air.
-  ///   - pressure: The pressure of the air.
-  public func enthalpy(humidity: RelativeHumidity, pressure: Pressure) -> Enthalpy {
-    .init(temperature: self, humidity: humidity, pressure: pressure)
-  }
 }

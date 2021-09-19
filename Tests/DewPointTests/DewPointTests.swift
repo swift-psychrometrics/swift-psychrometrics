@@ -43,9 +43,9 @@ final class DewPointTests: XCTestCase {
     XCTAssertEqual(dewPoint.temperature, 25)
   }
   
-  func test_magnitude() {
-    XCTAssertEqual(DewPoint.init(temperature: 75).magnitude, 75.magnitude)
-  }
+//  func test_magnitude() {
+//    XCTAssertEqual(DewPoint.init(temperature: 75).magnitude, 75.magnitude)
+//  }
   
   func test_multiplication() {
     var dewPoint: DewPoint = 10

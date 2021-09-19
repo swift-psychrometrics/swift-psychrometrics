@@ -32,7 +32,7 @@ final class WetBulbTests: XCTestCase {
   }
   
   func test_magnitude() {
-    XCTAssertEqual(WetBulb.init(10).magnitude, 10.magnitude)
+    XCTAssertEqual(WetBulb.init(10).magnitude, Temperature(10).magnitude)
   }
   
   func test_multiplication() {
