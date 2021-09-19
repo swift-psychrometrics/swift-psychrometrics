@@ -111,41 +111,41 @@ final class PressureTests: XCTestCase {
     XCTAssertEqual(pressure.psi, 200)
   }
   
-  func test_magnitude() {
-    XCTAssertEqual(Pressure.psi(100).magnitude, 100.magnitude)
-  }
+//  func test_magnitude() {
+//    XCTAssertEqual(Pressure.psi(100).magnitude, 100.magnitude)
+//  }
   
   func test_PressureUnit_symbol() {
-    XCTAssertEqual(PressureUnit.atmosphere.symbol, "atm")
-    XCTAssertEqual(PressureUnit.bar.symbol, "bar")
-    XCTAssertEqual(PressureUnit.inchesWater.symbol, "inH2O")
-    XCTAssertEqual(PressureUnit.millibar.symbol, "mb")
-    XCTAssertEqual(PressureUnit.pascals.symbol, "Pa")
-    XCTAssertEqual(PressureUnit.psi.symbol, "psi")
-    XCTAssertEqual(PressureUnit.torr.symbol, "torr")
+    XCTAssertEqual(Pressure.Unit.atmosphere.symbol, "atm")
+    XCTAssertEqual(Pressure.Unit.bar.symbol, "bar")
+    XCTAssertEqual(Pressure.Unit.inchesWater.symbol, "inH2O")
+    XCTAssertEqual(Pressure.Unit.millibar.symbol, "mb")
+    XCTAssertEqual(Pressure.Unit.pascals.symbol, "Pa")
+    XCTAssertEqual(Pressure.Unit.psi.symbol, "psi")
+    XCTAssertEqual(Pressure.Unit.torr.symbol, "torr")
   }
   
   func test_PressureUnit_pressureKeyPath() {
     var pressure = Pressure.atmosphere(10)
-    XCTAssertEqual(pressure[keyPath: PressureUnit.atmosphere.pressureKeyPath], 10)
+    XCTAssertEqual(pressure[keyPath: Pressure.Unit.atmosphere.keyPath], 10)
     
     pressure.bar = 10
-    XCTAssertEqual(pressure[keyPath: PressureUnit.bar.pressureKeyPath], 10)
+    XCTAssertEqual(pressure[keyPath: Pressure.Unit.bar.keyPath], 10)
     
     pressure.inchesWaterColumn = 10
-    XCTAssertEqual(pressure[keyPath: PressureUnit.inchesWater.pressureKeyPath], 10)
+    XCTAssertEqual(pressure[keyPath: Pressure.Unit.inchesWater.keyPath], 10)
     
     pressure.millibar = 10
-    XCTAssertEqual(pressure[keyPath: PressureUnit.millibar.pressureKeyPath], 10)
+    XCTAssertEqual(pressure[keyPath: Pressure.Unit.millibar.keyPath], 10)
     
     pressure.pascals = 10
-    XCTAssertEqual(pressure[keyPath: PressureUnit.pascals.pressureKeyPath], 10)
+    XCTAssertEqual(pressure[keyPath: Pressure.Unit.pascals.keyPath], 10)
     
     pressure.psi = 10
-    XCTAssertEqual(pressure[keyPath: PressureUnit.psi.pressureKeyPath], 10)
+    XCTAssertEqual(pressure[keyPath: Pressure.Unit.psi.keyPath], 10)
     
-    pressure.torr = 10
-    XCTAssertEqual(pressure[keyPath: PressureUnit.torr.pressureKeyPath], 10)
+    pressure[.torr] = 10
+    XCTAssertEqual(pressure[.torr], 10)
   }
   
   func test_saturation_pressure() {

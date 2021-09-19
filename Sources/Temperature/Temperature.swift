@@ -2,7 +2,7 @@ import Foundation
 import Core
 
 /// Represents / calculates temperature in SI and IP units as well as scientific / absolute units.
-public struct Temperature: Equatable, Hashable {
+public struct Temperature: Hashable {
 
   public private(set) var rawValue: Double
   public private(set) var units: Unit
@@ -154,13 +154,16 @@ extension Temperature {
   }
 }
 
-extension Temperature.Unit: NumericUnit, DefaultUnitRepresentable {
+extension Temperature.Unit: UnitOfMeasure, DefaultUnitRepresentable {
   public typealias Container = Temperature
 }
 
-extension Temperature: NumericWithUnitType, RawRepresentable {
-  public typealias RawValue = Double
-  public typealias FloatLiteralType = Double
-  public typealias IntegerLiteralType = Int
+extension Temperature: NumericWithUnitOfMeasure, RawRepresentable {
   public typealias Units = Unit
+}
+
+extension Temperature: Equatable {
+  public static func == (lhs: Temperature, rhs: Temperature) -> Bool {
+    lhs.rawValue == rhs[lhs.units]
+  }
 }

@@ -9,26 +9,22 @@ extension NumericType where Self: RawRepresentable, Self.RawValue == Double {
   }
 }
 
-public protocol NumericUnit {
-  associatedtype Container
-  var keyPath: WritableKeyPath<Container, Double> { get }
-}
-
-public protocol DefaultUnitRepresentable {
-  static var `default`: Self { get set }
-}
-
-public protocol NumericWithUnitType: NumericType {
-  associatedtype Units: NumericUnit
+public protocol NumericWithUnitOfMeasure: NumericType {
+  associatedtype Units: UnitOfMeasure
   
   var units: Units { get }
   
   init(_ value: Double, units: Units)
   
-  subscript(units: Units) -> Double { get set }
 }
 
-extension NumericWithUnitType where Units: DefaultUnitRepresentable {
+extension NumericWithUnitOfMeasure {
+  public func clone(_ newValue: Double) -> Self {
+    .init(newValue, units: units)
+  }
+}
+
+extension NumericWithUnitOfMeasure where Units: DefaultUnitRepresentable {
   
   public init(_ value: Double) {
     self.init(value, units: Units.default)
@@ -39,41 +35,35 @@ extension NumericWithUnitType where Units: DefaultUnitRepresentable {
   }
 }
 
-extension NumericWithUnitType where Units: DefaultUnitRepresentable, Self: RawRepresentable, RawValue == Double {
+extension NumericWithUnitOfMeasure where Units: DefaultUnitRepresentable, Self: RawRepresentable, RawValue == Double {
   
   public init?(rawValue: Double) {
     self.init(rawValue)
   }
 }
 
-extension NumericWithUnitType where Units: DefaultUnitRepresentable, IntegerLiteralType == Int {
+extension NumericWithUnitOfMeasure where Units: DefaultUnitRepresentable, IntegerLiteralType == Int {
   
   public init(integerLiteral value: Int) {
     self.init(Double(value))
   }
 }
 
-extension NumericWithUnitType where Units: DefaultUnitRepresentable, FloatLiteralType == Double {
+extension NumericWithUnitOfMeasure where Units: DefaultUnitRepresentable, FloatLiteralType == Double {
   
   public init(floatLiteral value: Double) {
     self.init(value)
   }
 }
 
-extension NumericWithUnitType where Self: RawRepresentable, RawValue == Double, Magnitude == Self {
+extension NumericWithUnitOfMeasure where Self: RawRepresentable, RawValue == Double, Magnitude == Self {
   
   public var magnitude: Self {
     clone(rawValue.magnitude)
   }
 }
 
-extension NumericWithUnitType {
-  public func clone(_ newValue: Double) -> Self {
-    .init(newValue, units: units)
-  }
-}
-
-extension NumericWithUnitType where Units.Container == Self {
+extension NumericWithUnitOfMeasure where Units.Container == Self {
   
   public subscript(units: Units) -> Double {
     get { self[keyPath: units.keyPath] }
@@ -81,7 +71,7 @@ extension NumericWithUnitType where Units.Container == Self {
   }
 }
 
-extension NumericWithUnitType where Units.Container == Self, Self: RawRepresentable, RawValue == Double {
+extension NumericWithUnitOfMeasure where Units.Container == Self, Self: RawRepresentable, RawValue == Double {
   
   public static func + (lhs: Self, rhs: Self) -> Self {
     lhs.clone(lhs.rawValue + rhs[lhs.units])

@@ -86,6 +86,7 @@ let package = Package(
     .target(
       name: "Pressure",
       dependencies: [
+        "Core",
         "Length",
         "Temperature",
       ]

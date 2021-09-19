@@ -1,17 +1,18 @@
 import Foundation
-@_exported import Length
-@_exported import Temperature
+import Core
+import Length
+import Temperature
 
 /// Represents / calculates pressure for different units.
 public struct Pressure: Hashable {
 
-  public static var defaultUnits: PressureUnit = .psi
+//  public static var defaultUnits: Unit = .psi
 
   public private(set) var rawValue: Double
 
-  public private(set) var units: PressureUnit
+  public private(set) var units: Unit
 
-  public init(_ value: Double = 0, units: PressureUnit = Self.defaultUnits) {
+  public init(_ value: Double = 0, units: Unit = .default) {
     self.rawValue = value
     self.units = units
   }
@@ -25,6 +26,60 @@ public struct Pressure: Hashable {
     let pascals = 101325 * pow((1 - 2.25577e-5 * meters), 5.525588)
     self.init(pascals, units: .pascals)
   }
+  
+  // MARK: - PressureUnit
+  /// Represents the different symbols / units of measure for ``Pressure``.
+  public enum Unit: String, Equatable, Hashable, CaseIterable {
+    
+    public static var `default`: Self = .psi
+    
+    case atmosphere
+    case bar
+    case inchesWater
+    case millibar
+    case pascals
+    case psi
+    case torr
+
+    public var symbol: String {
+      switch self {
+      case .atmosphere:
+        return "atm"
+      case .bar:
+        return "bar"
+      case .inchesWater:
+        return "inH2O"
+      case .millibar:
+        return "mb"
+      case .pascals:
+        return "Pa"
+      case .psi:
+        return "psi"
+      case .torr:
+        return "torr"
+      }
+    }
+
+    public var keyPath: WritableKeyPath<Pressure, Double> {
+      switch self {
+      case .atmosphere:
+        return \.atmosphere
+      case .bar:
+        return \.bar
+      case .inchesWater:
+        return \.inchesWaterColumn
+      case .millibar:
+        return \.millibar
+      case .pascals:
+        return \.pascals
+      case .psi:
+        return \.psi
+      case .torr:
+        return \.torr
+      }
+    }
+  }
+
 }
 
 extension Pressure {
@@ -150,127 +205,16 @@ extension Pressure {
   }
 }
 
-// MARK: - Vapor Pressure
-extension Pressure {
-
-  /// Calculate the vapor pressure of air at a given temperature.
-  ///
-  /// - Parameters:
-  ///   - temperature: The temperature to calculate the vapor pressure of.
-  public static func vaporPressure(at temperature: Temperature) -> Pressure {
-    let celsius = temperature.celsius
-    let exponent = (7.5 * celsius) / (237.3 + celsius)
-    let millibar = 6.11 * pow(10, exponent)
-    return .millibar(millibar)
-  }
+extension Pressure.Unit: UnitOfMeasure, DefaultUnitRepresentable {
+  public typealias Container = Pressure
 }
 
-// MARK: - Numeric
-extension Pressure: ExpressibleByFloatLiteral {
-
-  public init(floatLiteral value: Double) {
-    self.init(value)
-  }
-}
-
-extension Pressure: ExpressibleByIntegerLiteral {
-
-  public init(integerLiteral value: Int) {
-    self.init(Double(value))
-  }
+extension Pressure: NumericWithUnitOfMeasure, RawRepresentable {
+  public typealias Units = Unit
 }
 
 extension Pressure: Equatable {
   public static func == (lhs: Pressure, rhs: Pressure) -> Bool {
-    lhs.rawValue == rhs[keyPath: lhs.units.pressureKeyPath]
-  }
-}
-
-extension Pressure: Comparable {
-  public static func < (lhs: Pressure, rhs: Pressure) -> Bool {
-    lhs.rawValue < rhs[keyPath: lhs.units.pressureKeyPath]
-  }
-}
-
-extension Pressure: AdditiveArithmetic {
-  public static func - (lhs: Pressure, rhs: Pressure) -> Pressure {
-    let value = lhs.rawValue - rhs[keyPath: lhs.units.pressureKeyPath]
-    return .init(value, units: lhs.units)
-  }
-
-  public static func + (lhs: Pressure, rhs: Pressure) -> Pressure {
-    let value = lhs.rawValue + rhs[keyPath: lhs.units.pressureKeyPath]
-    return .init(value, units: lhs.units)
-  }
-}
-
-extension Pressure: Numeric {
-  public init?<T>(exactly source: T) where T: BinaryInteger {
-    self.init(Double(source))
-  }
-
-  public var magnitude: Double.Magnitude {
-    rawValue.magnitude
-  }
-
-  public static func * (lhs: Pressure, rhs: Pressure) -> Pressure {
-    let value = lhs.rawValue * rhs[keyPath: lhs.units.pressureKeyPath]
-    return .init(value, units: lhs.units)
-  }
-
-  public static func *= (lhs: inout Pressure, rhs: Pressure) {
-    lhs.rawValue *= rhs[keyPath: lhs.units.pressureKeyPath]
-  }
-
-  public typealias Magnitude = Double.Magnitude
-}
-
-// MARK: - PressureUnit
-/// Represents the different symbols / units of measure for ``Pressure``.
-public enum PressureUnit: String, Equatable, Hashable, CaseIterable {
-  case atmosphere
-  case bar
-  case inchesWater
-  case millibar
-  case pascals
-  case psi
-  case torr
-
-  public var symbol: String {
-    switch self {
-    case .atmosphere:
-      return "atm"
-    case .bar:
-      return "bar"
-    case .inchesWater:
-      return "inH2O"
-    case .millibar:
-      return "mb"
-    case .pascals:
-      return "Pa"
-    case .psi:
-      return "psi"
-    case .torr:
-      return "torr"
-    }
-  }
-
-  public var pressureKeyPath: WritableKeyPath<Pressure, Double> {
-    switch self {
-    case .atmosphere:
-      return \.atmosphere
-    case .bar:
-      return \.bar
-    case .inchesWater:
-      return \.inchesWaterColumn
-    case .millibar:
-      return \.millibar
-    case .pascals:
-      return \.pascals
-    case .psi:
-      return \.psi
-    case .torr:
-      return \.torr
-    }
+    lhs.rawValue == rhs[lhs.units]
   }
 }
