@@ -147,4 +147,18 @@ final class PressureTests: XCTestCase {
     pressure.torr = 10
     XCTAssertEqual(pressure[keyPath: PressureUnit.torr.pressureKeyPath], 10)
   }
+  
+  func test_saturation_pressure() {
+    let tempsAndExpectation: [(Temperature, Pressure)] = [
+      (.fahrenheit(-30), .psi(0.00344)),
+      (.fahrenheit(32), .psi(0.08865))
+    ]
+    
+    for (temp, expected) in tempsAndExpectation {
+      XCTAssertEqual(
+        round(Pressure.saturationPressure(at: temp).psi * 100000) / 100000,
+        expected.psi
+      )
+    }
+  }
 }

@@ -7,22 +7,22 @@ import Foundation
 /// Represents / calculates the enthalpy of moist air.
 public struct Enthalpy {
 
-  public static func partialPressure(for temperature: Temperature, at humidity: RelativeHumidity)
-    -> Double
-  {
-    let rankineTemperature = temperature.rankine
-    let naturalLog = log(rankineTemperature)
-    let exponent =
-      -10440.4 / rankineTemperature - 11.29465 - 0.02702235 * rankineTemperature + 1.289036e-5
-      * pow(rankineTemperature, 2) - 2.478068e-9 * pow(rankineTemperature, 3) + 6.545967
-      * naturalLog
-
-    return humidity.fraction * exp(exponent)
-  }
+//  public static func partialPressure(for temperature: Temperature, at humidity: RelativeHumidity)
+//    -> Double
+//  {
+//    let rankineTemperature = temperature.rankine
+//    let naturalLog = log(rankineTemperature)
+//    let exponent =
+//      -10440.4 / rankineTemperature - 11.29465 - 0.02702235 * rankineTemperature + 1.289036e-5
+//      * pow(rankineTemperature, 2) - 2.478068e-9 * pow(rankineTemperature, 3) + 6.545967
+//      * naturalLog
+//
+//    return humidity.fraction * exp(exponent)
+//  }
 
   /// The humidity ratio of the air.
-  public static func humidityRatio(for pressure: Pressure, with partialPressure: Double) -> Double {
-    0.62198 * partialPressure / (pressure.psi - partialPressure)
+  public static func humidityRatio(for pressure: Pressure, with partialPressure: Pressure) -> Double {
+    0.62198 * partialPressure.psi / (pressure.psi - partialPressure.psi)
   }
 
   private var input: Input
@@ -36,8 +36,11 @@ public struct Enthalpy {
       case let .raw(value):
         return value
       case let .calculate(temperature, humidity, pressure):
-        let partialPressure = Enthalpy.partialPressure(for: temperature, at: humidity)
-        let humidityRatio = Enthalpy.humidityRatio(for: pressure, with: partialPressure)
+//        let partialPressure = Enthalpy.partialPressure(for: temperature, at: humidity)
+        let humidityRatio = Enthalpy.humidityRatio(
+          for: pressure,
+          with: .partialPressure(for: temperature, at: humidity)
+        )
         return 0.24 * temperature.fahrenheit + humidityRatio
           * (1061 + 0.444 * temperature.fahrenheit)
       }

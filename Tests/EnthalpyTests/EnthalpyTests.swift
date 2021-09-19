@@ -17,10 +17,10 @@ final class EnthalpyTests: XCTestCase {
   }
 
   func test_humidityRatio_and_partialPressure() {
-    let partialPressure = Enthalpy.partialPressure(for: 75, at: 50%)
+    let partialPressure = Pressure.partialPressure(for: 75, at: 50%)
     let humidityRatio = Enthalpy.humidityRatio(for: .init(altitude: .seaLevel), with: partialPressure)
     XCTAssertEqual(round(humidityRatio * 10000) / 10000, 0.0092)
-    XCTAssertEqual(round(partialPressure * 10000) / 10000, 0.215)
+    XCTAssertEqual(round(partialPressure.psi * 10000) / 10000, 0.215)
   }
   
   func test_enthalpy_at_altitude() {
