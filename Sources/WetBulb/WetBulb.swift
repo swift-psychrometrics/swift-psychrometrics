@@ -6,7 +6,7 @@ import Foundation
 public struct WetBulb {
 
   fileprivate var input: Input
-  
+
   /// Create a new ``WetBulb`` for the given temperature.
   ///
   /// - Parameters:
@@ -33,7 +33,7 @@ public struct WetBulb {
   fileprivate enum Input {
     case raw(Temperature)
     case calculate(Temperature, RelativeHumidity)
-    
+
     var rawValue: Temperature {
       switch self {
       case let .raw(value):
@@ -80,25 +80,25 @@ extension WetBulb: AdditiveArithmetic {
   public static func - (lhs: WetBulb, rhs: WetBulb) -> WetBulb {
     .init(lhs.temperature - rhs.temperature)
   }
-  
+
   public static func + (lhs: WetBulb, rhs: WetBulb) -> WetBulb {
     .init(lhs.temperature + rhs.temperature)
   }
 }
 
 extension WetBulb: Numeric {
-  public init?<T>(exactly source: T) where T : BinaryInteger {
+  public init?<T>(exactly source: T) where T: BinaryInteger {
     self.init(floatLiteral: Double(source))
   }
-  
+
   public var magnitude: Temperature.Magnitude {
     temperature.magnitude
   }
-  
+
   public static func * (lhs: WetBulb, rhs: WetBulb) -> WetBulb {
     .init(lhs.temperature * rhs.temperature)
   }
-  
+
   public static func *= (lhs: inout WetBulb, rhs: WetBulb) {
     lhs.temperature *= rhs.temperature
   }
