@@ -12,4 +12,33 @@ final class WetBulbTests: XCTestCase {
       62.51
     )
   }
+  
+  func test_equatable() {
+    let wetBulb: WetBulb = 75
+    XCTAssertEqual(wetBulb, 75.0)
+  }
+  
+  func test_comparable() {
+    XCTAssertTrue(WetBulb.init(75) > 64)
+  }
+  
+  func test_additon_and_subtraction() {
+    var wetBulb = WetBulb.init(exactly: 63)!
+    XCTAssertEqual(wetBulb.temperature, 63)
+    wetBulb += 10
+    XCTAssertEqual(wetBulb.temperature, 73)
+    wetBulb -= 3
+    XCTAssertEqual(wetBulb.temperature, 70)
+  }
+  
+  func test_magnitude() {
+    XCTAssertEqual(WetBulb.init(10).magnitude, 10.magnitude)
+  }
+  
+  func test_multiplication() {
+    var wetBulb: WetBulb = 10 * 2
+    XCTAssertEqual(wetBulb.temperature, 20)
+    wetBulb *= 3
+    XCTAssertEqual(wetBulb.temperature, 60)
+  }
 }
