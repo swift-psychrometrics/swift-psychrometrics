@@ -1,0 +1,112 @@
+import Foundation
+
+public protocol NumericType: Divisible, Comparable, ExpressibleByFloatLiteral, Numeric { }
+
+extension NumericType where Self: RawRepresentable, Self.RawValue == Double {
+  
+  public init?<T>(exactly source: T) where T : BinaryInteger {
+    self.init(rawValue: Double(source))
+  }
+}
+
+public protocol NumericUnit {
+  associatedtype Container
+  var keyPath: WritableKeyPath<Container, Double> { get }
+}
+
+public protocol DefaultUnitRepresentable {
+  static var `default`: Self { get set }
+}
+
+public protocol NumericWithUnitType: NumericType {
+  associatedtype Units: NumericUnit
+  
+  var units: Units { get }
+  
+  init(_ value: Double, units: Units)
+  
+  subscript(units: Units) -> Double { get set }
+}
+
+extension NumericWithUnitType where Units: DefaultUnitRepresentable {
+  
+  public init(_ value: Double) {
+    self.init(value, units: Units.default)
+  }
+  
+  public static var zero: Self {
+    .init(0)
+  }
+}
+
+extension NumericWithUnitType where Units: DefaultUnitRepresentable, Self: RawRepresentable, RawValue == Double {
+  
+  public init?(rawValue: Double) {
+    self.init(rawValue)
+  }
+}
+
+extension NumericWithUnitType where Units: DefaultUnitRepresentable, IntegerLiteralType == Int {
+  
+  public init(integerLiteral value: Int) {
+    self.init(Double(value))
+  }
+}
+
+extension NumericWithUnitType where Units: DefaultUnitRepresentable, FloatLiteralType == Double {
+  
+  public init(floatLiteral value: Double) {
+    self.init(value)
+  }
+}
+
+extension NumericWithUnitType where Self: RawRepresentable, RawValue == Double, Magnitude == Self {
+  
+  public var magnitude: Self {
+    clone(rawValue.magnitude)
+  }
+}
+
+extension NumericWithUnitType {
+  public func clone(_ newValue: Double) -> Self {
+    .init(newValue, units: units)
+  }
+}
+
+extension NumericWithUnitType where Units.Container == Self {
+  
+  public subscript(units: Units) -> Double {
+    get { self[keyPath: units.keyPath] }
+    set { self[keyPath: units.keyPath] = newValue }
+  }
+}
+
+extension NumericWithUnitType where Units.Container == Self, Self: RawRepresentable, RawValue == Double {
+  
+  public static func + (lhs: Self, rhs: Self) -> Self {
+    lhs.clone(lhs.rawValue + rhs[lhs.units])
+  }
+  
+  public static func - (lhs: Self, rhs: Self) -> Self {
+    lhs.clone(lhs.rawValue - rhs[lhs.units])
+  }
+  
+  public static func * (lhs: Self, rhs: Self) -> Self {
+    lhs.clone(lhs.rawValue * rhs[lhs.units])
+  }
+  public static func *= (lhs: inout Self, rhs: Self) {
+    lhs = lhs.clone(lhs.rawValue * rhs[lhs.units])
+  }
+  
+  public static func / (lhs: Self, rhs: Self) -> Self {
+    lhs.clone(lhs.rawValue / rhs[lhs.units])
+  }
+  
+  public static func /= (lhs: inout Self, rhs: Self) {
+    lhs = lhs.clone(lhs.rawValue / rhs[lhs.units])
+  }
+  
+  public static func < (lhs: Self, rhs: Self) -> Bool {
+    lhs.rawValue < rhs[lhs.units]
+  }
+}

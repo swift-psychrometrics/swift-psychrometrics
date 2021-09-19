@@ -5,6 +5,7 @@ import PackageDescription
 let package = Package(
   name: "swift-psychrometrics",
   products: [
+    .library(name: "Core", targets: ["Core"]),
     .library(name: "Density", targets: ["Density"]),
     .library(name: "DewPoint", targets: ["DewPoint"]),
     .library(name: "Enthalpy", targets: ["Enthalpy"]),
@@ -18,6 +19,7 @@ let package = Package(
   ],
   dependencies: [],
   targets: [
+    .target(name: "Core"),
     .target(
       name: "Density",
       dependencies: [
@@ -118,7 +120,7 @@ let package = Package(
     ),
     .target(
       name: "Temperature",
-      dependencies: []
+      dependencies: ["Core"]
     ),
     .testTarget(
       name: "TemperatureTests",
