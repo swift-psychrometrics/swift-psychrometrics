@@ -2,11 +2,13 @@ import Foundation
 
 public protocol NumericType: Divisible, Comparable, ExpressibleByFloatLiteral, Numeric {}
 
+extension Double: NumericType { }
+
 extension NumericType where Self: RawRepresentable, Self.RawValue == Double {
 
-  public init?<T>(exactly source: T) where T: BinaryInteger {
-    self.init(rawValue: Double(source))
-  }
+//  public init?<T>(exactly source: T) where T: BinaryInteger {
+  //    self.init(rawValue: Double(source))
+  //  }
 }
 
 public protocol RawValueInitializable: RawRepresentable {
@@ -21,7 +23,7 @@ extension RawValueInitializable {
   }
 }
 
-extension NumericType where Self: RawValueInitializable, Self.RawValue: NumericWithUnitOfMeasure {
+extension NumericType where Self: RawValueInitializable, Self.RawValue: NumericType {
 
   public init?<T>(exactly source: T) where T: BinaryInteger {
     guard let rawValue = RawValue.init(exactly: source) else {
@@ -72,7 +74,8 @@ where Self: RawValueInitializable, RawValue: NumericType, Magnitude == RawValue.
 
 extension NumericType
 where
-  Self: RawValueInitializable, RawValue: NumericWithUnitOfMeasure,
+  Self: RawValueInitializable,
+  RawValue: NumericType,
   FloatLiteralType == RawValue.FloatLiteralType
 {
 
@@ -83,7 +86,8 @@ where
 
 extension NumericType
 where
-  Self: RawValueInitializable, RawValue: NumericWithUnitOfMeasure,
+  Self: RawValueInitializable,
+  RawValue: NumericType,
   IntegerLiteralType == RawValue.IntegerLiteralType
 {
 

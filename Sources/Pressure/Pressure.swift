@@ -209,12 +209,6 @@ extension Pressure.Unit: UnitOfMeasure, DefaultUnitRepresentable {
   public typealias Container = Pressure
 }
 
-extension Pressure: NumericWithUnitOfMeasure, RawRepresentable {
+extension Pressure: NumericWithUnitOfMeasure, RawValueInitializable {
   public typealias Units = Unit
-}
-
-extension Pressure: Equatable {
-  public static func == (lhs: Pressure, rhs: Pressure) -> Bool {
-    lhs.rawValue == rhs[lhs.units]
-  }
 }

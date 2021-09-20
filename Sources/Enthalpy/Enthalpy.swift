@@ -1,4 +1,5 @@
 import Foundation
+import Core
 import Length
 import Pressure
 import RelativeHumidity
@@ -51,59 +52,16 @@ public struct Enthalpy {
   }
 }
 
+extension Enthalpy: RawValueInitializable, NumericType {
+  
+  public typealias FloatLiteralType = Double.FloatLiteralType
+  public typealias Magnitude = Double.Magnitude
+  public typealias IntegerLiteralType = Double.IntegerLiteralType
+  
+}
+
 extension Enthalpy: Equatable {
   public static func == (lhs: Enthalpy, rhs: Enthalpy) -> Bool {
     lhs.rawValue == rhs.rawValue
   }
-}
-
-// MARK: - Numeric
-
-extension Enthalpy: ExpressibleByIntegerLiteral {
-  public init(integerLiteral value: Int) {
-    self.init(Double(value))
-  }
-}
-
-extension Enthalpy: ExpressibleByFloatLiteral {
-  public init(floatLiteral value: Double) {
-    self.init(value)
-  }
-}
-
-extension Enthalpy: Comparable {
-  public static func < (lhs: Enthalpy, rhs: Enthalpy) -> Bool {
-    lhs.rawValue < rhs.rawValue
-  }
-}
-
-extension Enthalpy: AdditiveArithmetic {
-  public static func - (lhs: Enthalpy, rhs: Enthalpy) -> Enthalpy {
-    .init(lhs.rawValue - rhs.rawValue)
-  }
-
-  public static func + (lhs: Enthalpy, rhs: Enthalpy) -> Enthalpy {
-    .init(lhs.rawValue + rhs.rawValue)
-  }
-}
-
-extension Enthalpy: Numeric {
-
-  public init?<T>(exactly source: T) where T: BinaryInteger {
-    self.init(Double(source))
-  }
-
-  public var magnitude: Double.Magnitude {
-    rawValue.magnitude
-  }
-
-  public static func * (lhs: Enthalpy, rhs: Enthalpy) -> Enthalpy {
-    self.init(lhs.rawValue * rhs.rawValue)
-  }
-
-  public static func *= (lhs: inout Enthalpy, rhs: Enthalpy) {
-    lhs.rawValue *= rhs.rawValue
-  }
-
-  public typealias Magnitude = Double.Magnitude
 }

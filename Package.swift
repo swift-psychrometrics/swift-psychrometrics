@@ -50,6 +50,7 @@ let package = Package(
     .target(
       name: "Enthalpy",
       dependencies: [
+        "Core",
         "Pressure",
         "RelativeHumidity",
         "Temperature",

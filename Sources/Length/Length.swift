@@ -160,6 +160,6 @@ extension Length.Unit: UnitOfMeasure, DefaultUnitRepresentable {
   public typealias Container = Length
 }
 
-extension Length: NumericWithUnitOfMeasure, RawRepresentable {
+extension Length: NumericWithUnitOfMeasure, RawValueInitializable {
   public typealias Units = Unit
 }

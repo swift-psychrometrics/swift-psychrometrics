@@ -159,6 +159,6 @@ extension Temperature.Unit: UnitOfMeasure, DefaultUnitRepresentable {
   public typealias Container = Temperature
 }
 
-extension Temperature: NumericWithUnitOfMeasure, RawRepresentable {
+extension Temperature: NumericWithUnitOfMeasure, RawValueInitializable {
   public typealias Units = Unit
 }
