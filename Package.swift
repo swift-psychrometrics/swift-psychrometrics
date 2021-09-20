@@ -1,13 +1,13 @@
 // swift-tools-version:5.4
-
+import Foundation
 import PackageDescription
 
-let package = Package(
+var package = Package(
   name: "swift-psychrometrics",
-  platforms: [
-    .macOS(.v10_15),
-    .iOS(.v10),
-  ],
+//  platforms: [
+//    .macOS(.v10_15),
+//    .iOS(.v10),
+//  ],
   products: [
     .library(name: "Core", targets: ["Core"]),
     .library(name: "Density", targets: ["Density"]),
@@ -17,13 +17,12 @@ let package = Package(
     .library(name: "Length", targets: ["Length"]),
     .library(name: "Pressure", targets: ["Pressure"]),
     .library(name: "SpecificHeat", targets: ["SpecificHeat"]),
-    .executable(name: "psychrometrics", targets: ["swift-psychrometrics"]),
     .library(name: "RelativeHumidity", targets: ["RelativeHumidity"]),
     .library(name: "Temperature", targets: ["Temperature"]),
     .library(name: "WetBulb", targets: ["WetBulb"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
+//    .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
   ],
   targets: [
     .target(name: "Core"),
@@ -134,13 +133,6 @@ let package = Package(
       name: "SpecificHeatTests",
       dependencies: ["SpecificHeat"]
     ),
-    .executableTarget(
-      name: "swift-psychrometrics",
-      dependencies: [
-        "Enthalpy",
-        .product(name: "ConsoleKit", package: "console-kit"),
-      ]
-    ),
     .target(
       name: "Temperature",
       dependencies: [
@@ -168,3 +160,25 @@ let package = Package(
     ),
   ]
 )
+
+// #MARK: - CLI
+if #available(macOS 10.15, *) {
+  package.platforms = [
+    .macOS(.v10_15)
+  ]
+  package.dependencies.append(contentsOf: [
+    .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
+  ])
+  package.products.append(contentsOf: [
+    .executable(name: "psychrometrics", targets: ["swift-psychrometrics"]),
+  ])
+  package.targets.append(contentsOf: [
+    .executableTarget(
+      name: "swift-psychrometrics",
+      dependencies: [
+        "Enthalpy",
+        .product(name: "ConsoleKit", package: "console-kit"),
+      ]
+    ),
+  ])
+}

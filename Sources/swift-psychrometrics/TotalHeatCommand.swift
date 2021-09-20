@@ -2,6 +2,7 @@ import ConsoleKit
 import Enthalpy
 import Foundation
 
+@available(macOS 10.15, *)
 struct TotalHeatCommand: Command {
 
   struct Signature: CommandSignature {
