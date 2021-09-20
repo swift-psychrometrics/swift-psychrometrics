@@ -1,4 +1,5 @@
 import Foundation
+import Core
 @_exported import Length
 @_exported import Pressure
 @_exported import RelativeHumidity
@@ -73,54 +74,10 @@ public struct GrainsOfMoisture: Equatable {
   }
 }
 
-extension GrainsOfMoisture: Comparable {
-  public static func < (lhs: GrainsOfMoisture, rhs: GrainsOfMoisture) -> Bool {
-    lhs.rawValue < rhs.rawValue
-  }
-}
-
-extension GrainsOfMoisture: ExpressibleByFloatLiteral {
-
-  public init(floatLiteral value: Double) {
-    self.init(value)
-  }
-}
-
-extension GrainsOfMoisture: ExpressibleByIntegerLiteral {
-
-  public init(integerLiteral value: Int) {
-    self.init(floatLiteral: Double(value))
-  }
-}
-
-extension GrainsOfMoisture: AdditiveArithmetic {
-  public static func - (lhs: GrainsOfMoisture, rhs: GrainsOfMoisture) -> GrainsOfMoisture {
-    .init(lhs.rawValue - rhs.rawValue)
-  }
-
-  public static func + (lhs: GrainsOfMoisture, rhs: GrainsOfMoisture) -> GrainsOfMoisture {
-    .init(lhs.rawValue + rhs.rawValue)
-  }
-}
-
-extension GrainsOfMoisture: Numeric {
-  public init?<T>(exactly source: T) where T: BinaryInteger {
-    self.init(Double(source))
-  }
-
-  public var magnitude: Double.Magnitude {
-    rawValue.magnitude
-  }
-
-  public static func * (lhs: GrainsOfMoisture, rhs: GrainsOfMoisture) -> GrainsOfMoisture {
-    .init(lhs.rawValue * rhs.rawValue)
-  }
-
-  public static func *= (lhs: inout GrainsOfMoisture, rhs: GrainsOfMoisture) {
-    lhs.rawValue *= rhs.rawValue
-  }
-
+extension GrainsOfMoisture: RawValueInitializable, NumericType {
   public typealias Magnitude = Double.Magnitude
+  public typealias IntegerLiteralType = Double.IntegerLiteralType
+  public typealias FloatLiteralType = Double.FloatLiteralType
 }
 
 extension Temperature {

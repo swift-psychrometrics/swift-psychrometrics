@@ -65,6 +65,7 @@ let package = Package(
     .target(
       name: "GrainsOfMoisture",
       dependencies: [
+        "Core",
         "Length",
         "Pressure",
         "RelativeHumidity",
@@ -104,6 +105,7 @@ let package = Package(
     .target(
       name: "RelativeHumidity",
       dependencies: [
+        "Core",
         "Temperature"
       ]
     ),
