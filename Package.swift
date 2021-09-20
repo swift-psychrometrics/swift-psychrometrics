@@ -36,6 +36,7 @@ let package = Package(
     .target(
       name: "DewPoint",
       dependencies: [
+        "Core",
         "RelativeHumidity",
         "Temperature",
       ]
