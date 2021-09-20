@@ -8,7 +8,7 @@ final class PressureTests: XCTestCase {
     XCTAssertEqual(Pressure.atmosphere(10).atmosphere, 10)
     XCTAssertEqual(Pressure.psi(10).atmosphere, 0.6804596377991787)
     XCTAssertEqual(Pressure.bar(10).atmosphere, 9.8692316931427)
-    XCTAssertEqual(Pressure.inchesWaterColumn(10).atmosphere, 0.0245832)
+    XCTAssertEqual(Pressure.inchesWater(10).atmosphere, 0.0245832)
     XCTAssertEqual(Pressure.millibar(10).atmosphere, 0.0098692316931427)
     XCTAssertEqual(Pressure.pascals(10).atmosphere, 9.869231693142701e-5)
     XCTAssertEqual(Pressure.psi(10).atmosphere, 0.6804596377991787)
@@ -30,11 +30,11 @@ final class PressureTests: XCTestCase {
   }
   
   func test_converting_to_inchesWaterColumn() {
-    XCTAssertEqual(Pressure.pascals(100).inchesWaterColumn, 0.4014624496868878)
-    var temp = Pressure.inchesWaterColumn(10)
-    XCTAssertEqual(temp.inchesWaterColumn, 10)
-    temp.inchesWaterColumn = 20
-    XCTAssertEqual(temp.inchesWaterColumn, 20)
+    XCTAssertEqual(Pressure.pascals(100).inchesWater, 0.4014624496868878)
+    var temp = Pressure.inchesWater(10)
+    XCTAssertEqual(temp.inchesWater, 10)
+    temp.inchesWater = 20
+    XCTAssertEqual(temp.inchesWater, 20)
   }
   
   func test_converting_to_millibar() {
@@ -46,7 +46,7 @@ final class PressureTests: XCTestCase {
   }
   
   func test_converting_to_pascals() {
-    XCTAssertEqual(Pressure.inchesWaterColumn(0.4014624496868878).pascals, 100)
+    XCTAssertEqual(Pressure.inchesWater(0.4014624496868878).pascals, 100)
     var temp = Pressure.pascals(10)
     XCTAssertEqual(temp.pascals, 10)
     temp.pascals = 20
@@ -132,7 +132,7 @@ final class PressureTests: XCTestCase {
     pressure.bar = 10
     XCTAssertEqual(pressure[.bar], 10)
     
-    pressure.inchesWaterColumn = 10
+    pressure.inchesWater = 10
     XCTAssertEqual(pressure[.inchesWater], 10)
     
     pressure.millibar = 10

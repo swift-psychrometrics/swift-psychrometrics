@@ -6,8 +6,6 @@ import Temperature
 /// Represents / calculates pressure for different units.
 public struct Pressure: Hashable {
 
-  //  public static var defaultUnits: Unit = .psi
-
   public private(set) var rawValue: Double
 
   public private(set) var units: Unit
@@ -84,7 +82,7 @@ extension Pressure {
   ///
   /// - Parameters:
   ///    - value: The inches of water column value.
-  public static func inchesWaterColumn(_ value: Double) -> Pressure {
+  public static func inchesWater(_ value: Double) -> Pressure {
     .init(value, units: .inchesWater)
   }
 
@@ -155,9 +153,9 @@ extension Pressure {
   }
 
   /// Access / calculate the pressure as inches of water column.
-  public var inchesWaterColumn: Double {
+  public var inchesWater: Double {
     get { self.atmosphere / 0.00245832 }
-    set { self = .inchesWaterColumn(newValue) }
+    set { self = .inchesWater(newValue) }
   }
 
   /// Access / calculate the pressure as millibar.
@@ -202,7 +200,7 @@ extension Pressure: NumberWithUnitOfMeasure {
     case .bar:
       return \.bar
     case .inchesWater:
-      return \.inchesWaterColumn
+      return \.inchesWater
     case .millibar:
       return \.millibar
     case .pascals:
