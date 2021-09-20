@@ -1,4 +1,3 @@
-
 /// A raw representable type that has a non-fallable initializer.
 public protocol RawInitializable: RawRepresentable {
 

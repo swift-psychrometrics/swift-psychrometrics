@@ -11,7 +11,7 @@ public protocol NumericWithUnitOfMeasureRepresentable: NumericType {
   var units: Units { get }
 
   init(_ value: Number, units: Units)
-  
+
   static func keyPath(for units: Units) -> WritableKeyPath<Self, Number>
 }
 
@@ -52,21 +52,21 @@ where
   public static func + (lhs: Self, rhs: Self) -> Self {
     lhs.cloneUnits(lhs.rawValue + rhs[lhs.units])
   }
-  
+
   /// Subtract the values with the lhs units.
   ///
   /// - SeeAlso: ``AdditiveArithmetic``
   public static func - (lhs: Self, rhs: Self) -> Self {
     lhs.cloneUnits(lhs.rawValue - rhs[lhs.units])
   }
-  
+
   /// Multiply the values with the lhs units.
   ///
   /// - SeeAlso: ``Numeric``
   public static func * (lhs: Self, rhs: Self) -> Self {
     lhs.cloneUnits(lhs.rawValue * rhs[lhs.units])
   }
-  
+
   /// Multiply the values with the lhs units.
   ///
   /// - SeeAlso: ``Numeric``
@@ -87,7 +87,7 @@ where
   public static func /= (lhs: inout Self, rhs: Self) {
     lhs = lhs.cloneUnits(lhs.rawValue / rhs[lhs.units])
   }
-  
+
   /// Compare the values with the lhs units.
   ///
   /// - SeeAlso: ``Comparable``
@@ -104,4 +104,4 @@ where
 }
 
 /// Represents a type that is ``NumericWithUnitOfMeasureRepresentable`` and ``RawInitializable``.
-public protocol NumberWithUnitOfMeasure: NumericWithUnitOfMeasureRepresentable, RawInitializable { }
+public protocol NumberWithUnitOfMeasure: NumericWithUnitOfMeasureRepresentable, RawInitializable {}

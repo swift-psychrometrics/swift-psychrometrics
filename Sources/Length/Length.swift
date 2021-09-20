@@ -151,8 +151,7 @@ extension Length: NumberWithUnitOfMeasure {
   public typealias Magnitude = Double.Magnitude
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias Units = Unit
-  
-  
+
   /// The key-path on a ``Length`` for the units.
   public static func keyPath(for units: Unit) -> WritableKeyPath<Length, Double> {
     switch units {

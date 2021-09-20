@@ -22,7 +22,7 @@ extension NumericType where Self: RawInitializable, RawValue: NumericType {
   public static func + (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue + rhs.rawValue)
   }
-  
+
   /// See ``AdditiveArithmetic``.
   public static func - (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue - rhs.rawValue)
@@ -32,7 +32,7 @@ extension NumericType where Self: RawInitializable, RawValue: NumericType {
   public static func * (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue * rhs.rawValue)
   }
-  
+
   /// See ``Numeric``.
   public static func *= (lhs: inout Self, rhs: Self) {
     lhs = .init(lhs.rawValue * rhs.rawValue)
@@ -96,4 +96,4 @@ where
 }
 
 /// Represents a type that is both a ``NumericType`` and ``RawInitializable``.
-public protocol RawNumericType: NumericType, RawInitializable { }
+public protocol RawNumericType: NumericType, RawInitializable {}

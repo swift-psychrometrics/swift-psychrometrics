@@ -192,7 +192,7 @@ extension Pressure: NumberWithUnitOfMeasure {
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias Magnitude = Double.Magnitude
   public typealias Units = Unit
-  
+
   public static func keyPath(for units: Unit) -> WritableKeyPath<Pressure, Double> {
     switch units {
     case .atmosphere:

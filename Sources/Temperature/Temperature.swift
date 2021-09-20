@@ -151,7 +151,7 @@ extension Temperature: NumberWithUnitOfMeasure {
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias Magnitude = Double.Magnitude
   public typealias Units = Unit
-  
+
   public static func keyPath(for units: Unit) -> WritableKeyPath<Temperature, Double> {
     switch units {
     case .celsius:
