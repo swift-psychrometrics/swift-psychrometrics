@@ -1,5 +1,4 @@
 import Foundation
-import Pressure
 import RelativeHumidity
 
 extension Pressure {
@@ -15,4 +14,5 @@ extension Pressure {
   ) -> Pressure {
     .psi(Pressure.saturationPressure(at: temperature).psi * humidity.fraction)
   }
+
 }

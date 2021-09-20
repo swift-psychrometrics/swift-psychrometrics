@@ -7,12 +7,18 @@ final class DewPointTests: XCTestCase {
   
   func test_dewPoint_fahrenheit() {
     let temperature = Temperature.fahrenheit(75)
-    XCTAssertEqual(round(temperature.dewPoint(humidity: 50%).rawValue.fahrenheit * 100) / 100, 55.11)
+    XCTAssertEqual(
+      round(temperature.dewPoint(humidity: 50%).rawValue.fahrenheit * 100) / 100,
+      56.24
+    )
   }
   
   func test_dewPoint_celsius() {
     let temperature = Temperature.celsius(23)
-    XCTAssertEqual(round(temperature.dewPoint(humidity: 50%).rawValue.celsius * 100) / 100, 12.02)
+    XCTAssertEqual(
+      round(temperature.dewPoint(humidity: 50%).rawValue.celsius * 100) / 100,
+      12.65
+    )
   }
   
   func test_calculating_humidity_from_dewPoint() {

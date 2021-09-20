@@ -46,6 +46,7 @@ let package = Package(
         "Core",
         "RelativeHumidity",
         "Temperature",
+        "Pressure",
       ]
     ),
     .testTarget(
@@ -100,6 +101,7 @@ let package = Package(
       dependencies: [
         "Core",
         "Length",
+        "RelativeHumidity",
         "Temperature",
       ]
     ),
@@ -141,7 +143,10 @@ let package = Package(
     ),
     .target(
       name: "Temperature",
-      dependencies: ["Core"]
+      dependencies: [
+        "Core",
+        "Length",
+      ]
     ),
     .testTarget(
       name: "TemperatureTests",

@@ -28,9 +28,11 @@ public struct GrainsOfMoisture {
     _ humidity: RelativeHumidity,
     _ pressure: Pressure
   ) -> Double {
-    let vaporPressure = Pressure.vaporPressure(at: temperature)
+    let vaporPressure = Pressure.saturationPressure(at: temperature)
     let saturationHumidity = saturationHumidity(
-      vaporPressure: vaporPressure, ambientPressure: pressure)
+      vaporPressure: vaporPressure,
+      ambientPressure: pressure
+    )
     return saturationHumidity * humidity.fraction
   }
 

@@ -1,5 +1,8 @@
 import Foundation
 
+// Because of rounding errors and notes in ASHRAE Fundamentals 2017, these are sometimes
+// off a little from the tables in the book.
+
 extension Pressure {
 
   private static func saturationPressureBelowFreezing(_ temperature: Temperature) -> Double {
@@ -31,8 +34,10 @@ extension Pressure {
     )
   }
 
-  // Because of rounding errors and notes in ASHRAE Fundamentals 2017, these are sometimes
-  // off a little from the tables in the book.
+  /// Calculate the saturation pressure of air at a given temperature.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature to calculate the saturation pressure of.
   public static func saturationPressure(at temperature: Temperature) -> Pressure {
     let fahrenheit = temperature.fahrenheit
 

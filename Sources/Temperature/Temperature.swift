@@ -1,5 +1,6 @@
 import Core
 import Foundation
+import Length
 
 /// Represents / calculates temperature in SI and IP units as well as scientific / absolute units.
 public struct Temperature: Hashable {
@@ -163,5 +164,16 @@ extension Temperature: NumberWithUnitOfMeasure {
     case .rankine:
       return \.rankine
     }
+  }
+}
+
+extension Temperature {
+
+  /// Create a ``Temperature`` as a function of the given altitude.
+  ///
+  ///  - Parameters:
+  ///   - altitude: The altitude to calculate the temperature.
+  public static func atAltitude(_ altitude: Length) -> Temperature {
+    .fahrenheit(59 - 0.00356620 * altitude.feet)
   }
 }

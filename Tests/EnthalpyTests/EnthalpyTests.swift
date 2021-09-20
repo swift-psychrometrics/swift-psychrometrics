@@ -25,12 +25,10 @@ final class EnthalpyTests: XCTestCase {
   
   func test_enthalpy_at_altitude() {
     let enthalpy = Enthalpy(for: .fahrenheit(75), at: 50%, altitude: 1000)
-    XCTAssertEqual(round(enthalpy.rawValue * 100) / 100, 28.51)
+    XCTAssertEqual(round(enthalpy.rawValue * 100) / 100, 28.49)
     
     let enthalpy2 = Temperature.fahrenheit(75).enthalpy(at: 50%, altitude: 1000)
-    XCTAssertEqual(round(enthalpy2.rawValue * 100) / 100, 28.51)
-//    XCTAssertEqual(round(enthalpy2.humidityRatio * 10000) / 10000, 0.0096)
-//    XCTAssertEqual(round(enthalpy2.partialPressure * 10000) / 10000, 0.215)
+    XCTAssertEqual(round(enthalpy2.rawValue * 100) / 100, 28.49)
   }
   
   func test_addition_and_subtraction() {
@@ -60,5 +58,50 @@ final class EnthalpyTests: XCTestCase {
     XCTAssertEqual(enthalpy.rawValue, 20)
     enthalpy *= 2
     XCTAssertEqual(enthalpy.rawValue, 40)
+  }
+  
+  func test_humidityRatio_as_mass() {
+    XCTAssertEqual(
+      round(Enthalpy.humidityRatio(water: 14.7, dryAir: 18.3) * 100) / 100,
+      0.50
+    )
+  }
+  
+  func test_specificHumidity() {
+    XCTAssertEqual(
+      round(Enthalpy.specificHumidity(water: 14.7, dryAir: 18.3) * 100) / 100,
+      0.45
+    )
+    let temperature: Temperature = 75
+    let humidity: RelativeHumidity = 50%
+    let altitude: Length = 1000
+    let pressure: Pressure = .init(altitude: altitude)
+    let ratio = Enthalpy.humidityRatio(
+      for: temperature, with: humidity, at: pressure
+    )
+    
+    XCTAssertEqual(
+      round(Enthalpy.specificHumidity(ratio: ratio) * 100) / 100,
+      0.01
+    )
+    XCTAssertEqual(
+      round(Enthalpy.specificHumidity(
+        for: temperature, with: humidity, at: pressure) * 1000) / 1000,
+      0.009
+    )
+    XCTAssertEqual(
+      round(Enthalpy.specificHumidity(
+        for: temperature, with: humidity, at: altitude) * 1000) / 1000,
+      0.009
+    )
+  }
+  
+  func test_specificVolume() {
+    let volume = Enthalpy.specificVolume(for: 75, at: 100%, altitude: .seaLevel)
+    XCTAssertEqual(round(volume * 100) / 100, 13.89)
+    XCTAssertEqual(
+      round(Enthalpy.specificVolume(for: 76.1, at: 58.3%, altitude: .seaLevel) * 100) / 100,
+      13.75
+    )
   }
 }

@@ -71,21 +71,21 @@ final class PressureTests: XCTestCase {
   
   func test_pressure_for_altitude() {
     let pressure = Pressure(altitude: .feet(1000))
-    XCTAssertEqual(round(pressure.psi * 100) / 100, 14.15)
+    XCTAssertEqual(round(pressure.psi * 100) / 100, 14.17)
   }
   
-  func test_vapor_pressure() {
-    let temperature = Temperature.fahrenheit(56)
-    let pressure = Pressure.vaporPressure(at: temperature)
-    XCTAssertEqual(
-      round(pressure.millibar * 10) / 10,
-      15.3
-    )
-    XCTAssertEqual(
-      round(pressure.psi * 100) / 100,
-      0.22
-    )
-  }
+//  func test_vapor_pressure() {
+//    let temperature = Temperature.fahrenheit(56)
+//    let pressure = Pressure.vaporPressure(at: temperature)
+//    XCTAssertEqual(
+//      round(pressure.millibar * 10) / 10,
+//      15.3
+//    )
+//    XCTAssertEqual(
+//      round(pressure.psi * 100) / 100,
+//      0.22
+//    )
+//  }
   
   func test_comparable() {
     XCTAssertTrue(Pressure.psi(10) > 5)
@@ -151,7 +151,8 @@ final class PressureTests: XCTestCase {
   func test_saturation_pressure() {
     let tempsAndExpectation: [(Temperature, Pressure)] = [
       (.fahrenheit(-30), .psi(0.00344)),
-      (.fahrenheit(32), .psi(0.08865))
+      (.fahrenheit(32), .psi(0.08865)),
+      (.fahrenheit(56), .psi(0.22202))
     ]
     
     for (temp, expected) in tempsAndExpectation {

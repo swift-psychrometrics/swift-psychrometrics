@@ -150,4 +150,17 @@ class TemperatureTests: XCTestCase {
     XCTAssertEqual(Temperature.Unit.kelvin.symbol, "°K")
     XCTAssertEqual(Temperature.Unit.rankine.symbol, "°R")
   }
+  
+  func test_atAltitude() {
+    let expectations: [(Double, Double)] = [
+      (0.0, 59),
+      (1000, 55.4),
+      (5000, 41.2)
+    ]
+    
+    for (input, expected) in expectations {
+      let temperature: Temperature = .atAltitude(.feet(input))
+      XCTAssertEqual(round(temperature.fahrenheit * 10) / 10, expected)
+    }
+  }
 }

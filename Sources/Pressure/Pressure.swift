@@ -20,9 +20,10 @@ public struct Pressure: Hashable {
   /// - Parameters:
   ///   - altitude: The altitude to calculate the pressure.
   public init(altitude: Length) {
-    let meters = altitude.meters
-    let pascals = 101325 * pow((1 - 2.25577e-5 * meters), 5.525588)
-    self.init(pascals, units: .pascals)
+    self.init(
+      14.696 * pow(1 - 6.8754 * pow(10, -6) * altitude.feet, 5.2559),
+      units: .psi
+    )
   }
 
   // MARK: - PressureUnit

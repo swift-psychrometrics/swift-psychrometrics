@@ -88,6 +88,18 @@ Some of these calculations do not yet support different units of measure.
 
 - Total Delivered Heat Quantity
 
+- Partial Pressure
+
+- Saturation Pressure
+
+- Vapor Pressure
+
+- Humidity Ratio
+
+- Pressure as function of Altitude
+
+- Temperature as a function of Altitude
+
 ### CLI Utility
 
 This package ships with a command line utility that allows you to explore the different calculations.
