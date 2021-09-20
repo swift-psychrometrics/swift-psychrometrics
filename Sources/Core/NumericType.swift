@@ -2,14 +2,7 @@ import Foundation
 
 public protocol NumericType: Divisible, Comparable, ExpressibleByFloatLiteral, Numeric {}
 
-extension Double: NumericType { }
-
-extension NumericType where Self: RawRepresentable, Self.RawValue == Double {
-
-//  public init?<T>(exactly source: T) where T: BinaryInteger {
-  //    self.init(rawValue: Double(source))
-  //  }
-}
+extension Double: NumericType {}
 
 public protocol RawValueInitializable: RawRepresentable {
 

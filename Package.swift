@@ -106,7 +106,7 @@ let package = Package(
       name: "RelativeHumidity",
       dependencies: [
         "Core",
-        "Temperature"
+        "Temperature",
       ]
     ),
     .testTarget(

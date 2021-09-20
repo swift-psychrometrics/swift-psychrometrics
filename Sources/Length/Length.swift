@@ -161,5 +161,7 @@ extension Length.Unit: UnitOfMeasure, DefaultUnitRepresentable {
 }
 
 extension Length: NumericWithUnitOfMeasure, RawValueInitializable {
+  public typealias Magnitude = Double.Magnitude
+  public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias Units = Unit
 }

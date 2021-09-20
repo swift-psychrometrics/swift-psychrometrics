@@ -1,5 +1,5 @@
-import Foundation
 import Core
+import Foundation
 import Length
 import Pressure
 import RelativeHumidity
@@ -53,11 +53,11 @@ public struct Enthalpy {
 }
 
 extension Enthalpy: RawValueInitializable, NumericType {
-  
+
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude
   public typealias IntegerLiteralType = Double.IntegerLiteralType
-  
+
 }
 
 extension Enthalpy: Equatable {

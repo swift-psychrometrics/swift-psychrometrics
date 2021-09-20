@@ -42,9 +42,8 @@ public struct WetBulb {
 }
 
 extension WetBulb: RawValueInitializable, NumericType {
-
   public typealias FloatLiteralType = Temperature.FloatLiteralType
-  public typealias Magnitude = Temperature
+  public typealias Magnitude = Temperature.Magnitude
   public typealias IntegerLiteralType = Temperature.IntegerLiteralType
 }
 

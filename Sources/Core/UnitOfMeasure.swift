@@ -1,6 +1,8 @@
 public protocol UnitOfMeasure {
   associatedtype Container
-  var keyPath: WritableKeyPath<Container, Double> { get }
+  associatedtype Number: NumericType
+
+  var keyPath: WritableKeyPath<Container, Number> { get }
 }
 
 public protocol DefaultUnitRepresentable {

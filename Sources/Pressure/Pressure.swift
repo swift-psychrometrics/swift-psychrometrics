@@ -210,5 +210,7 @@ extension Pressure.Unit: UnitOfMeasure, DefaultUnitRepresentable {
 }
 
 extension Pressure: NumericWithUnitOfMeasure, RawValueInitializable {
+  public typealias IntegerLiteralType = Double.IntegerLiteralType
+  public typealias Magnitude = Double.Magnitude
   public typealias Units = Unit
 }

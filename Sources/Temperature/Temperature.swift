@@ -160,5 +160,7 @@ extension Temperature.Unit: UnitOfMeasure, DefaultUnitRepresentable {
 }
 
 extension Temperature: NumericWithUnitOfMeasure, RawValueInitializable {
+  public typealias IntegerLiteralType = Double.IntegerLiteralType
+  public typealias Magnitude = Double.Magnitude
   public typealias Units = Unit
 }
