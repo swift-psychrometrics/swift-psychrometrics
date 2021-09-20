@@ -132,6 +132,7 @@ let package = Package(
     .target(
       name: "WetBulb",
       dependencies: [
+        "Core",
         "RelativeHumidity",
         "Temperature",
       ]

@@ -5,6 +5,7 @@ import Foundation
 public struct Temperature: Hashable {
 
   public private(set) var rawValue: Double
+  
   public private(set) var units: Unit
 
   public init(_ value: Double, units: Unit = .default) {
@@ -123,10 +124,10 @@ extension Temperature {
   public var kelvin: Double {
     get {
       switch units {
-      case .celsius, .rankine:
-        return Temperature.fahrenheit(self.fahrenheit).kelvin
-      case .fahrenheit:
-        return (rawValue + 459.67) * 5 / 9
+      case .celsius:
+        return rawValue + 273.15
+      case .rankine, .fahrenheit:
+        return Temperature.celsius(self.celsius).kelvin
       case .kelvin:
         return rawValue
       }
@@ -160,10 +161,4 @@ extension Temperature.Unit: UnitOfMeasure, DefaultUnitRepresentable {
 
 extension Temperature: NumericWithUnitOfMeasure, RawRepresentable {
   public typealias Units = Unit
-}
-
-extension Temperature: Equatable {
-  public static func == (lhs: Temperature, rhs: Temperature) -> Bool {
-    lhs.rawValue == rhs[lhs.units]
-  }
 }

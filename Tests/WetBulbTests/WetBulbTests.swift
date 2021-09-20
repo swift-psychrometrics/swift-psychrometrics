@@ -8,7 +8,7 @@ final class WetBulbTests: XCTestCase {
   func test_wetBulb_for_fahrenheit() {
     let temperature = Temperature.fahrenheit(75)
     XCTAssertEqual(
-      round(temperature.wetBulb(humidity: 50%).temperature.fahrenheit * 100) / 100,
+      round(temperature.wetBulb(at: 50%).rawValue.fahrenheit * 100) / 100,
       62.51
     )
   }
@@ -24,11 +24,11 @@ final class WetBulbTests: XCTestCase {
   
   func test_additon_and_subtraction() {
     var wetBulb = WetBulb.init(exactly: 63)!
-    XCTAssertEqual(wetBulb.temperature, 63)
+    XCTAssertEqual(wetBulb.rawValue, 63)
     wetBulb += 10
-    XCTAssertEqual(wetBulb.temperature, 73)
+    XCTAssertEqual(wetBulb.rawValue, 73)
     wetBulb -= 3
-    XCTAssertEqual(wetBulb.temperature, 70)
+    XCTAssertEqual(wetBulb.rawValue, 70)
   }
   
   func test_magnitude() {
@@ -37,8 +37,8 @@ final class WetBulbTests: XCTestCase {
   
   func test_multiplication() {
     var wetBulb: WetBulb = 10 * 2
-    XCTAssertEqual(wetBulb.temperature, 20)
+    XCTAssertEqual(wetBulb.rawValue, 20)
     wetBulb *= 3
-    XCTAssertEqual(wetBulb.temperature, 60)
+    XCTAssertEqual(wetBulb.rawValue, 60)
   }
 }
