@@ -4,10 +4,17 @@ import Foundation
 /// Represents a unit of length in both SI and IP units.
 public struct Length: Hashable {
 
+  /// The raw value of the length for the units set on the instance.
   public private(set) var rawValue: Double
 
+  /// The unit of measure for the lenght set on the instance.
   public private(set) var units: Unit
 
+  /// Create a new ``Length`` with the given value and units.
+  ///
+  /// - Parameters:
+  ///   - value: The value of the length.
+  ///   - units: The unit of measure for the length.
   public init(
     _ value: Double = 0,
     units: Unit = .default

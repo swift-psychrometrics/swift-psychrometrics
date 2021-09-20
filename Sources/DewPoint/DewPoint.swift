@@ -4,6 +4,7 @@ import Foundation
 @_exported import Temperature
 
 /// Represents / calculates the dew-point.
+@dynamicMemberLookup
 public struct DewPoint {
 
   public static func calculate(for temperature: Temperature, at humidity: RelativeHumidity)
@@ -36,6 +37,10 @@ public struct DewPoint {
   ///   - temperature: The dew-point temperature to set on the instance.
   public init(_ value: Temperature) {
     self.rawValue = value
+  }
+  
+  public subscript<V>(dynamicMember keyPath: KeyPath<Temperature, V>) -> V {
+    rawValue[keyPath: keyPath]
   }
 }
 

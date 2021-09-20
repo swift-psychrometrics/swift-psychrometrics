@@ -4,6 +4,7 @@ import Foundation
 @_exported import Temperature
 
 /// Represents / calculates the wet-bulb temperature for the given temperature and relative humidity.
+@dynamicMemberLookup
 public struct WetBulb {
 
   private static func calculate(_ temperature: Temperature, _ humidity: RelativeHumidity)
@@ -38,6 +39,10 @@ public struct WetBulb {
   ///   - humidity: The relative humidity.
   public init(temperature: Temperature, humidity: RelativeHumidity) {
     self.rawValue = Self.calculate(temperature, humidity)
+  }
+  
+  public subscript<V>(dynamicMember keyPath: KeyPath<Temperature, V>) -> V {
+    rawValue[keyPath: keyPath]
   }
 }
 
