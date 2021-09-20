@@ -1,16 +1,16 @@
 import Foundation
-import Temperature
-import RelativeHumidity
 import Length
+import RelativeHumidity
+import Temperature
 
 public struct Condition {
-  
+
   public var temperature: Temperature
   public var humidity: RelativeHumidity
   public var altitude: Length
-  
+
   public var enthalpy: Enthalpy { temperature.enthalpy(at: humidity, altitude: altitude) }
-  
+
   public init(
     temperature: Temperature,
     humidity: RelativeHumidity,
@@ -23,10 +23,10 @@ public struct Condition {
 }
 
 public struct ConditionEnvelope {
-  
+
   public var `return`: Condition
   public var supply: Condition
-  
+
   public init(return: Condition, supply: Condition) {
     self.return = `return`
     self.supply = supply
@@ -34,7 +34,8 @@ public struct ConditionEnvelope {
 }
 
 public func totalDeliveredHeat(_ lhs: Enthalpy, _ rhs: Enthalpy, airflow cfm: Double) -> Double {
-  let deltaE = lhs > rhs
+  let deltaE =
+    lhs > rhs
     ? lhs - rhs
     : rhs - lhs
   return 4.5 * deltaE.rawValue * cfm

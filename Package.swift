@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
   name: "swift-psychrometrics",
   platforms: [
-    .macOS(.v10_15)
+    .macOS(.v10_15),
+    .iOS(.v10),
   ],
   products: [
     .library(name: "Core", targets: ["Core"]),
@@ -135,7 +136,7 @@ let package = Package(
       name: "swift-psychrometrics",
       dependencies: [
         "Enthalpy",
-        .product(name: "ConsoleKit", package: "console-kit")
+        .product(name: "ConsoleKit", package: "console-kit"),
       ]
     ),
     .target(

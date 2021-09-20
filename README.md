@@ -11,7 +11,10 @@ units of measure.
 
 Psychrometrics are used by Heating Ventilation and Air Conditioning (HVAC) professionals and engineers, as
 well by scientests and metorologists.  This package aims to provide the calculations used for psychrometric
-evaluation.
+evaluation.  Most of the psychrometric calculations are based off of ASHRAE Fundamentals (2017).
+Unit conversions were found either in the ASHRAE Fundamentals or online (primarily at 
+  [engineeringtoolbox.com](https://engineeringtoolbox.com)
+)
 
 ## Installation
 
@@ -31,6 +34,13 @@ let package = Package(
 This package provides several libraries depending on your needs.  There are basic units of measure that are
 convertible to other standard units of measure, including S.I. and I.P. units.  As well as calculations for
 moist and dry air conditions, and a few calculations for water.
+
+Most of the types this library provides support basic mathematical operations (addition, subtraction,
+multiplication, and division).  These operations should for the most part be considered safe, however there
+is nothing that prevents a value to be operated on with a different unit of measure, which could lead to
+unexpected results.  This library will try to do the right thing and convert the units of measure (taking 
+the left hand side of an operation as precedence), but it is encouraged to operate on the underlying raw values
+of the type for less error-prone results.
 
 ### Units of Measure
 The following units of measure are provided with the corresponding conversions.
@@ -76,6 +86,29 @@ Some of these calculations do not yet support different units of measure.
 
 - Wet Bulb
 
+- Total Delivered Heat Quantity
+
+### CLI Utility
+
+This package ships with a command line utility that allows you to explore the different calculations.
+It currently does not support all the calculations or units of measure.
+
+To use the command line utility you can use the following command from the project root.
+```swift
+swift run psychrometrics
+```
+
+Or to build the command line utility as an executable to put in your ``PATH``.  The following command
+will build the executable in release mode and open a Finder window at the build location.
+```
+make cli
+```
+
+### Playground Support
+
+This package ships with an `XCode Playground` in the `Examples` directory that you can use to explore
+the API's.
+
 ## Documentation
 
 The documentation is currently being worked on / improved with more examples.
@@ -85,3 +118,7 @@ The documentation is currently being worked on / improved with more examples.
 ## License
 
 This project is licensed under the [MIT License](https://github.com/swift-psychrometrics/swift-psychrometrics/LICENSE)
+
+## Contributions
+
+Contributions are welcome.  If errors are found please submit an issue or pull-request.

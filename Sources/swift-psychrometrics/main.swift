@@ -10,7 +10,8 @@ commands.use(EnthalpyCommand(), as: "enthalpy", isDefault: false)
 commands.use(TotalHeatCommand(), as: "total-heat", isDefault: false)
 
 do {
-  let group = commands
+  let group =
+    commands
     .group(help: "A command line utility for psychrometric calculations.")
   try console.run(group, input: input)
 } catch let error {

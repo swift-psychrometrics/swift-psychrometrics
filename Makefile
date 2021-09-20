@@ -45,3 +45,7 @@ code-cov-report: test
 		$(COV_BIN) \
 		-instr-profile=.build/debug/codecov/default.profdata \
 		-use-color
+		
+cli:
+	@swift build -c release
+	@open .build/release

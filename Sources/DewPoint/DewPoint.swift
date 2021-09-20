@@ -38,7 +38,7 @@ public struct DewPoint {
   public init(_ value: Temperature) {
     self.rawValue = value
   }
-  
+
   public subscript<V>(dynamicMember keyPath: KeyPath<Temperature, V>) -> V {
     rawValue[keyPath: keyPath]
   }

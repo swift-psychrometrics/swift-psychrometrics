@@ -40,7 +40,7 @@ public struct WetBulb {
   public init(temperature: Temperature, humidity: RelativeHumidity) {
     self.rawValue = Self.calculate(temperature, humidity)
   }
-  
+
   public subscript<V>(dynamicMember keyPath: KeyPath<Temperature, V>) -> V {
     rawValue[keyPath: keyPath]
   }
