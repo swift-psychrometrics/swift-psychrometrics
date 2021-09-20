@@ -47,7 +47,7 @@ public postfix func % (value: Int) -> RelativeHumidity {
   RelativeHumidity(Double(value))
 }
 
-extension RelativeHumidity: RawValueInitializable, NumericType {
+extension RelativeHumidity: RawNumericType {
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude

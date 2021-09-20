@@ -6,7 +6,11 @@ import Temperature
 
 extension Enthalpy {
 
-  /// The humidity ratio of the air.
+  /// The humidity ratio of the air for the given total pressure and partial pressure.
+  ///
+  /// - Parameters:
+  ///   - totalPressure: The total pressure of the air.
+  ///   - partialPressure: The partial pressure of the air.
   public static func humidityRatio(
     for totalPressure: Pressure,
     with partialPressure: Pressure
@@ -14,6 +18,12 @@ extension Enthalpy {
     0.62198 * partialPressure.psi / (totalPressure.psi - partialPressure.psi)
   }
 
+  /// The humidity ratio of the air for the given temperature, humidity, and altitude.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the air.
+  ///   - humidity: The humidity of the air.
+  ///   - altitude: The altitude of the air.
   public static func humidityRatio(
     for temperature: Temperature,
     with humidity: RelativeHumidity,
@@ -25,6 +35,12 @@ extension Enthalpy {
     )
   }
 
+  /// The humidity ratio of the air for the given temperature, humidity, and pressure.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the air.
+  ///   - humidity: The humidity of the air.
+  ///   - totalPressure: The pressure of the air.
   public static func humidityRatio(
     for temperature: Temperature,
     with humidity: RelativeHumidity,

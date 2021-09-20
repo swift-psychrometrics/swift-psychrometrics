@@ -29,19 +29,6 @@ extension Temperature {
     public var symbol: String {
       rawValue
     }
-
-    public var keyPath: WritableKeyPath<Temperature, Double> {
-      switch self {
-      case .celsius:
-        return \.celsius
-      case .fahrenheit:
-        return \.fahrenheit
-      case .kelvin:
-        return \.kelvin
-      case .rankine:
-        return \.rankine
-      }
-    }
   }
 }
 
@@ -155,13 +142,26 @@ extension Temperature {
   }
 }
 
-extension Temperature.Unit: UnitOfMeasure, DefaultUnitRepresentable {
+extension Temperature.Unit: UnitOfMeasure {
   public typealias Container = Temperature
 }
 
-extension Temperature: NumericWithUnitOfMeasure, RawValueInitializable {
+extension Temperature: NumberWithUnitOfMeasure {
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias Magnitude = Double.Magnitude
   public typealias Units = Unit
+  
+  public static func keyPath(for units: Unit) -> WritableKeyPath<Temperature, Double> {
+    switch units {
+    case .celsius:
+      return \.celsius
+    case .fahrenheit:
+      return \.fahrenheit
+    case .kelvin:
+      return \.kelvin
+    case .rankine:
+      return \.rankine
+    }
+  }
 }

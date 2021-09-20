@@ -106,17 +106,16 @@ final class LengthTests: XCTestCase {
   
   func test_LengthUnit_lengthKeyPath() {
     var length: Length = .centimeters(10)
-    XCTAssertEqual(length[keyPath: Length.Unit.centimeters.keyPath], 10)
+    XCTAssertEqual(length[.centimeters], 10)
     
     length = .meters(10)
-    XCTAssertEqual(length[keyPath: Length.Unit.meters.keyPath], 10)
+    XCTAssertEqual(length[.meters], 10)
     
     length = .inches(10)
-    XCTAssertEqual(length[keyPath: Length.Unit.inches.keyPath], 10)
-    
+    XCTAssertEqual(length[.inches], 10)
     
     length = .feet(10)
-    XCTAssertEqual(length[keyPath: Length.Unit.feet.keyPath], 10)
+    XCTAssertEqual(length[.feet], 10)
     
   }
 }

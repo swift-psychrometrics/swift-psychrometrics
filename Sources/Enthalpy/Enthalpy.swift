@@ -52,16 +52,9 @@ public struct Enthalpy {
   }
 }
 
-extension Enthalpy: RawValueInitializable, NumericType {
-
+extension Enthalpy: RawNumericType {
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude
   public typealias IntegerLiteralType = Double.IntegerLiteralType
 
-}
-
-extension Enthalpy: Equatable {
-  public static func == (lhs: Enthalpy, rhs: Enthalpy) -> Bool {
-    lhs.rawValue == rhs.rawValue
-  }
 }

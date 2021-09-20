@@ -39,7 +39,7 @@ public struct DewPoint {
   }
 }
 
-extension DewPoint: RawValueInitializable, NumericType {
+extension DewPoint: RawNumericType {
   public typealias IntegerLiteralType = Temperature.IntegerLiteralType
   public typealias FloatLiteralType = Temperature.FloatLiteralType
   public typealias Magnitude = Temperature.Magnitude

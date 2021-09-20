@@ -1,10 +1,11 @@
-public protocol UnitOfMeasure {
+
+/// Represents a unit of measure for a container type.
+public protocol UnitOfMeasureRepresentable {
+  
+  /// The container of the raw values for the unit of measure.
   associatedtype Container
-  associatedtype Number: NumericType
-
-  var keyPath: WritableKeyPath<Container, Number> { get }
+  
 }
 
-public protocol DefaultUnitRepresentable {
-  static var `default`: Self { get set }
-}
+/// Represents the default contract for the unit of measures for this library.
+public protocol UnitOfMeasure: UnitOfMeasureRepresentable, DefaultRepresentable { }

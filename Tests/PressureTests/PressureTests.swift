@@ -127,22 +127,22 @@ final class PressureTests: XCTestCase {
   
   func test_PressureUnit_pressureKeyPath() {
     var pressure = Pressure.atmosphere(10)
-    XCTAssertEqual(pressure[keyPath: Pressure.Unit.atmosphere.keyPath], 10)
+    XCTAssertEqual(pressure[.atmosphere], 10)
     
     pressure.bar = 10
-    XCTAssertEqual(pressure[keyPath: Pressure.Unit.bar.keyPath], 10)
+    XCTAssertEqual(pressure[.bar], 10)
     
     pressure.inchesWaterColumn = 10
-    XCTAssertEqual(pressure[keyPath: Pressure.Unit.inchesWater.keyPath], 10)
+    XCTAssertEqual(pressure[.inchesWater], 10)
     
     pressure.millibar = 10
-    XCTAssertEqual(pressure[keyPath: Pressure.Unit.millibar.keyPath], 10)
+    XCTAssertEqual(pressure[.millibar], 10)
     
     pressure.pascals = 10
-    XCTAssertEqual(pressure[keyPath: Pressure.Unit.pascals.keyPath], 10)
+    XCTAssertEqual(pressure[.pascals], 10)
     
     pressure.psi = 10
-    XCTAssertEqual(pressure[keyPath: Pressure.Unit.psi.keyPath], 10)
+    XCTAssertEqual(pressure[.psi], 10)
     
     pressure[.torr] = 10
     XCTAssertEqual(pressure[.torr], 10)

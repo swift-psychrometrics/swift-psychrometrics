@@ -59,27 +59,7 @@ public struct Pressure: Hashable {
         return "torr"
       }
     }
-
-    public var keyPath: WritableKeyPath<Pressure, Double> {
-      switch self {
-      case .atmosphere:
-        return \.atmosphere
-      case .bar:
-        return \.bar
-      case .inchesWater:
-        return \.inchesWaterColumn
-      case .millibar:
-        return \.millibar
-      case .pascals:
-        return \.pascals
-      case .psi:
-        return \.psi
-      case .torr:
-        return \.torr
-      }
-    }
   }
-
 }
 
 extension Pressure {
@@ -205,13 +185,32 @@ extension Pressure {
   }
 }
 
-extension Pressure.Unit: UnitOfMeasure, DefaultUnitRepresentable {
+extension Pressure.Unit: UnitOfMeasure {
   public typealias Container = Pressure
 }
 
-extension Pressure: NumericWithUnitOfMeasure, RawValueInitializable {
+extension Pressure: NumberWithUnitOfMeasure {
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias Magnitude = Double.Magnitude
   public typealias Units = Unit
+  
+  public static func keyPath(for units: Unit) -> WritableKeyPath<Pressure, Double> {
+    switch units {
+    case .atmosphere:
+      return \.atmosphere
+    case .bar:
+      return \.bar
+    case .inchesWater:
+      return \.inchesWaterColumn
+    case .millibar:
+      return \.millibar
+    case .pascals:
+      return \.pascals
+    case .psi:
+      return \.psi
+    case .torr:
+      return \.torr
+    }
+  }
 }

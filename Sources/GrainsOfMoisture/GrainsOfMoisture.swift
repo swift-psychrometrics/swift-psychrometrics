@@ -8,7 +8,7 @@ import Foundation
 // TODO: Add units of measure.
 
 /// Represents / calculates the grains of moisture for air.
-public struct GrainsOfMoisture: Equatable {
+public struct GrainsOfMoisture {
 
   /// Constant for the mole weight of water.
   public static let moleWeightWater = 18.02
@@ -74,7 +74,7 @@ public struct GrainsOfMoisture: Equatable {
   }
 }
 
-extension GrainsOfMoisture: RawValueInitializable, NumericType {
+extension GrainsOfMoisture: RawNumericType {
   public typealias Magnitude = Double.Magnitude
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias FloatLiteralType = Double.FloatLiteralType

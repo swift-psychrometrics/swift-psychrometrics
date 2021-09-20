@@ -28,20 +28,6 @@ public struct Length: Hashable {
 
     /// The symbol string for the unit of length.
     public var symbol: String { rawValue }
-
-    /// The key-path on a ``Length`` for the units.
-    public var keyPath: WritableKeyPath<Length, Double> {
-      switch self {
-      case .centimeters:
-        return \.centimeters
-      case .meters:
-        return \.meters
-      case .feet:
-        return \.feet
-      case .inches:
-        return \.inches
-      }
-    }
   }
 }
 
@@ -156,13 +142,28 @@ extension Length {
   }
 }
 
-extension Length.Unit: UnitOfMeasure, DefaultUnitRepresentable {
+extension Length.Unit: UnitOfMeasure {
   public typealias Container = Length
 }
 
-extension Length: NumericWithUnitOfMeasure, RawValueInitializable {
+extension Length: NumberWithUnitOfMeasure {
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias Units = Unit
+  
+  
+  /// The key-path on a ``Length`` for the units.
+  public static func keyPath(for units: Unit) -> WritableKeyPath<Length, Double> {
+    switch units {
+    case .centimeters:
+      return \.centimeters
+    case .meters:
+      return \.meters
+    case .feet:
+      return \.feet
+    case .inches:
+      return \.inches
+    }
+  }
 }

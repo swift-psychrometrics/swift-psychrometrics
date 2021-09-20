@@ -1,25 +1,29 @@
 import Foundation
 
-public protocol NumericWithUnitOfMeasure: NumericType {
+/// Represents a number that also has a unit of measure associated with it.  It should have the ability
+/// to convert the raw value to a different unit of measure for the type.
+public protocol NumericWithUnitOfMeasureRepresentable: NumericType {
 
-  associatedtype Units: UnitOfMeasure
+  associatedtype Units: UnitOfMeasureRepresentable
   associatedtype Number: NumericType
 
   var rawValue: Number { get }
   var units: Units { get }
 
   init(_ value: Number, units: Units)
+  
+  static func keyPath(for units: Units) -> WritableKeyPath<Self, Number>
 }
 
-extension NumericWithUnitOfMeasure {
+extension NumericWithUnitOfMeasureRepresentable {
 
   // Internal helper to ensure units are set.
-  func clone(_ newValue: Number) -> Self {
+  func cloneUnits(_ newValue: Number) -> Self {
     .init(newValue, units: units)
   }
 }
 
-extension NumericWithUnitOfMeasure where Units: DefaultUnitRepresentable, Units.Number == Number {
+extension NumericWithUnitOfMeasureRepresentable where Units: DefaultRepresentable {
 
   public init(_ value: Number) {
     self.init(value, units: .default)
@@ -27,50 +31,77 @@ extension NumericWithUnitOfMeasure where Units: DefaultUnitRepresentable, Units.
 
 }
 
-extension NumericWithUnitOfMeasure where Units.Container == Self, Units.Number == Number {
+extension NumericWithUnitOfMeasureRepresentable where Units.Container == Self {
 
   public subscript(units: Units) -> Number {
-    get { self[keyPath: units.keyPath] }
-    set { self[keyPath: units.keyPath] = newValue }
+    get { self[keyPath: Self.keyPath(for: units)] }
+    set { self[keyPath: Self.keyPath(for: units)] = newValue }
   }
 }
 
-extension NumericWithUnitOfMeasure
+extension NumericWithUnitOfMeasureRepresentable
 where
   Units.Container == Self,
   Self: RawRepresentable,
-  RawValue == Number,
-  Units.Number == Number
+  RawValue == Number
 {
 
+  /// Add the values with the lhs units.
+  ///
+  /// - SeeAlso: ``AdditiveArithmetic``
   public static func + (lhs: Self, rhs: Self) -> Self {
-    lhs.clone(lhs.rawValue + rhs[lhs.units])
+    lhs.cloneUnits(lhs.rawValue + rhs[lhs.units])
   }
-
+  
+  /// Subtract the values with the lhs units.
+  ///
+  /// - SeeAlso: ``AdditiveArithmetic``
   public static func - (lhs: Self, rhs: Self) -> Self {
-    lhs.clone(lhs.rawValue - rhs[lhs.units])
+    lhs.cloneUnits(lhs.rawValue - rhs[lhs.units])
   }
-
+  
+  /// Multiply the values with the lhs units.
+  ///
+  /// - SeeAlso: ``Numeric``
   public static func * (lhs: Self, rhs: Self) -> Self {
-    lhs.clone(lhs.rawValue * rhs[lhs.units])
+    lhs.cloneUnits(lhs.rawValue * rhs[lhs.units])
   }
+  
+  /// Multiply the values with the lhs units.
+  ///
+  /// - SeeAlso: ``Numeric``
   public static func *= (lhs: inout Self, rhs: Self) {
-    lhs = lhs.clone(lhs.rawValue * rhs[lhs.units])
+    lhs = lhs.cloneUnits(lhs.rawValue * rhs[lhs.units])
   }
 
+  /// Divide the values with the lhs units.
+  ///
+  /// - SeeAlso: ``Divisible``
   public static func / (lhs: Self, rhs: Self) -> Self {
-    lhs.clone(lhs.rawValue / rhs[lhs.units])
+    lhs.cloneUnits(lhs.rawValue / rhs[lhs.units])
   }
 
+  /// Divide the values with the lhs units.
+  ///
+  /// - SeeAlso: ``Divisible``
   public static func /= (lhs: inout Self, rhs: Self) {
-    lhs = lhs.clone(lhs.rawValue / rhs[lhs.units])
+    lhs = lhs.cloneUnits(lhs.rawValue / rhs[lhs.units])
   }
-
+  
+  /// Compare the values with the lhs units.
+  ///
+  /// - SeeAlso: ``Comparable``
   public static func < (lhs: Self, rhs: Self) -> Bool {
     lhs.rawValue < rhs[lhs.units]
   }
 
+  /// Compare the values with the lhs units.
+  ///
+  /// - SeeAlso: ``Equatable``
   public static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.rawValue == rhs[lhs.units]
   }
 }
+
+/// Represents a type that is ``NumericWithUnitOfMeasureRepresentable`` and ``RawInitializable``.
+public protocol NumberWithUnitOfMeasure: NumericWithUnitOfMeasureRepresentable, RawInitializable { }
