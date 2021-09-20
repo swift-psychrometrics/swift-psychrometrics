@@ -25,33 +25,6 @@ extension NumericWithUnitOfMeasure where Units: DefaultUnitRepresentable, Units.
     self.init(value, units: .default)
   }
 
-  public static var zero: Self {
-    .init(Number.zero)
-  }
-}
-
-extension NumericWithUnitOfMeasure
-where
-  Units: DefaultUnitRepresentable,
-  IntegerLiteralType == Number.IntegerLiteralType,
-  Units.Number == Number
-{
-
-  public init(integerLiteral value: IntegerLiteralType) {
-    self.init(.init(integerLiteral: value))
-  }
-}
-
-extension NumericWithUnitOfMeasure
-where
-  Units: DefaultUnitRepresentable,
-  FloatLiteralType == Number.FloatLiteralType,
-  Units.Number == Number
-{
-
-  public init(floatLiteral value: Number.FloatLiteralType) {
-    self.init(.init(floatLiteral: value))
-  }
 }
 
 extension NumericWithUnitOfMeasure where Units.Container == Self, Units.Number == Number {
@@ -63,7 +36,12 @@ extension NumericWithUnitOfMeasure where Units.Container == Self, Units.Number =
 }
 
 extension NumericWithUnitOfMeasure
-where Units.Container == Self, Self: RawRepresentable, RawValue == Number, Units.Number == Number {
+where
+  Units.Container == Self,
+  Self: RawRepresentable,
+  RawValue == Number,
+  Units.Number == Number
+{
 
   public static func + (lhs: Self, rhs: Self) -> Self {
     lhs.clone(lhs.rawValue + rhs[lhs.units])

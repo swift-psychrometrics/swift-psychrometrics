@@ -58,7 +58,11 @@ extension NumericType where Self: RawValueInitializable, Self.RawValue: NumericT
 }
 
 extension NumericType
-where Self: RawValueInitializable, RawValue: NumericType, Magnitude == RawValue.Magnitude {
+where
+  Self: RawValueInitializable,
+  RawValue: NumericType,
+  Magnitude == RawValue.Magnitude
+{
 
   public var magnitude: Magnitude {
     rawValue.magnitude
