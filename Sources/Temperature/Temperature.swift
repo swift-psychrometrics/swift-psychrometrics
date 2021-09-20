@@ -5,7 +5,7 @@ import Foundation
 public struct Temperature: Hashable {
 
   public private(set) var rawValue: Double
-  
+
   public private(set) var units: Unit
 
   public init(_ value: Double, units: Unit = .default) {

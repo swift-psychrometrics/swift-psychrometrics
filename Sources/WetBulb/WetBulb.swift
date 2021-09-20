@@ -1,12 +1,14 @@
-import Foundation
 import Core
+import Foundation
 @_exported import RelativeHumidity
 @_exported import Temperature
 
 /// Represents / calculates the wet-bulb temperature for the given temperature and relative humidity.
 public struct WetBulb {
-  
-  private static func calculate(_ temperature: Temperature, _ humidity: RelativeHumidity) -> Temperature {
+
+  private static func calculate(_ temperature: Temperature, _ humidity: RelativeHumidity)
+    -> Temperature
+  {
     let celsius = temperature.celsius
     let humidity = humidity.rawValue
     let value =
@@ -16,10 +18,10 @@ public struct WetBulb {
           * humidity * humidity))
     return .celsius(value)
   }
-  
+
   public var rawValue: Temperature
 
-//  fileprivate var input: Input
+  //  fileprivate var input: Input
 
   /// Create a new ``WetBulb`` for the given temperature.
   ///
@@ -40,7 +42,7 @@ public struct WetBulb {
 }
 
 extension WetBulb: RawValueInitializable, NumericType {
-  
+
   public typealias FloatLiteralType = Temperature.FloatLiteralType
   public typealias Magnitude = Temperature
   public typealias IntegerLiteralType = Temperature.IntegerLiteralType

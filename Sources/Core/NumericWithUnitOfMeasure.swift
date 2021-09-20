@@ -9,7 +9,7 @@ public protocol NumericWithUnitOfMeasure: NumericType {
 }
 
 extension NumericWithUnitOfMeasure {
-  
+
   // Helper to ensure units are set.
   func clone(_ newValue: Double) -> Self {
     .init(newValue, units: units)
