@@ -15,13 +15,6 @@ final class EnthalpyTests: XCTestCase {
     
     XCTAssertEqual(round(enthalpy2.rawValue * 100) / 100, 28.11)
   }
-
-  func test_humidityRatio_and_partialPressure() {
-    let partialPressure = Pressure.partialPressure(for: 75, at: 50%)
-    let humidityRatio = Enthalpy.humidityRatio(for: .init(altitude: .seaLevel), with: partialPressure)
-    XCTAssertEqual(round(humidityRatio * 10000) / 10000, 0.0092)
-    XCTAssertEqual(round(partialPressure.psi * 10000) / 10000, 0.215)
-  }
   
   func test_enthalpy_at_altitude() {
     let enthalpy = Enthalpy(for: .fahrenheit(75), at: 50%, altitude: 1000)
@@ -60,48 +53,23 @@ final class EnthalpyTests: XCTestCase {
     XCTAssertEqual(enthalpy.rawValue, 40)
   }
   
-  func test_humidityRatio_as_mass() {
-    XCTAssertEqual(
-      round(Enthalpy.humidityRatio(water: 14.7, dryAir: 18.3) * 100) / 100,
-      0.50
-    )
-  }
-  
-  func test_specificHumidity() {
-    XCTAssertEqual(
-      round(Enthalpy.specificHumidity(water: 14.7, dryAir: 18.3) * 100) / 100,
-      0.45
-    )
-    let temperature: Temperature = 75
-    let humidity: RelativeHumidity = 50%
-    let altitude: Length = 1000
-    let pressure: Pressure = .init(altitude: altitude)
-    let ratio = Enthalpy.humidityRatio(
-      for: temperature, with: humidity, at: pressure
-    )
-    
-    XCTAssertEqual(
-      round(Enthalpy.specificHumidity(ratio: ratio) * 100) / 100,
-      0.01
-    )
-    XCTAssertEqual(
-      round(Enthalpy.specificHumidity(
-        for: temperature, with: humidity, at: pressure) * 1000) / 1000,
-      0.009
-    )
-    XCTAssertEqual(
-      round(Enthalpy.specificHumidity(
-        for: temperature, with: humidity, at: altitude) * 1000) / 1000,
-      0.009
-    )
-  }
-  
   func test_specificVolume() {
     let volume = Enthalpy.specificVolume(for: 75, at: 100%, altitude: .seaLevel)
+//    let vda = Enthalpy.specificVolume(for: 75, at: 0%, altitude: .seaLevel)
+//    print(vda)
+//    XCTFail()
     XCTAssertEqual(round(volume * 100) / 100, 13.89)
     XCTAssertEqual(
       round(Enthalpy.specificVolume(for: 76.1, at: 58.3%, altitude: .seaLevel) * 100) / 100,
       13.75
     )
   }
+  
+//  func test_relative_humidity_for_dewPoint_and_dryBulb_enthalpies() {
+//    let totalPressure = Pressure(altitude: .seaLevel)
+//    let saturationPressure = Pressure.saturationPressure(at: 75)
+//    let rh = (saturationPressure.psi / totalPressure.psi)
+//    print(rh)
+//    XCTFail()
+//  }
 }

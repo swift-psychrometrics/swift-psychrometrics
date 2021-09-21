@@ -55,3 +55,19 @@ print(returnConditions.string)
 print("Supply Conditions")
 print(supplyConditions.string)
 print("Delivered BTU: \(numberString(btus))")
+func enthalpy(for temperature: Temperature, humidityRatio: Double) -> Double {
+  0.24 * temperature.fahrenheit
+    + humidityRatio
+    * (1061 + 0.444 * temperature.fahrenheit)
+}
+
+func humidityRatio(from enthalpy: Double, and temperature: Temperature) -> Double {
+  let c1 = (0.24 * temperature.fahrenheit)
+  let c2 = (1061 + 0.444 * temperature.fahrenheit)
+  return (enthalpy - c1) / c2
+}
+
+let expected = returnConditions.humidityRatio
+let enthalpy = returnConditions.enthalpy.rawValue
+let calculated = humidityRatio(from: enthalpy, and: returnConditions.temperature)
+print(expected == calculated)

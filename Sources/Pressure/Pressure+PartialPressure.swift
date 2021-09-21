@@ -15,4 +15,13 @@ extension Pressure {
     .psi(Pressure.saturationPressure(at: temperature).psi * humidity.fraction)
   }
 
+  //  public static func partialPressure(
+  //    totalPressure: Pressure,
+  //    humidityRatio: Double
+  //  ) -> Pressure {
+  //    .psi(
+  //      (totalPressure.psi * humidityRatio)
+  //        / (0.621945 + humidityRatio)
+  //    )
+  //  }
 }

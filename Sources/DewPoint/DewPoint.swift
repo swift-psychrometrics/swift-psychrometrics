@@ -13,9 +13,10 @@ public struct DewPoint {
   /// - Parameters:
   ///   - temperature: The dry-bulb temperature of the air.
   ///   - humidity: The relative humidity of the air.
-  public static func calculate(for temperature: Temperature, at humidity: RelativeHumidity)
-    -> Temperature
-  {
+  public static func calculate(
+    for temperature: Temperature,
+    at humidity: RelativeHumidity
+  ) -> Temperature {
     let partialPressure = Pressure.partialPressure(for: temperature, at: humidity).psi
     let naturalLog = log(partialPressure)
     let c1 = 100.45

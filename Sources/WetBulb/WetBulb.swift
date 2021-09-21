@@ -1,5 +1,6 @@
 import Core
 import Foundation
+import Pressure
 @_exported import RelativeHumidity
 @_exported import Temperature
 
@@ -21,8 +22,6 @@ public struct WetBulb {
   }
 
   public var rawValue: Temperature
-
-  //  fileprivate var input: Input
 
   /// Create a new ``WetBulb`` for the given temperature.
   ///

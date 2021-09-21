@@ -1,5 +1,6 @@
 import Core
 import Foundation
+import HumidityRatio
 import Length
 import Pressure
 import RelativeHumidity
@@ -10,6 +11,18 @@ public struct Enthalpy {
 
   /// The enthalpy of the air based on input state.
   public var rawValue: Double
+
+  public init(_ value: Double) {
+    self.rawValue = value
+  }
+
+  public init(for temperature: Temperature, humidityRatio: HumidityRatio) {
+    self.init(
+      0.24 * temperature.fahrenheit
+        + humidityRatio.rawValue
+        * (1061 + 0.444 * temperature.fahrenheit)
+    )
+  }
 
   /// Creates a new ``Enthalpy`` with the given temperature, humidity, and pressure.
   ///
@@ -23,9 +36,8 @@ public struct Enthalpy {
     pressure: Pressure
   ) {
     self.init(
-      0.24 * temperature.fahrenheit
-        + Enthalpy.humidityRatio(for: temperature, with: humidity, at: pressure)
-        * (1061 + 0.444 * temperature.fahrenheit)
+      for: temperature,
+      humidityRatio: HumidityRatio(for: temperature, with: humidity, at: pressure)
     )
   }
 
@@ -45,10 +57,6 @@ public struct Enthalpy {
       at: humidity,
       pressure: .init(altitude: altitude)
     )
-  }
-
-  public init(_ value: Double) {
-    self.rawValue = value
   }
 }
 

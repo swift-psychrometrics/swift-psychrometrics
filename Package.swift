@@ -4,25 +4,27 @@ import PackageDescription
 
 var package = Package(
   name: "swift-psychrometrics",
-//  platforms: [
-//    .macOS(.v10_15),
-//    .iOS(.v10),
-//  ],
+  //  platforms: [
+  //    .macOS(.v10_15),
+  //    .iOS(.v10),
+  //  ],
   products: [
     .library(name: "Core", targets: ["Core"]),
     .library(name: "Density", targets: ["Density"]),
     .library(name: "DewPoint", targets: ["DewPoint"]),
     .library(name: "Enthalpy", targets: ["Enthalpy"]),
     .library(name: "GrainsOfMoisture", targets: ["GrainsOfMoisture"]),
+    .library(name: "HumidityRatio", targets: ["HumidityRatio"]),
     .library(name: "Length", targets: ["Length"]),
     .library(name: "Pressure", targets: ["Pressure"]),
     .library(name: "SpecificHeat", targets: ["SpecificHeat"]),
+    .library(name: "SpecificHumidity", targets: ["SpecificHumidity"]),
     .library(name: "RelativeHumidity", targets: ["RelativeHumidity"]),
     .library(name: "Temperature", targets: ["Temperature"]),
     .library(name: "WetBulb", targets: ["WetBulb"]),
   ],
   dependencies: [
-//    .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
+    //    .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
   ],
   targets: [
     .target(name: "Core"),
@@ -58,6 +60,7 @@ var package = Package(
       name: "Enthalpy",
       dependencies: [
         "Core",
+        "HumidityRatio",
         "Pressure",
         "RelativeHumidity",
         "Temperature",
@@ -83,6 +86,22 @@ var package = Package(
       name: "GrainsOfMoistureTests",
       dependencies: [
         "GrainsOfMoisture"
+      ]
+    ),
+    .target(
+      name: "HumidityRatio",
+      dependencies: [
+        "Core",
+        "Length",
+        "Pressure",
+        "RelativeHumidity",
+        "Temperature",
+      ]
+    ),
+    .testTarget(
+      name: "HumidityRatioTests",
+      dependencies: [
+        "HumidityRatio"
       ]
     ),
     .target(
@@ -134,6 +153,21 @@ var package = Package(
       dependencies: ["SpecificHeat"]
     ),
     .target(
+      name: "SpecificHumidity",
+      dependencies: [
+        "Core",
+        "Length",
+        "HumidityRatio",
+        "Pressure",
+        "RelativeHumidity",
+        "Temperature",
+      ]
+    ),
+    .testTarget(
+      name: "SpecificHumidityTests",
+      dependencies: ["SpecificHumidity"]
+    ),
+    .target(
       name: "Temperature",
       dependencies: [
         "Core",
@@ -148,6 +182,7 @@ var package = Package(
       name: "WetBulb",
       dependencies: [
         "Core",
+        "Pressure",
         "RelativeHumidity",
         "Temperature",
       ]
@@ -162,7 +197,9 @@ var package = Package(
 )
 
 // #MARK: - CLI
-if #available(macOS 10.15, *) {
+if #available(macOS 10.15, *),
+  ProcessInfo.processInfo.environment["PSYCHROMETRIC_CLI_ENABLED"] != nil
+{
   package.platforms = [
     .macOS(.v10_15)
   ]
@@ -170,7 +207,7 @@ if #available(macOS 10.15, *) {
     .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
   ])
   package.products.append(contentsOf: [
-    .executable(name: "psychrometrics", targets: ["swift-psychrometrics"]),
+    .executable(name: "psychrometrics", targets: ["swift-psychrometrics"])
   ])
   package.targets.append(contentsOf: [
     .executableTarget(
@@ -179,6 +216,6 @@ if #available(macOS 10.15, *) {
         "Enthalpy",
         .product(name: "ConsoleKit", package: "console-kit"),
       ]
-    ),
+    )
   ])
 }

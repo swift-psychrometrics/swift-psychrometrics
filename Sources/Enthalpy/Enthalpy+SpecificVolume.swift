@@ -1,4 +1,5 @@
 import Foundation
+import HumidityRatio
 import Length
 import Pressure
 import RelativeHumidity
@@ -14,12 +15,12 @@ extension Enthalpy {
   ///   - totalPressure: The total pressure.
   public static func specificVolume(
     for temperature: Temperature,
-    humidityRatio: Double,
+    humidityRatio: HumidityRatio,
     totalPressure: Pressure
   ) -> Double {
     0.370486
       * temperature.rankine
-      * (1 + 1.607858 * humidityRatio)
+      * (1 + 1.607858 * humidityRatio.rawValue)
       / totalPressure.psi
   }
 
@@ -36,7 +37,7 @@ extension Enthalpy {
   ) -> Double {
     specificVolume(
       for: temperature,
-      humidityRatio: humidityRatio(for: temperature, with: humidity, at: altitude),
+      humidityRatio: HumidityRatio(for: temperature, with: humidity, at: altitude),
       totalPressure: .init(altitude: altitude)
     )
   }

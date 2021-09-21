@@ -107,11 +107,15 @@ It currently does not support all the calculations or units of measure.
 
 To use the command line utility you can use the following command from the project root.
 ```swift
-swift run psychrometrics
+  PSYCHROMETRIC_CLI_ENABLED=1 swift run psychrometrics
 ```
+Note:
+  To use or build the CLI utility you must pass `PSYCHROMETRIC_CLI_ENABLED=1` to the environment of the
+  command or have set in your terminal environment.
 
-Or to build the command line utility as an executable to put in your ``PATH``.  The following command
-will build the executable in release mode and open a Finder window at the build location.
+Or to build the command line utility as an executable to put in your `PATH`.  The following command
+will build the executable in release mode and open a Finder window at the build location, you can then find
+and move the `psychrometrics` executable and put somewhere in your path.
 ```
 make cli
 ```

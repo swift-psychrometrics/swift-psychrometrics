@@ -47,5 +47,6 @@ code-cov-report: test
 		-use-color
 		
 cli:
-	@swift build -c release
+	@swift package clean \
+		&& PSYCHROMETRIC_CLI_ENABLED=1 swift build -c release
 	@open .build/release
