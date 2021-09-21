@@ -1,6 +1,4 @@
-import Core
 import Foundation
-@_exported import Temperature
 
 /// Represents relative humidity as a percentage.  These are stored and initialized in their whole number state and you can access
 /// the decimal equivalent through the the ``RelativeHumidity.fraction `` property.

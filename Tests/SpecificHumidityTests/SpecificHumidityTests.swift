@@ -1,9 +1,6 @@
 import XCTest
 import HumidityRatio
-import Length
-import Temperature
-import RelativeHumidity
-import Pressure
+import Core
 import SpecificHumidity
 
 final class SpecificHumidityTests: XCTestCase {

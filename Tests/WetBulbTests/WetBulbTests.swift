@@ -1,6 +1,5 @@
 import XCTest
-import Temperature
-import RelativeHumidity
+import Core
 import WetBulb
 
 final class WetBulbTests: XCTestCase {

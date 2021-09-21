@@ -1,6 +1,4 @@
-import Length
-import Pressure
-import Temperature
+import Core
 
 extension Temperature {
 

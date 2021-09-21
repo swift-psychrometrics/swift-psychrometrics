@@ -1,7 +1,5 @@
 import Foundation
-import Length
-import RelativeHumidity
-import Temperature
+import Core
 
 public struct Condition {
 

@@ -1,8 +1,5 @@
 import Core
 import Foundation
-@_exported import Pressure
-@_exported import RelativeHumidity
-@_exported import Temperature
 
 /// Represents / calculates the dew-point.
 @dynamicMemberLookup

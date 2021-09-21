@@ -1,6 +1,6 @@
 import Foundation
 import HumidityRatio
-import Temperature
+import Core
 
 extension HumidityRatio {
 

@@ -1,4 +1,5 @@
 import ConsoleKit
+import Core
 import Enthalpy
 import Foundation
 

@@ -1,10 +1,6 @@
 import Core
 import Foundation
 import HumidityRatio
-import Length
-import Pressure
-import RelativeHumidity
-import Temperature
 
 /// Represents / calculates the enthalpy of moist air.
 public struct Enthalpy {

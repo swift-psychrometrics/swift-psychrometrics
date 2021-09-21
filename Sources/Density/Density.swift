@@ -1,7 +1,5 @@
 import Foundation
-@_exported import Length
-@_exported import Pressure
-@_exported import Temperature
+import Core
 
 /// Represents / calculates the density of dry-air or water.
 public struct Density: Equatable {

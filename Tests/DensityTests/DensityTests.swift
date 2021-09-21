@@ -1,7 +1,6 @@
 import XCTest
 import Density
-import Temperature
-import Pressure
+import Core
 
 final class DensityTests: XCTestCase {
   

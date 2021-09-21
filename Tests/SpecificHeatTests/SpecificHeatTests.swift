@@ -1,5 +1,5 @@
 import XCTest
-import Temperature
+import Core
 import SpecificHeat
 
 final class SpecificHeatTests: XCTestCase {

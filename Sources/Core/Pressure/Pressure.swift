@@ -1,7 +1,4 @@
-import Core
 import Foundation
-import Length
-import Temperature
 
 /// Represents / calculates pressure for different units.
 public struct Pressure: Hashable {

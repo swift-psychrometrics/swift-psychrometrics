@@ -1,7 +1,6 @@
 import XCTest
 import GrainsOfMoisture
-import Temperature
-import RelativeHumidity
+import Core
 
 final class GrainsOfMoistureTests: XCTestCase {
   

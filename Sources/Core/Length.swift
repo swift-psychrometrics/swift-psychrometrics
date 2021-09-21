@@ -1,4 +1,3 @@
-import Core
 import Foundation
 
 /// Represents a unit of length in both SI and IP units.

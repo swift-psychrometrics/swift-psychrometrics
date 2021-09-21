@@ -1,6 +1,4 @@
-import Core
 import Foundation
-import Length
 
 /// Represents / calculates temperature in SI and IP units as well as scientific / absolute units.
 public struct Temperature: Hashable {

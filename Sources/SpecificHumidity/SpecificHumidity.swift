@@ -1,9 +1,6 @@
 import Core
 import Foundation
 import HumidityRatio
-import Length
-import Pressure
-import RelativeHumidity
 
 /// Represents the specific humidity of moist air.
 public struct SpecificHumidity {

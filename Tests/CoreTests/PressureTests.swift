@@ -1,6 +1,5 @@
 import XCTest
-import Temperature
-@testable import Pressure
+import Core
 
 final class PressureTests: XCTestCase {
   

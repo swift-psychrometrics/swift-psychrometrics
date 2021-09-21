@@ -1,9 +1,6 @@
 import Core
 import Foundation
-import Length
-import Pressure
-import RelativeHumidity
-import Temperature
+
 
 public struct HumidityRatio: Equatable {
 

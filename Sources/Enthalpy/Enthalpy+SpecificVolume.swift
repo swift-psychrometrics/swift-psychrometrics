@@ -1,9 +1,6 @@
 import Foundation
 import HumidityRatio
-import Length
-import Pressure
-import RelativeHumidity
-import Temperature
+import Core
 
 extension Enthalpy {
 

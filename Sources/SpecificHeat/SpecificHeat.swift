@@ -1,5 +1,5 @@
 import Foundation
-@_exported import Temperature
+import Core
 
 /// Represents / calculates the specific heat of water.
 public struct SpecificHeat: Equatable {

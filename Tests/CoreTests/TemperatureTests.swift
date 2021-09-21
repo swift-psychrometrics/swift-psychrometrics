@@ -1,11 +1,5 @@
-//
-//  TemperatureConversionTests.swift
-//  UnitConversionsTests
-//
-//  Created by Michael Housh on 10/4/17.
-//
 import XCTest
-@testable import Temperature
+@testable import Core
 
 class TemperatureTests: XCTestCase {
   

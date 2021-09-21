@@ -1,8 +1,5 @@
 import Core
 import Foundation
-import Pressure
-@_exported import RelativeHumidity
-@_exported import Temperature
 
 /// Represents / calculates the wet-bulb temperature for the given temperature and relative humidity.
 @dynamicMemberLookup

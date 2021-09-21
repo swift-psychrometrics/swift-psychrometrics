@@ -1,5 +1,5 @@
 import XCTest
-@testable import Length
+@testable import Core
 
 final class LengthTests: XCTestCase {
   

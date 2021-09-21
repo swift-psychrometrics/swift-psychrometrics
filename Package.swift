@@ -15,12 +15,8 @@ var package = Package(
     .library(name: "Enthalpy", targets: ["Enthalpy"]),
     .library(name: "GrainsOfMoisture", targets: ["GrainsOfMoisture"]),
     .library(name: "HumidityRatio", targets: ["HumidityRatio"]),
-    .library(name: "Length", targets: ["Length"]),
-    .library(name: "Pressure", targets: ["Pressure"]),
     .library(name: "SpecificHeat", targets: ["SpecificHeat"]),
     .library(name: "SpecificHumidity", targets: ["SpecificHumidity"]),
-    .library(name: "RelativeHumidity", targets: ["RelativeHumidity"]),
-    .library(name: "Temperature", targets: ["Temperature"]),
     .library(name: "WetBulb", targets: ["WetBulb"]),
   ],
   dependencies: [
@@ -28,11 +24,16 @@ var package = Package(
   ],
   targets: [
     .target(name: "Core"),
+    .testTarget(
+      name: "CoreTests",
+      dependencies: [
+        "Core"
+      ]
+    ),
     .target(
       name: "Density",
       dependencies: [
-        "Pressure",
-        "Temperature",
+        "Core"
       ]
     ),
     .testTarget(
@@ -45,9 +46,6 @@ var package = Package(
       name: "DewPoint",
       dependencies: [
         "Core",
-        "RelativeHumidity",
-        "Temperature",
-        "Pressure",
       ]
     ),
     .testTarget(
@@ -61,9 +59,6 @@ var package = Package(
       dependencies: [
         "Core",
         "HumidityRatio",
-        "Pressure",
-        "RelativeHumidity",
-        "Temperature",
       ]
     ),
     .testTarget(
@@ -76,10 +71,6 @@ var package = Package(
       name: "GrainsOfMoisture",
       dependencies: [
         "Core",
-        "Length",
-        "Pressure",
-        "RelativeHumidity",
-        "Temperature",
       ]
     ),
     .testTarget(
@@ -92,10 +83,6 @@ var package = Package(
       name: "HumidityRatio",
       dependencies: [
         "Core",
-        "Length",
-        "Pressure",
-        "RelativeHumidity",
-        "Temperature",
       ]
     ),
     .testTarget(
@@ -105,47 +92,9 @@ var package = Package(
       ]
     ),
     .target(
-      name: "Length",
-      dependencies: [
-        "Core"
-      ]
-    ),
-    .testTarget(
-      name: "LengthTests",
-      dependencies: ["Length"]
-    ),
-    .target(
-      name: "Pressure",
-      dependencies: [
-        "Core",
-        "Length",
-        "RelativeHumidity",
-        "Temperature",
-      ]
-    ),
-    .testTarget(
-      name: "PressureTests",
-      dependencies: [
-        "Pressure"
-      ]
-    ),
-    .target(
-      name: "RelativeHumidity",
-      dependencies: [
-        "Core",
-        "Temperature",
-      ]
-    ),
-    .testTarget(
-      name: "RelativeHumidityTests",
-      dependencies: [
-        "RelativeHumidity"
-      ]
-    ),
-    .target(
       name: "SpecificHeat",
       dependencies: [
-        "Temperature"
+        "Core"
       ]
     ),
     .testTarget(
@@ -156,11 +105,7 @@ var package = Package(
       name: "SpecificHumidity",
       dependencies: [
         "Core",
-        "Length",
         "HumidityRatio",
-        "Pressure",
-        "RelativeHumidity",
-        "Temperature",
       ]
     ),
     .testTarget(
@@ -168,23 +113,9 @@ var package = Package(
       dependencies: ["SpecificHumidity"]
     ),
     .target(
-      name: "Temperature",
-      dependencies: [
-        "Core",
-        "Length",
-      ]
-    ),
-    .testTarget(
-      name: "TemperatureTests",
-      dependencies: ["Temperature"]
-    ),
-    .target(
       name: "WetBulb",
       dependencies: [
         "Core",
-        "Pressure",
-        "RelativeHumidity",
-        "Temperature",
       ]
     ),
     .testTarget(
