@@ -2,7 +2,11 @@ import Core
 import Foundation
 import HumidityRatio
 
-/// Represents the specific humidity of moist air.
+/// Represents the specific humidity of moist air, which is defined as the ratio of the mass of water vapor to the total
+/// mass of the moist air sample.
+///
+/// Often represented by the symbol `γ` in ASHRAE Fundamentals (2017).
+///
 public struct SpecificHumidity {
 
   /// The raw value for the given conditions.
@@ -35,7 +39,7 @@ public struct SpecificHumidity {
   public init(
     ratio: HumidityRatio
   ) {
-    self.init(ratio.rawValue / (1 + ratio.rawValue))
+    self.init(ratio / (1 + ratio))
   }
 
   /// Calculate the specific humidity for the given temperature, humidity, and pressure.

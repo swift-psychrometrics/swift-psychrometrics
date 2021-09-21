@@ -1,12 +1,20 @@
 import Foundation
 
-/// Represents / calculates temperature in SI and IP units as well as scientific / absolute units.
+/// Represents a temperature in SI and IP units as well as scientific / absolute units.
 public struct Temperature: Hashable {
 
+  /// The raw value set on the instance, this should typically not be used. You should access
+  /// the value through the units that you need.
   public private(set) var rawValue: Double
 
+  /// The units for the raw value of the instance.
   public private(set) var units: Unit
 
+  /// Create a new ``Temperature`` with the given raw value and units.
+  ///
+  /// - Parameters:
+  ///   - value: The raw value of the temperature.
+  ///   - units: The units for the raw value.
   public init(_ value: Double, units: Unit = .default) {
     self.rawValue = value
     self.units = units

@@ -52,18 +52,6 @@ final class EnthalpyTests: XCTestCase {
     XCTAssertEqual(enthalpy.rawValue, 40)
   }
   
-  func test_specificVolume() {
-    let volume = Enthalpy.specificVolume(for: 75, at: 100%, altitude: .seaLevel)
-//    let vda = Enthalpy.specificVolume(for: 75, at: 0%, altitude: .seaLevel)
-//    print(vda)
-//    XCTFail()
-    XCTAssertEqual(round(volume * 100) / 100, 13.89)
-    XCTAssertEqual(
-      round(Enthalpy.specificVolume(for: 76.1, at: 58.3%, altitude: .seaLevel) * 100) / 100,
-      13.75
-    )
-  }
-  
 //  func test_relative_humidity_for_dewPoint_and_dryBulb_enthalpies() {
 //    let totalPressure = Pressure(altitude: .seaLevel)
 //    let saturationPressure = Pressure.saturationPressure(at: 75)

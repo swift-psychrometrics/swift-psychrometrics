@@ -1,72 +1,109 @@
 import Foundation
 import Core
+import HumidityRatio
+import SpecificVolume
 
-/// Represents / calculates the density of dry-air or water.
-public struct Density: Equatable {
+/// Namespace for calculations that can work on water.
+public struct Water { }
 
-  var unit: Unit
+/// Namespace for calculations that can work on dry air.
+public struct DryAir { }
 
-  init(_ unit: Unit) {
-    self.unit = unit
-  }
+/// Namespace for calculations that can work on moist air.
+public struct MoistAir { }
 
-  enum Unit: Equatable {
-    case dryAir(Temperature, Pressure)
-    case water(Temperature)
-  }
-
-  /// The calcuated value based on the input.
-  public var rawValue: Double {
-    switch unit {
-
-    case let .dryAir(temperature, pressure):
-      return ((29.0 * (pressure.psi)) / (345.23 * temperature.rankine)) * 32.174
-
-    case let .water(temperature):
-      return 62.56 + 3.413 * (pow(10, -4) * temperature.fahrenheit) - 6.255
-        * pow((pow(10, -5) * temperature.fahrenheit), 2)
-    }
-  }
-
-  /// Create a new ``Density`` for dry-air given a temperature and pressure.
+/// Represents the mass per unit of volume.
+///
+/// Often represented by `ρ` in ASHRAE Fundamentals (2017)
+///
+public struct Density<T> {
+  
+  /// The raw value of the density.
+  public var rawValue: Double
+  
+  /// Create a new ``Density`` with the given raw value.
   ///
   /// - Parameters:
-  ///   - temperature: The temperature of the air.
-  ///   - pressure: The pressure of the air.
-  public static func dryAir(
-    at temperature: Temperature, pressure: Pressure = .init(altitude: .seaLevel)
-  ) -> Density {
-    .init(.dryAir(temperature, pressure))
-  }
-
-  /// Create a new ``Density`` for dry-air given a temperature and altitude.
-  ///
-  /// - Parameters:
-  ///   - temperature: The temperature of the air.
-  ///   - altitude: The altitude of the air.
-  public static func dryAir(at temperature: Temperature, altitude: Length) -> Density {
-    .dryAir(at: temperature, pressure: .init(altitude: altitude))
-  }
-
-  /// Create a new ``Density`` for water given a temperature.
-  ///
-  /// - Parameters:
-  ///   - temperature: The temperature of the water.
-  public static func water(at temperature: Temperature) -> Density {
-    .init(.water(temperature))
+  ///   - value: The raw value of the density.
+  public init(_ value: Double) {
+    self.rawValue = value
   }
 }
 
-public enum DensityUnit: String, Equatable, Hashable, CaseIterable {
-  case dryAir
-  case water
+public typealias DensityOf<T> = Density<T>
 
-  public var label: String {
-    switch self {
-    case .dryAir:
-      return "Dry Air"
-    case .water:
-      return "Water"
-    }
+// MARK: - Water
+extension Density where T == Water {
+  
+  /// Create a new ``Density<Water>`` for the given temperature.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature to calculate the density for.
+  public init(at temperature: Temperature) {
+    self.init(
+      62.56
+      + 3.413
+      * (pow(10, -4) * temperature.fahrenheit)
+      - 6.255
+      * pow((pow(10, -5) * temperature.fahrenheit), 2)
+    )
   }
+}
+
+// MARK: - DryAir
+extension Density where T == DryAir {
+  
+  /// Create a new ``Density<DryAir>`` for the given temperature and pressure.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature to calculate the density for.
+  ///   - totalPressure: The pressure to calculate the density for.
+  public init(
+    at temperature: Temperature,
+    pressure totalPressure: Pressure
+  ) {
+    self.init(
+      (
+        (29.0 * (totalPressure.psi))
+        / (345.23 * temperature.rankine)
+      )
+      * 32.174
+    )
+  }
+  
+  /// Create a new ``Density<DryAir>`` for the given temperature and altitude.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature to calculate the density for.
+  ///   - altitude: The altitude to calculate the density for.
+  public init(
+    at temperature: Temperature,
+    altitude: Length = .seaLevel
+  ) {
+    self.init(at: temperature, pressure: .init(altitude: altitude))
+  }
+}
+
+// MARK: - MoistAir
+extension Density where T == MoistAir {
+  
+  /// Create a new ``Density<MoistAir>`` for the given specific volume and humidity ratio.
+  ///
+  /// - Parameters:
+  ///   - specificVolume: The specific volume to calculate the density for.
+  ///   - humidityRatio: The humidity ratio to calculate the density for.
+  public init(
+    volume specificVolume: SpecificVolume,
+    ratio humidityRatio: HumidityRatio
+  ) {
+    self.init(
+      (1 / specificVolume) * (1 + humidityRatio)
+    )
+  }
+}
+
+extension Density: RawNumericType {
+  public typealias IntegerLiteralType = Double.IntegerLiteralType
+  public typealias FloatLiteralType = Double.FloatLiteralType
+  public typealias Magnitude = Double.Magnitude
 }

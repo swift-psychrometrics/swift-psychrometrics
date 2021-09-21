@@ -5,12 +5,39 @@ import Foundation
 @dynamicMemberLookup
 public struct DewPoint {
 
+  /// The raw dew point temperature.
+  public var rawValue: Temperature
+
+  /// Creates a new ``DewPoint`` as the temperaure given.
+  ///
+  /// - Parameters:
+  ///   - temperature: The dew-point temperature to set on the instance.
+  public init(_ value: Temperature) {
+    self.rawValue = value
+  }
+  
+  /// Creates a new ``DewPoint`` for the given temperature and humidity.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature.
+  ///   - humidity: The relative humidity.
+  public init(temperature: Temperature, humidity: RelativeHumidity) {
+    self.init(Self.calculate(for: temperature, at: humidity))
+  }
+
+  /// Access values on the wrapped temperature.
+  public subscript<V>(dynamicMember keyPath: KeyPath<Temperature, V>) -> V {
+    rawValue[keyPath: keyPath]
+  }
+}
+
+extension DewPoint {
   /// Calculate the dew-point temperature for the given temperature and humidity.
   ///
   /// - Parameters:
   ///   - temperature: The dry-bulb temperature of the air.
   ///   - humidity: The relative humidity of the air.
-  public static func calculate(
+  private static func calculate(
     for temperature: Temperature,
     at humidity: RelativeHumidity
   ) -> Temperature {
@@ -31,29 +58,6 @@ public struct DewPoint {
       + pow(partialPressure, 0.1984)
 
     return .fahrenheit(value)
-  }
-
-  public var rawValue: Temperature
-
-  /// Creates a new ``DewPoint`` for the given temperature and humidity.
-  ///
-  /// - Parameters:
-  ///   - temperature: The temperature.
-  ///   - humidity: The relative humidity.
-  public init(temperature: Temperature, humidity: RelativeHumidity) {
-    self.rawValue = Self.calculate(for: temperature, at: humidity)
-  }
-
-  /// Creates a new ``DewPoint`` as the temperaure given.
-  ///
-  /// - Parameters:
-  ///   - temperature: The dew-point temperature to set on the instance.
-  public init(_ value: Temperature) {
-    self.rawValue = value
-  }
-
-  public subscript<V>(dynamicMember keyPath: KeyPath<Temperature, V>) -> V {
-    rawValue[keyPath: keyPath]
   }
 }
 

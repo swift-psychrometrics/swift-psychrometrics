@@ -23,7 +23,7 @@ public struct Pressure: Hashable {
     )
   }
 
-  // MARK: - PressureUnit
+  // MARK: - Pressure.Unit
   /// Represents the different symbols / units of measure for ``Pressure``.
   public enum Unit: String, Equatable, Hashable, CaseIterable {
 

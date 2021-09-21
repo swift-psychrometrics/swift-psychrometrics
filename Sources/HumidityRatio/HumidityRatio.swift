@@ -1,11 +1,29 @@
 import Core
 import Foundation
 
-
+/// Represents the humidity ratio (or mixing ratio) of a given moist air sample.
+///
+/// Defined as the ratio of the mass of water vapor to the mass of dry air in the sample and is often represented
+/// by the symbol `W` in the ASHRAE Fundamentals (2017).
+///
 public struct HumidityRatio: Equatable {
+  
+  /// Constant for the mole weight of water.
+  public static let moleWeightWater = 18.015268
 
+  /// Constant for the mole weight of air.
+  public static let moleWeightAir = 28.966
+  
+  /// Constant for the ratio of the mole weight of water over the mole weight of air.
+  public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
+  
+  /// The raw humidity ratio.
   public var rawValue: Double
 
+  /// Create a new ``HumidityRatio`` with the given raw value.
+  ///
+  /// - Parameters:
+  ///   - value: The raw humidity ratio value.
   public init(_ value: Double) {
     self.rawValue = value
   }
@@ -19,7 +37,7 @@ public struct HumidityRatio: Equatable {
     water waterMass: Double,
     dryAir dryAirMass: Double
   ) {
-    self.init(0.621945 * (waterMass / dryAirMass))
+    self.init(Self.moleWeightRatio * (waterMass / dryAirMass))
   }
 
   /// The  humidity ratio of the air for the given total pressure and partial pressure.
@@ -32,7 +50,7 @@ public struct HumidityRatio: Equatable {
     with partialPressure: Pressure
   ) {
     self.init(
-      0.621945 * partialPressure.psi
+      Self.moleWeightRatio * partialPressure.psi
         / (totalPressure.psi - partialPressure.psi)
     )
   }

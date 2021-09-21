@@ -36,6 +36,8 @@ extension Pressure {
 
   /// Calculate the saturation pressure of air at a given temperature.
   ///
+  /// Often defined / denoted as pws, in the ASHRAE Fundamentels (2017)
+  ///
   /// - Parameters:
   ///   - temperature: The temperature to calculate the saturation pressure of.
   public static func saturationPressure(at temperature: Temperature) -> Pressure {
