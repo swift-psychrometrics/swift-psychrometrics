@@ -36,7 +36,7 @@ var package = Package(
       dependencies: [
         "Core",
         "HumidityRatio",
-        "SpecificVolume"
+        "SpecificVolume",
       ]
     ),
     .testTarget(
@@ -48,7 +48,7 @@ var package = Package(
     .target(
       name: "DewPoint",
       dependencies: [
-        "Core",
+        "Core"
       ]
     ),
     .testTarget(
@@ -73,7 +73,7 @@ var package = Package(
     .target(
       name: "GrainsOfMoisture",
       dependencies: [
-        "Core",
+        "Core"
       ]
     ),
     .testTarget(
@@ -85,7 +85,7 @@ var package = Package(
     .target(
       name: "HumidityRatio",
       dependencies: [
-        "Core",
+        "Core"
       ]
     ),
     .testTarget(
@@ -129,7 +129,7 @@ var package = Package(
     .target(
       name: "WetBulb",
       dependencies: [
-        "Core",
+        "Core"
       ]
     ),
     .testTarget(

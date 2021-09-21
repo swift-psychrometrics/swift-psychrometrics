@@ -41,7 +41,7 @@ extension NumericWithUnitOfMeasureRepresentable {
 
 extension NumericWithUnitOfMeasureRepresentable
 where
-//  Units.Container == Self,
+  //  Units.Container == Self,
   Self: RawRepresentable,
   RawValue == Number
 {

@@ -148,7 +148,7 @@ extension Length {
   }
 }
 
-extension Length.Unit: UnitOfMeasure { }
+extension Length.Unit: UnitOfMeasure {}
 
 extension Length: NumberWithUnitOfMeasure {
   public typealias FloatLiteralType = Double.FloatLiteralType

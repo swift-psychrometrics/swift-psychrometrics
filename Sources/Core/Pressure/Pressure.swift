@@ -181,7 +181,7 @@ extension Pressure {
   }
 }
 
-extension Pressure.Unit: UnitOfMeasure { }
+extension Pressure.Unit: UnitOfMeasure {}
 
 extension Pressure: NumberWithUnitOfMeasure {
   public typealias FloatLiteralType = Double.FloatLiteralType

@@ -11,7 +11,7 @@ public struct GrainsOfMoisture {
 
   /// Constant for the mole weight of air.
   public static let moleWeightAir = 28.85
-  
+
   /// Constant for the ratio of the mole weight of water over the mole weight of air.
   public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
 

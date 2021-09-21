@@ -8,10 +8,10 @@ import HumidityRatio
 ///
 /// Often represented by the symbol `v` in ASHRAE Fundamentals (2017)
 public struct SpecificVolume {
-  
+
   /// The specific volume's raw value.
   public var rawValue: Double
-  
+
   /// Create a new ``SpecificVolume`` for the given raw value.
   ///
   /// - Parameters:
@@ -19,7 +19,7 @@ public struct SpecificVolume {
   public init(_ value: Double) {
     self.rawValue = value
   }
-  
+
   /// Calculate the ``SpecificVolume`` for the given temperature, humidity ratio, and total pressure.
   ///
   /// - Parameters:
@@ -33,12 +33,12 @@ public struct SpecificVolume {
   ) {
     self.init(
       0.370486
-      * temperature.rankine
-      * (1 + 1.607858 * humidityRatio)
-      / totalPressure.psi
+        * temperature.rankine
+        * (1 + 1.607858 * humidityRatio)
+        / totalPressure.psi
     )
   }
-  
+
   /// Calculate the ``SpecificVolume`` for the given temperature, relative humidity, and altitude.
   ///
   /// - Parameters:
@@ -56,7 +56,7 @@ public struct SpecificVolume {
       pressure: totalPressure
     )
   }
-  
+
   /// Calculate the ``SpecificVolume`` for the given temperature, relative humidity, and altitude.
   ///
   /// - Parameters:

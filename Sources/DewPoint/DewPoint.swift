@@ -15,7 +15,7 @@ public struct DewPoint {
   public init(_ value: Temperature) {
     self.rawValue = value
   }
-  
+
   /// Creates a new ``DewPoint`` for the given temperature and humidity.
   ///
   /// - Parameters:

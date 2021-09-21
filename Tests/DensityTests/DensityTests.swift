@@ -32,10 +32,12 @@ final class DensityTests: XCTestCase {
     let ratio = HumidityRatio(for: 72.9, at: 72.5%, pressure: pressure)
     let volume = SpecificVolume(for: 72.9, ratio: ratio, pressure: pressure)
     let density = DensityOf<MoistAir>(volume: volume, ratio: ratio)
+    let density2 = DensityOf<MoistAir>(for: 72.9, at: 72.5%, pressure: pressure)
     XCTAssertEqual(
       round(density * 1000) / 1000,
       0.072
     )
+    XCTAssertEqual(density2, density)
   }
   
 //  func testDensityUnit() {

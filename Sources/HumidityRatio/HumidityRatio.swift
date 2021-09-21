@@ -7,16 +7,16 @@ import Foundation
 /// by the symbol `W` in the ASHRAE Fundamentals (2017).
 ///
 public struct HumidityRatio: Equatable {
-  
+
   /// Constant for the mole weight of water.
   public static let moleWeightWater = 18.015268
 
   /// Constant for the mole weight of air.
   public static let moleWeightAir = 28.966
-  
+
   /// Constant for the ratio of the mole weight of water over the mole weight of air.
   public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
-  
+
   /// The raw humidity ratio.
   public var rawValue: Double
 
@@ -71,8 +71,7 @@ public struct HumidityRatio: Equatable {
       with: .partialPressure(for: temperature, at: humidity)
     )
   }
-  
-  
+
   /// The humidity ratio of the air for the given temperature, humidity, and altitude.
   ///
   /// - Parameters:

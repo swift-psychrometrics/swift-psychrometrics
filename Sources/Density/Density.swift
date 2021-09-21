@@ -1,5 +1,5 @@
-import Foundation
 @_exported import Core
+import Foundation
 import HumidityRatio
 import SpecificVolume
 
@@ -8,10 +8,10 @@ import SpecificVolume
 /// Often represented by `ρ` in ASHRAE Fundamentals (2017)
 ///
 public struct Density<T> {
-  
+
   /// The raw value of the density.
   public var rawValue: Double
-  
+
   /// Create a new ``Density`` with the given raw value.
   ///
   /// - Parameters:
@@ -25,7 +25,7 @@ public typealias DensityOf<T> = Density<T>
 
 // MARK: - Water
 extension Density where T == Water {
-  
+
   /// Create a new ``Density<Water>`` for the given temperature.
   ///
   /// - Parameters:
@@ -33,17 +33,17 @@ extension Density where T == Water {
   public init(for temperature: Temperature) {
     self.init(
       62.56
-      + 3.413
-      * (pow(10, -4) * temperature.fahrenheit)
-      - 6.255
-      * pow((pow(10, -5) * temperature.fahrenheit), 2)
+        + 3.413
+        * (pow(10, -4) * temperature.fahrenheit)
+        - 6.255
+        * pow((pow(10, -5) * temperature.fahrenheit), 2)
     )
   }
 }
 
 // MARK: - DryAir
 extension Density where T == DryAir {
-  
+
   /// Create a new ``Density<DryAir>`` for the given temperature and pressure.
   ///
   /// - Parameters:
@@ -54,14 +54,12 @@ extension Density where T == DryAir {
     pressure totalPressure: Pressure
   ) {
     self.init(
-      (
-        (29.0 * (totalPressure.psi))
-        / (345.23 * temperature.rankine)
-      )
-      * 32.174
+      ((29.0 * (totalPressure.psi))
+        / (345.23 * temperature.rankine))
+        * 32.174
     )
   }
-  
+
   /// Create a new ``Density<DryAir>`` for the given temperature and altitude.
   ///
   /// - Parameters:
@@ -77,7 +75,7 @@ extension Density where T == DryAir {
 
 // MARK: - MoistAir
 extension Density where T == MoistAir {
-  
+
   /// Create a new ``Density<MoistAir>`` for the given specific volume and humidity ratio.
   ///
   /// - Parameters:

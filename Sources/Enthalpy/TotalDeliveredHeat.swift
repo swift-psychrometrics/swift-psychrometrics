@@ -1,5 +1,5 @@
-import Foundation
 import Core
+import Foundation
 
 public struct Condition {
 
