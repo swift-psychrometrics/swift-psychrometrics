@@ -14,7 +14,7 @@ final class SpecificHumidityTests: XCTestCase {
     let altitude: Length = 1000
     let pressure: Pressure = .init(altitude: altitude)
     let ratio = HumidityRatio(
-      for: temperature, with: humidity, at: pressure
+      for: temperature, at: humidity, pressure: pressure
     )
     
     XCTAssertEqual(

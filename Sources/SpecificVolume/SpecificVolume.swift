@@ -44,6 +44,24 @@ public struct SpecificVolume {
   /// - Parameters:
   ///   - temperature: The temperature to calculate the specific volume for.
   ///   - humidity: The relative humidity to calculate the specific volume for.
+  ///   - totalPressure: The total pressure to calculate the specific volume for.
+  public init(
+    for temperature: Temperature,
+    at humidity: RelativeHumidity,
+    pressure totalPressure: Pressure
+  ) {
+    self.init(
+      for: temperature,
+      ratio: HumidityRatio(for: temperature, at: humidity, pressure: totalPressure),
+      pressure: totalPressure
+    )
+  }
+  
+  /// Calculate the ``SpecificVolume`` for the given temperature, relative humidity, and altitude.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature to calculate the specific volume for.
+  ///   - humidity: The relative humidity to calculate the specific volume for.
   ///   - altitude: The altitude to calculate the specific volume for.
   public init(
     for temperature: Temperature,
@@ -52,7 +70,7 @@ public struct SpecificVolume {
   ) {
     self.init(
       for: temperature,
-      ratio: HumidityRatio(for: temperature, with: humidity, at: altitude),
+      at: humidity,
       pressure: .init(altitude: altitude)
     )
   }

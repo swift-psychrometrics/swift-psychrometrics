@@ -8,11 +8,23 @@ public struct Enthalpy {
   /// The enthalpy of the air based on input state.
   public var rawValue: Double
 
+  /// Create a new ``Enthalpy`` for the given raw value.
+  ///
+  /// - Parameters:
+  ///   - value: The raw value for the enthalpy.
   public init(_ value: Double) {
     self.rawValue = value
   }
 
-  public init(for temperature: Temperature, humidityRatio: HumidityRatio) {
+  /// Create a new ``Enthalpy`` for the given temperature and humidity ratio.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature to calculate the enthalpy for.
+  ///   - humidityRatio: The humidity ratio to calculate the enthalpy for.
+  public init(
+    for temperature: Temperature,
+    ratio humidityRatio: HumidityRatio
+  ) {
     self.init(
       0.24 * temperature.fahrenheit
         + humidityRatio.rawValue
@@ -25,15 +37,15 @@ public struct Enthalpy {
   /// - Parameters:
   ///   - temperature: The temperature of the air.
   ///   - humidity: The relative humidity of the air.
-  ///   - pressure: The pressure of the air.
+  ///   - totalPressure: The pressure of the air.
   public init(
     for temperature: Temperature,
     at humidity: RelativeHumidity,
-    pressure: Pressure
+    pressure totalPressure: Pressure
   ) {
     self.init(
       for: temperature,
-      humidityRatio: HumidityRatio(for: temperature, with: humidity, at: pressure)
+      ratio: .init(for: temperature, at: humidity, pressure: totalPressure)
     )
   }
 

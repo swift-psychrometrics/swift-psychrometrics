@@ -31,7 +31,7 @@ extension NumericWithUnitOfMeasureRepresentable where Units: DefaultRepresentabl
 
 }
 
-extension NumericWithUnitOfMeasureRepresentable where Units.Container == Self {
+extension NumericWithUnitOfMeasureRepresentable {
 
   public subscript(units: Units) -> Number {
     get { self[keyPath: Self.keyPath(for: units)] }
@@ -41,7 +41,7 @@ extension NumericWithUnitOfMeasureRepresentable where Units.Container == Self {
 
 extension NumericWithUnitOfMeasureRepresentable
 where
-  Units.Container == Self,
+//  Units.Container == Self,
   Self: RawRepresentable,
   RawValue == Number
 {

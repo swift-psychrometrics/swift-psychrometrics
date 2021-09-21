@@ -149,9 +149,7 @@ extension Temperature {
   }
 }
 
-extension Temperature.Unit: UnitOfMeasure {
-  public typealias Container = Temperature
-}
+extension Temperature.Unit: UnitOfMeasure { }
 
 extension Temperature: NumberWithUnitOfMeasure {
   public typealias FloatLiteralType = Double.FloatLiteralType

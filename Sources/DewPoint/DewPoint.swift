@@ -21,7 +21,10 @@ public struct DewPoint {
   /// - Parameters:
   ///   - temperature: The temperature.
   ///   - humidity: The relative humidity.
-  public init(temperature: Temperature, humidity: RelativeHumidity) {
+  public init(
+    for temperature: Temperature,
+    at humidity: RelativeHumidity
+  ) {
     self.init(Self.calculate(for: temperature, at: humidity))
   }
 
@@ -74,6 +77,6 @@ extension Temperature {
   /// - Parameters:
   ///   - humidity: The relative humidity to use to calculate the dew-point.
   public func dewPoint(humidity: RelativeHumidity) -> DewPoint {
-    .init(temperature: self, humidity: humidity)
+    .init(for: self, at: humidity)
   }
 }

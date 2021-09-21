@@ -15,8 +15,8 @@ extension Temperature {
   ///
   /// - Parameters:
   ///   - humidity: The relative humidity of the air.
-  ///   - pressure: The pressure of the air.
-  public func enthalpy(at humidity: RelativeHumidity, pressure: Pressure) -> Enthalpy {
-    .init(for: self, at: humidity, pressure: pressure)
+  ///   - totalPressure: The pressure of the air.
+  public func enthalpy(at humidity: RelativeHumidity, pressure totalPressure: Pressure) -> Enthalpy {
+    .init(for: self, at: humidity, pressure: totalPressure)
   }
 }

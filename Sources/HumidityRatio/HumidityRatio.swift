@@ -55,23 +55,6 @@ public struct HumidityRatio: Equatable {
     )
   }
 
-  /// The humidity ratio of the air for the given temperature, humidity, and altitude.
-  ///
-  /// - Parameters:
-  ///   - temperature: The temperature of the air.
-  ///   - humidity: The humidity of the air.
-  ///   - altitude: The altitude of the air.
-  public init(
-    for temperature: Temperature,
-    with humidity: RelativeHumidity,
-    at altitude: Length
-  ) {
-    self.init(
-      for: .init(altitude: altitude),
-      with: .partialPressure(for: temperature, at: humidity)
-    )
-  }
-
   /// The humidity ratio of the air for the given temperature, humidity, and pressure.
   ///
   /// - Parameters:
@@ -80,12 +63,31 @@ public struct HumidityRatio: Equatable {
   ///   - totalPressure: The pressure of the air.
   public init(
     for temperature: Temperature,
-    with humidity: RelativeHumidity,
-    at totalPressure: Pressure
+    at humidity: RelativeHumidity,
+    pressure totalPressure: Pressure
   ) {
     self.init(
       for: totalPressure,
       with: .partialPressure(for: temperature, at: humidity)
+    )
+  }
+  
+  
+  /// The humidity ratio of the air for the given temperature, humidity, and altitude.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the air.
+  ///   - humidity: The humidity of the air.
+  ///   - altitude: The altitude of the air.
+  public init(
+    for temperature: Temperature,
+    at humidity: RelativeHumidity,
+    altitude: Length
+  ) {
+    self.init(
+      for: temperature,
+      at: humidity,
+      pressure: .init(altitude: altitude)
     )
   }
 }

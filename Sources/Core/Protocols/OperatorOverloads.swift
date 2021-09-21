@@ -1,5 +1,8 @@
 import Foundation
 
+// Overload operators to work on Numeric types.  This avoids having to always reach into `Type.rawValue`
+// for math operations.
+
 public func * <T>(
   lhs: T.RawValue,
   rhs: T

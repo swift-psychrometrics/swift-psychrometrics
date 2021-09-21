@@ -1,16 +1,7 @@
 import Foundation
-import Core
+@_exported import Core
 import HumidityRatio
 import SpecificVolume
-
-/// Namespace for calculations that can work on water.
-public struct Water { }
-
-/// Namespace for calculations that can work on dry air.
-public struct DryAir { }
-
-/// Namespace for calculations that can work on moist air.
-public struct MoistAir { }
 
 /// Represents the mass per unit of volume.
 ///
@@ -39,7 +30,7 @@ extension Density where T == Water {
   ///
   /// - Parameters:
   ///   - temperature: The temperature to calculate the density for.
-  public init(at temperature: Temperature) {
+  public init(for temperature: Temperature) {
     self.init(
       62.56
       + 3.413
@@ -59,7 +50,7 @@ extension Density where T == DryAir {
   ///   - temperature: The temperature to calculate the density for.
   ///   - totalPressure: The pressure to calculate the density for.
   public init(
-    at temperature: Temperature,
+    for temperature: Temperature,
     pressure totalPressure: Pressure
   ) {
     self.init(
@@ -77,10 +68,10 @@ extension Density where T == DryAir {
   ///   - temperature: The temperature to calculate the density for.
   ///   - altitude: The altitude to calculate the density for.
   public init(
-    at temperature: Temperature,
+    for temperature: Temperature,
     altitude: Length = .seaLevel
   ) {
-    self.init(at: temperature, pressure: .init(altitude: altitude))
+    self.init(for: temperature, pressure: .init(altitude: altitude))
   }
 }
 
@@ -98,6 +89,17 @@ extension Density where T == MoistAir {
   ) {
     self.init(
       (1 / specificVolume) * (1 + humidityRatio)
+    )
+  }
+
+  public init(
+    for temperature: Temperature,
+    at humidity: RelativeHumidity,
+    pressure totalPressure: Pressure
+  ) {
+    self.init(
+      volume: .init(for: temperature, at: humidity, pressure: totalPressure),
+      ratio: .init(for: temperature, at: humidity, pressure: totalPressure)
     )
   }
 }

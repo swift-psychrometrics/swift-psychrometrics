@@ -54,7 +54,7 @@ public struct SpecificHumidity {
     at totalPressure: Pressure
   ) {
     self.init(
-      ratio: HumidityRatio(for: temperature, with: humidity, at: totalPressure)
+      ratio: HumidityRatio(for: temperature, at: humidity, pressure: totalPressure)
     )
   }
 
@@ -70,7 +70,7 @@ public struct SpecificHumidity {
     at altitude: Length
   ) {
     self.init(
-      ratio: HumidityRatio(for: temperature, with: humidity, at: altitude)
+      ratio: HumidityRatio(for: temperature, at: humidity, altitude: altitude)
     )
   }
 }
