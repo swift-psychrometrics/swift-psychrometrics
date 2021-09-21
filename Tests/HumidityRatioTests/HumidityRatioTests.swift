@@ -1,5 +1,6 @@
 import XCTest
 import HumidityRatio
+import Pressure
 
 final class HumidityRatioTests: XCTestCase {
   func test_humidityRatio_as_mass() {

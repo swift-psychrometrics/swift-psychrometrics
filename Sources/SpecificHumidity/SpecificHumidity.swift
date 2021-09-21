@@ -5,10 +5,16 @@ import Length
 import Pressure
 import RelativeHumidity
 
+/// Represents the specific humidity of moist air.
 public struct SpecificHumidity {
 
+  /// The raw value for the given conditions.
   public var rawValue: Double
 
+  /// Create a new ``SpecificHumidity`` with the given raw value.
+  ///
+  /// - Parameters:
+  ///   - value: The specific humidity value.
   public init(_ value: Double) {
     self.rawValue = value
   }

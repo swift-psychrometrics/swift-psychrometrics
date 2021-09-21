@@ -1,5 +1,6 @@
 import DewPoint
 import Enthalpy
+import HumidityRatio
 import WetBulb
 import Foundation
 
@@ -21,7 +22,7 @@ extension Condition {
   }
   
   var humidityRatio: Double {
-    Enthalpy.humidityRatio(for: temperature, with: humidity, at: altitude)
+    HumidityRatio(for: temperature, with: humidity, at: altitude).rawValue
   }
   
   var partialPressure: Pressure { .partialPressure(for: temperature, at: humidity) }
