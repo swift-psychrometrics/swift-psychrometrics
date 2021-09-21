@@ -1,6 +1,7 @@
 import XCTest
 import Core
 import Enthalpy
+import HumidityRatio
 
 final class EnthalpyTests: XCTestCase {
   
@@ -50,6 +51,31 @@ final class EnthalpyTests: XCTestCase {
     XCTAssertEqual(enthalpy.rawValue, 20)
     enthalpy *= 2
     XCTAssertEqual(enthalpy.rawValue, 40)
+  }
+  
+  func test_humidityRatio_from_enthalpy() {
+    let enthalpy = Enthalpy(for: 75, at: 50%)
+    let ratio = HumidityRatio(for: 75, at: 50%, altitude: .seaLevel)
+    XCTAssertEqual(
+      round(enthalpy.humidityRatio(at: 75) * 1000000) / 1000000,
+      round(ratio * 1000000) / 1000000
+    )
+  }
+  
+  func test_temperature_from_enthalpy_and_ratio() {
+    let temperature: Temperature = 75
+    let humidity: RelativeHumidity = 50%
+    let ratio = HumidityRatio(for: temperature, at: humidity, altitude: .seaLevel)
+    let enthalpy = Enthalpy.init(for: temperature, ratio: ratio)
+    let temperature2 = Temperature(enthalpy: enthalpy, ratio: ratio)
+    XCTAssertEqual(
+      round(temperature2.fahrenheit * 100) / 100,
+      75
+    )
+    XCTAssertEqual(
+      round(temperature2.fahrenheit * 100) / 100,
+      temperature.fahrenheit
+    )
   }
   
 //  func test_relative_humidity_for_dewPoint_and_dryBulb_enthalpies() {

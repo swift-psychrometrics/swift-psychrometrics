@@ -29,6 +29,10 @@ final class OperatorOverloadTests: XCTestCase {
     XCTAssertEqual(20 / value, 2)
     XCTAssertEqual(round(100 / value), 10)
   }
+  
+  func test_rawInitializable() {
+    XCTAssertNotNil(NumericTestType.init(rawValue: 20))
+  }
 }
 
 struct NumericTestType {

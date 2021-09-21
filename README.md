@@ -73,32 +73,37 @@ The following units of measure are provided with the corresponding conversions.
 The following calculations are currently provided.  Most of these types are `Numeric` and support arithmetic.
 Some of these calculations do not yet support different units of measure.
 
-- Density (not yet `Numeric` supporting):
+- Density:
   - Dry Air
+  - Moist Air
   - Water
+
+- Dew Point
   
 - Enthalpy
 
 - Grains of Moisture
 
-- Specific Heat (not yet `Numeric` supporting):
-  - Water
-
-- Wet Bulb
-
-- Total Delivered Heat Quantity
+- Humidity Ratio
 
 - Partial Pressure
 
+- Pressure as function of Altitude
+
 - Saturation / Vapor Pressure
 
-- Humidity Ratio
+- Specific Heat (not yet `Numeric` supporting):
+  - Water
+
+- Specific Humidity
 
 - Specific Volume
 
-- Pressure as function of Altitude
-
 - Temperature as a function of Altitude
+
+- Total Delivered Heat Quantity
+
+- Wet Bulb
 
 ### CLI Utility
 
@@ -111,7 +116,7 @@ To use the command line utility you can use the following command from the proje
 ```
 Note:
   To use or build the CLI utility you must pass `PSYCHROMETRIC_CLI_ENABLED=1` to the environment of the
-  command or have set in your terminal environment.
+  command.
 
 Or to build the command line utility as an executable to put in your `PATH`.  The following command
 will build the executable in release mode and open a Finder window at the build location, you can then find
