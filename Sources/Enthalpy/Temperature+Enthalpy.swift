@@ -3,11 +3,12 @@ import HumidityRatio
 
 extension Temperature {
 
-  /// Calculates the ``Enthalpy`` for the temperature at a given relative humidity and altitude.
+  /// Calculates the ``Enthalpy`` of ``MoistAir`` for the temperature at a given relative humidity and altitude.
   ///
   /// - Parameters:
   ///   - humidity: The relative humidity of the air.
   ///   - altitude: The altitude of the air.
+  ///   - units: The units to solve for, if not supplied then this will default to ``Core.environment`` units.
   public func enthalpy(
     at humidity: RelativeHumidity,
     altitude: Length = .seaLevel,
@@ -16,17 +17,28 @@ extension Temperature {
     .init(dryBulb: self, humidity: humidity, altitude: altitude, units: units)
   }
 
-  /// Calculates the ``Enthalpy`` for the temperature at a given relative humidity and pressure.
+  /// Calculates the ``Enthalpy`` of ``MoistAir``  for the temperature at a given relative humidity and pressure.
   ///
   /// - Parameters:
   ///   - humidity: The relative humidity of the air.
   ///   - totalPressure: The pressure of the air.
+  ///   - units: The units to solve for, if not supplied then this will default to ``Core.environment`` units.
   public func enthalpy(
     at humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricEnvironment.Units? = nil
   ) -> EnthalpyOf<MoistAir> {
     .init(dryBulb: self, humidity: humidity, pressure: totalPressure, units: units)
+  }
+  
+  /// Calculates the ``Enthalpy`` of ``DryAir``  for the temperature.
+  ///
+  /// - Parameters:
+  ///   - units: The units to solve for, if not supplied then this will default to ``Core.environment`` units.
+  public func enthalpy(
+    units: PsychrometricEnvironment.Units? = nil
+  ) -> EnthalpyOf<DryAir> {
+    .init(dryBulb: self, units: units)
   }
 
   /// Calculate the dry bulb``Temperature`` for the given enthalpy and humidity ratio.

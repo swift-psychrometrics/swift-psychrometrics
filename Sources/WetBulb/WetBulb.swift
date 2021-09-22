@@ -44,15 +44,6 @@ public struct WetBulb {
     self.rawValue = Self.calculate(temperature, humidity)
   }
 
-//    public init(
-//      dryBulb temperature: Temperature,
-//      ratio humidityRatio: HumidityRatio,
-//      pressure totalPressure: Pressure
-//    ) {
-//      let humidityRatio = HumidityRatio.ensureHumidityRatio(humidityRatio)
-//      let dewPoint = DewPoint.in
-//    }
-
   public subscript<V>(dynamicMember keyPath: KeyPath<Temperature, V>) -> V {
     rawValue[keyPath: keyPath]
   }
@@ -62,15 +53,4 @@ extension WetBulb: RawNumericType {
   public typealias FloatLiteralType = Temperature.FloatLiteralType
   public typealias Magnitude = Temperature.Magnitude
   public typealias IntegerLiteralType = Temperature.IntegerLiteralType
-}
-
-extension Temperature {
-
-  /// Calculate the wet-bulb temperature for the given relative humidity.
-  ///
-  /// - Parameters:
-  ///   - humidity: The relative humidity.
-  public func wetBulb(at humidity: RelativeHumidity) -> WetBulb {
-    .init(temperature: self, humidity: humidity)
-  }
 }

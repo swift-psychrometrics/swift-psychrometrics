@@ -1,7 +1,7 @@
 import Core
 import Foundation
 
-// TODO: Add Units.
+// TODO: Add Units and move to it's own module.
 
 public struct Condition {
 

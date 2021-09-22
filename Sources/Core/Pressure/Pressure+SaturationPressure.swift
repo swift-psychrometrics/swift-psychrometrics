@@ -3,22 +3,20 @@ import Foundation
 // Because of rounding errors and notes in ASHRAE Fundamentals 2017, these are sometimes
 // off a little from the tables in the book.
 
-// TODO: Make constants private.
-
 extension Pressure {
 
-  public struct SaturationConstantsBelowFreezing {
-    public let c1: Double
-    public let c2: Double
-    public let c3: Double
-    public let c4: Double
-    public let c5: Double
-    public let c6: Double
-    public let c7: Double
+  private struct SaturationConstantsBelowFreezing {
+    let c1: Double
+    let c2: Double
+    let c3: Double
+    let c4: Double
+    let c5: Double
+    let c6: Double
+    let c7: Double
     
     private let units: PsychrometricEnvironment.Units
 
-    public init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricEnvironment.Units) {
       self.c1 = units == .imperial ? -1.0214165e4 : -5.674539e3
       self.c2 = units == .imperial ? -4.8932428 : 6.3925247
       self.c3 = units == .imperial ? -5.3765794e-3 : -9.677843E-03
@@ -52,17 +50,17 @@ extension Pressure {
     }
   }
 
-  public struct SaturationConstantsAboveFreezing {
-    public let c1: Double
-    public let c2: Double
-    public let c3: Double
-    public let c4: Double
-    public let c5: Double
-    public let c6: Double
+  private struct SaturationConstantsAboveFreezing {
+    let c1: Double
+    let c2: Double
+    let c3: Double
+    let c4: Double
+    let c5: Double
+    let c6: Double
     
     private let units: PsychrometricEnvironment.Units
 
-    public init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricEnvironment.Units) {
       self.c1 = units == .imperial ? -1.0440397e4 : -5.8002206E+03
       self.c2 = units == .imperial ? -1.1294650e1 : 1.3914993
       self.c3 = units == .imperial ? -2.7022355e-2 : -4.8640239E-02
@@ -108,11 +106,15 @@ extension Pressure {
   ///
   /// - Parameters:
   ///   - temperature: The temperature to calculate the saturation pressure of.
-  public static func saturationPressure(at temperature: Temperature) -> Pressure {
+  ///   - units: The unit of measure to solve the pressure for, if not supplied then will default to ``Core.environment`` units.
+  public static func saturationPressure(
+    at temperature: Temperature,
+    units: PsychrometricEnvironment.Units? = nil
+  ) -> Pressure {
 
-    let units = environment.units
-    let bounds = environment.pressureBounds
-    let triplePoint = environment.triplePointOfWater
+    let units = units ?? environment.units
+    let bounds = environment.pressureBounds(for: units)
+    let triplePoint = environment.triplePointOfWater(for: units)
 
     precondition(
       temperature >= bounds.low && temperature <= bounds.high
@@ -122,9 +124,10 @@ extension Pressure {
       ? SaturationConstantsBelowFreezing(units: units).exponent(dryBulb: temperature)
       : SaturationConstantsAboveFreezing(units: units).exponent(dryBulb: temperature)
 
-    return units == .imperial
-      ? .psi(exp(exponent))
-      : .pascals(exp(exponent))
+    return .init(exp(exponent), units: .for(units))
+//    return units == .imperial
+//      ? .psi(exp(exponent))
+//      : .pascals(exp(exponent))
   }
   
   /// Helper to calculate the saturation pressure derivative of air at a given temperature.  This is the reverse of
@@ -132,11 +135,15 @@ extension Pressure {
   ///
   /// - Parameters:
   ///   - temperature: The temperature to calculate the saturation pressure of.
-  public static func saturationPressureDerivative(at temperature: Temperature) -> Pressure {
+  ///   - units: The unit of measure to solve the pressure for, if not supplied then will default to ``Core.environment`` units.
+  public static func saturationPressureDerivative(
+    at temperature: Temperature,
+    units: PsychrometricEnvironment.Units? = nil
+  ) -> Pressure {
 
-    let units = environment.units
-    let bounds = environment.pressureBounds
-    let triplePoint = environment.triplePointOfWater
+    let units = units ?? environment.units
+    let bounds = environment.pressureBounds(for: units)
+    let triplePoint = environment.triplePointOfWater(for: units)
 
     precondition(
       temperature > bounds.low && temperature < bounds.high
@@ -146,8 +153,6 @@ extension Pressure {
       ? SaturationConstantsBelowFreezing(units: units).derivative(dryBulb: temperature)
       : SaturationConstantsAboveFreezing(units: units).derivative(dryBulb: temperature)
 
-    return units == .imperial
-      ? .psi(derivative)
-      : .pascals(derivative)
+    return .init(derivative, units: .for(units))
   }
 }

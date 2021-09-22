@@ -72,12 +72,15 @@ extension HumidityRatio {
   public init(
     dryBulb: Temperature,
     wetBulb: WetBulb,
-    pressure: Pressure
+    pressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
     precondition(dryBulb > wetBulb.temperature)
 
+    let units = units ?? environment.units
+    
     let saturatedHumidityRatio = HumidityRatio(for: wetBulb.temperature, pressure: pressure)
-    if wetBulb.temperature > environment.triplePointOfWater {
+    if wetBulb.temperature > environment.triplePointOfWater(for: units) {
       self.init(
         ConstantsBelowFreezing(units: environment.units)
           .run(dryBulb: dryBulb, wetBulb: wetBulb, saturatedHumidityRatio: saturatedHumidityRatio)

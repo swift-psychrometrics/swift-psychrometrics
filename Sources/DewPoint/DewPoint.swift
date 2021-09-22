@@ -8,6 +8,11 @@ public struct DewPoint {
 
   /// The raw dew point temperature.
   public var rawValue: Temperature
+  
+  public var temperature: Temperature {
+    get { rawValue }
+    set { rawValue = newValue }
+  }
 
   /// Creates a new ``DewPoint`` as the temperaure given.
   ///

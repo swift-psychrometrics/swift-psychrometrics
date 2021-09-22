@@ -13,7 +13,7 @@ public struct Pressure: Hashable {
   }
 
   // MARK: - Pressure.Unit
-  /// Represents the different symbols / units of measure for ``Pressure``.
+  /// Represents the units of measure for ``Pressure``.
   public enum Unit: String, Equatable, Hashable, CaseIterable {
 
     public static var `default`: Self = .psi
@@ -25,31 +25,16 @@ public struct Pressure: Hashable {
       }
     }
 
-    case atmosphere
-    case bar
-    case inchesWater
-    case millibar
-    case pascals
-    case psi
-    case torr
+    case atmosphere = "atm"
+    case bar = "bar"
+    case inchesWater = "inH2O"
+    case millibar = "mb"
+    case pascals = "Pa"
+    case psi = "psi"
+    case torr = "torr"
 
     public var symbol: String {
-      switch self {
-      case .atmosphere:
-        return "atm"
-      case .bar:
-        return "bar"
-      case .inchesWater:
-        return "inH2O"
-      case .millibar:
-        return "mb"
-      case .pascals:
-        return "Pa"
-      case .psi:
-        return "psi"
-      case .torr:
-        return "torr"
-      }
+      return rawValue
     }
   }
 }

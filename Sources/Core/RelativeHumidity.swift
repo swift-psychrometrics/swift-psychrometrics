@@ -69,3 +69,25 @@ extension RelativeHumidity {
     self.init(humidity)
   }
 }
+
+// MARK: Pressure + RelativeHumidity
+extension RelativeHumidity {
+  
+  /// Calculates the relative humidity based on the dry-bulb temperature and dew-point temperatures.
+  ///
+  /// - Parameters:
+  ///   - temperature: The dry bulb temperature.
+  ///   - partialPressure: The partial pressure (vapor pressure).
+  ///   - units: The units of measure, if not supplied then this defaults to ``Core.environment`` units.
+  public init(
+    dryBulb temperature: Temperature,
+    pressure partialPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
+  ) {
+    precondition(partialPressure > 0)
+    let units = units ?? environment.units
+    let saturationPressure = Pressure.saturationPressure(at: temperature, units: units)
+    let fraction = partialPressure / saturationPressure
+    self.init(fraction.rawValue * 100)
+  }
+}

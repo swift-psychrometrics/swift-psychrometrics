@@ -3,8 +3,8 @@ import Foundation
 
 extension Pressure {
   
-  public func dewPoint(dryBulb temperature: Temperature) -> DewPoint {
-    dewPoint_from_vapor_pressure(temperature, self)
+  public func dewPoint(dryBulb temperature: Temperature, units: PsychrometricEnvironment.Units? = nil) -> DewPoint {
+    dewPoint_from_vapor_pressure(temperature, self, units ?? environment.units)
   }
 }
 
@@ -38,15 +38,16 @@ extension DewPoint {
 /// Helper that produces a dew-point from dry bulb temperature an vapor pressure.
 private func dewPoint_from_vapor_pressure(
   _ dryBulb: Temperature,
-  _ vaporPressure: Pressure
+  _ vaporPressure: Pressure,
+  _ units: PsychrometricEnvironment.Units
 ) -> DewPoint {
   
-  let bounds = environment.pressureBounds
-  let temperatureUnits: Temperature.Units = environment.units == .imperial ? .fahrenheit : .celsius
+  let bounds = environment.pressureBounds(for: units)
+  let temperatureUnits: Temperature.Units = units == .imperial ? .fahrenheit : .celsius
   
   precondition(
-    vaporPressure > .saturationPressure(at: bounds.low)
-    && vaporPressure < .saturationPressure(at: bounds.high)
+    vaporPressure > .saturationPressure(at: bounds.low, units: units)
+    && vaporPressure < .saturationPressure(at: bounds.high, units: units)
   )
 
   // First guesses

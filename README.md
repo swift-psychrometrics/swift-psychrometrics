@@ -80,19 +80,31 @@ Some of these calculations do not yet support different units of measure.
 
 - Dew Point
   - From temperature and relative humidity
-  - From temperature and vapor pressure
+  - From temperature and partial pressure (vapor pressure)
   
 - Enthalpy
+  - Dry Air
+  - Moist Air
 
 - Grains of Moisture
 
 - Humidity Ratio
+  - From water mass and dry air mass
+  - From specific humidity
+  - From total pressure and partial pressure (vapor pressure)
+  - From dry bulb temperature and total pressure
+  - From dry bulb temperature, relative humidity, and total pressure
+  - From dry bulb temperature, relative humidity, and altitude
 
-- Partial Pressure
+- Partial Pressure (Vapor Pressure)
 
 - Pressure as function of Altitude
 
-- Saturation / Vapor Pressure
+- Relative Humidity
+  - From dry bulb temperature and dew point temperature
+  - From dry bulb temperature and partial pressure (vapor pressure)
+
+- Saturation Pressure
 
 - Specific Heat (not yet `Numeric` supporting):
   - Water
@@ -100,6 +112,8 @@ Some of these calculations do not yet support different units of measure.
 - Specific Humidity
 
 - Specific Volume
+  - Dry Air
+  - Moist Air
 
 - Temperature as a function of Altitude
 
