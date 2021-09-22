@@ -12,22 +12,18 @@ public struct Pressure: Hashable {
     self.units = units
   }
 
-  /// Create a new ``Pressure`` for the given altitude.
-  ///
-  /// - Parameters:
-  ///   - altitude: The altitude to calculate the pressure.
-  public init(altitude: Length) {
-    self.init(
-      14.696 * pow(1 - 6.8754 * pow(10, -6) * altitude.feet, 5.2559),
-      units: .psi
-    )
-  }
-
   // MARK: - Pressure.Unit
   /// Represents the different symbols / units of measure for ``Pressure``.
   public enum Unit: String, Equatable, Hashable, CaseIterable {
 
     public static var `default`: Self = .psi
+    
+    internal static func `for`(_ units: PsychrometricEnvironment.Units) -> Self {
+      switch units {
+      case .metric: return .pascals
+      case .imperial: return .psi
+      }
+    }
 
     case atmosphere
     case bar

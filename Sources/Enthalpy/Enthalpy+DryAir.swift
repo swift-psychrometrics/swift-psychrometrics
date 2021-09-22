@@ -19,13 +19,13 @@ extension Enthalpy2 where T == DryAir {
     }
   }
   
-  /// Create a new ``Enthalpy`` of ``DryAir`` for the given dry bulb temperature and unit of measure.
+  /// Create a new ``Enthalpy`` of ``Core.DryAir`` for the given dry bulb temperature and unit of measure.
   ///
   /// **Reference**:  ASHRAE - Fundamentals (2017) ch. 1 eq 28
   ///
   /// - Parameters:
   ///   - temperature: The dry bulb temperature in °F [IP] or °C [SI].
-  ///   - units: The unit of measure, if not supplied then we will resolve from the ``environment`` setting.
+  ///   - units: The unit of measure, if not supplied then we will resolve from the ``Core.environment`` setting.
   public init(
     dryBulb temperature: Temperature,
     units: PsychrometricEnvironment.Units? = nil

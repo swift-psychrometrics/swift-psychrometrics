@@ -7,7 +7,6 @@ final class EnthalpyTests: XCTestCase {
   
   func test_enthalpy() {
     let enthalpy = Enthalpy(for: .fahrenheit(75), at: 50%)
-    
     XCTAssertEqual(round(enthalpy.rawValue * 100) / 100, 28.11)
     
     let enthalpy2 = Temperature.fahrenheit(75)
@@ -60,6 +59,10 @@ final class EnthalpyTests: XCTestCase {
       round(enthalpy.humidityRatio(at: 75) * 1000000) / 1000000,
       round(ratio * 1000000) / 1000000
     )
+    
+    // Test enthalpy given a dry bulb and humidity ratio.
+    let enthalpy2 = EnthalpyOf<MoistAir>.init(dryBulb: 75, ratio: ratio, units: .imperial)
+    XCTAssertEqual(enthalpy.rawValue, enthalpy2.rawValue)
   }
   
   func test_temperature_from_enthalpy_and_ratio() {
