@@ -36,10 +36,20 @@ public struct PsychrometricEnvironment {
       return (low: -148, high: 392)
     }
   }
+  
+  public static func universalGasConstant(for units: Units) -> Double {
+    switch units {
+    case .metric:
+      return 287.042
+    case .imperial:
+      return 53.350
+    }
+  }
 
   public enum Units {
     case metric, imperial
   }
 }
 
+/// The default  global environment settings.
 public var environment = PsychrometricEnvironment()

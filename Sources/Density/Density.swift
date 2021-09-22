@@ -10,14 +10,35 @@ import SpecificVolume
 public struct Density<T> {
 
   /// The raw value of the density.
-  public var rawValue: Double
+  public private(set) var rawValue: Double
+  
+  /// The units of the raw value.
+  public private(set) var units: DensityUnits
 
   /// Create a new ``Density`` with the given raw value.
   ///
   /// - Parameters:
   ///   - value: The raw value of the density.
-  public init(_ value: Double) {
+  ///   - units: The unit of measure for the raw value.
+  public init(_ value: Double, units: DensityUnits = .default) {
     self.rawValue = value
+    self.units = units
+  }
+}
+
+/// The units of measure for a ``Density`` type.
+public enum DensityUnits: UnitOfMeasure {
+  
+  case poundsPerCubicFoot
+  case kilogramPerCubicMeter
+  
+  public static var `default`: Self = .poundsPerCubicFoot
+  
+  fileprivate static func `for`(_ units: PsychrometricEnvironment.Units) -> Self {
+    switch units {
+    case .imperial: return .poundsPerCubicFoot
+    case .metric: return .kilogramPerCubicMeter
+    }
   }
 }
 
@@ -25,39 +46,64 @@ public typealias DensityOf<T> = Density<T>
 
 // MARK: - Water
 extension Density where T == Water {
+  
+  // TODO: Add [SI] units.
 
   /// Create a new ``Density<Water>`` for the given temperature.
   ///
   /// - Parameters:
   ///   - temperature: The temperature to calculate the density for.
   public init(for temperature: Temperature) {
-    self.init(
-      62.56
-        + 3.413
-        * (pow(10, -4) * temperature.fahrenheit)
-        - 6.255
-        * pow((pow(10, -5) * temperature.fahrenheit), 2)
-    )
+    let value = 62.56
+      + 3.413
+      * (pow(10, -4) * temperature.fahrenheit)
+      - 6.255
+      * pow((pow(10, -5) * temperature.fahrenheit), 2)
+    self.init(value, units: .poundsPerCubicFoot)
   }
 }
 
 // MARK: - DryAir
 extension Density where T == DryAir {
+  
+  private struct Constants {
+    let universalGasConstant: Double
+    let units: PsychrometricEnvironment.Units
+    
+    init(units: PsychrometricEnvironment.Units) {
+      self.units = units
+      self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
+    }
+    
+    func run(dryBulb: Temperature, pressure: Pressure) -> Double {
+      let T = units == .imperial ? dryBulb.rankine : dryBulb.kelvin
+      let pressure = units == .imperial ? pressure.psi : pressure.pascals
+      
+      guard units == .imperial else {
+        return pressure / universalGasConstant / T
+      }
+      
+      /// Convert pressure in pounds per square inch to pounds per cubic foot.
+      return (pressure * 144) / universalGasConstant / T
+    }
+  }
 
   /// Create a new ``Density<DryAir>`` for the given temperature and pressure.
+  ///
+  /// **Reference**: ASHRAE Fundamentals (2017) ch. 1
   ///
   /// - Parameters:
   ///   - temperature: The temperature to calculate the density for.
   ///   - totalPressure: The pressure to calculate the density for.
+  ///   - units: The unit of measure to solve for, will default the the ``Core.environment`` setting if not supplied.
   public init(
     for temperature: Temperature,
-    pressure totalPressure: Pressure
+    pressure totalPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
-    self.init(
-      ((29.0 * (totalPressure.psi))
-        / (345.23 * temperature.rankine))
-        * 32.174
-    )
+    let units = units ?? environment.units
+    let value = Constants(units: units).run(dryBulb: temperature, pressure: totalPressure)
+    self.init(value, units: .for(units))
   }
 
   /// Create a new ``Density<DryAir>`` for the given temperature and altitude.
@@ -67,9 +113,10 @@ extension Density where T == DryAir {
   ///   - altitude: The altitude to calculate the density for.
   public init(
     for temperature: Temperature,
-    altitude: Length = .seaLevel
+    altitude: Length = .seaLevel,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
-    self.init(for: temperature, pressure: .init(altitude: altitude))
+    self.init(for: temperature, pressure: .init(altitude: altitude), units: units)
   }
 }
 
@@ -102,8 +149,14 @@ extension Density where T == MoistAir {
   }
 }
 
-extension Density: RawNumericType {
+extension Density: NumberWithUnitOfMeasure {
+  
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude
+  public typealias Units = DensityUnits
+  
+  public static func keyPath(for units: DensityUnits) -> WritableKeyPath<Density<T>, Double> {
+    \.rawValue
+  }
 }
