@@ -125,26 +125,48 @@ extension Density where T == MoistAir {
 
   /// Create a new ``Density<MoistAir>`` for the given specific volume and humidity ratio.
   ///
+  /// **Reference**:
+  ///   ASHRAE - Fundamentals (2017) ch. 1 eq. 11
+  ///
   /// - Parameters:
   ///   - specificVolume: The specific volume to calculate the density for.
   ///   - humidityRatio: The humidity ratio to calculate the density for.
+  ///   - units: The unit of measure to solve for, will default the the ``Core.environment`` setting if not supplied.
   public init(
     volume specificVolume: SpecificVolume,
-    ratio humidityRatio: HumidityRatio
+    ratio humidityRatio: HumidityRatio,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
+    precondition(humidityRatio.rawValue > 0)
+    
+    let units = units ?? environment.units
+    
     self.init(
-      (1 / specificVolume) * (1 + humidityRatio)
+      (1 + humidityRatio) / specificVolume,
+      units: .for(units)
     )
   }
 
+  /// Create a new ``Density<MoistAir>`` for the given dry bulb temperature, relative humidity, and total pressure.
+  ///
+  /// **Reference**:
+  ///   ASHRAE - Fundamentals (2017) ch. 1 eq. 11
+  ///
+  /// - Parameters:
+  ///   - temperature: The dry bulb temperature to calculate the density for.
+  ///   - humidity: The relative humidity to calculate the density for.
+  ///   - pressure: The total pressure to calculate the density for.
+  ///   - units: The unit of measure to solve for, will default the the ``Core.environment`` setting if not supplied.
   public init(
     for temperature: Temperature,
     at humidity: RelativeHumidity,
-    pressure totalPressure: Pressure
+    pressure totalPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
       volume: .init(for: temperature, at: humidity, pressure: totalPressure),
-      ratio: .init(for: temperature, at: humidity, pressure: totalPressure)
+      ratio: .init(for: temperature, at: humidity, pressure: totalPressure),
+      units: units
     )
   }
 }

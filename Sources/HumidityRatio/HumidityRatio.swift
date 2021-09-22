@@ -70,14 +70,14 @@ public struct HumidityRatio: Equatable {
     )
   }
 
-  /// The  humidity ratio of the air for the given total pressure and partial pressure.
+  /// The  humidity ratio of the air for the given dry bulb temperature and total pressure.
   ///
   /// - Parameters:
-  ///   - temperature: The temperature of the air.
+  ///   - temperature: The dry bulb temperature of the air.
   ///   - totalPressure: The total pressure of the air.
   public init(
     for temperature: Temperature,
-    totalPressure: Pressure
+    pressure totalPressure: Pressure
   ) {
     self.init(
       totalPressure: totalPressure,

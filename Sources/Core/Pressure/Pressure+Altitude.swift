@@ -22,9 +22,12 @@ extension Pressure {
   
   /// Create a new ``Pressure`` for the given altitude.
   ///
+  /// - Note:
+  ///   The altitude will be converted to the appropriate unit of measure base on the units you are trying to solve for.
+  ///
   /// - Parameters:
   ///   - altitude: The altitude to calculate the pressure.
-  ///   - units: The unit of measure to solve the pressure for.
+  ///   - units: The unit of measure to solve the pressure for, if not supplied then will default to ``Core.environment`` units.
   public init(
     altitude: Length,
     units: PsychrometricEnvironment.Units? = nil

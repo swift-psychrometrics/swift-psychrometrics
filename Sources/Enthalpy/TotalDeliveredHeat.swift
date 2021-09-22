@@ -1,13 +1,15 @@
 import Core
 import Foundation
 
+// TODO: Add Units.
+
 public struct Condition {
 
   public var temperature: Temperature
   public var humidity: RelativeHumidity
   public var altitude: Length
 
-  public var enthalpy: Enthalpy { temperature.enthalpy(at: humidity, altitude: altitude) }
+  public var enthalpy: EnthalpyOf<MoistAir> { temperature.enthalpy(at: humidity, altitude: altitude) }
 
   public init(
     temperature: Temperature,
@@ -31,7 +33,11 @@ public struct ConditionEnvelope {
   }
 }
 
-public func totalDeliveredHeat(_ lhs: Enthalpy, _ rhs: Enthalpy, airflow cfm: Double) -> Double {
+public func totalDeliveredHeat(
+  _ lhs: EnthalpyOf<MoistAir>,
+  _ rhs: EnthalpyOf<MoistAir>,
+  airflow cfm: Double
+) -> Double {
   let deltaE =
     lhs > rhs
     ? lhs - rhs

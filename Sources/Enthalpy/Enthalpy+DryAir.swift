@@ -2,9 +2,9 @@ import Core
 import Foundation
 
 
-extension Enthalpy2 where T == DryAir {
+extension Enthalpy where T == DryAir {
   
-  private struct Constants {
+  private struct DryAirConstants {
     let specificHeat: Double
     let units: PsychrometricEnvironment.Units
     
@@ -31,7 +31,7 @@ extension Enthalpy2 where T == DryAir {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     let units = units ?? environment.units
-    let value = Constants(units: units).run(temperature)
+    let value = DryAirConstants(units: units).run(temperature)
     self.init(value, units: .for(units))
   }
 }

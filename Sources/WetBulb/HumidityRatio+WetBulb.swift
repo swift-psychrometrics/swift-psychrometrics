@@ -76,7 +76,7 @@ extension HumidityRatio {
   ) {
     precondition(dryBulb > wetBulb.temperature)
 
-    let saturatedHumidityRatio = HumidityRatio(for: wetBulb.temperature, totalPressure: pressure)
+    let saturatedHumidityRatio = HumidityRatio(for: wetBulb.temperature, pressure: pressure)
     if wetBulb.temperature > environment.triplePointOfWater {
       self.init(
         ConstantsBelowFreezing(units: environment.units)
