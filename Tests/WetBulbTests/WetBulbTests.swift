@@ -1,6 +1,7 @@
 import XCTest
 import Core
 import WetBulb
+import HumidityRatio
 
 final class WetBulbTests: XCTestCase {
   
@@ -40,4 +41,13 @@ final class WetBulbTests: XCTestCase {
     wetBulb *= 3
     XCTAssertEqual(wetBulb.rawValue, 60)
   }
+  
+//  func test_HumidityRatio_with_wetBulb() {
+//    // above freezing
+//    let ratio = HumidityRatio.init(dryBulb: 86, wetBulb: 77, pressure: 14.175)
+//    XCTAssertEqual(ratio, 0.0187193288418892)
+//    // below freezing
+//    let below = HumidityRatio.init(dryBulb: 30.2, wetBulb: 23, pressure: 14.175)
+//    XCTAssertEqual(below, 0.00114657481090184)
+//  }
 }

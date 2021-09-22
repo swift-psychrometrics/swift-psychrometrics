@@ -149,15 +149,24 @@ final class PressureTests: XCTestCase {
   
   func test_saturation_pressure() {
     let tempsAndExpectation: [(Temperature, Pressure)] = [
+      (.fahrenheit(-76), .psi(0.000157)),
       (.fahrenheit(-30), .psi(0.00344)),
-      (.fahrenheit(32), .psi(0.08865)),
-      (.fahrenheit(56), .psi(0.22202))
+      (.fahrenheit(-4), .psi(0.014974)),
+      (.fahrenheit(23), .psi(0.058268)),
+      (.fahrenheit(32), .psi(0.08864)),
+      (.fahrenheit(41), .psi(0.12656)),
+      (.fahrenheit(56), .psi(0.22202)),
+      (.fahrenheit(77), .psi(0.45973)),
+      (.fahrenheit(122), .psi(1.79140)),
+      (.fahrenheit(212), .psi(14.7094)),
+      (.fahrenheit(300), .psi(67.0206)),
+
     ]
     
     for (temp, expected) in tempsAndExpectation {
       XCTAssertEqual(
         round(Pressure.saturationPressure(at: temp).psi * 100000) / 100000,
-        expected.psi
+        round(expected.psi * 100000) / 100000
       )
     }
   }

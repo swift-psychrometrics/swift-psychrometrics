@@ -6,6 +6,10 @@ import Foundation
 /// Defined as the ratio of the mass of water vapor to the mass of dry air in the sample and is often represented
 /// by the symbol `W` in the ASHRAE Fundamentals (2017).
 ///
+/// This value can not be negative, so it will be set to ``PsychrometricEnvironment.minimumHumidityRatio`` if
+/// initialized with a value that's out of range.  For methods that use a humidity ratio they should check that the humidity ratio
+/// is valid by calling ``HumidityRatio.ensureHumidityRatio(_:)``.
+///
 public struct HumidityRatio: Equatable {
 
   /// Constant for the mole weight of water.
@@ -16,6 +20,13 @@ public struct HumidityRatio: Equatable {
 
   /// Constant for the ratio of the mole weight of water over the mole weight of air.
   public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
+  
+  public static func ensureHumidityRatio(_ ratio: HumidityRatio) -> HumidityRatio {
+    guard ratio.rawValue > environment.minimumHumidityRatio else {
+      return .init(environment.minimumHumidityRatio)
+    }
+    return ratio
+  }
 
   /// The raw humidity ratio.
   public var rawValue: Double
@@ -25,7 +36,7 @@ public struct HumidityRatio: Equatable {
   /// - Parameters:
   ///   - value: The raw humidity ratio value.
   public init(_ value: Double) {
-    self.rawValue = value
+    self.rawValue = max(value, environment.minimumHumidityRatio)
   }
 
   /// The humidity ratio of air for the given mass of water and mass of dry air.
@@ -46,12 +57,30 @@ public struct HumidityRatio: Equatable {
   ///   - totalPressure: The total pressure of the air.
   ///   - partialPressure: The partial pressure of the air.
   public init(
-    for totalPressure: Pressure,
-    with partialPressure: Pressure
+    totalPressure: Pressure,
+    partialPressure: Pressure
+  ) {
+    let partialPressure = environment.units == .imperial ? partialPressure.psi : partialPressure.pascals
+    let totalPressure = environment.units == .imperial ? totalPressure.psi : totalPressure.pascals
+    
+    self.init(
+      Self.moleWeightRatio * partialPressure
+        / (totalPressure - partialPressure)
+    )
+  }
+  
+  /// The  humidity ratio of the air for the given total pressure and partial pressure.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the air.
+  ///   - totalPressure: The total pressure of the air.
+  public init(
+    for temperature: Temperature,
+    totalPressure: Pressure
   ) {
     self.init(
-      Self.moleWeightRatio * partialPressure.psi
-        / (totalPressure.psi - partialPressure.psi)
+      totalPressure: totalPressure,
+      partialPressure: .saturationPressure(at: temperature)
     )
   }
 
@@ -67,8 +96,8 @@ public struct HumidityRatio: Equatable {
     pressure totalPressure: Pressure
   ) {
     self.init(
-      for: totalPressure,
-      with: .partialPressure(for: temperature, at: humidity)
+      totalPressure: totalPressure,
+      partialPressure: .partialPressure(for: temperature, at: humidity)
     )
   }
 
