@@ -30,9 +30,6 @@ extension HumidityRatio {
       let wetBulb = units == .imperial ? wetBulb.fahrenheit : wetBulb.celsius
       return ((c1 - c2 * wetBulb) * saturatedHumidityRatio - c3 * (dryBulb - wetBulb))
         / (c1 + c4 * dryBulb - wetBulb)
-
-      //           HumRatio = ((1093 - 0.556 * TWetBulb) * Wsstar - 0.240 * (TDryBulb - TWetBulb)) \
-      //                / (1093 + 0.444 * TDryBulb - TWetBulb)
     }
   }
 

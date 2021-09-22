@@ -27,6 +27,15 @@ public struct PsychrometricEnvironment {
       return .fahrenheit(32.018)
     }
   }
+  
+  public var pressureBounds: (low: Temperature, high: Temperature) {
+    switch units {
+    case .metric:
+      return (low: -100, high: 200)
+    case .imperial:
+      return (low: -148, high: 392)
+    }
+  }
 
   public enum Units {
     case metric, imperial

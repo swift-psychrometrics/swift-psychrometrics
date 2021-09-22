@@ -79,6 +79,8 @@ Some of these calculations do not yet support different units of measure.
   - Water
 
 - Dew Point
+  - From temperature and relative humidity
+  - From temperature and vapor pressure
   
 - Enthalpy
 

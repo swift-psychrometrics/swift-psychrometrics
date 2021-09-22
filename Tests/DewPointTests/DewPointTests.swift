@@ -60,4 +60,18 @@ final class DewPointTests: XCTestCase {
     let dewPoint2 = dewPoint * 3
     XCTAssertEqual(dewPoint2.rawValue, 180)
   }
+  
+  func test_dewPoint_from_vapor_pressure() {
+    var vaporPressure = Pressure.saturationPressure(at: -4)
+    var dewPoint = DewPoint.init(dryBulb: 59, vaporPressure: vaporPressure)
+    XCTAssertEqual(round(dewPoint.fahrenheit * 1000) / 1000, -4)
+    
+    vaporPressure = .saturationPressure(at: 41)
+    dewPoint = .init(dryBulb: 59, vaporPressure: vaporPressure)
+    XCTAssertEqual(round(dewPoint.fahrenheit * 1000) / 1000, 41)
+    
+    vaporPressure = .saturationPressure(at: 122)
+    dewPoint = .init(dryBulb: 140, vaporPressure: vaporPressure)
+    XCTAssertEqual(round(dewPoint.fahrenheit * 1000) / 1000, 122)
+  }
 }

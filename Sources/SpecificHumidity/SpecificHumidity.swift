@@ -74,3 +74,9 @@ public struct SpecificHumidity {
     )
   }
 }
+
+extension SpecificHumidity: RawNumericType {
+  public typealias IntegerLiteralType = Double.IntegerLiteralType
+  public typealias FloatLiteralType = Double.FloatLiteralType
+  public typealias Magnitude = Double.Magnitude
+}

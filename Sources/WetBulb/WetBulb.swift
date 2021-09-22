@@ -44,14 +44,14 @@ public struct WetBulb {
     self.rawValue = Self.calculate(temperature, humidity)
   }
 
-  //  public init(
-  //    dryBulb temperature: Temperature,
-  //    ratio humidityRatio: HumidityRatio,
-  //    pressure totalPressure: Pressure
-  //  ) {
-  //    let humidityRatio = HumidityRatio.ensureHumidityRatio(humidityRatio)
-  //    let dewPoint = DewPoint.in
-  //  }
+//    public init(
+//      dryBulb temperature: Temperature,
+//      ratio humidityRatio: HumidityRatio,
+//      pressure totalPressure: Pressure
+//    ) {
+//      let humidityRatio = HumidityRatio.ensureHumidityRatio(humidityRatio)
+//      let dewPoint = DewPoint.in
+//    }
 
   public subscript<V>(dynamicMember keyPath: KeyPath<Temperature, V>) -> V {
     rawValue[keyPath: keyPath]

@@ -19,4 +19,18 @@ final class HumidityRatioTests: XCTestCase {
     XCTAssertEqual(round(humidityRatio.rawValue * 10000) / 10000, 0.0092)
     XCTAssertEqual(round(partialPressure.psi * 10000) / 10000, 0.215)
   }
+  
+  func test_humidityRatio_and_vapor_pressure() {
+    // conditions at 77°F and standard pressure at 1000'
+    let ratio = HumidityRatio(totalPressure: 14.175, partialPressure: 0.45973)
+    XCTAssertEqual(
+      round(ratio.rawValue * 1000000) / 1000000,
+      0.020847
+    )
+    let vaporPressure = Pressure.init(ratio: ratio, pressure: 14.175)
+    XCTAssertEqual(
+      round(vaporPressure.rawValue * 100000) / 100000,
+      0.45973
+    )
+  }
 }

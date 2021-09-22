@@ -51,7 +51,7 @@ public struct HumidityRatio: Equatable {
     self.init(Self.moleWeightRatio * (waterMass / dryAirMass))
   }
 
-  /// The  humidity ratio of the air for the given total pressure and partial pressure.
+  /// The  humidity ratio of the air for the given total pressure and partial pressure. (vapor pressure)
   ///
   /// - Parameters:
   ///   - totalPressure: The total pressure of the air.
