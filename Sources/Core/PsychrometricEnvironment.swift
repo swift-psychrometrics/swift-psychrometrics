@@ -14,7 +14,6 @@ public struct PsychrometricEnvironment {
   /// The unit of measure.
   public var units: Units = .imperial
 
-  
   /// Returns the freezing point of water for the given units.
   ///
   /// - Parameters:
@@ -40,8 +39,7 @@ public struct PsychrometricEnvironment {
       return .fahrenheit(32.018)
     }
   }
-  
-  
+
   /// Returns the temperature bounds for calculating saturation pressures for the given units.
   ///
   /// - Parameters:
@@ -54,8 +52,7 @@ public struct PsychrometricEnvironment {
       return (low: -148, high: 392)
     }
   }
-  
-  
+
   /// Returns the universal gas constant for the given units.
   ///
   /// - Parameters:

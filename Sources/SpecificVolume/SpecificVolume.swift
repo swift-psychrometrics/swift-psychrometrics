@@ -77,11 +77,11 @@ public struct SpecificVolume {
 }
 
 public struct SpecificVolume2<T> {
-  
+
   public private(set) var rawValue: Double
-  
+
   public private(set) var units: SpecificVolumeUnits
-  
+
   public init(_ value: Double, units: SpecificVolumeUnits = .default) {
     self.rawValue = value
     self.units = units
@@ -91,12 +91,12 @@ public struct SpecificVolume2<T> {
 public typealias SpecificVolumeOf<T> = SpecificVolume2<T>
 
 public enum SpecificVolumeUnits: UnitOfMeasure {
-  
+
   case cubicFeetPerPound
   case cubicMeterPerKilogram
-  
+
   public static var `default`: Self = .cubicFeetPerPound
-  
+
   internal static func `for`(_ units: PsychrometricEnvironment.Units) -> Self {
     switch units {
     case .metric: return .cubicMeterPerKilogram
@@ -110,12 +110,13 @@ extension SpecificVolume2: NumberWithUnitOfMeasure {
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude
   public typealias Units = SpecificVolumeUnits
-  
-  public static func keyPath(for units: SpecificVolumeUnits) -> WritableKeyPath<SpecificVolume2<T>, Double> {
+
+  public static func keyPath(for units: SpecificVolumeUnits) -> WritableKeyPath<
+    SpecificVolume2<T>, Double
+  > {
     \.rawValue
   }
 }
-
 
 extension SpecificVolume: RawNumericType {
   public typealias IntegerLiteralType = Double.IntegerLiteralType

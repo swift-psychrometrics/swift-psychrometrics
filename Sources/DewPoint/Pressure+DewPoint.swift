@@ -2,14 +2,16 @@ import Core
 import Foundation
 
 extension Pressure {
-  
-  public func dewPoint(dryBulb temperature: Temperature, units: PsychrometricEnvironment.Units? = nil) -> DewPoint {
+
+  public func dewPoint(
+    dryBulb temperature: Temperature, units: PsychrometricEnvironment.Units? = nil
+  ) -> DewPoint {
     dewPoint_from_vapor_pressure(temperature, self, units ?? environment.units)
   }
 }
 
 extension DewPoint {
-  
+
   /// Create a new ``DewPoint`` from the given dry bulb temperature and vapor pressure.
   ///
   /// - Parameters:
@@ -41,13 +43,13 @@ private func dewPoint_from_vapor_pressure(
   _ vaporPressure: Pressure,
   _ units: PsychrometricEnvironment.Units
 ) -> DewPoint {
-  
+
   let bounds = environment.pressureBounds(for: units)
   let temperatureUnits: Temperature.Units = units == .imperial ? .fahrenheit : .celsius
-  
+
   precondition(
     vaporPressure > .saturationPressure(at: bounds.low, units: units)
-    && vaporPressure < .saturationPressure(at: bounds.high, units: units)
+      && vaporPressure < .saturationPressure(at: bounds.high, units: units)
   )
 
   // First guesses
@@ -64,7 +66,8 @@ private func dewPoint_from_vapor_pressure(
     let derivative = Pressure.saturationPressureDerivative(at: dewPoint_iteration)
 
     // new estimate.
-    let dewPointValue = dewPoint_iteration.rawValue
+    let dewPointValue =
+      dewPoint_iteration.rawValue
       - (logVaporPressure_iteration - logVaporPressure) / derivative.rawValue
     if dewPointValue > bounds.high.rawValue {
       dewPoint = bounds.high
@@ -73,21 +76,23 @@ private func dewPoint_from_vapor_pressure(
     } else {
       dewPoint = .init(dewPointValue, units: temperatureUnits)
     }
-    
-    if (fabs(dewPoint.rawValue - dewPoint_iteration.rawValue) <= environment.temperatureTolerance.rawValue) {
+
+    if fabs(dewPoint.rawValue - dewPoint_iteration.rawValue)
+      <= environment.temperatureTolerance.rawValue
+    {
       break
     } else if index > environment.maximumIterationCount {
       // Do something useful like throw an error.
       break
     }
-    
+
     index += 1
 
   }
-  
+
   guard dewPoint < dryBulb else {
     return .init(dryBulb)
   }
-  
+
   return .init(dewPoint)
 }

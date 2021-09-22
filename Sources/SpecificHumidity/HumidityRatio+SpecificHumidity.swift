@@ -2,7 +2,7 @@ import Foundation
 import HumidityRatio
 
 extension HumidityRatio {
-  
+
   /// Create a new ``HumidityRatio`` from the given specific humidity.
   ///
   /// **Reference**:  ASHRAE Handbook - Fundamentals (2017) ch. 1 eqn 9b (solved for humidity ratio)

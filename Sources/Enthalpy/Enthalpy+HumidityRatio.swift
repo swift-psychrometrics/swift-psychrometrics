@@ -3,26 +3,27 @@ import Foundation
 import HumidityRatio
 
 extension HumidityRatio {
-  
+
   private struct Constants {
     let c1: Double
     let c2: Double
     let c3: Double
     let units: PsychrometricEnvironment.Units
-    
+
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
       self.c1 = units == .imperial ? 0.24 : 1.006
       self.c2 = units == .imperial ? 1061 : 2501
       self.c3 = units == .imperial ? 0.444 : 1.86
     }
-    
+
     func run(enthalpy: EnthalpyOf<MoistAir>, dryBulb: Temperature) -> Double {
       let T = units == .imperial ? dryBulb.fahrenheit : dryBulb.celsius
-      let intermediateValue = units == .imperial
-      ? enthalpy.rawValue - c1 * T
-      : enthalpy.rawValue / 1000 - c1 * T
-      
+      let intermediateValue =
+        units == .imperial
+        ? enthalpy.rawValue - c1 * T
+        : enthalpy.rawValue / 1000 - c1 * T
+
       return intermediateValue / (c2 + c3 * T)
     }
   }

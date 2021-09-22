@@ -2,7 +2,7 @@ import Core
 import Foundation
 
 extension Pressure {
-  
+
   /// Create a new vapor ``Pressure`` for the given humidity ratio and total pressure.
   ///
   /// - Parameters:

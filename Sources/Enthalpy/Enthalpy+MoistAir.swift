@@ -3,35 +3,36 @@ import Foundation
 import HumidityRatio
 
 extension Enthalpy where T == MoistAir {
-  
+
   internal struct Constants {
     let c1: Double
     let c2: Double
     let c3: Double
     let units: PsychrometricEnvironment.Units
-    
+
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
       self.c1 = units == .imperial ? 0.24 : 1.006
       self.c2 = units == .imperial ? 1061 : 2501
       self.c3 = units == .imperial ? 0.444 : 1.86
     }
-    
+
     func run(dryBulb: Temperature, ratio: HumidityRatio) -> Double {
       let T = units == .imperial ? dryBulb.fahrenheit : dryBulb.celsius
       let value = c1 * T + ratio.rawValue * (c2 + c3 * T)
       return units == .imperial ? value : value * 1000
     }
-    
+
     func dryBulb(enthalpy: EnthalpyOf<MoistAir>, ratio: HumidityRatio) -> Temperature {
-      let intermediateValue = units == .imperial
-      ? enthalpy.rawValue - c2 * ratio.rawValue
-      : enthalpy.rawValue / 1000 - c2 * ratio.rawValue
+      let intermediateValue =
+        units == .imperial
+        ? enthalpy.rawValue - c2 * ratio.rawValue
+        : enthalpy.rawValue / 1000 - c2 * ratio.rawValue
       let value = intermediateValue / (c1 + c3 * ratio.rawValue)
       return units == .imperial ? .fahrenheit(value) : .celsius(value)
     }
   }
-  
+
   /// Create a new ``Enthalpy`` for the given temperature and humidity ratio.
   ///
   /// **Reference**:  ASHRAE - Fundamentals (2017) ch. 1
@@ -49,7 +50,7 @@ extension Enthalpy where T == MoistAir {
     let value = Constants(units: units).run(dryBulb: temperature, ratio: humidityRatio)
     self.init(value, units: .for(units))
   }
-  
+
   /// Create a new ``Enthalpy`` for the given temperature and pressure.
   ///
   /// **Reference**:  ASHRAE - Fundamentals (2017) ch. 1
@@ -69,7 +70,7 @@ extension Enthalpy where T == MoistAir {
       units: units
     )
   }
-  
+
   /// Create a new ``Enthalpy`` for the given temperature, relative humidity, and pressure.
   ///
   /// **Reference**:  ASHRAE - Fundamentals (2017) ch. 1
@@ -91,7 +92,7 @@ extension Enthalpy where T == MoistAir {
       units: units
     )
   }
-  
+
   /// Create a new ``Enthalpy`` for the given temperature, relative humidity, and pressure.
   ///
   /// **Reference**:  ASHRAE - Fundamentals (2017) ch. 1

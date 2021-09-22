@@ -3,37 +3,39 @@ import Foundation
 import HumidityRatio
 
 extension SpecificVolume2 where T == MoistAir {
-  
+
   fileprivate struct Constants {
     let universalGasConstant: Double
     let c1: Double = 1.607858
     let units: PsychrometricEnvironment.Units
-    
+
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
-    
+
     func run(dryBulb: Temperature, ratio: HumidityRatio, pressure: Pressure) -> Double {
       let T = units == .imperial ? dryBulb.rankine : dryBulb.kelvin
       let P = units == .imperial ? pressure.psi : pressure.pascals
       let intermediateValue = universalGasConstant * T * (1 + c1 * ratio.rawValue)
       return units == .imperial ? intermediateValue / (144 * P) : intermediateValue / P
     }
-    
+
     // inverts the calculation to solve for dry-bulb
-    func dryBulb(volume: SpecificVolumeOf<MoistAir>, ratio: HumidityRatio, pressure: Pressure) -> Temperature {
+    func dryBulb(volume: SpecificVolumeOf<MoistAir>, ratio: HumidityRatio, pressure: Pressure)
+      -> Temperature
+    {
       let P = units == .imperial ? pressure.psi : pressure.pascals
       let c2 = units == .imperial ? 144.0 : 1.0
       let value = volume.rawValue * (c2 * P) / (universalGasConstant * (1 + c2 * ratio.rawValue))
       return units == .imperial ? .rankine(value) : .kelvin(value)
     }
   }
-  
+
   /// Calculate the ``SpecificVolume`` for ``Core.MoistAir`` the given temperature,humidity ratio, and total pressure.
   ///
   /// **References**: ASHRAE - Fundamentals (2017) ch. 1 eq. 26
-  /// 
+  ///
   /// - Parameters:
   ///   - temperature: The temperature to calculate the specific volume for.
   ///   - humidityRatio: The relative humidity to calculate the specific volume for.
@@ -51,7 +53,7 @@ extension SpecificVolume2 where T == MoistAir {
       .run(dryBulb: temperature, ratio: humidityRatio, pressure: totalPressure)
     self.init(value, units: .for(units))
   }
-  
+
   /// Calculate the ``SpecificVolume`` for ``Core.MoistAir`` the given temperature,humidity ratio, and total pressure.
   ///
   /// **References**: ASHRAE - Fundamentals (2017) ch. 1 eq. 26
@@ -67,12 +69,13 @@ extension SpecificVolume2 where T == MoistAir {
     altitude: Length,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    self.init(dryBulb: temperature, ratio: humidityRatio, pressure: .init(altitude: altitude), units: units)
+    self.init(
+      dryBulb: temperature, ratio: humidityRatio, pressure: .init(altitude: altitude), units: units)
   }
 }
 
 extension Temperature {
-  
+
   /// Create a new dry bulb ``Temperature`` for the given specific volume, humidity ratio, and total pressure.
   ///
   /// **Reference**:
@@ -89,20 +92,21 @@ extension Temperature {
     pressure totalPressure: Pressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    
+
     let units = units ?? environment.units
-    
+
     precondition(specificVolume.units == SpecificVolumeUnits.for(units))
-    
+
     let absoluteTemperature = SpecificVolumeOf<MoistAir>.Constants(units: units)
       .dryBulb(volume: specificVolume, ratio: humidityRatio, pressure: totalPressure)
-    
+
     // Convert the absolute temperature appropriately for the given units.
-    self = units == .imperial
-    ? .fahrenheit(absoluteTemperature.fahrenheit)
-    : .celsius(absoluteTemperature.celsius)
+    self =
+      units == .imperial
+      ? .fahrenheit(absoluteTemperature.fahrenheit)
+      : .celsius(absoluteTemperature.celsius)
   }
-  
+
   /// Create a new dry bulb ``Temperature`` for the given specific volume, humidity ratio, and altitude.
   ///
   /// **Reference**:
@@ -119,6 +123,8 @@ extension Temperature {
     altitude: Length,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    self.init(volume: specificVolume, ratio: humidityRatio, pressure: .init(altitude: altitude), units: units)
+    self.init(
+      volume: specificVolume, ratio: humidityRatio, pressure: .init(altitude: altitude),
+      units: units)
   }
 }

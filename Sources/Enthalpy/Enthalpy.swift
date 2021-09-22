@@ -3,10 +3,10 @@ import Foundation
 import HumidityRatio
 
 public struct Enthalpy<T> {
-  
+
   /// The enthalpy of the air based on input state.
   public private(set) var rawValue: Double
-  
+
   /// The units of measure for the raw value.
   public private(set) var units: EnthalpyUnits
 
@@ -22,12 +22,12 @@ public struct Enthalpy<T> {
 }
 
 public enum EnthalpyUnits: UnitOfMeasure {
-  
+
   public static var `default`: Self = .btuPerPound
-  
+
   case btuPerPound
   case joulePerKilogram
-  
+
   internal static func `for`(_ units: PsychrometricEnvironment.Units) -> Self {
     switch units {
     case .metric: return .joulePerKilogram
@@ -41,7 +41,7 @@ extension Enthalpy: NumberWithUnitOfMeasure {
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias Magnitude = Double.Magnitude
   public typealias Units = EnthalpyUnits
-  
+
   public static func keyPath(for units: EnthalpyUnits) -> WritableKeyPath<Enthalpy<T>, Double> {
     \.rawValue
   }

@@ -3,7 +3,7 @@ import Foundation
 import HumidityRatio
 
 extension HumidityRatio {
-  
+
   public init(
     dewPoint: DewPoint,
     pressure totalPressure: Pressure,

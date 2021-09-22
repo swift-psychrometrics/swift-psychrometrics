@@ -49,7 +49,7 @@ var package = Package(
       name: "DewPoint",
       dependencies: [
         "Core",
-        "HumidityRatio"
+        "HumidityRatio",
       ]
     ),
     .testTarget(

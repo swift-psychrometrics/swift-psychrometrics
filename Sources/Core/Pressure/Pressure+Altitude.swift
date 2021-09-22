@@ -1,25 +1,25 @@
 import Foundation
 
 extension Pressure {
-  
+
   private struct Constants {
     let c1: Double
     let c2: Double
     let c3 = 5.2559
     let units: PsychrometricEnvironment.Units
-    
+
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
       self.c1 = units == .imperial ? 14.696 : 101325
       self.c2 = units == .imperial ? 6.8754e-06 : 2.25577e-05
     }
-    
+
     func run(altitude: Length) -> Double {
       let altitude = units == .imperial ? altitude.feet : altitude.meters
       return c1 * pow(1 - c2 * altitude, c3)
     }
   }
-  
+
   /// Create a new ``Pressure`` for the given altitude.
   ///
   /// - Note:

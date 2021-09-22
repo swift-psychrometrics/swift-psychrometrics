@@ -11,7 +11,7 @@ public struct Density<T> {
 
   /// The raw value of the density.
   public private(set) var rawValue: Double
-  
+
   /// The units of the raw value.
   public private(set) var units: DensityUnits
 
@@ -28,12 +28,12 @@ public struct Density<T> {
 
 /// The units of measure for a ``Density`` type.
 public enum DensityUnits: UnitOfMeasure {
-  
+
   case poundsPerCubicFoot
   case kilogramPerCubicMeter
-  
+
   public static var `default`: Self = .poundsPerCubicFoot
-  
+
   fileprivate static func `for`(_ units: PsychrometricEnvironment.Units) -> Self {
     switch units {
     case .imperial: return .poundsPerCubicFoot
@@ -46,7 +46,7 @@ public typealias DensityOf<T> = Density<T>
 
 // MARK: - Water
 extension Density where T == Water {
-  
+
   // TODO: Add [SI] units.
 
   /// Create a new ``Density<Water>`` for the given temperature.
@@ -54,7 +54,8 @@ extension Density where T == Water {
   /// - Parameters:
   ///   - temperature: The temperature to calculate the density for.
   public init(for temperature: Temperature) {
-    let value = 62.56
+    let value =
+      62.56
       + 3.413
       * (pow(10, -4) * temperature.fahrenheit)
       - 6.255
@@ -65,24 +66,24 @@ extension Density where T == Water {
 
 // MARK: - DryAir
 extension Density where T == DryAir {
-  
+
   private struct Constants {
     let universalGasConstant: Double
     let units: PsychrometricEnvironment.Units
-    
+
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
-    
+
     func run(dryBulb: Temperature, pressure: Pressure) -> Double {
       let T = units == .imperial ? dryBulb.rankine : dryBulb.kelvin
       let pressure = units == .imperial ? pressure.psi : pressure.pascals
-      
+
       guard units == .imperial else {
         return pressure / universalGasConstant / T
       }
-      
+
       /// Convert pressure in pounds per square inch to pounds per cubic foot.
       return (pressure * 144) / universalGasConstant / T
     }
@@ -138,9 +139,9 @@ extension Density where T == MoistAir {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     precondition(humidityRatio.rawValue > 0)
-    
+
     let units = units ?? environment.units
-    
+
     self.init(
       (1 + humidityRatio) / specificVolume,
       units: .for(units)
@@ -172,12 +173,12 @@ extension Density where T == MoistAir {
 }
 
 extension Density: NumberWithUnitOfMeasure {
-  
+
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude
   public typealias Units = DensityUnits
-  
+
   public static func keyPath(for units: DensityUnits) -> WritableKeyPath<Density<T>, Double> {
     \.rawValue
   }

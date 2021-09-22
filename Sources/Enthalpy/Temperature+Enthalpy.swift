@@ -30,7 +30,7 @@ extension Temperature {
   ) -> EnthalpyOf<MoistAir> {
     .init(dryBulb: self, humidity: humidity, pressure: totalPressure, units: units)
   }
-  
+
   /// Calculates the ``Enthalpy`` of ``DryAir``  for the temperature.
   ///
   /// - Parameters:
@@ -54,6 +54,7 @@ extension Temperature {
   ) {
     precondition(humidityRatio.rawValue > 0)
     let units = units ?? environment.units
-    self = EnthalpyOf<MoistAir>.Constants(units: units).dryBulb(enthalpy: enthalpy, ratio: humidityRatio)
+    self = EnthalpyOf<MoistAir>.Constants(units: units).dryBulb(
+      enthalpy: enthalpy, ratio: humidityRatio)
   }
 }

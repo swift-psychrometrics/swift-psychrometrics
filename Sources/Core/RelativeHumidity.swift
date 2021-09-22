@@ -72,7 +72,7 @@ extension RelativeHumidity {
 
 // MARK: Pressure + RelativeHumidity
 extension RelativeHumidity {
-  
+
   /// Calculates the relative humidity based on the dry-bulb temperature and dew-point temperatures.
   ///
   /// - Parameters:

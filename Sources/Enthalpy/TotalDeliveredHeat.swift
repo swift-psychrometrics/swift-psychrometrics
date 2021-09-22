@@ -9,7 +9,9 @@ public struct Condition {
   public var humidity: RelativeHumidity
   public var altitude: Length
 
-  public var enthalpy: EnthalpyOf<MoistAir> { temperature.enthalpy(at: humidity, altitude: altitude) }
+  public var enthalpy: EnthalpyOf<MoistAir> {
+    temperature.enthalpy(at: humidity, altitude: altitude)
+  }
 
   public init(
     temperature: Temperature,

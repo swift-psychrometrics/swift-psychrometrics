@@ -14,7 +14,8 @@ extension Pressure {
     units: PsychrometricEnvironment.Units? = nil
   ) -> Pressure {
     let units = units ?? environment.units
-    let value = Pressure.saturationPressure(at: temperature, units: units)
+    let value =
+      Pressure.saturationPressure(at: temperature, units: units)
       .rawValue * humidity.fraction
     return .init(value, units: .for(units))
   }

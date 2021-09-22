@@ -8,7 +8,7 @@ public struct DewPoint {
 
   /// The raw dew point temperature.
   public var rawValue: Temperature
-  
+
   public var temperature: Temperature {
     get { rawValue }
     set { rawValue = newValue }
@@ -27,7 +27,6 @@ public struct DewPoint {
     rawValue[keyPath: keyPath]
   }
 }
-
 
 extension DewPoint: RawNumericType {
   public typealias IntegerLiteralType = Temperature.IntegerLiteralType

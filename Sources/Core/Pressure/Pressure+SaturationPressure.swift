@@ -13,7 +13,7 @@ extension Pressure {
     let c5: Double
     let c6: Double
     let c7: Double
-    
+
     private let units: PsychrometricEnvironment.Units
 
     init(units: PsychrometricEnvironment.Units) {
@@ -26,7 +26,7 @@ extension Pressure {
       self.c7 = units == .imperial ? 4.1635019 : 4.1635019
       self.units = units
     }
-    
+
     fileprivate func exponent(dryBulb temperature: Temperature) -> Double {
       let T = environment.units == .imperial ? temperature.rankine : temperature.kelvin
       return c1 / T
@@ -37,7 +37,7 @@ extension Pressure {
         + c6 * pow(T, 4)
         + c7 * log(T)
     }
-    
+
     fileprivate func derivative(dryBulb temperature: Temperature) -> Double {
       let T = units == .imperial ? temperature.rankine : temperature.kelvin
       return (c1 * -1)
@@ -57,7 +57,7 @@ extension Pressure {
     let c4: Double
     let c5: Double
     let c6: Double
-    
+
     private let units: PsychrometricEnvironment.Units
 
     init(units: PsychrometricEnvironment.Units) {
@@ -69,7 +69,7 @@ extension Pressure {
       self.c6 = units == .imperial ? 6.5459673 : 6.5459673
       self.units = units
     }
-    
+
     fileprivate func exponent(dryBulb temperature: Temperature) -> Double {
       let T = units == .imperial ? temperature.rankine : temperature.kelvin
       return c1 / T
@@ -79,7 +79,7 @@ extension Pressure {
         + c5 * pow(T, 3)
         + c6 * log(T)
     }
-    
+
     fileprivate func derivative(dryBulb temperature: Temperature) -> Double {
       let T = units == .imperial ? temperature.rankine : temperature.kelvin
       return (c1 * -1)
@@ -119,17 +119,18 @@ extension Pressure {
     precondition(
       temperature >= bounds.low && temperature <= bounds.high
     )
-    
-    let exponent = temperature < triplePoint
+
+    let exponent =
+      temperature < triplePoint
       ? SaturationConstantsBelowFreezing(units: units).exponent(dryBulb: temperature)
       : SaturationConstantsAboveFreezing(units: units).exponent(dryBulb: temperature)
 
     return .init(exp(exponent), units: .for(units))
-//    return units == .imperial
-//      ? .psi(exp(exponent))
-//      : .pascals(exp(exponent))
+    //    return units == .imperial
+    //      ? .psi(exp(exponent))
+    //      : .pascals(exp(exponent))
   }
-  
+
   /// Helper to calculate the saturation pressure derivative of air at a given temperature.  This is the reverse of
   /// saturation pressure.
   ///
@@ -148,8 +149,9 @@ extension Pressure {
     precondition(
       temperature > bounds.low && temperature < bounds.high
     )
-    
-    let derivative = temperature < triplePoint
+
+    let derivative =
+      temperature < triplePoint
       ? SaturationConstantsBelowFreezing(units: units).derivative(dryBulb: temperature)
       : SaturationConstantsAboveFreezing(units: units).derivative(dryBulb: temperature)
 

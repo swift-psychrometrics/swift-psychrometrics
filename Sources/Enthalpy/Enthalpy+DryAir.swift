@@ -1,24 +1,23 @@
 import Core
 import Foundation
 
-
 extension Enthalpy where T == DryAir {
-  
+
   private struct DryAirConstants {
     let specificHeat: Double
     let units: PsychrometricEnvironment.Units
-    
+
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
       self.specificHeat = units == .imperial ? 0.24 : 1006
     }
-    
+
     func run(_ dryBulb: Temperature) -> Double {
       let T = units == .imperial ? dryBulb.fahrenheit : dryBulb.celsius
       return specificHeat * T
     }
   }
-  
+
   /// Create a new ``Enthalpy`` of ``Core.DryAir`` for the given dry bulb temperature and unit of measure.
   ///
   /// **Reference**:  ASHRAE - Fundamentals (2017) ch. 1 eq 28
