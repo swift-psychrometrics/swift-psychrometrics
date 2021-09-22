@@ -4,7 +4,7 @@ import Foundation
 // off a little from the tables in the book.
 
 extension Pressure {
-  
+
   public struct SaturationConstantsBelowFreezing {
     public let c1: Double
     public let c2: Double
@@ -13,7 +13,7 @@ extension Pressure {
     public let c5: Double
     public let c6: Double
     public let c7: Double
-    
+
     public init(units: PsychrometricEnvironment.Units) {
       self.c1 = units == .imperial ? -1.0214165e4 : -5.674539e3
       self.c2 = units == .imperial ? -4.8932428 : 6.3925247
@@ -24,7 +24,7 @@ extension Pressure {
       self.c7 = units == .imperial ? 4.1635019 : 4.1635019
     }
   }
-  
+
   public struct SaturationConstantsAboveFreezing {
     public let c1: Double
     public let c2: Double
@@ -32,7 +32,7 @@ extension Pressure {
     public let c4: Double
     public let c5: Double
     public let c6: Double
-    
+
     public init(units: PsychrometricEnvironment.Units) {
       self.c1 = units == .imperial ? -1.0440397e4 : -5.8002206E+03
       self.c2 = units == .imperial ? -1.1294650e1 : 1.3914993
@@ -49,15 +49,15 @@ extension Pressure {
   ) -> Double {
     let constants = SaturationConstantsBelowFreezing(units: units)
     let T = units == .imperial ? temperature.rankine : temperature.kelvin
-    
+
     return exp(
       constants.c1 / T
-      + constants.c2
-      + constants.c3 * T
-      + constants.c4 * pow(T, 2)
-      + constants.c5 * pow(T, 3)
-      + constants.c6 * pow(T, 4)
-      + constants.c7 * log(T)
+        + constants.c2
+        + constants.c3 * T
+        + constants.c4 * pow(T, 2)
+        + constants.c5 * pow(T, 3)
+        + constants.c6 * pow(T, 4)
+        + constants.c7 * log(T)
     )
   }
 
@@ -70,11 +70,11 @@ extension Pressure {
 
     return exp(
       constants.c1 / T
-      + constants.c2
-      + constants.c3 * T
-      + constants.c4 * pow(T, 2)
-      + constants.c5 * pow(T, 3)
-      + constants.c6 * log(T)
+        + constants.c2
+        + constants.c3 * T
+        + constants.c4 * pow(T, 2)
+        + constants.c5 * pow(T, 3)
+        + constants.c6 * log(T)
     )
   }
 
@@ -93,17 +93,18 @@ extension Pressure {
   /// - Parameters:
   ///   - temperature: The temperature to calculate the saturation pressure of.
   public static func saturationPressure(at temperature: Temperature) -> Pressure {
-    
+
     let units = environment.units
     let T = environment.units == .imperial ? temperature.fahrenheit : temperature.celsius
-    
+
     precondition(
       units == .imperial
-      ? T >= -148 && T <= 392
-      : T > -100 && T < 200
+        ? T >= -148 && T <= 392
+        : T > -100 && T < 200
     )
 
-    let value = T < environment.triplePointOfWater.rawValue
+    let value =
+      T < environment.triplePointOfWater.rawValue
       ? saturationPressureBelowFreezing(temperature, units)
       : saturationPressureAboveFreezing(temperature, units)
 

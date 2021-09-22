@@ -20,7 +20,7 @@ public struct HumidityRatio: Equatable {
 
   /// Constant for the ratio of the mole weight of water over the mole weight of air.
   public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
-  
+
   public static func ensureHumidityRatio(_ ratio: HumidityRatio) -> HumidityRatio {
     guard ratio.rawValue > environment.minimumHumidityRatio else {
       return .init(environment.minimumHumidityRatio)
@@ -60,15 +60,16 @@ public struct HumidityRatio: Equatable {
     totalPressure: Pressure,
     partialPressure: Pressure
   ) {
-    let partialPressure = environment.units == .imperial ? partialPressure.psi : partialPressure.pascals
+    let partialPressure =
+      environment.units == .imperial ? partialPressure.psi : partialPressure.pascals
     let totalPressure = environment.units == .imperial ? totalPressure.psi : totalPressure.pascals
-    
+
     self.init(
       Self.moleWeightRatio * partialPressure
         / (totalPressure - partialPressure)
     )
   }
-  
+
   /// The  humidity ratio of the air for the given total pressure and partial pressure.
   ///
   /// - Parameters:

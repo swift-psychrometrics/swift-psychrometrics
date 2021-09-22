@@ -130,7 +130,7 @@ var package = Package(
       name: "WetBulb",
       dependencies: [
         "Core",
-        "HumidityRatio"
+        "HumidityRatio",
       ]
     ),
     .testTarget(

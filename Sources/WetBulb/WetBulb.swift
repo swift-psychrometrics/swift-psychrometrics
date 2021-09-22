@@ -1,7 +1,7 @@
 import Core
+import DewPoint
 import Foundation
 import HumidityRatio
-import DewPoint
 
 /// Represents / calculates the wet-bulb temperature for the given temperature and relative humidity.
 @dynamicMemberLookup
@@ -21,7 +21,7 @@ public struct WetBulb {
   }
 
   public var rawValue: Temperature
-  
+
   public var temperature: Temperature {
     get { rawValue }
     set { rawValue = newValue }
@@ -43,15 +43,15 @@ public struct WetBulb {
   public init(temperature: Temperature, humidity: RelativeHumidity) {
     self.rawValue = Self.calculate(temperature, humidity)
   }
-  
-//  public init(
-//    dryBulb temperature: Temperature,
-//    ratio humidityRatio: HumidityRatio,
-//    pressure totalPressure: Pressure
-//  ) {
-//    let humidityRatio = HumidityRatio.ensureHumidityRatio(humidityRatio)
-//    let dewPoint = DewPoint.in
-//  }
+
+  //  public init(
+  //    dryBulb temperature: Temperature,
+  //    ratio humidityRatio: HumidityRatio,
+  //    pressure totalPressure: Pressure
+  //  ) {
+  //    let humidityRatio = HumidityRatio.ensureHumidityRatio(humidityRatio)
+  //    let dewPoint = DewPoint.in
+  //  }
 
   public subscript<V>(dynamicMember keyPath: KeyPath<Temperature, V>) -> V {
     rawValue[keyPath: keyPath]
