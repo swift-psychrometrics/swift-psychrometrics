@@ -46,6 +46,7 @@ extension Enthalpy where T == MoistAir {
     ratio humidityRatio: HumidityRatio,
     units: PsychrometricEnvironment.Units? = nil
   ) {
+    precondition(humidityRatio > 0)
     let units = units ?? environment.units
     let value = Constants(units: units).run(dryBulb: temperature, ratio: humidityRatio)
     self.init(value, units: .for(units))
@@ -66,7 +67,7 @@ extension Enthalpy where T == MoistAir {
   ) {
     self.init(
       dryBulb: temperature,
-      ratio: .init(for: temperature, pressure: totalPressure),
+      ratio: .init(for: temperature, pressure: totalPressure, units: units),
       units: units
     )
   }
@@ -88,7 +89,7 @@ extension Enthalpy where T == MoistAir {
   ) {
     self.init(
       dryBulb: temperature,
-      ratio: .init(for: temperature, at: humidity, pressure: totalPressure),
+      ratio: .init(for: temperature, at: humidity, pressure: totalPressure, units: units),
       units: units
     )
   }

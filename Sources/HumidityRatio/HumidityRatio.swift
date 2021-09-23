@@ -58,11 +58,13 @@ public struct HumidityRatio: Equatable {
   ///   - partialPressure: The partial pressure of the air.
   public init(
     totalPressure: Pressure,
-    partialPressure: Pressure
+    partialPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
+    let units = units ?? environment.units
     let partialPressure =
-      environment.units.isImperial ? partialPressure.psi : partialPressure.pascals
-    let totalPressure = environment.units.isImperial ? totalPressure.psi : totalPressure.pascals
+      units.isImperial ? partialPressure.psi : partialPressure.pascals
+    let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
 
     self.init(
       Self.moleWeightRatio * partialPressure
@@ -77,11 +79,13 @@ public struct HumidityRatio: Equatable {
   ///   - totalPressure: The total pressure of the air.
   public init(
     for temperature: Temperature,
-    pressure totalPressure: Pressure
+    pressure totalPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
       totalPressure: totalPressure,
-      partialPressure: .saturationPressure(at: temperature)
+      partialPressure: .saturationPressure(at: temperature),
+      units: units
     )
   }
 
@@ -94,11 +98,13 @@ public struct HumidityRatio: Equatable {
   public init(
     for temperature: Temperature,
     at humidity: RelativeHumidity,
-    pressure totalPressure: Pressure
+    pressure totalPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
       totalPressure: totalPressure,
-      partialPressure: .partialPressure(for: temperature, at: humidity)
+      partialPressure: .partialPressure(for: temperature, at: humidity),
+      units: units
     )
   }
 
@@ -111,12 +117,14 @@ public struct HumidityRatio: Equatable {
   public init(
     for temperature: Temperature,
     at humidity: RelativeHumidity,
-    altitude: Length
+    altitude: Length,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
       for: temperature,
       at: humidity,
-      pressure: .init(altitude: altitude)
+      pressure: .init(altitude: altitude),
+      units: units
     )
   }
 }

@@ -18,6 +18,7 @@ var package = Package(
     .library(name: "SpecificHeat", targets: ["SpecificHeat"]),
     .library(name: "SpecificHumidity", targets: ["SpecificHumidity"]),
     .library(name: "SpecificVolume", targets: ["SpecificVolume"]),
+    .library(name: "TestSupport", targets: ["TestSupport"]),
     .library(name: "WetBulb", targets: ["WetBulb"]),
   ],
   dependencies: [
@@ -28,7 +29,8 @@ var package = Package(
     .testTarget(
       name: "CoreTests",
       dependencies: [
-        "Core"
+        "Core",
+        "TestSupport"
       ]
     ),
     .target(
@@ -55,7 +57,8 @@ var package = Package(
     .testTarget(
       name: "DewPointTests",
       dependencies: [
-        "DewPoint"
+        "DewPoint",
+        "TestSupport"
       ]
     ),
     .target(
@@ -68,7 +71,8 @@ var package = Package(
     .testTarget(
       name: "EnthalpyTests",
       dependencies: [
-        "Enthalpy"
+        "Enthalpy",
+        "TestSupport"
       ]
     ),
     .target(
@@ -92,7 +96,8 @@ var package = Package(
     .testTarget(
       name: "HumidityRatioTests",
       dependencies: [
-        "HumidityRatio"
+        "HumidityRatio",
+        "TestSupport"
       ]
     ),
     .target(
@@ -127,6 +132,7 @@ var package = Package(
       name: "SpecificVolumeTests",
       dependencies: ["SpecificVolume"]
     ),
+    .target(name: "TestSupport"),
     .target(
       name: "WetBulb",
       dependencies: [
@@ -138,7 +144,8 @@ var package = Package(
     .testTarget(
       name: "WetBulbTests",
       dependencies: [
-        "WetBulb"
+        "WetBulb",
+        "TestSupport"
       ]
     ),
   ]

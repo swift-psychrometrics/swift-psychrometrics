@@ -1,6 +1,7 @@
 import Core
 import Foundation
 import HumidityRatio
+import DewPoint
 
 extension HumidityRatio {
 
@@ -92,4 +93,67 @@ extension HumidityRatio {
       )
     }
   }
+}
+
+extension WetBulb {
+  
+  public init(
+    dryBulb temperature: Temperature,
+    ratio humidityRatio: HumidityRatio,
+    pressure totalPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
+  ) throws {
+    self = try wetBulb_from_humidity_ratio(
+      dryBulb: temperature,
+      humidityRatio: humidityRatio,
+      pressure: totalPressure,
+      units: units ?? environment.units
+    )
+  }
+}
+
+// Helper to solve wet bulb for the humidity ratio.
+private func wetBulb_from_humidity_ratio(
+  dryBulb: Temperature,
+  humidityRatio: HumidityRatio,
+  pressure: Pressure,
+  units: PsychrometricEnvironment.Units
+) throws -> WetBulb {
+  precondition(humidityRatio > 0)
+  
+  let dewPoint = DewPoint(dryBulb: dryBulb, ratio: humidityRatio, pressure: pressure, units: units)
+  let temperatureUnits = units.isImperial ? Temperature.Units.fahrenheit : .celsius
+  
+  // Initial guesses
+  var wetBulbSup = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
+  var wetBulbInf = units.isImperial ? dewPoint.fahrenheit : dewPoint.celsius
+  var wetBulb = (wetBulbInf + wetBulbSup) / 2
+  
+  var index = 1
+  
+  while (wetBulbSup - wetBulbInf) > environment.temperatureTolerance.rawValue {
+    let ratio = HumidityRatio(
+      dryBulb: dryBulb,
+      wetBulb: .init(.init(wetBulb, units: temperatureUnits)),
+      pressure: pressure,
+      units: units
+    )
+    
+    if ratio > humidityRatio {
+      wetBulbSup = wetBulb
+    } else {
+      wetBulbInf = wetBulb
+    }
+    
+    // new guess of wet bulb
+    wetBulb = (wetBulbSup + wetBulbInf) / 2
+    
+    if index >= environment.maximumIterationCount {
+      throw MaxIterationError("Maximum iterations met while trying to solve wet-bulb from humidity ratio. Stopping.")
+    }
+    
+    index += 1
+  }
+  
+  return .init(.init(wetBulb, units: temperatureUnits))
 }

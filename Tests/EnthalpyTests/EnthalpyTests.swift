@@ -2,6 +2,7 @@ import XCTest
 import Core
 import Enthalpy
 import HumidityRatio
+import TestSupport
 
 final class EnthalpyTests: XCTestCase {
   
@@ -85,6 +86,46 @@ final class EnthalpyTests: XCTestCase {
     let enthalpy = Temperature.fahrenheit(77).enthalpy(units: .imperial)
     XCTAssertEqual(round(enthalpy.rawValue * 10e8) / 10e8, 18.48)
   }
+  
+  // The tolerance is decent but exponentially worse at higher temperatures.
+  func test_saturated_enthalpy_imperial() {
+    let values: [(Temperature, Double, Double)] = [
+      (.fahrenheit(-58), -13.906, 0.1),
+      (.fahrenheit(-4), -0.286, 0.1),
+      (.fahrenheit(23), 8.186, 0.1),
+      (.fahrenheit(41), 15.699, 0.1),
+      (.fahrenheit(77), 40.576, 0.11),
+      (.fahrenheit(122), 126.066, 0.52),
+      (.fahrenheit(185), 999.749, 8.8)
+    ]
+    
+    for (temp, expected, tolerance) in values {
+      let saturatedEnthalpy = EnthalpyOf<MoistAir>.init(dryBulb: temp, pressure: 14.696, units: .imperial)
+      XCTApproximatelyEqual(saturatedEnthalpy.rawValue, expected, tolerance: tolerance)
+    }
+  }
+  
+  // TODO: Fix tolerances.
+//  func test_saturated_enthalpy_metric() {
+//    let values: [(Temperature, Double, Double)] = [
+//      (.celsius(-50), -50222, 0.01),
+//      (.celsius(-20), -18542, 0.01),
+//      (.celsius(-5), 1164, 0.03),
+//      (.celsius(5), 18639, 0.01),
+//      (.celsius(25), 76504, 0.01),
+//      (.celsius(50), 275353, 0.01),
+//      (.celsius(85), 2307539, 0.01)
+//    ]
+//    
+//    for (temp, expected, tolerance) in values {
+//      let saturatedEnthalpy = EnthalpyOf<MoistAir>.init(
+//        dryBulb: temp,
+//        pressure: .pascals(101325),
+//        units: .metric
+//      )
+//      XCTApproximatelyEqual(saturatedEnthalpy.rawValue, expected, tolerance: tolerance)
+//    }
+//  }
   
 //  func test_relative_humidity_for_dewPoint_and_dryBulb_enthalpies() {
 //    let totalPressure = Pressure(altitude: .seaLevel)

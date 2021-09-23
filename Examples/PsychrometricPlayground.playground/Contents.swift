@@ -1,75 +1,38 @@
-//import DewPoint
-//import Enthalpy
-//import HumidityRatio
-//import WetBulb
+import Core
+import DewPoint
+import Enthalpy
+import HumidityRatio
+import SpecificVolume
+import WetBulb
 import Foundation
 
-//let formatter: NumberFormatter = {
-//  let f = NumberFormatter()
-//  f.numberStyle = .decimal
-//  f.maximumFractionDigits = 3
-//  f.groupingSeparator = ","
-//  return f
-//}()
+struct Psychrometrics {
+  
+  let humidityRatio: HumidityRatio
+//  let wetBulb: WetBulb
+  let dewPoint: DewPoint
+  let relativeHumidity: RelativeHumidity
+  let vaporPressure: Pressure
+  let enthalpy: EnthalpyOf<MoistAir>
+  let volume: SpecificVolumeOf<MoistAir>
+  
+  init(dryBulb: Temperature, wetBulb: WetBulb, pressure: Pressure) {
+    self.humidityRatio = .init(dryBulb: dryBulb, wetBulb: wetBulb, pressure: pressure, units: .imperial)
+//    self.wetBulb = .init(temperature: dryBulb, humidity: humidity)
+    self.dewPoint = .init(dryBulb: dryBulb, ratio: self.humidityRatio, pressure: pressure, units: .imperial)
+    self.relativeHumidity = .init(dryBulb: dryBulb, ratio: self.humidityRatio, pressure: pressure, units: .imperial)
+    self.vaporPressure = .init(ratio: self.humidityRatio, pressure: pressure, units: .imperial)
+    self.enthalpy = .init(dryBulb: dryBulb, ratio: self.humidityRatio, units: .imperial)
+    self.volume = .init(dryBulb: dryBulb, ratio: self.humidityRatio, pressure: pressure, units: .imperial)
+  }
+}
 //
-//func numberString(_ value: Double) -> String {
-//  formatter.string(for: value) ?? "\(value)"
-//}
-//
-//extension Condition {
-//  var dewPoint: DewPoint {
-//    temperature.dewPoint(humidity: humidity)
-//  }
-//
-//  var humidityRatio: Double {
-//    HumidityRatio(for: temperature, with: humidity, at: altitude).rawValue
-//  }
-//
-//  var partialPressure: Pressure { .partialPressure(for: temperature, at: humidity) }
-//
-//  var wetBulb: WetBulb { temperature.wetBulb(at: humidity) }
-//
-//  var string: String {
-//    """
-//      Inputs:
-//        Temperature: \(numberString(temperature.fahrenheit)) °F
-//        Humidity: \(humidity.rawValue)%
-//        Altitude: \(altitude.rawValue)
-//
-//      Results:
-//        Dew Point: \(numberString(dewPoint.fahrenheit)) °F
-//        Enthalpy: \(numberString(enthalpy.rawValue))
-//        Humidity Ratio: \(numberString(humidityRatio))
-//        Partial Pressure: \(numberString(partialPressure.psi)) psi
-//        Wet Bulb: \(numberString(wetBulb.fahrenheit)) °F
-//
-//    """
-//  }
-//}
-//
-//let returnConditions = Condition(temperature: 76.1, humidity: 58.3%)
-//let supplyConditions = Condition(temperature: 55, humidity: 91.2%)
-//let btus = totalDeliveredHeat(supply: supplyConditions, return: returnConditions, airflow: 1_000)
-//
-//print("Return Conditions")
-//print(returnConditions.string)
-//print("Supply Conditions")
-//print(supplyConditions.string)
-//print("Delivered BTU: \(numberString(btus))")
-//func enthalpy(for temperature: Temperature, humidityRatio: Double) -> Double {
-//  0.24 * temperature.fahrenheit
-//    + humidityRatio
-//    * (1061 + 0.444 * temperature.fahrenheit)
-//}
-//
-//func humidityRatio(from enthalpy: Double, and temperature: Temperature) -> Double {
-//  let c1 = (0.24 * temperature.fahrenheit)
-//  let c2 = (1061 + 0.444 * temperature.fahrenheit)
-//  return (enthalpy - c1) / c2
-//}
-//
-//let expected = returnConditions.humidityRatio
-//let enthalpy = returnConditions.enthalpy.rawValue
-//let calculated = humidityRatio(from: enthalpy, and: returnConditions.temperature)
-//print(expected == calculated)
-
+//let psychrometrics = Psychrometrics(dryBulb: 32.02, wetBulb: 65, pressure: 14.696)
+//print(abs(psychrometrics.humidityRatio.rawValue))
+//print(psychrometrics.dewPoint)
+//print(psychrometrics.relativeHumidity)
+//print(psychrometrics.vaporPressure)
+//print(psychrometrics.enthalpy)
+//print(psychrometrics.volume)
+print(Pressure.saturationPressure(at: 34, units: .imperial))
+print(Pressure.saturationPressure(at: .celsius(34), units: .metric).rawValue / 1000)

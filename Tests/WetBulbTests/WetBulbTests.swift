@@ -2,6 +2,8 @@ import XCTest
 import Core
 import WetBulb
 import HumidityRatio
+import DewPoint
+import TestSupport
 
 final class WetBulbTests: XCTestCase {
   
@@ -41,6 +43,37 @@ final class WetBulbTests: XCTestCase {
     wetBulb *= 3
     XCTAssertEqual(wetBulb.rawValue, 60)
   }
+  
+  // TODO: Fix tolerances.
+  func test_humidityRatio_and_wetBulb() throws {
+    // Above freezing.
+    var ratio = HumidityRatio.init(dryBulb: 86, wetBulb: 77, pressure: 14.175, units: .imperial)
+    XCTApproximatelyEqual(ratio.rawValue, 0.0187193288418892, tolerance: 0.0003)
+    
+    // This tolerance is high
+    var wetBulb = try WetBulb.init(dryBulb: 77, ratio: ratio, pressure: 14.175, units: .imperial)
+    XCTApproximatelyEqual(wetBulb.fahrenheit, 77, tolerance: 2.39)
+    
+    // Below freezing
+    ratio = .init(dryBulb: 30.2, wetBulb: 23, pressure: 14.175, units: .imperial)
+    XCTApproximatelyEqual(ratio.rawValue, 0.00114657481090184, tolerance: 0.0003)
+    
+    wetBulb = try .init(dryBulb: 30.2, ratio: ratio, pressure: 14.175, units: .imperial)
+    XCTApproximatelyEqual(wetBulb.fahrenheit, 23, tolerance: 0.001)
+    
+  }
+  
+//  func test_humidityRatio_from_wetBulb() {
+//    let hr = HumidityRatio(dryBulb: 77, wetBulb: 66, pressure: 14.7, units: .imperial)
+//    print(hr)
+//    XCTFail()
+//  }
+//  
+//  func test_dewPoint_from_wetBulb() {
+//    let dp = DewPoint(dryBulb: 73.4, wetBulb: 58.6, pressure: 14.696, units: .imperial)
+//    print(dp)
+//    XCTFail()
+//  }
   
 //  func test_HumidityRatio_with_wetBulb() {
 //    // above freezing

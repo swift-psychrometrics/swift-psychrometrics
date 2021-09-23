@@ -17,7 +17,7 @@ extension Pressure {
     private let units: PsychrometricEnvironment.Units
 
     init(units: PsychrometricEnvironment.Units) {
-      self.c1 = units.isImperial ? -1.0214165e4 : -5.674539e3
+      self.c1 = units.isImperial ? -1.0214165e4 : -5.6745359e3
       self.c2 = units.isImperial ? -4.8932428 : 6.3925247
       self.c3 = units.isImperial ? -5.3765794e-3 : -9.677843E-03
       self.c4 = units.isImperial ? 1.9202377e-7 : 6.2215701E-07
@@ -28,7 +28,7 @@ extension Pressure {
     }
 
     fileprivate func exponent(dryBulb temperature: Temperature) -> Double {
-      let T = environment.units.isImperial ? temperature.rankine : temperature.kelvin
+      let T = units.isImperial ? temperature.rankine : temperature.kelvin
       return c1 / T
         + c2
         + c3 * T
@@ -61,11 +61,11 @@ extension Pressure {
     private let units: PsychrometricEnvironment.Units
 
     init(units: PsychrometricEnvironment.Units) {
-      self.c1 = units.isImperial ? -1.0440397e4 : -5.8002206E+03
+      self.c1 = units.isImperial ? -1.0440397e4 : -5.8002206e03
       self.c2 = units.isImperial ? -1.1294650e1 : 1.3914993
-      self.c3 = units.isImperial ? -2.7022355e-2 : -4.8640239E-02
-      self.c4 = units.isImperial ? 1.2890360e-5 : 4.1764768E-05
-      self.c5 = units.isImperial ? -2.4780681e-9 : -1.4452093E-08
+      self.c3 = units.isImperial ? -2.7022355e-2 : -4.8640239e-2
+      self.c4 = units.isImperial ? 1.2890360e-5 : 4.1764768e-5
+      self.c5 = units.isImperial ? -2.4780681e-9 : -1.4452093e-8
       self.c6 = units.isImperial ? 6.5459673 : 6.5459673
       self.units = units
     }
@@ -94,7 +94,9 @@ extension Pressure {
 
   /// Calculate the saturation pressure of air at a given temperature.
   ///
-  /// Often defined / denoted as pws, in the ASHRAE Fundamentels (2017)
+  /// Often defined / denoted as `pws`, in the ASHRAE Fundamentels (2017).  These calculations often
+  /// do not line up exactly to the tables published in ASHRAE Fundamentals, they are mostly within the
+  /// 300 ppm tolerance set forth in the book, however they drift further at very high and very low temperature.
   ///
   /// - Note:
   /// The ASHRAE formula are defined above and below the freezing point but have
@@ -121,14 +123,12 @@ extension Pressure {
     )
 
     let exponent =
-      temperature < triplePoint
+      temperature <= triplePoint
       ? SaturationConstantsBelowFreezing(units: units).exponent(dryBulb: temperature)
       : SaturationConstantsAboveFreezing(units: units).exponent(dryBulb: temperature)
 
     return .init(exp(exponent), units: .for(units))
-    //    return units.isImperial
-    //      ? .psi(exp(exponent))
-    //      : .pascals(exp(exponent))
+
   }
 
   /// Helper to calculate the saturation pressure derivative of air at a given temperature.  This is the reverse of
@@ -147,7 +147,7 @@ extension Pressure {
     let triplePoint = environment.triplePointOfWater(for: units)
 
     precondition(
-      temperature > bounds.low && temperature < bounds.high
+      temperature >= bounds.low && temperature <= bounds.high
     )
 
     let derivative =

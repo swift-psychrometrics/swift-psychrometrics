@@ -2,6 +2,7 @@ import XCTest
 import Core
 import DewPoint
 import HumidityRatio
+import TestSupport
 
 final class DewPointTests: XCTestCase {
   
@@ -65,15 +66,15 @@ final class DewPointTests: XCTestCase {
   func test_dewPoint_from_vapor_pressure() {
     var vaporPressure = Pressure.saturationPressure(at: -4)
     var dewPoint = DewPoint.init(dryBulb: 59, vaporPressure: vaporPressure)
-    XCTAssertEqual(round(dewPoint.fahrenheit * 1000) / 1000, -4)
+    XCTApproximatelyEqual(dewPoint.fahrenheit, -4)
     
     vaporPressure = .saturationPressure(at: 41)
     dewPoint = .init(dryBulb: 59, vaporPressure: vaporPressure)
-    XCTAssertEqual(round(dewPoint.fahrenheit * 1000) / 1000, 41)
+    XCTApproximatelyEqual(dewPoint.fahrenheit, 41)
     
     vaporPressure = .saturationPressure(at: 122)
     dewPoint = .init(dryBulb: 140, vaporPressure: vaporPressure)
-    XCTAssertEqual(round(dewPoint.fahrenheit * 1000) / 1000, 122)
+    XCTApproximatelyEqual(dewPoint.fahrenheit, 122)
   }
   
   func test_humidityRatio_from_dewPoint() {
@@ -81,9 +82,6 @@ final class DewPointTests: XCTestCase {
     let ratio = HumidityRatio.init(for: 75, at: 50%, pressure: pressure)
     let dewPoint = DewPoint.init(dryBulb: 75, ratio: ratio, pressure: pressure, units: .imperial)
     let ratio2 = HumidityRatio.init(dewPoint: dewPoint, pressure: pressure, units: .imperial)
-    XCTAssertEqual(
-      round(ratio * 10e8) / 10e8,
-      round(ratio2 * 10e8) / 10e8
-    )
+    XCTApproximatelyEqual(ratio.rawValue, ratio2.rawValue)
   }
 }

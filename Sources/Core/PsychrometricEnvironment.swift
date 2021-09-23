@@ -47,9 +47,9 @@ public struct PsychrometricEnvironment {
   public func pressureBounds(for units: Units) -> (low: Temperature, high: Temperature) {
     switch units {
     case .metric:
-      return (low: -100, high: 200)
+      return (low: .celsius(-100), high: .celsius(200))
     case .imperial:
-      return (low: -148, high: 392)
+      return (low: .fahrenheit(-148), high: .fahrenheit(392))
     }
   }
 

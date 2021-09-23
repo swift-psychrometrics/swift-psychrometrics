@@ -1,5 +1,6 @@
 import XCTest
 import Core
+import TestSupport
 
 final class PressureTests: XCTestCase {
   
@@ -70,21 +71,9 @@ final class PressureTests: XCTestCase {
   
   func test_pressure_for_altitude() {
     let pressure = Pressure(altitude: .feet(1000))
-    XCTAssertEqual(round(pressure.psi * 100) / 100, 14.17)
+    XCTApproximatelyEqual(pressure.rawValue, 14.175, tolerance: 0.0024)
+//    XCTAssertEqual(round(pressure.psi * 100) / 100, 14.17)
   }
-  
-//  func test_vapor_pressure() {
-//    let temperature = Temperature.fahrenheit(56)
-//    let pressure = Pressure.vaporPressure(at: temperature)
-//    XCTAssertEqual(
-//      round(pressure.millibar * 10) / 10,
-//      15.3
-//    )
-//    XCTAssertEqual(
-//      round(pressure.psi * 100) / 100,
-//      0.22
-//    )
-//  }
   
   func test_comparable() {
     XCTAssertTrue(Pressure.psi(10) > 5)
@@ -147,48 +136,45 @@ final class PressureTests: XCTestCase {
     XCTAssertEqual(pressure[.torr], 10)
   }
   
-  // Commented out items fail, but are mostly within the margin of error of 300 ppm
+  // The values are tested against published table in ASHRAE 2017,
+  // they are mostly within the margin of error of 300 ppm
   // recommended in ASHRAE 2017.
-  func test_saturation_pressure() {
-    let tempsAndExpectation: [(Temperature, Pressure)] = [
-//      (.fahrenheit(-76), .psi(0.000157)),
-      (.fahrenheit(-30), .psi(0.00344)),
-//      (.fahrenheit(-4), .psi(0.014974)),
-      (.fahrenheit(23), .psi(0.058268)),
-      (.fahrenheit(32), .psi(0.08864)),
-//      (.fahrenheit(41), .psi(0.12656)),
-      (.fahrenheit(56), .psi(0.22202)),
-//      (.fahrenheit(77), .psi(0.45973)),
-//      (.fahrenheit(122), .psi(1.79140)),
-//      (.fahrenheit(212), .psi(14.7094)),
-//      (.fahrenheit(300), .psi(67.0206)),
+  func test_saturation_pressure_imperial() {
+    let tempsAndExpectation: [(Temperature, Pressure, Double)] = [
+      (.fahrenheit(-76), .psi(0.000157), 0.00001),
+      (.fahrenheit(-30), .psi(0.00344), 0.0003),
+      (.fahrenheit(-4), .psi(0.014974), 0.0003),
+      (.fahrenheit(23), .psi(0.058268), 0.0003),
+      (.fahrenheit(32), .psi(0.08864), 0.0003),
+      (.fahrenheit(41), .psi(0.12656), 0.0003),
+      (.fahrenheit(56), .psi(0.22202), 0.0003),
+      (.fahrenheit(77), .psi(0.45973), 0.0003),
+      (.fahrenheit(122), .psi(1.79140), 0.0003),
+      (.fahrenheit(212), .psi(14.7094), 0.0003),
+      (.fahrenheit(300), .psi(67.0206), 0.014),
     ]
     
-    for (temp, expected) in tempsAndExpectation {
-      XCTAssertEqual(
-        round(Pressure.saturationPressure(at: temp).psi * 100000) / 100000,
-        round(expected.psi * 100000) / 100000
-      )
-//      XCTAssertTrue(
-//        nearlyEqual(Pressure.saturationPressure(at: temp).psi, expected.psi)
-//      )
+    for (temp, expected, tolerance) in tempsAndExpectation {
+      let pressure: Pressure = .saturationPressure(at: temp, units: .imperial)
+      XCTApproximatelyEqual(pressure.rawValue, expected.rawValue, tolerance: tolerance)
+    }
+  }
+  
+  func test_saturation_pressure_metric() {
+    let tempsAndExpectation: [(Temperature, Pressure, Double)] = [
+      (.celsius(-60), .pascals(1.08), 0.01),
+      (.celsius(-20), .pascals(103.24), 0.024),
+      (.celsius(-5), .pascals(401.74), 0.0242),
+      (.celsius(5), .pascals(872.6), 0.114),
+      (.celsius(25), .pascals(3169.7), 0.484),
+      (.celsius(50), .pascals(12351.3), 1.444),
+      (.celsius(100), .pascals(101418.0), 0.717),
+      (.celsius(150), .pascals(476101.4), 96.476), // This is pretty far off.
+    ]
+    
+    for (temp, expected, tolerance) in tempsAndExpectation {
+      let pressure: Pressure = .saturationPressure(at: temp, units: .metric)
+      XCTApproximatelyEqual(pressure.rawValue, expected.rawValue, tolerance: tolerance)
     }
   }
 }
-
-//func nearlyEqual(_ a: Double, _ b: Double, rel: Double = 0.000003) -> Bool {
-//  let absA = abs(a)
-//  let absB = abs(b)
-//  let diff = abs(a - b)
-//
-////  return diff < rel
-//  if a == b { return true }
-//  else if (a == 0 || b == 0 || absA + absB < Double.leastNormalMagnitude) {
-//    return diff < (rel * Double.leastNormalMagnitude)
-//  }
-//  else {
-//    print(diff)
-//    print(abs(a - b / b) < rel)
-//    return (diff / min((absA + absB), Double.greatestFiniteMagnitude)) < rel
-//  }
-//}
