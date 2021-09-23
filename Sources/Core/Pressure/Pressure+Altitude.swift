@@ -10,12 +10,12 @@ extension Pressure {
 
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
-      self.c1 = units == .imperial ? 14.696 : 101325
-      self.c2 = units == .imperial ? 6.8754e-06 : 2.25577e-05
+      self.c1 = units.isImperial ? 14.696 : 101325
+      self.c2 = units.isImperial ? 6.8754e-06 : 2.25577e-05
     }
 
     func run(altitude: Length) -> Double {
-      let altitude = units == .imperial ? altitude.feet : altitude.meters
+      let altitude = units.isImperial ? altitude.feet : altitude.meters
       return c1 * pow(1 - c2 * altitude, c3)
     }
   }

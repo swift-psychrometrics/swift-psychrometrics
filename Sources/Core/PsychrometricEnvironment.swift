@@ -68,7 +68,11 @@ public struct PsychrometricEnvironment {
 
   /// Represents unit of measure used in calculations [SI] or [IP].
   public enum Units: String, CaseIterable {
+
     case metric, imperial
+
+    /// Convenience for telling if the units are imperial units.
+    public var isImperial: Bool { self == .imperial }
   }
 }
 

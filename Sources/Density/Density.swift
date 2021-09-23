@@ -77,10 +77,10 @@ extension Density where T == DryAir {
     }
 
     func run(dryBulb: Temperature, pressure: Pressure) -> Double {
-      let T = units == .imperial ? dryBulb.rankine : dryBulb.kelvin
-      let pressure = units == .imperial ? pressure.psi : pressure.pascals
+      let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
+      let pressure = units.isImperial ? pressure.psi : pressure.pascals
 
-      guard units == .imperial else {
+      guard units.isImperial else {
         return pressure / universalGasConstant / T
       }
 
@@ -134,7 +134,7 @@ extension Density where T == MoistAir {
   ///   - humidityRatio: The humidity ratio to calculate the density for.
   ///   - units: The unit of measure to solve for, will default the the ``Core.environment`` setting if not supplied.
   public init(
-    volume specificVolume: SpecificVolume,
+    volume specificVolume: SpecificVolumeOf<MoistAir>,
     ratio humidityRatio: HumidityRatio,
     units: PsychrometricEnvironment.Units? = nil
   ) {
@@ -143,7 +143,7 @@ extension Density where T == MoistAir {
     let units = units ?? environment.units
 
     self.init(
-      (1 + humidityRatio) / specificVolume,
+      (1 + humidityRatio) / specificVolume.rawValue,
       units: .for(units)
     )
   }
@@ -165,7 +165,8 @@ extension Density where T == MoistAir {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
-      volume: .init(for: temperature, at: humidity, pressure: totalPressure),
+      volume: .init(
+        dryBulb: temperature, humidity: humidity, pressure: totalPressure, units: units),
       ratio: .init(for: temperature, at: humidity, pressure: totalPressure),
       units: units
     )

@@ -2,7 +2,7 @@ import Core
 import Foundation
 import HumidityRatio
 
-extension SpecificVolume2 where T == MoistAir {
+extension SpecificVolume where T == MoistAir {
 
   fileprivate struct Constants {
     let universalGasConstant: Double
@@ -15,20 +15,20 @@ extension SpecificVolume2 where T == MoistAir {
     }
 
     func run(dryBulb: Temperature, ratio: HumidityRatio, pressure: Pressure) -> Double {
-      let T = units == .imperial ? dryBulb.rankine : dryBulb.kelvin
-      let P = units == .imperial ? pressure.psi : pressure.pascals
+      let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
+      let P = units.isImperial ? pressure.psi : pressure.pascals
       let intermediateValue = universalGasConstant * T * (1 + c1 * ratio.rawValue)
-      return units == .imperial ? intermediateValue / (144 * P) : intermediateValue / P
+      return units.isImperial ? intermediateValue / (144 * P) : intermediateValue / P
     }
 
     // inverts the calculation to solve for dry-bulb
     func dryBulb(volume: SpecificVolumeOf<MoistAir>, ratio: HumidityRatio, pressure: Pressure)
       -> Temperature
     {
-      let P = units == .imperial ? pressure.psi : pressure.pascals
-      let c2 = units == .imperial ? 144.0 : 1.0
+      let P = units.isImperial ? pressure.psi : pressure.pascals
+      let c2 = units.isImperial ? 144.0 : 1.0
       let value = volume.rawValue * (c2 * P) / (universalGasConstant * (1 + c2 * ratio.rawValue))
-      return units == .imperial ? .rankine(value) : .kelvin(value)
+      return units.isImperial ? .rankine(value) : .kelvin(value)
     }
   }
 
@@ -38,7 +38,7 @@ extension SpecificVolume2 where T == MoistAir {
   ///
   /// - Parameters:
   ///   - temperature: The temperature to calculate the specific volume for.
-  ///   - humidityRatio: The relative humidity to calculate the specific volume for.
+  ///   - humidityRatio: The humidity ratio to calculate the specific volume for.
   ///   - totalPressure: The total pressure to calculate the specific volume for.
   ///   - units: The unit of measure to solve for, if not supplied then ``Core.environment`` value will be used.
   public init(
@@ -60,17 +60,44 @@ extension SpecificVolume2 where T == MoistAir {
   ///
   /// - Parameters:
   ///   - temperature: The temperature to calculate the specific volume for.
-  ///   - humidityRatio: The relative humidity to calculate the specific volume for.
+  ///   - humidity: The relative humidity to calculate the specific volume for.
   ///   - altitude: The altitude to calculate the specific volume for.
   ///   - units: The unit of measure to solve for, if not supplied then ``Core.environment`` value will be used.
   public init(
     dryBulb temperature: Temperature,
-    ratio humidityRatio: HumidityRatio,
+    humidity: RelativeHumidity,
+    pressure totalPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
+  ) {
+    self.init(
+      dryBulb: temperature,
+      ratio: .init(for: temperature, pressure: totalPressure),
+      pressure: totalPressure,
+      units: units
+    )
+  }
+
+  /// Calculate the ``SpecificVolume`` for ``Core.MoistAir`` the given temperature,humidity ratio, and total pressure.
+  ///
+  /// **References**: ASHRAE - Fundamentals (2017) ch. 1 eq. 26
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature to calculate the specific volume for.
+  ///   - humidity: The relative humidity to calculate the specific volume for.
+  ///   - altitude: The altitude to calculate the specific volume for.
+  ///   - units: The unit of measure to solve for, if not supplied then ``Core.environment`` value will be used.
+  public init(
+    dryBulb temperature: Temperature,
+    humidity: RelativeHumidity,
     altitude: Length,
     units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
-      dryBulb: temperature, ratio: humidityRatio, pressure: .init(altitude: altitude), units: units)
+      dryBulb: temperature,
+      humidity: humidity,
+      pressure: .init(altitude: altitude, units: units),
+      units: units
+    )
   }
 }
 
@@ -102,7 +129,7 @@ extension Temperature {
 
     // Convert the absolute temperature appropriately for the given units.
     self =
-      units == .imperial
+      units.isImperial
       ? .fahrenheit(absoluteTemperature.fahrenheit)
       : .celsius(absoluteTemperature.celsius)
   }

@@ -1,7 +1,7 @@
 import Core
 import Foundation
 
-extension SpecificVolume2 where T == DryAir {
+extension SpecificVolume where T == DryAir {
 
   private struct Constants {
     let units: PsychrometricEnvironment.Units
@@ -13,9 +13,9 @@ extension SpecificVolume2 where T == DryAir {
     }
 
     func run(dryBulb: Temperature, pressure: Pressure) -> Double {
-      let T = units == .imperial ? dryBulb.rankine : dryBulb.kelvin
-      let P = units == .imperial ? pressure.psi : pressure.pascals
-      guard units == .imperial else {
+      let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
+      let P = units.isImperial ? pressure.psi : pressure.pascals
+      guard units.isImperial else {
         return universalGasConstant * T / P
       }
       return universalGasConstant * T / (144 * P)

@@ -9,11 +9,11 @@ extension Enthalpy where T == DryAir {
 
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
-      self.specificHeat = units == .imperial ? 0.24 : 1006
+      self.specificHeat = units.isImperial ? 0.24 : 1006
     }
 
     func run(_ dryBulb: Temperature) -> Double {
-      let T = units == .imperial ? dryBulb.fahrenheit : dryBulb.celsius
+      let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       return specificHeat * T
     }
   }

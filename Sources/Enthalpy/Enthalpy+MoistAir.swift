@@ -12,24 +12,24 @@ extension Enthalpy where T == MoistAir {
 
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
-      self.c1 = units == .imperial ? 0.24 : 1.006
-      self.c2 = units == .imperial ? 1061 : 2501
-      self.c3 = units == .imperial ? 0.444 : 1.86
+      self.c1 = units.isImperial ? 0.24 : 1.006
+      self.c2 = units.isImperial ? 1061 : 2501
+      self.c3 = units.isImperial ? 0.444 : 1.86
     }
 
     func run(dryBulb: Temperature, ratio: HumidityRatio) -> Double {
-      let T = units == .imperial ? dryBulb.fahrenheit : dryBulb.celsius
+      let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let value = c1 * T + ratio.rawValue * (c2 + c3 * T)
-      return units == .imperial ? value : value * 1000
+      return units.isImperial ? value : value * 1000
     }
 
     func dryBulb(enthalpy: EnthalpyOf<MoistAir>, ratio: HumidityRatio) -> Temperature {
       let intermediateValue =
-        units == .imperial
+        units.isImperial
         ? enthalpy.rawValue - c2 * ratio.rawValue
         : enthalpy.rawValue / 1000 - c2 * ratio.rawValue
       let value = intermediateValue / (c1 + c3 * ratio.rawValue)
-      return units == .imperial ? .fahrenheit(value) : .celsius(value)
+      return units.isImperial ? .fahrenheit(value) : .celsius(value)
     }
   }
 

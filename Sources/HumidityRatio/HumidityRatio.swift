@@ -61,8 +61,8 @@ public struct HumidityRatio: Equatable {
     partialPressure: Pressure
   ) {
     let partialPressure =
-      environment.units == .imperial ? partialPressure.psi : partialPressure.pascals
-    let totalPressure = environment.units == .imperial ? totalPressure.psi : totalPressure.pascals
+      environment.units.isImperial ? partialPressure.psi : partialPressure.pascals
+    let totalPressure = environment.units.isImperial ? totalPressure.psi : totalPressure.pascals
 
     self.init(
       Self.moleWeightRatio * partialPressure

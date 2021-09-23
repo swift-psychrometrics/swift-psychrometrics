@@ -17,18 +17,18 @@ extension Pressure {
     private let units: PsychrometricEnvironment.Units
 
     init(units: PsychrometricEnvironment.Units) {
-      self.c1 = units == .imperial ? -1.0214165e4 : -5.674539e3
-      self.c2 = units == .imperial ? -4.8932428 : 6.3925247
-      self.c3 = units == .imperial ? -5.3765794e-3 : -9.677843E-03
-      self.c4 = units == .imperial ? 1.9202377e-7 : 6.2215701E-07
-      self.c5 = units == .imperial ? 3.5575832e-10 : 2.0747825E-09
-      self.c6 = units == .imperial ? -9.0344688e-14 : -9.484024E-13
-      self.c7 = units == .imperial ? 4.1635019 : 4.1635019
+      self.c1 = units.isImperial ? -1.0214165e4 : -5.674539e3
+      self.c2 = units.isImperial ? -4.8932428 : 6.3925247
+      self.c3 = units.isImperial ? -5.3765794e-3 : -9.677843E-03
+      self.c4 = units.isImperial ? 1.9202377e-7 : 6.2215701E-07
+      self.c5 = units.isImperial ? 3.5575832e-10 : 2.0747825E-09
+      self.c6 = units.isImperial ? -9.0344688e-14 : -9.484024E-13
+      self.c7 = units.isImperial ? 4.1635019 : 4.1635019
       self.units = units
     }
 
     fileprivate func exponent(dryBulb temperature: Temperature) -> Double {
-      let T = environment.units == .imperial ? temperature.rankine : temperature.kelvin
+      let T = environment.units.isImperial ? temperature.rankine : temperature.kelvin
       return c1 / T
         + c2
         + c3 * T
@@ -39,7 +39,7 @@ extension Pressure {
     }
 
     fileprivate func derivative(dryBulb temperature: Temperature) -> Double {
-      let T = units == .imperial ? temperature.rankine : temperature.kelvin
+      let T = units.isImperial ? temperature.rankine : temperature.kelvin
       return (c1 * -1)
         / pow(T, 2)
         + c3
@@ -61,17 +61,17 @@ extension Pressure {
     private let units: PsychrometricEnvironment.Units
 
     init(units: PsychrometricEnvironment.Units) {
-      self.c1 = units == .imperial ? -1.0440397e4 : -5.8002206E+03
-      self.c2 = units == .imperial ? -1.1294650e1 : 1.3914993
-      self.c3 = units == .imperial ? -2.7022355e-2 : -4.8640239E-02
-      self.c4 = units == .imperial ? 1.2890360e-5 : 4.1764768E-05
-      self.c5 = units == .imperial ? -2.4780681e-9 : -1.4452093E-08
-      self.c6 = units == .imperial ? 6.5459673 : 6.5459673
+      self.c1 = units.isImperial ? -1.0440397e4 : -5.8002206E+03
+      self.c2 = units.isImperial ? -1.1294650e1 : 1.3914993
+      self.c3 = units.isImperial ? -2.7022355e-2 : -4.8640239E-02
+      self.c4 = units.isImperial ? 1.2890360e-5 : 4.1764768E-05
+      self.c5 = units.isImperial ? -2.4780681e-9 : -1.4452093E-08
+      self.c6 = units.isImperial ? 6.5459673 : 6.5459673
       self.units = units
     }
 
     fileprivate func exponent(dryBulb temperature: Temperature) -> Double {
-      let T = units == .imperial ? temperature.rankine : temperature.kelvin
+      let T = units.isImperial ? temperature.rankine : temperature.kelvin
       return c1 / T
         + c2
         + c3 * T
@@ -81,7 +81,7 @@ extension Pressure {
     }
 
     fileprivate func derivative(dryBulb temperature: Temperature) -> Double {
-      let T = units == .imperial ? temperature.rankine : temperature.kelvin
+      let T = units.isImperial ? temperature.rankine : temperature.kelvin
       return (c1 * -1)
         / pow(T, 2)
         + c3
@@ -126,7 +126,7 @@ extension Pressure {
       : SaturationConstantsAboveFreezing(units: units).exponent(dryBulb: temperature)
 
     return .init(exp(exponent), units: .for(units))
-    //    return units == .imperial
+    //    return units.isImperial
     //      ? .psi(exp(exponent))
     //      : .pascals(exp(exponent))
   }

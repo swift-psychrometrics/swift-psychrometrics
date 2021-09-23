@@ -131,6 +131,7 @@ var package = Package(
       name: "WetBulb",
       dependencies: [
         "Core",
+        "DewPoint",
         "HumidityRatio",
       ]
     ),

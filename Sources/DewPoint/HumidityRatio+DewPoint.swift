@@ -15,3 +15,19 @@ extension HumidityRatio {
     )
   }
 }
+
+extension DewPoint {
+
+  public init(
+    dryBulb temperature: Temperature,
+    ratio humidityRatio: HumidityRatio,
+    pressure totalPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
+  ) {
+    precondition(humidityRatio > 0)
+    self.init(
+      dryBulb: temperature,
+      vaporPressure: .init(ratio: humidityRatio, pressure: totalPressure)
+    )
+  }
+}

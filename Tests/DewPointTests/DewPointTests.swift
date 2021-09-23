@@ -79,8 +79,11 @@ final class DewPointTests: XCTestCase {
   func test_humidityRatio_from_dewPoint() {
     let pressure = Pressure(altitude: .seaLevel, units: .imperial)
     let ratio = HumidityRatio.init(for: 75, at: 50%, pressure: pressure)
-    let dewPoint = DewPoint.init(for: 75, at: 50%)
+    let dewPoint = DewPoint.init(dryBulb: 75, ratio: ratio, pressure: pressure, units: .imperial)
     let ratio2 = HumidityRatio.init(dewPoint: dewPoint, pressure: pressure, units: .imperial)
-    XCTAssertEqual(ratio, ratio2)
+    XCTAssertEqual(
+      round(ratio * 10e8) / 10e8,
+      round(ratio2 * 10e8) / 10e8
+    )
   }
 }

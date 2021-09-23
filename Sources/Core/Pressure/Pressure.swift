@@ -18,7 +18,7 @@ public struct Pressure: Hashable {
 
     public static var `default`: Self = .psi
 
-    internal static func `for`(_ units: PsychrometricEnvironment.Units) -> Self {
+    public static func `for`(_ units: PsychrometricEnvironment.Units) -> Self {
       switch units {
       case .metric: return .pascals
       case .imperial: return .psi

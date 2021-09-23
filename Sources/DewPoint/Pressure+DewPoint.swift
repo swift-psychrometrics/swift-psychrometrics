@@ -45,7 +45,7 @@ private func dewPoint_from_vapor_pressure(
 ) -> DewPoint {
 
   let bounds = environment.pressureBounds(for: units)
-  let temperatureUnits: Temperature.Units = units == .imperial ? .fahrenheit : .celsius
+  let temperatureUnits: Temperature.Units = units.isImperial ? .fahrenheit : .celsius
 
   precondition(
     vaporPressure > .saturationPressure(at: bounds.low, units: units)
