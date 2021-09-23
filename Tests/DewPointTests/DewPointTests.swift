@@ -63,7 +63,7 @@ final class DewPointTests: XCTestCase {
     XCTAssertEqual(dewPoint2.rawValue, 180)
   }
   
-  func test_dewPoint_from_vapor_pressure() {
+  func test_dewPoint_from_vapor_pressure_imperial() {
     var vaporPressure = Pressure.saturationPressure(at: -4)
     var dewPoint = DewPoint.init(dryBulb: 59, vaporPressure: vaporPressure)
     XCTApproximatelyEqual(dewPoint.fahrenheit, -4)
@@ -77,11 +77,34 @@ final class DewPointTests: XCTestCase {
     XCTApproximatelyEqual(dewPoint.fahrenheit, 122)
   }
   
-  func test_humidityRatio_from_dewPoint() {
+  func test_dewPoint_from_vapor_pressure_metric() {
+    var vaporPressure = Pressure.saturationPressure(at: .celsius(-20), units: .metric)
+    var dewPoint = DewPoint.init(dryBulb: .celsius(15), vaporPressure: vaporPressure, units: .metric)
+    XCTApproximatelyEqual(dewPoint.celsius, -20)
+    
+    vaporPressure = .saturationPressure(at: .celsius(5), units: .metric)
+    dewPoint = .init(dryBulb: .celsius(15), vaporPressure: vaporPressure, units: .metric)
+    XCTApproximatelyEqual(dewPoint.celsius, 5)
+
+    vaporPressure = .saturationPressure(at: .celsius(50), units: .metric)
+    dewPoint = .init(dryBulb: .celsius(60), vaporPressure: vaporPressure, units: .metric)
+    XCTApproximatelyEqual(dewPoint.celsius, 50)
+  }
+  
+  func test_humidityRatio_from_dewPoint_imperial() {
     let pressure = Pressure(altitude: .seaLevel, units: .imperial)
     let ratio = HumidityRatio.init(for: 75, at: 50%, pressure: pressure)
     let dewPoint = DewPoint.init(dryBulb: 75, ratio: ratio, pressure: pressure, units: .imperial)
     let ratio2 = HumidityRatio.init(dewPoint: dewPoint, pressure: pressure, units: .imperial)
+    XCTApproximatelyEqual(ratio.rawValue, ratio2.rawValue)
+  }
+  
+  func test_humidityRatio_from_dewPoint_metric() {
+    let pressure = Pressure(altitude: .seaLevel, units: .metric)
+    let ratio = HumidityRatio.init(for: .celsius(23.89), at: 50%, pressure: pressure, units: .metric)
+    
+    let dewPoint = DewPoint.init(dryBulb: .celsius(23.89), ratio: ratio, pressure: pressure, units: .metric)
+    let ratio2 = HumidityRatio.init(dewPoint: dewPoint, pressure: pressure, units: .metric)
     XCTApproximatelyEqual(ratio.rawValue, ratio2.rawValue)
   }
 }

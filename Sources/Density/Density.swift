@@ -171,6 +171,30 @@ extension Density where T == MoistAir {
       units: units
     )
   }
+
+  /// Create a new ``Density<MoistAir>`` for the given dry bulb temperature, relative humidity, and total pressure.
+  ///
+  /// **Reference**:
+  ///   ASHRAE - Fundamentals (2017) ch. 1 eq. 11
+  ///
+  /// - Parameters:
+  ///   - temperature: The dry bulb temperature to calculate the density for.
+  ///   - humidityRatio: The humidity ratio to calculate the density for.
+  ///   - pressure: The total atmospheric pressure to calculate the density for.
+  ///   - units: The unit of measure to solve for, will default the the ``Core.environment`` setting if not supplied.
+  public init(
+    dryBulb temperature: Temperature,
+    ratio humidityRatio: HumidityRatio,
+    pressure totalPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
+  ) {
+    self.init(
+      volume: .init(
+        dryBulb: temperature, ratio: humidityRatio, pressure: totalPressure, units: units),
+      ratio: humidityRatio,
+      units: units
+    )
+  }
 }
 
 extension Density: NumberWithUnitOfMeasure {

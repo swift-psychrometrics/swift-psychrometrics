@@ -103,7 +103,7 @@ public struct HumidityRatio: Equatable {
   ) {
     self.init(
       totalPressure: totalPressure,
-      partialPressure: .partialPressure(for: temperature, at: humidity),
+      partialPressure: .vaporPressure(for: temperature, at: humidity),
       units: units
     )
   }

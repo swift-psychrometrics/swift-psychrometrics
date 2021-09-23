@@ -8,7 +8,7 @@ extension Pressure {
   ///   - temperature: The temperature of the air.
   ///   - humidity: The relative humidity of the air.
   ///   - units: The unit of measure to solve the pressure for, if not supplied then will default to ``Core.environment`` units.
-  public static func partialPressure(
+  public static func vaporPressure(
     for temperature: Temperature,
     at humidity: RelativeHumidity,
     units: PsychrometricEnvironment.Units? = nil

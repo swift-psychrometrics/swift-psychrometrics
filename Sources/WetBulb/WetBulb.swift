@@ -34,15 +34,9 @@ public struct WetBulb {
   public init(_ value: Temperature) {
     self.rawValue = value
   }
-
-  /// Create a new ``WetBulb`` for the given temperature and relative humidity.
-  ///
-  /// - Parameters:
-  ///   - temperature: The temperature to calculate wet-bulb for.
-  ///   - humidity: The relative humidity.
-  public init(temperature: Temperature, humidity: RelativeHumidity) {
-    self.rawValue = Self.calculate(temperature, humidity)
-  }
+  //  public init(temperature: Temperature, humidity: RelativeHumidity) {
+  //    self.rawValue = Self.calculate(temperature, humidity)
+  //  }
 
   public subscript<V>(dynamicMember keyPath: KeyPath<Temperature, V>) -> V {
     rawValue[keyPath: keyPath]

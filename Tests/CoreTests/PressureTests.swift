@@ -177,4 +177,13 @@ final class PressureTests: XCTestCase {
       XCTApproximatelyEqual(pressure.rawValue, expected.rawValue, tolerance: tolerance)
     }
   }
+  
+  func test_vapor_pressure_with_relativeHumidity_metric() {
+    let pressure = Pressure.vaporPressure(for: .celsius(25), at: 80%, units: .metric)
+    XCTApproximatelyEqual(pressure.rawValue, 2535.2, tolerance: 0.18)
+    let humidity = RelativeHumidity.init(dryBulb: .celsius(25), pressure: pressure, units: .metric)
+    XCTApproximatelyEqual(humidity.rawValue, 80)
+  }
+  
+  
 }

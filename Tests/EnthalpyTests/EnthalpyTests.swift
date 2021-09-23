@@ -82,9 +82,15 @@ final class EnthalpyTests: XCTestCase {
     )
   }
   
-  func test_dry_air_enthalpy() {
+  func test_dry_air_enthalpy_imperial() {
     let enthalpy = Temperature.fahrenheit(77).enthalpy(units: .imperial)
     XCTAssertEqual(round(enthalpy.rawValue * 10e8) / 10e8, 18.48)
+  }
+  
+  // TODO: Tolerance is a bit high.
+  func test_dry_air_enthalpy_metric() {
+    let enthalpy = Temperature.celsius(25).enthalpy(units: .metric)
+    XCTApproximatelyEqual(enthalpy.rawValue, 25148, tolerance: 2)
   }
   
   // The tolerance is decent but exponentially worse at higher temperatures.
@@ -106,26 +112,53 @@ final class EnthalpyTests: XCTestCase {
   }
   
   // TODO: Fix tolerances.
-//  func test_saturated_enthalpy_metric() {
-//    let values: [(Temperature, Double, Double)] = [
-//      (.celsius(-50), -50222, 0.01),
-//      (.celsius(-20), -18542, 0.01),
-//      (.celsius(-5), 1164, 0.03),
-//      (.celsius(5), 18639, 0.01),
-//      (.celsius(25), 76504, 0.01),
-//      (.celsius(50), 275353, 0.01),
-//      (.celsius(85), 2307539, 0.01)
-//    ]
-//    
-//    for (temp, expected, tolerance) in values {
-//      let saturatedEnthalpy = EnthalpyOf<MoistAir>.init(
-//        dryBulb: temp,
-//        pressure: .pascals(101325),
-//        units: .metric
-//      )
-//      XCTApproximatelyEqual(saturatedEnthalpy.rawValue, expected, tolerance: tolerance)
-//    }
+  func test_saturated_enthalpy_metric() {
+    let values: [(Temperature, Double, Double)] = [
+      (.celsius(-50), -50222, 19.778),
+      (.celsius(-20), -18542, 14.791),
+      (.celsius(-5), 1164, 24.82),
+      (.celsius(5), 18639, 48.51),
+      (.celsius(25), 76504, 197.34),
+      (.celsius(50), 275353, 1121.5),
+      (.celsius(85), 2307539, 20095.2)
+    ]
+    
+    for (temp, expected, tolerance) in values {
+      let saturatedEnthalpy = EnthalpyOf<MoistAir>.init(
+        dryBulb: temp,
+        pressure: .pascals(101325),
+        units: .metric
+      )
+      XCTApproximatelyEqual(saturatedEnthalpy.rawValue, expected, tolerance: tolerance)
+    }
+  }
+  
+  func test_dryBulb_from_enthalpy_and_humidityRatio_metric() {
+    let temperature = Temperature.init(
+      enthalpy: 81316,
+      ratio: 0.02,
+      units: .metric
+    )
+    XCTApproximatelyEqual(temperature.celsius, 30, tolerance: 0.001)
+  }
+  
+//  func test_dryBulb_from_enthalpy_and_volume_metric() {
+//    let temperature = Temperature.ini
 //  }
+  
+  func test_humidityRatio_from_dryBulb_and_enthalpy_metric() {
+    let ratio = HumidityRatio.init(
+      enthalpy: .init(81316, units: .joulePerKilogram),
+      dryBulb: .celsius(30),
+      units: .metric
+    )
+    XCTApproximatelyEqual(ratio.rawValue, 0.02, tolerance: 0.001)
+  }
+  
+  func test_moistAir_enthalpy_metric() {
+    let enthalpy = EnthalpyOf<MoistAir>.init(dryBulb: .celsius(30), ratio: 0.02, units: .metric)
+    XCTApproximatelyEqual(enthalpy, 81316, tolerance: 0.0003)
+  }
   
 //  func test_relative_humidity_for_dewPoint_and_dryBulb_enthalpies() {
 //    let totalPressure = Pressure(altitude: .seaLevel)

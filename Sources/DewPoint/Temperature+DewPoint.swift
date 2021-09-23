@@ -18,7 +18,7 @@ extension DewPoint {
     ///   - temperature: The dry-bulb temperature of the air.
     ///   - humidity: The relative humidity of the air.
     func run(_ dryBulb: Temperature, _ humidity: RelativeHumidity) -> Double {
-      let partialPressure = Pressure.partialPressure(for: dryBulb, at: humidity).psi
+      let partialPressure = Pressure.vaporPressure(for: dryBulb, at: humidity).psi
       let naturalLog = log(partialPressure)
 
       return c1

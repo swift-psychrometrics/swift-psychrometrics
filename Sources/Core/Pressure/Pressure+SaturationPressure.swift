@@ -151,7 +151,7 @@ extension Pressure {
     )
 
     let derivative =
-      temperature < triplePoint
+      temperature <= triplePoint
       ? SaturationConstantsBelowFreezing(units: units).derivative(dryBulb: temperature)
       : SaturationConstantsAboveFreezing(units: units).derivative(dryBulb: temperature)
 

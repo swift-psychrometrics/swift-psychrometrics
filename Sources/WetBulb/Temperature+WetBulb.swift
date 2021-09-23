@@ -7,7 +7,7 @@ extension Temperature {
   ///
   /// - Parameters:
   ///   - humidity: The relative humidity.
-  public func wetBulb(at humidity: RelativeHumidity) -> WetBulb {
-    .init(temperature: self, humidity: humidity)
-  }
+  //  public func wetBulb(at humidity: RelativeHumidity) -> WetBulb {
+  //    .init(temperature: self, humidity: humidity)
+  //  }
 }

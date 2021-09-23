@@ -4,7 +4,8 @@ import Foundation
 extension Pressure {
 
   public func dewPoint(
-    dryBulb temperature: Temperature, units: PsychrometricEnvironment.Units? = nil
+    dryBulb temperature: Temperature,
+    units: PsychrometricEnvironment.Units? = nil
   ) -> DewPoint {
     dewPoint_from_vapor_pressure(temperature, self, units ?? environment.units)
   }
@@ -31,9 +32,10 @@ extension DewPoint {
   ///  TDryBulb is not really needed here, just used for convenience.
   public init(
     dryBulb temperature: Temperature,
-    vaporPressure pressure: Pressure
+    vaporPressure pressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
-    self = pressure.dewPoint(dryBulb: temperature)
+    self = pressure.dewPoint(dryBulb: temperature, units: units)
   }
 }
 
@@ -61,9 +63,9 @@ private func dewPoint_from_vapor_pressure(
   while true {
     let dewPoint_iteration = dewPoint
     let logVaporPressure_iteration = log(
-      Pressure.saturationPressure(at: dewPoint_iteration).rawValue
+      Pressure.saturationPressure(at: dewPoint_iteration, units: units).rawValue
     )
-    let derivative = Pressure.saturationPressureDerivative(at: dewPoint_iteration)
+    let derivative = Pressure.saturationPressureDerivative(at: dewPoint_iteration, units: units)
 
     // new estimate.
     let dewPointValue =

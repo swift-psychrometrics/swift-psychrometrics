@@ -12,7 +12,7 @@ final class HumidityRatioTests: XCTestCase {
   }
   
   func test_humidityRatio_and_partialPressure() {
-    let partialPressure = Pressure.partialPressure(for: 75, at: 50%)
+    let partialPressure = Pressure.vaporPressure(for: 75, at: 50%)
     let humidityRatio = HumidityRatio(
       totalPressure: .init(altitude: .seaLevel),
       partialPressure: partialPressure
@@ -63,7 +63,7 @@ final class HumidityRatioTests: XCTestCase {
     }
   }
 
-  func test_humidityRatio_and_relativeHumidity() {
+  func test_humidityRatio_and_relativeHumidity_imperial() {
     let relativeHumidity = RelativeHumidity.init(dryBulb: 100, ratio: 0.00523, pressure: 14.696, units: .imperial)
     XCTAssertEqual(round(relativeHumidity.rawValue), 13)
   }

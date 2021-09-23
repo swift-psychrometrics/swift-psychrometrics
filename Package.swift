@@ -44,7 +44,8 @@ var package = Package(
     .testTarget(
       name: "DensityTests",
       dependencies: [
-        "Density"
+        "Density",
+        "TestSupport",
       ]
     ),
     .target(
@@ -119,13 +120,17 @@ var package = Package(
     ),
     .testTarget(
       name: "SpecificHumidityTests",
-      dependencies: ["SpecificHumidity"]
+      dependencies: [
+        "SpecificHumidity",
+        "TestSupport",
+      ]
     ),
     .target(
       name: "SpecificVolume",
       dependencies: [
         "Core",
         "HumidityRatio",
+        "TestSupport",
       ]
     ),
     .testTarget(

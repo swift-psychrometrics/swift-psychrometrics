@@ -2,6 +2,7 @@ import XCTest
 import HumidityRatio
 import Core
 import SpecificHumidity
+import TestSupport
 
 final class SpecificHumidityTests: XCTestCase {
   func test_specificHumidity() {
@@ -35,11 +36,8 @@ final class SpecificHumidityTests: XCTestCase {
   
   func test_conversions_between_specificHumidity_and_humidityRatio() {
     let specific = SpecificHumidity(ratio: 0.006)
-    XCTAssertEqual(
-      round(specific.rawValue * 100000000000) / 100000000000,
-      0.00596421471
-    )
+    XCTApproximatelyEqual(specific.rawValue,  0.00596421471)
     let ratio = HumidityRatio(specificHumidity: 0.00596421471)
-    XCTAssertEqual(round(ratio * 1000) / 1000, 0.006)
+    XCTApproximatelyEqual(ratio.rawValue, 0.006)
   }
 }
