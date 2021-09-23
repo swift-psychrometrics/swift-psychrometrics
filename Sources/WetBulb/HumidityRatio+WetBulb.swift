@@ -1,7 +1,7 @@
 import Core
+import DewPoint
 import Foundation
 import HumidityRatio
-import DewPoint
 
 extension HumidityRatio {
 
@@ -96,7 +96,7 @@ extension HumidityRatio {
 }
 
 extension WetBulb {
-  
+
   public init(
     dryBulb temperature: Temperature,
     ratio humidityRatio: HumidityRatio,
@@ -120,17 +120,17 @@ private func wetBulb_from_humidity_ratio(
   units: PsychrometricEnvironment.Units
 ) throws -> WetBulb {
   precondition(humidityRatio > 0)
-  
+
   let dewPoint = DewPoint(dryBulb: dryBulb, ratio: humidityRatio, pressure: pressure, units: units)
   let temperatureUnits = units.isImperial ? Temperature.Units.fahrenheit : .celsius
-  
+
   // Initial guesses
   var wetBulbSup = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
   var wetBulbInf = units.isImperial ? dewPoint.fahrenheit : dewPoint.celsius
   var wetBulb = (wetBulbInf + wetBulbSup) / 2
-  
+
   var index = 1
-  
+
   while (wetBulbSup - wetBulbInf) > environment.temperatureTolerance.rawValue {
     let ratio = HumidityRatio(
       dryBulb: dryBulb,
@@ -138,22 +138,23 @@ private func wetBulb_from_humidity_ratio(
       pressure: pressure,
       units: units
     )
-    
+
     if ratio > humidityRatio {
       wetBulbSup = wetBulb
     } else {
       wetBulbInf = wetBulb
     }
-    
+
     // new guess of wet bulb
     wetBulb = (wetBulbSup + wetBulbInf) / 2
-    
+
     if index >= environment.maximumIterationCount {
-      throw MaxIterationError("Maximum iterations met while trying to solve wet-bulb from humidity ratio. Stopping.")
+      throw MaxIterationError(
+        "Maximum iterations met while trying to solve wet-bulb from humidity ratio. Stopping.")
     }
-    
+
     index += 1
   }
-  
+
   return .init(.init(wetBulb, units: temperatureUnits))
 }

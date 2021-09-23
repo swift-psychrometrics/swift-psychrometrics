@@ -30,7 +30,7 @@ var package = Package(
       name: "CoreTests",
       dependencies: [
         "Core",
-        "TestSupport"
+        "TestSupport",
       ]
     ),
     .target(
@@ -58,7 +58,7 @@ var package = Package(
       name: "DewPointTests",
       dependencies: [
         "DewPoint",
-        "TestSupport"
+        "TestSupport",
       ]
     ),
     .target(
@@ -72,7 +72,7 @@ var package = Package(
       name: "EnthalpyTests",
       dependencies: [
         "Enthalpy",
-        "TestSupport"
+        "TestSupport",
       ]
     ),
     .target(
@@ -97,7 +97,7 @@ var package = Package(
       name: "HumidityRatioTests",
       dependencies: [
         "HumidityRatio",
-        "TestSupport"
+        "TestSupport",
       ]
     ),
     .target(
@@ -145,7 +145,7 @@ var package = Package(
       name: "WetBulbTests",
       dependencies: [
         "WetBulb",
-        "TestSupport"
+        "TestSupport",
       ]
     ),
   ]
