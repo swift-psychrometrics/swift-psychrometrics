@@ -81,6 +81,7 @@ Some of these calculations do not yet support different units of measure.
 - Dew Point
   - From temperature and relative humidity
   - From temperature and partial pressure (vapor pressure)
+  - From temperature, humidity ratio, and pressure
   
 - Enthalpy
   - Dry Air
@@ -95,6 +96,7 @@ Some of these calculations do not yet support different units of measure.
   - From dry bulb temperature and total pressure
   - From dry bulb temperature, relative humidity, and total pressure
   - From dry bulb temperature, relative humidity, and altitude
+  - From dew point temperature and pressure
 
 - Partial Pressure (Vapor Pressure)
 

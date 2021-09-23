@@ -81,6 +81,11 @@ final class EnthalpyTests: XCTestCase {
     )
   }
   
+  func test_dry_air_enthalpy() {
+    let enthalpy = Temperature.fahrenheit(77).enthalpy(units: .imperial)
+    XCTAssertEqual(round(enthalpy.rawValue * 10e8) / 10e8, 18.48)
+  }
+  
 //  func test_relative_humidity_for_dewPoint_and_dryBulb_enthalpies() {
 //    let totalPressure = Pressure(altitude: .seaLevel)
 //    let saturationPressure = Pressure.saturationPressure(at: 75)

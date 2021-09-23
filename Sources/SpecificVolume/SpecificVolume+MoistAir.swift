@@ -28,6 +28,7 @@ extension SpecificVolume where T == MoistAir {
       let P = units.isImperial ? pressure.psi : pressure.pascals
       let c2 = units.isImperial ? 144.0 : 1.0
       let value = volume.rawValue * (c2 * P) / (universalGasConstant * (1 + c2 * ratio.rawValue))
+      print("value: \(value)")
       return units.isImperial ? .rankine(value) : .kelvin(value)
     }
   }
@@ -127,6 +128,7 @@ extension Temperature {
     let absoluteTemperature = SpecificVolumeOf<MoistAir>.Constants(units: units)
       .dryBulb(volume: specificVolume, ratio: humidityRatio, pressure: totalPressure)
 
+    print("abs: \(absoluteTemperature)")
     // Convert the absolute temperature appropriately for the given units.
     self =
       units.isImperial

@@ -49,4 +49,16 @@ final class SpecificVolumeTests: XCTestCase {
 //      13.5251
     )
   }
+  
+  // Not working.
+//  func test_dry_bulb_from_volume() {
+//    let dryBulb = Temperature.init(
+//      volume: 14.72,
+//      ratio: 0.02,
+//      pressure: 14.175,
+//      units: .imperial
+//    )
+//    
+//    XCTAssertEqual(round(dryBulb.rawValue), 86)
+//  }
 }
