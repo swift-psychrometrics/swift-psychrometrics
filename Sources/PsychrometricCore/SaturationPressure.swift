@@ -118,9 +118,9 @@ extension SaturationPressure {
     units: PsychrometricEnvironment.Units? = nil
   ) {
 
-    let units = units ?? environment.units
-    let bounds = environment.pressureBounds(for: units)
-    let triplePoint = environment.triplePointOfWater(for: units)
+    let units = units ?? PsychrometricEnvironment.shared.units
+    let bounds = PsychrometricEnvironment.pressureBounds(for: units)
+    let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
 
     precondition(
       temperature >= bounds.low && temperature <= bounds.high
@@ -146,9 +146,9 @@ extension SaturationPressure {
     units: PsychrometricEnvironment.Units? = nil
   ) -> Pressure {
 
-    let units = units ?? environment.units
-    let bounds = environment.pressureBounds(for: units)
-    let triplePoint = environment.triplePointOfWater(for: units)
+    let units = units ?? PsychrometricEnvironment.shared.units
+    let bounds = PsychrometricEnvironment.pressureBounds(for: units)
+    let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
 
     precondition(
       temperature >= bounds.low && temperature <= bounds.high
@@ -162,16 +162,6 @@ extension SaturationPressure {
     return .init(derivative, units: .defaultFor(units: units))
   }
 }
-//
-//extension Pressure {
-//
-//  public static func saturationPressure(
-//    at temperature: Temperature,
-//    units: PsychrometricEnvironment.Units? = nil
-//  ) -> SaturationPressure {
-//    .init(at: temperature, units: units)
-//  }
-//}
 
 // MARK: Pressure + RelativeHumidity
 extension RelativeHumidity {
@@ -188,7 +178,7 @@ extension RelativeHumidity {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     precondition(vaporPressure > 0)
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     let saturationPressure = SaturationPressure(at: temperature, units: units)
     let fraction = vaporPressure.rawValue / saturationPressure.rawValue
     self.init(fraction * 100)

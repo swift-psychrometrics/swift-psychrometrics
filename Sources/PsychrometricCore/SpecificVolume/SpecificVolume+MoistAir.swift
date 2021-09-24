@@ -47,7 +47,7 @@ extension SpecificVolume where T == MoistAir {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     precondition(humidityRatio.rawValue > 0)
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     let value = Constants(units: units)
       .run(dryBulb: temperature, ratio: humidityRatio, pressure: totalPressure)
     self.init(value, units: .defaultFor(units: units))
@@ -119,7 +119,7 @@ extension Temperature {
     units: PsychrometricEnvironment.Units? = nil
   ) {
 
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
 
     precondition(specificVolume.units == SpecificVolumeUnits.defaultFor(units: units))
 

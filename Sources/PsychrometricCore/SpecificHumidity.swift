@@ -1,4 +1,5 @@
 import Foundation
+import CoreUnitTypes
 
 // TODO: Add Units
 
@@ -10,14 +11,17 @@ import Foundation
 public struct SpecificHumidity {
 
   /// The raw value for the given conditions.
-  public var rawValue: Double
+  public private(set) var rawValue: Double
+  
+  public private(set) var units: Units
 
   /// Create a new ``SpecificHumidity`` with the given raw value.
   ///
   /// - Parameters:
   ///   - value: The specific humidity value.
-  public init(_ value: Double) {
+  public init(_ value: Double, units: Units) {
     self.rawValue = value
+    self.units = units
   }
 
   /// Calculate the specific humidity for the given mass of water and mass of dry air.
@@ -27,9 +31,13 @@ public struct SpecificHumidity {
   ///   - dryAirMass: The mass of the dry air content.
   public init(
     water waterMass: Double,
-    dryAir dryAirMass: Double
+    dryAir dryAirMass: Double,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
-    self.init(waterMass / (waterMass + dryAirMass))
+    self.init(
+      waterMass / (waterMass + dryAirMass),
+      units: .defaultFor(units: units ?? PsychrometricEnvironment.shared.units)
+    )
   }
 
   /// Calculate the specific humidity for the given humidity ratio.
@@ -37,9 +45,13 @@ public struct SpecificHumidity {
   /// - Parameters:
   ///   - ratio: The humidity ratio.
   public init(
-    ratio: HumidityRatio
+    ratio: HumidityRatio,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
-    self.init(ratio / (1 + ratio))
+    self.init(
+      ratio / (1 + ratio),
+      units: .defaultFor(units: units ?? PsychrometricEnvironment.shared.units)
+    )
   }
 
   /// Calculate the specific humidity for the given temperature, humidity, and pressure.
@@ -51,10 +63,12 @@ public struct SpecificHumidity {
   public init(
     for temperature: Temperature,
     with humidity: RelativeHumidity,
-    at totalPressure: Pressure
+    at totalPressure: Pressure,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
-      ratio: HumidityRatio(for: temperature, at: humidity, pressure: totalPressure)
+      ratio: HumidityRatio(for: temperature, at: humidity, pressure: totalPressure),
+      units: units
     )
   }
 
@@ -67,16 +81,39 @@ public struct SpecificHumidity {
   public init(
     for temperature: Temperature,
     with humidity: RelativeHumidity,
-    at altitude: Length
+    at altitude: Length,
+    units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
-      ratio: HumidityRatio(for: temperature, at: humidity, altitude: altitude)
+      ratio: HumidityRatio(for: temperature, at: humidity, altitude: altitude),
+      units: units
     )
   }
 }
 
-extension SpecificHumidity: RawNumericType {
+extension SpecificHumidity {
+  
+  public enum Units: UnitOfMeasure {
+    
+    case poundsOfWaterPerPoundOfAir
+    case kilogramsOfWaterPerKilogramOfAir
+    
+    public static func defaultFor(units: PsychrometricEnvironment.Units) -> SpecificHumidity.Units {
+      switch units {
+      case .metric: return .kilogramsOfWaterPerKilogramOfAir
+      case .imperial: return .poundsOfWaterPerPoundOfAir
+      }
+    }
+  }
+}
+
+extension SpecificHumidity: NumberWithUnitOfMeasure {
+  
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude
+  
+  public static func keyPath(for units: Units) -> WritableKeyPath<SpecificHumidity, Double> {
+    \.rawValue
+  }
 }

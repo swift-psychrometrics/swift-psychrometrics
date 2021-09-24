@@ -14,7 +14,7 @@ extension VaporPressure {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     precondition(humidityRatio > 0)
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
     let value = totalPressure * humidityRatio / (HumidityRatio.moleWeightRatio + humidityRatio)
     self.init(value, units: .defaultFor(units: units))

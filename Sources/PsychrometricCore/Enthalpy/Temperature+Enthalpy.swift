@@ -50,7 +50,7 @@ extension Temperature {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     precondition(humidityRatio.rawValue > 0)
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     self = EnthalpyOf<MoistAir>.Constants(units: units).dryBulb(
       enthalpy: enthalpy, ratio: humidityRatio)
   }

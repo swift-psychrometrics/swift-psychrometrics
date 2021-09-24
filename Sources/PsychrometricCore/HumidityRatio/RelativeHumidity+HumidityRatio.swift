@@ -8,7 +8,7 @@ extension RelativeHumidity {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     precondition(vaporPressure > 0)
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     let saturationPressure = SaturationPressure(at: temperature, units: units)
     let vaporPressure = units.isImperial ? vaporPressure.psi : vaporPressure.pascals
     let saturationPressureValue =

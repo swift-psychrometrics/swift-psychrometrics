@@ -21,8 +21,8 @@ public struct HumidityRatio: Equatable {
   public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
 
   public static func ensureHumidityRatio(_ ratio: HumidityRatio) -> HumidityRatio {
-    guard ratio.rawValue > environment.minimumHumidityRatio else {
-      return .init(environment.minimumHumidityRatio)
+    guard ratio.rawValue > PsychrometricEnvironment.shared.minimumHumidityRatio else {
+      return .init(PsychrometricEnvironment.shared.minimumHumidityRatio)
     }
     return ratio
   }
@@ -35,7 +35,7 @@ public struct HumidityRatio: Equatable {
   /// - Parameters:
   ///   - value: The raw humidity ratio value.
   public init(_ value: Double) {
-    self.rawValue = max(value, environment.minimumHumidityRatio)
+    self.rawValue = max(value, PsychrometricEnvironment.shared.minimumHumidityRatio)
   }
 
   /// The humidity ratio of air for the given mass of water and mass of dry air.
@@ -55,7 +55,7 @@ public struct HumidityRatio: Equatable {
     partialPressure: Pressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     let partialPressure =
       units.isImperial ? partialPressure.psi : partialPressure.pascals
     let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals

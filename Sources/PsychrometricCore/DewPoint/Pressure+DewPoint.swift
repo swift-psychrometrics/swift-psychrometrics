@@ -34,8 +34,7 @@ extension DewPoint {
     vaporPressure pressure: VaporPressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    //    self = pressure.dewPoint(dryBulb: temperature, units: units)
-    self = dewPoint_from_vapor_pressure(temperature, pressure, units ?? environment.units)
+    self = dewPoint_from_vapor_pressure(temperature, pressure, units ?? PsychrometricEnvironment.shared.units)
   }
 }
 
@@ -46,7 +45,7 @@ private func dewPoint_from_vapor_pressure(
   _ units: PsychrometricEnvironment.Units
 ) -> DewPoint {
 
-  let bounds = environment.pressureBounds(for: units)
+  let bounds = PsychrometricEnvironment.pressureBounds(for: units)
   let temperatureUnits: Temperature.Units = units.isImperial ? .fahrenheit : .celsius
 
   precondition(
@@ -81,10 +80,10 @@ private func dewPoint_from_vapor_pressure(
     }
 
     if fabs(dewPoint.rawValue - dewPoint_iteration.rawValue)
-      <= environment.temperatureTolerance.rawValue
+      <= PsychrometricEnvironment.shared.temperatureTolerance.rawValue
     {
       break
-    } else if index > environment.maximumIterationCount {
+    } else if index > PsychrometricEnvironment.shared.maximumIterationCount {
       // Do something useful like throw an error.
       break
     }

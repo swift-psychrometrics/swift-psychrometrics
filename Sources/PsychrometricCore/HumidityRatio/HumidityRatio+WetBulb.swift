@@ -75,17 +75,17 @@ extension HumidityRatio {
   ) {
     precondition(dryBulb > wetBulb.temperature)
 
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
 
     let saturatedHumidityRatio = HumidityRatio(for: wetBulb.temperature, pressure: pressure)
-    if wetBulb.temperature > environment.triplePointOfWater(for: units) {
+    if wetBulb.temperature > PsychrometricEnvironment.triplePointOfWater(for: units) {
       self.init(
-        ConstantsBelowFreezing(units: environment.units)
+        ConstantsBelowFreezing(units: units)
           .run(dryBulb: dryBulb, wetBulb: wetBulb, saturatedHumidityRatio: saturatedHumidityRatio)
       )
     } else {
       self.init(
-        ConstantsAboveFreezing(units: environment.units)
+        ConstantsAboveFreezing(units: units)
           .run(dryBulb: dryBulb, wetBulb: wetBulb, saturatedHumidityRatio: saturatedHumidityRatio)
       )
     }
@@ -105,7 +105,7 @@ extension WetBulb {
         dryBulb: temperature,
         humidityRatio: humidityRatio,
         pressure: totalPressure,
-        units: units ?? environment.units
+        units: units ?? PsychrometricEnvironment.shared.units
       )
     else { return nil }
     self = wetBulb
@@ -131,7 +131,7 @@ private func wetBulb_from_humidity_ratio(
 
   var index = 1
 
-  while (wetBulbSup - wetBulbInf) > environment.temperatureTolerance.rawValue {
+  while (wetBulbSup - wetBulbInf) > PsychrometricEnvironment.shared.temperatureTolerance.rawValue {
     let ratio = HumidityRatio(
       dryBulb: dryBulb,
       wetBulb: .init(wetBulb, units: temperatureUnits),
@@ -148,7 +148,7 @@ private func wetBulb_from_humidity_ratio(
     // new guess of wet bulb
     wetBulb = (wetBulbSup + wetBulbInf) / 2
 
-    if index >= environment.maximumIterationCount {
+    if index >= PsychrometricEnvironment.shared.maximumIterationCount {
       return nil
     }
 

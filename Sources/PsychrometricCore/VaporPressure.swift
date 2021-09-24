@@ -17,7 +17,7 @@ extension VaporPressure {
     at humidity: RelativeHumidity,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     let value =
       SaturationPressure(at: temperature, units: units).pressure.rawValue * humidity.fraction
     self.init(value, units: .defaultFor(units: units))

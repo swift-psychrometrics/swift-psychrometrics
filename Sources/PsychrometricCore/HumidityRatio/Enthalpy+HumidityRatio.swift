@@ -36,7 +36,7 @@ extension HumidityRatio {
     dryBulb temperature: Temperature,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     let value = Constants(units: units).run(enthalpy: enthalpy, dryBulb: temperature)
     self.init(value)
   }

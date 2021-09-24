@@ -99,7 +99,7 @@ extension Density where T == DryAir {
     pressure totalPressure: Pressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     let value = Constants(units: units).run(dryBulb: temperature, pressure: totalPressure)
     self.init(value, units: .defaultFor(units: units))
   }
@@ -137,7 +137,7 @@ extension Density where T == MoistAir {
   ) {
     precondition(humidityRatio.rawValue > 0)
 
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
 
     self.init(
       (1 + humidityRatio) / specificVolume.rawValue,

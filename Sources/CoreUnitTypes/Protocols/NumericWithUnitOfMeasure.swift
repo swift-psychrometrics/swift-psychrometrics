@@ -26,7 +26,7 @@ extension NumericWithUnitOfMeasureRepresentable {
 extension NumericWithUnitOfMeasureRepresentable {
 
   public init(_ value: Number) {
-    self.init(value, units: .defaultFor(units: environment.units))
+    self.init(value, units: .defaultFor(units: PsychrometricEnvironment.shared.units))
   }
 
 }

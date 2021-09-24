@@ -18,7 +18,7 @@ public struct PsychrometricEnvironment {
   ///
   /// - Parameters:
   ///   - units: The units to return the freezing point of water for.
-  public func freezingPointOfWater(for units: Units) -> Temperature {
+  public static func freezingPointOfWater(for units: Units) -> Temperature {
     switch units {
     case .metric:
       return .celsius(0)
@@ -31,7 +31,7 @@ public struct PsychrometricEnvironment {
   ///
   /// - Parameters:
   ///   - units: The units to return the triple point of water for.
-  public func triplePointOfWater(for units: Units) -> Temperature {
+  public static func triplePointOfWater(for units: Units) -> Temperature {
     switch units {
     case .metric:
       return .celsius(0.01)
@@ -44,7 +44,7 @@ public struct PsychrometricEnvironment {
   ///
   /// - Parameters:
   ///   - units: The units to return the bounds for.
-  public func pressureBounds(for units: Units) -> (low: Temperature, high: Temperature) {
+  public static func pressureBounds(for units: Units) -> (low: Temperature, high: Temperature) {
     switch units {
     case .metric:
       return (low: .celsius(-100), high: .celsius(200))
@@ -76,5 +76,7 @@ public struct PsychrometricEnvironment {
   }
 }
 
-/// The default  global environment settings.
-public var environment = PsychrometricEnvironment()
+extension PsychrometricEnvironment {
+  /// The default  global environment settings.
+  public static var shared = PsychrometricEnvironment()
+}

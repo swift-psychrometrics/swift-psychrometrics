@@ -28,7 +28,7 @@ extension Enthalpy where T == DryAir {
     dryBulb temperature: Temperature,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     let value = DryAirConstants(units: units).run(temperature)
     self.init(value, units: .defaultFor(units: units))
   }

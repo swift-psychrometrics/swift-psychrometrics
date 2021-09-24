@@ -223,7 +223,7 @@ extension Pressure {
     altitude: Length,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    let units = units ?? environment.units
+    let units = units ?? PsychrometricEnvironment.shared.units
     let value = Constants(units: units).run(altitude: altitude)
     self.init(value, units: .defaultFor(units: units))
   }
