@@ -1,7 +1,6 @@
 import XCTest
-import Core
-import DewPoint
-import HumidityRatio
+import PsychrometricCore
+import CoreUnitTypes
 import TestSupport
 
 final class DewPointTests: XCTestCase {

@@ -1,5 +1,5 @@
 import XCTest
-import Core
+import CoreUnitTypes
 
 final class RelativeHumidityTests: XCTestCase {
   

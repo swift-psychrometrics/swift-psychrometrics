@@ -1,6 +1,6 @@
 import XCTest
-import GrainsOfMoisture
-import Core
+import PsychrometricCore
+import CoreUnitTypes
 
 final class GrainsOfMoistureTests: XCTestCase {
   

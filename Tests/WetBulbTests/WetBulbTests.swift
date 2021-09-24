@@ -1,8 +1,6 @@
 import XCTest
-import Core
-import WetBulb
-import HumidityRatio
-import DewPoint
+import PsychrometricCore
+import CoreUnitTypes
 import TestSupport
 
 final class WetBulbTests: XCTestCase {
@@ -33,9 +31,9 @@ final class WetBulbTests: XCTestCase {
     XCTAssertEqual(wetBulb.rawValue, 70)
   }
   
-  func test_magnitude() {
-    XCTAssertEqual(WetBulb.init(10).magnitude, Temperature(10).magnitude)
-  }
+//  func test_magnitude() {
+//    XCTAssertEqual(WetBulb.init(10).magnitude, Temperature(10).magnitude)
+//  }
   
   func test_multiplication() {
     var wetBulb: WetBulb = 10 * 2

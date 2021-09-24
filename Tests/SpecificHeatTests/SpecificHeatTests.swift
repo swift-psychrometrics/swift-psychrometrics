@@ -1,6 +1,6 @@
 import XCTest
-import Core
-import SpecificHeat
+import PsychrometricCore
+import CoreUnitTypes
 
 final class SpecificHeatTests: XCTestCase {
   

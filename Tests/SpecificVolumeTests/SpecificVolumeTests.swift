@@ -1,7 +1,6 @@
 import XCTest
-import Core
-@testable import SpecificVolume
-import HumidityRatio
+@testable import PsychrometricCore
+import CoreUnitTypes
 import TestSupport
 
 final class SpecificVolumeTests: XCTestCase {

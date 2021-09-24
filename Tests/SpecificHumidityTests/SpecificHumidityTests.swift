@@ -1,7 +1,6 @@
 import XCTest
-import HumidityRatio
-import Core
-import SpecificHumidity
+import PsychrometricCore
+import CoreUnitTypes
 import TestSupport
 
 final class SpecificHumidityTests: XCTestCase {

@@ -4,152 +4,81 @@ import PackageDescription
 
 var package = Package(
   name: "swift-psychrometrics",
-  //  platforms: [
-  //    .macOS(.v10_15),
-  //    .iOS(.v10),
-  //  ],
   products: [
-    .library(name: "Core", targets: ["Core"]),
-    .library(name: "Density", targets: ["Density"]),
-    .library(name: "DewPoint", targets: ["DewPoint"]),
-    .library(name: "Enthalpy", targets: ["Enthalpy"]),
-    .library(name: "GrainsOfMoisture", targets: ["GrainsOfMoisture"]),
-    .library(name: "HumidityRatio", targets: ["HumidityRatio"]),
-    .library(name: "SpecificHeat", targets: ["SpecificHeat"]),
-    .library(name: "SpecificHumidity", targets: ["SpecificHumidity"]),
-    .library(name: "SpecificVolume", targets: ["SpecificVolume"]),
+    .library(name: "CoreUnitTypes", targets: ["CoreUnitTypes"]),
+    .library(name: "PsychrometricCore", targets: ["PsychrometricCore"]),
     .library(name: "TestSupport", targets: ["TestSupport"]),
-    .library(name: "WetBulb", targets: ["WetBulb"]),
   ],
   dependencies: [
-    //    .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
   ],
   targets: [
-    .target(name: "Core"),
+    .target(name: "CoreUnitTypes"),
     .testTarget(
       name: "CoreTests",
       dependencies: [
-        "Core",
+        "CoreUnitTypes",
         "TestSupport",
-      ]
-    ),
-    .target(
-      name: "Density",
-      dependencies: [
-        "Core",
-        "HumidityRatio",
-        "SpecificVolume",
       ]
     ),
     .testTarget(
       name: "DensityTests",
       dependencies: [
-        "Density",
+        "PsychrometricCore",
         "TestSupport",
-      ]
-    ),
-    .target(
-      name: "DewPoint",
-      dependencies: [
-        "Core",
-        "HumidityRatio",
-      ]
-    ),
-    .testTarget(
-      name: "DewPointTests",
-      dependencies: [
-        "DewPoint",
-        "TestSupport",
-      ]
-    ),
-    .target(
-      name: "Enthalpy",
-      dependencies: [
-        "Core",
-        "HumidityRatio",
       ]
     ),
     .testTarget(
       name: "EnthalpyTests",
       dependencies: [
-        "Enthalpy",
+        "PsychrometricCore",
         "TestSupport",
-      ]
-    ),
-    .target(
-      name: "GrainsOfMoisture",
-      dependencies: [
-        "Core"
       ]
     ),
     .testTarget(
       name: "GrainsOfMoistureTests",
       dependencies: [
-        "GrainsOfMoisture"
-      ]
-    ),
-    .target(
-      name: "HumidityRatio",
-      dependencies: [
-        "Core"
+        "PsychrometricCore"
       ]
     ),
     .testTarget(
       name: "HumidityRatioTests",
       dependencies: [
-        "HumidityRatio",
+        "PsychrometricCore",
         "TestSupport",
       ]
     ),
     .target(
-      name: "SpecificHeat",
+      name: "PsychrometricCore",
       dependencies: [
-        "Core"
+        "CoreUnitTypes"
       ]
     ),
     .testTarget(
       name: "SpecificHeatTests",
-      dependencies: ["SpecificHeat"]
-    ),
-    .target(
-      name: "SpecificHumidity",
-      dependencies: [
-        "Core",
-        "HumidityRatio",
-      ]
+      dependencies: ["PsychrometricCore"]
     ),
     .testTarget(
       name: "SpecificHumidityTests",
       dependencies: [
-        "SpecificHumidity",
-        "TestSupport",
-      ]
-    ),
-    .target(
-      name: "SpecificVolume",
-      dependencies: [
-        "Core",
-        "HumidityRatio",
+        "PsychrometricCore",
         "TestSupport",
       ]
     ),
     .testTarget(
       name: "SpecificVolumeTests",
-      dependencies: ["SpecificVolume"]
-    ),
-    .target(name: "TestSupport"),
-    .target(
-      name: "WetBulb",
       dependencies: [
-        "Core",
-        "DewPoint",
-        "HumidityRatio",
+        "PsychrometricCore",
+        "TestSupport",
       ]
+    ),
+    .target(
+      name: "TestSupport",
+      dependencies: []
     ),
     .testTarget(
       name: "WetBulbTests",
       dependencies: [
-        "WetBulb",
+        "PsychrometricCore",
         "TestSupport",
       ]
     ),

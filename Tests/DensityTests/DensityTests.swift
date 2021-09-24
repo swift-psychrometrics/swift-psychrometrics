@@ -1,8 +1,6 @@
 import XCTest
-import Density
-import Core
-import SpecificVolume
-import HumidityRatio
+import PsychrometricCore
+import CoreUnitTypes
 import TestSupport
 
 final class DensityTests: XCTestCase {
