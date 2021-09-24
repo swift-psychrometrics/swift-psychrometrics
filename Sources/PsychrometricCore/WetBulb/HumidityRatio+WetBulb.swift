@@ -132,7 +132,7 @@ private func wetBulb_from_humidity_ratio(
   while (wetBulbSup - wetBulbInf) > environment.temperatureTolerance.rawValue {
     let ratio = HumidityRatio(
       dryBulb: dryBulb,
-      wetBulb: .init(.init(wetBulb, units: temperatureUnits)),
+      wetBulb: .init(wetBulb, units: temperatureUnits),
       pressure: pressure,
       units: units
     )
@@ -154,5 +154,5 @@ private func wetBulb_from_humidity_ratio(
     index += 1
   }
 
-  return .init(.init(wetBulb, units: temperatureUnits))
+  return .init(wetBulb, units: temperatureUnits)
 }

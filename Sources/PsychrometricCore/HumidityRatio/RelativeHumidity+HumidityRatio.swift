@@ -4,12 +4,12 @@ extension RelativeHumidity {
 
   public init(
     dryBulb temperature: Temperature,
-    vaporPressure: Pressure,
+    vaporPressure: VaporPressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
     precondition(vaporPressure > 0)
     let units = units ?? environment.units
-    let saturationPressure = Pressure.saturationPressure(at: temperature, units: units)
+    let saturationPressure = SaturationPressure(at: temperature, units: units)
     let vaporPressure = units.isImperial ? vaporPressure.psi : vaporPressure.pascals
     let saturationPressureValue =
       units.isImperial ? saturationPressure.psi : saturationPressure.pascals
@@ -23,7 +23,7 @@ extension RelativeHumidity {
     pressure totalPressure: Pressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    let vaporPressure = Pressure.init(ratio: humidityRatio, pressure: totalPressure, units: units)
+    let vaporPressure = VaporPressure(ratio: humidityRatio, pressure: totalPressure, units: units)
     self.init(dryBulb: temperature, vaporPressure: vaporPressure, units: units)
   }
 }

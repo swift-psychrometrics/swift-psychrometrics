@@ -15,7 +15,8 @@ extension HumidityRatio {
   ) {
     self.init(
       totalPressure: totalPressure,
-      partialPressure: .saturationPressure(at: dewPoint.temperature, units: units)
+      saturationPressure: SaturationPressure(at: dewPoint.temperature, units: units),
+      units: units
     )
   }
 }
@@ -38,7 +39,8 @@ extension DewPoint {
     precondition(humidityRatio > 0)
     self.init(
       dryBulb: temperature,
-      vaporPressure: .init(ratio: humidityRatio, pressure: totalPressure)
+      vaporPressure: .init(ratio: humidityRatio, pressure: totalPressure),
+      units: units
     )
   }
 }

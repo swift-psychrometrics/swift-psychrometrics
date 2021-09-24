@@ -27,6 +27,13 @@ extension Temperature {
   public enum Unit: String, Equatable, CaseIterable, Codable, Hashable {
 
     public static var `default`: Self = .fahrenheit
+    
+    public static func `for`(units: PsychrometricEnvironment.Units) -> Self {
+      switch units {
+      case .metric: return .celsius
+      case .imperial: return .fahrenheit
+      }
+    }
 
     case celsius = "°C"
     case fahrenheit = "°F"

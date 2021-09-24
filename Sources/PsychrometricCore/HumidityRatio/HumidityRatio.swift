@@ -49,13 +49,8 @@ public struct HumidityRatio: Equatable {
   ) {
     self.init(Self.moleWeightRatio * (waterMass / dryAirMass))
   }
-
-  /// The  humidity ratio of the air for the given total pressure and partial pressure. (vapor pressure)
-  ///
-  /// - Parameters:
-  ///   - totalPressure: The total pressure of the air.
-  ///   - partialPressure: The partial pressure of the air.
-  public init(
+  
+  internal init(
     totalPressure: Pressure,
     partialPressure: Pressure,
     units: PsychrometricEnvironment.Units? = nil
@@ -64,10 +59,44 @@ public struct HumidityRatio: Equatable {
     let partialPressure =
       units.isImperial ? partialPressure.psi : partialPressure.pascals
     let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
-
+    
     self.init(
       Self.moleWeightRatio * partialPressure
-        / (totalPressure - partialPressure)
+      / (totalPressure - partialPressure)
+    )
+  }
+
+  /// The  humidity ratio of the air for the given total pressure and vapor pressure.
+  ///
+  /// - Parameters:
+  ///   - totalPressure: The total pressure of the air.
+  ///   - vaporPressure: The partial pressure of the air.
+  public init(
+    totalPressure: Pressure,
+    vaporPressure: VaporPressure,
+    units: PsychrometricEnvironment.Units? = nil
+  ) {
+    self.init(
+      totalPressure: totalPressure,
+      partialPressure: vaporPressure.pressure,
+      units: units
+    )
+  }
+  
+  /// The  humidity ratio of the air for the given total pressure and saturation pressure.
+  ///
+  /// - Parameters:
+  ///   - totalPressure: The total pressure of the air.
+  ///   - saturationPressure: The saturation of the air.
+  public init(
+    totalPressure: Pressure,
+    saturationPressure: SaturationPressure,
+    units: PsychrometricEnvironment.Units? = nil
+  ) {
+    self.init(
+      totalPressure: totalPressure,
+      partialPressure: saturationPressure.pressure,
+      units: units
     )
   }
 
@@ -83,7 +112,7 @@ public struct HumidityRatio: Equatable {
   ) {
     self.init(
       totalPressure: totalPressure,
-      partialPressure: .saturationPressure(at: temperature),
+      saturationPressure: .init(at: temperature, units: units),
       units: units
     )
   }
@@ -102,7 +131,7 @@ public struct HumidityRatio: Equatable {
   ) {
     self.init(
       totalPressure: totalPressure,
-      partialPressure: .vaporPressure(for: temperature, at: humidity),
+      partialPressure: VaporPressure(for: temperature, at: humidity).pressure,
       units: units
     )
   }

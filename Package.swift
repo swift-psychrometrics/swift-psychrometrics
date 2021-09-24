@@ -17,6 +17,7 @@ var package = Package(
       name: "CoreTests",
       dependencies: [
         "CoreUnitTypes",
+        "PsychrometricCore",
         "TestSupport",
       ]
     ),

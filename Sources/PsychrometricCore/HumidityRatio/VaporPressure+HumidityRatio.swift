@@ -1,6 +1,6 @@
 import Foundation
 
-extension Pressure {
+extension VaporPressure {
 
   /// Create a new vapor ``Pressure`` for the given humidity ratio and total pressure.
   ///

@@ -14,13 +14,14 @@ public struct GrainsOfMoisture {
   /// Constant for the ratio of the mole weight of water over the mole weight of air.
   public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
 
+  // TODO: Fix for units.
   public static func saturationHumidity(
-    vaporPressure: Pressure,
+    saturationPressure: SaturationPressure,
     totalPressure: Pressure
   ) -> Double {
     7000 * moleWeightRatio
-      * vaporPressure.psi
-      / (totalPressure.psi - vaporPressure.psi)
+      * saturationPressure.psi
+      / (totalPressure.psi - saturationPressure.psi)
   }
 
   /// The calculated grains per pound of air.
@@ -42,7 +43,7 @@ public struct GrainsOfMoisture {
     pressure: Pressure
   ) {
     let saturationHumidity = Self.saturationHumidity(
-      vaporPressure: .saturationPressure(at: temperature),
+      saturationPressure: SaturationPressure(at: temperature),
       totalPressure: pressure
     )
     self.rawValue = saturationHumidity * humidity.fraction

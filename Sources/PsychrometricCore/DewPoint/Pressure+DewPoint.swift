@@ -1,14 +1,14 @@
 import Foundation
 
-extension Pressure {
-
-  public func dewPoint(
-    dryBulb temperature: Temperature,
-    units: PsychrometricEnvironment.Units? = nil
-  ) -> DewPoint {
-    dewPoint_from_vapor_pressure(temperature, self, units ?? environment.units)
-  }
-}
+//extension Pressure {
+//
+//  public func dewPoint(
+//    dryBulb temperature: Temperature,
+//    units: PsychrometricEnvironment.Units? = nil
+//  ) -> DewPoint {
+//    dewPoint_from_vapor_pressure(temperature, self, units ?? environment.units)
+//  }
+//}
 
 extension DewPoint {
 
@@ -31,17 +31,18 @@ extension DewPoint {
   ///  TDryBulb is not really needed here, just used for convenience.
   public init(
     dryBulb temperature: Temperature,
-    vaporPressure pressure: Pressure,
+    vaporPressure pressure: VaporPressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    self = pressure.dewPoint(dryBulb: temperature, units: units)
+//    self = pressure.dewPoint(dryBulb: temperature, units: units)
+    self = dewPoint_from_vapor_pressure(temperature, pressure, units ?? environment.units)
   }
 }
 
 /// Helper that produces a dew-point from dry bulb temperature an vapor pressure.
 private func dewPoint_from_vapor_pressure(
   _ dryBulb: Temperature,
-  _ vaporPressure: Pressure,
+  _ vaporPressure: VaporPressure,
   _ units: PsychrometricEnvironment.Units
 ) -> DewPoint {
 
@@ -49,22 +50,22 @@ private func dewPoint_from_vapor_pressure(
   let temperatureUnits: Temperature.Units = units.isImperial ? .fahrenheit : .celsius
 
   precondition(
-    vaporPressure > .saturationPressure(at: bounds.low, units: units)
-      && vaporPressure < .saturationPressure(at: bounds.high, units: units)
+    vaporPressure.rawValue > SaturationPressure(at: bounds.low, units: units).rawValue
+    && vaporPressure.rawValue < SaturationPressure(at: bounds.high, units: units).rawValue
   )
 
   // First guesses
   var dewPoint = dryBulb
-  let logVaporPressure = log(vaporPressure.rawValue)
+  let logVaporPressure = log(vaporPressure.pressure.rawValue)
 
   var index = 1
 
   while true {
     let dewPoint_iteration = dewPoint
     let logVaporPressure_iteration = log(
-      Pressure.saturationPressure(at: dewPoint_iteration, units: units).rawValue
+      SaturationPressure(at: dewPoint_iteration, units: units).pressure.rawValue
     )
-    let derivative = Pressure.saturationPressureDerivative(at: dewPoint_iteration, units: units)
+    let derivative = SaturationPressure.saturationPressureDerivative(at: dewPoint_iteration, units: units)
 
     // new estimate.
     let dewPointValue =
@@ -92,8 +93,8 @@ private func dewPoint_from_vapor_pressure(
   }
 
   guard dewPoint < dryBulb else {
-    return .init(dryBulb)
+    return .init(dryBulb.rawValue, units: .for(units: units))
   }
 
-  return .init(dewPoint)
+  return .init(dewPoint.rawValue, units: .for(units: units))
 }
