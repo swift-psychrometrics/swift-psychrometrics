@@ -1,6 +1,6 @@
 import XCTest
 import CoreUnitTypes
-import PsychrometricCore
+import Psychrometrics
 import TestSupport
 
 final class PressureTests: XCTestCase {
@@ -180,7 +180,7 @@ final class PressureTests: XCTestCase {
   }
   
   func test_vapor_pressure_with_relativeHumidity_metric() {
-    let pressure = VaporPressure(for: .celsius(25), at: 80%, units: .metric)
+    let pressure = VaporPressure(dryBulb: .celsius(25), humidity: 80%, units: .metric)
     XCTApproximatelyEqual(pressure.rawValue, 2535.2, tolerance: 0.18)
     let humidity = RelativeHumidity.init(dryBulb: .celsius(25), pressure: pressure, units: .metric)
     XCTApproximatelyEqual(humidity.rawValue, 80)

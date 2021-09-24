@@ -65,7 +65,7 @@ extension Enthalpy where T == MoistAir {
   ) {
     self.init(
       dryBulb: temperature,
-      ratio: .init(for: temperature, pressure: totalPressure, units: units),
+      ratio: .init(dryBulb: temperature, pressure: totalPressure, units: units),
       units: units
     )
   }
@@ -87,7 +87,12 @@ extension Enthalpy where T == MoistAir {
   ) {
     self.init(
       dryBulb: temperature,
-      ratio: .init(for: temperature, at: humidity, pressure: totalPressure, units: units),
+      ratio: .init(
+        dryBulb: temperature,
+        humidity: humidity,
+        pressure: totalPressure,
+        units: units
+      ),
       units: units
     )
   }

@@ -17,7 +17,7 @@ extension WetBulb {
   ) {
     self.init(
       dryBulb: temperature,
-      ratio: .init(for: temperature, at: relativeHumidity, pressure: totalPressure, units: units),
+      ratio: .init(dryBulb: temperature, humidity: relativeHumidity, pressure: totalPressure, units: units),
       pressure: totalPressure,
       units: units
     )

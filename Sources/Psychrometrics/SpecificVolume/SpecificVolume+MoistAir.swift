@@ -70,7 +70,7 @@ extension SpecificVolume where T == MoistAir {
   ) {
     self.init(
       dryBulb: temperature,
-      ratio: .init(for: temperature, pressure: totalPressure),
+      ratio: .init(dryBulb: temperature, pressure: totalPressure),
       pressure: totalPressure,
       units: units
     )

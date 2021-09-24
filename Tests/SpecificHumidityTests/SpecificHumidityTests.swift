@@ -1,5 +1,5 @@
 import XCTest
-import PsychrometricCore
+import Psychrometrics
 import CoreUnitTypes
 import TestSupport
 
@@ -14,7 +14,7 @@ final class SpecificHumidityTests: XCTestCase {
     let altitude: Length = 1000
     let pressure: Pressure = .init(altitude: altitude)
     let ratio = HumidityRatio(
-      for: temperature, at: humidity, pressure: pressure
+      dryBulb: temperature, humidity: humidity, pressure: pressure
     )
     
     XCTAssertEqual(

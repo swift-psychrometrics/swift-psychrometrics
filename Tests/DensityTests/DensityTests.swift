@@ -1,5 +1,5 @@
 import XCTest
-import PsychrometricCore
+import Psychrometrics
 import CoreUnitTypes
 import TestSupport
 

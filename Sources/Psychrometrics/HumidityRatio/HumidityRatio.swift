@@ -106,7 +106,7 @@ public struct HumidityRatio: Equatable {
   ///   - temperature: The dry bulb temperature of the air.
   ///   - totalPressure: The total pressure of the air.
   public init(
-    for temperature: Temperature,
+    dryBulb temperature: Temperature,
     pressure totalPressure: Pressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
@@ -124,14 +124,18 @@ public struct HumidityRatio: Equatable {
   ///   - humidity: The humidity of the air.
   ///   - totalPressure: The pressure of the air.
   public init(
-    for temperature: Temperature,
-    at humidity: RelativeHumidity,
+    dryBulb temperature: Temperature,
+    humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
       totalPressure: totalPressure,
-      partialPressure: VaporPressure(for: temperature, at: humidity).pressure,
+      partialPressure: VaporPressure(
+        dryBulb: temperature,
+        humidity: humidity,
+        units: units
+      ).pressure,
       units: units
     )
   }
@@ -143,14 +147,14 @@ public struct HumidityRatio: Equatable {
   ///   - humidity: The humidity of the air.
   ///   - altitude: The altitude of the air.
   public init(
-    for temperature: Temperature,
-    at humidity: RelativeHumidity,
+    dryBulb temperature: Temperature,
+    humidity: RelativeHumidity,
     altitude: Length,
     units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
-      for: temperature,
-      at: humidity,
+      dryBulb: temperature,
+      humidity: humidity,
       pressure: .init(altitude: altitude),
       units: units
     )

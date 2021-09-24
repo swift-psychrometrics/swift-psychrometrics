@@ -1,17 +1,9 @@
 import XCTest
-import PsychrometricCore
+import Psychrometrics
 import CoreUnitTypes
 import TestSupport
 
 final class WetBulbTests: XCTestCase {
-  
-//  func test_wetBulb_for_fahrenheit() {
-//    let temperature = Temperature.fahrenheit(75)
-//    XCTAssertEqual(
-//      round(temperature.wetBulb(at: 50%).rawValue.fahrenheit * 100) / 100,
-//      62.51
-//    )
-//  }
   
   func test_equatable() {
     let wetBulb: WetBulb = 75

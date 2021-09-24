@@ -398,6 +398,20 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Psychrometrics"
+               BuildableName = "Psychrometrics"
+               BlueprintName = "Psychrometrics"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -544,6 +558,16 @@
                BlueprintIdentifier = "SpecificVolumeTests"
                BuildableName = "SpecificVolumeTests"
                BlueprintName = "SpecificVolumeTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PsychrometricTests"
+               BuildableName = "PsychrometricTests"
+               BlueprintName = "PsychrometricTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>

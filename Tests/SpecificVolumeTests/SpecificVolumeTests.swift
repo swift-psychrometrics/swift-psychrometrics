@@ -1,5 +1,5 @@
 import XCTest
-@testable import PsychrometricCore
+@testable import Psychrometrics
 import CoreUnitTypes
 import TestSupport
 
@@ -17,7 +17,7 @@ final class SpecificVolumeTests: XCTestCase {
     )
     XCTApproximatelyEqual(volume2.rawValue, 14.7205749002918)
     
-    let ratio = HumidityRatio(for: 75, at: 100%, altitude: .seaLevel)
+    let ratio = HumidityRatio(dryBulb: 75, humidity: 100%, altitude: .seaLevel)
     let volume3 = SpecificVolumeOf<MoistAir>(
       dryBulb: 75,
       ratio: ratio,

@@ -10,16 +10,16 @@ extension VaporPressure {
   ///
   /// - Parameters:
   ///   - temperature: The temperature of the air.
-  ///   - humidity: The relative humidity of the air.
+  ///   - relativeHumidity: The relative humidity of the air.
   ///   - units: The unit of measure to solve the pressure for, if not supplied then will default to ``Core.environment`` units.
   public init(
-    for temperature: Temperature,
-    at humidity: RelativeHumidity,
+    dryBulb temperature: Temperature,
+    humidity relativeHumidity: RelativeHumidity,
     units: PsychrometricEnvironment.Units? = nil
   ) {
     let units = units ?? PsychrometricEnvironment.shared.units
     let value =
-      SaturationPressure(at: temperature, units: units).pressure.rawValue * humidity.fraction
+      SaturationPressure(at: temperature, units: units).rawValue * relativeHumidity.fraction
     self.init(value, units: .defaultFor(units: units))
   }
 }

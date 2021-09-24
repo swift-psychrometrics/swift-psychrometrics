@@ -1,5 +1,5 @@
 import XCTest
-import PsychrometricCore
+import Psychrometrics
 import CoreUnitTypes
 import TestSupport
 
@@ -12,7 +12,7 @@ final class HumidityRatioTests: XCTestCase {
   }
   
   func test_humidityRatio_and_partialPressure() {
-    let partialPressure = VaporPressure(for: 75, at: 50%)
+    let partialPressure = VaporPressure(dryBulb: 75, humidity: 50%)
     let humidityRatio = HumidityRatio(
       totalPressure: .init(altitude: .seaLevel),
       vaporPressure: partialPressure
@@ -41,7 +41,7 @@ final class HumidityRatioTests: XCTestCase {
     ]
     
     for (temp, expected, diff) in values {
-      let ratio = HumidityRatio(for: temp, pressure: 14.696)
+      let ratio = HumidityRatio(dryBulb: temp, pressure: 14.696)
       XCTApproximatelyEqual(ratio.rawValue, expected.rawValue, tolerance: diff)
     }
   }
@@ -58,7 +58,7 @@ final class HumidityRatioTests: XCTestCase {
     ]
     
     for (temp, expected, diff) in values {
-      let ratio = HumidityRatio(for: .celsius(temp), pressure: .pascals(101325))
+      let ratio = HumidityRatio(dryBulb: .celsius(temp), pressure: .pascals(101325))
       XCTApproximatelyEqual(ratio.rawValue, expected.rawValue, tolerance: diff)
     }
   }

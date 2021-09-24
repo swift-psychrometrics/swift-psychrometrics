@@ -67,7 +67,7 @@ public struct SpecificHumidity {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
-      ratio: HumidityRatio(for: temperature, at: humidity, pressure: totalPressure),
+      ratio: HumidityRatio(dryBulb: temperature, humidity: humidity, pressure: totalPressure),
       units: units
     )
   }
@@ -85,7 +85,7 @@ public struct SpecificHumidity {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     self.init(
-      ratio: HumidityRatio(for: temperature, at: humidity, altitude: altitude),
+      ratio: HumidityRatio(dryBulb: temperature, humidity: humidity, altitude: altitude),
       units: units
     )
   }

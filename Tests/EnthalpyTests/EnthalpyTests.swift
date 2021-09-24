@@ -1,5 +1,5 @@
 import XCTest
-import PsychrometricCore
+import Psychrometrics
 import CoreUnitTypes
 import TestSupport
 
@@ -54,7 +54,7 @@ final class EnthalpyTests: XCTestCase {
   
   func test_humidityRatio_from_enthalpy() {
     let enthalpy = EnthalpyOf<MoistAir>(dryBulb: 75, humidity: 50%, units: .imperial)
-    let ratio = HumidityRatio(for: 75, at: 50%, altitude: .seaLevel)
+    let ratio = HumidityRatio(dryBulb: 75, humidity: 50%, altitude: .seaLevel)
     XCTAssertEqual(
       round(enthalpy.humidityRatio(at: 75) * 1000000) / 1000000,
       round(ratio * 1000000) / 1000000
@@ -68,7 +68,7 @@ final class EnthalpyTests: XCTestCase {
   func test_temperature_from_enthalpy_and_ratio() {
     let temperature: Temperature = 75
     let humidity: RelativeHumidity = 50%
-    let ratio = HumidityRatio(for: temperature, at: humidity, altitude: .seaLevel)
+    let ratio = HumidityRatio(dryBulb: temperature, humidity: humidity, altitude: .seaLevel)
     let enthalpy = EnthalpyOf<MoistAir>.init(dryBulb: temperature, ratio: ratio, units: .imperial)
     let temperature2 = Temperature(enthalpy: enthalpy, ratio: ratio)
     XCTAssertEqual(

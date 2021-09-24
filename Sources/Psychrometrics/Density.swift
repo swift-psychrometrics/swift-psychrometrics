@@ -163,8 +163,12 @@ extension Density where T == MoistAir {
   ) {
     self.init(
       volume: .init(
-        dryBulb: temperature, humidity: humidity, pressure: totalPressure, units: units),
-      ratio: .init(for: temperature, at: humidity, pressure: totalPressure),
+        dryBulb: temperature,
+        humidity: humidity,
+        pressure: totalPressure,
+        units: units
+      ),
+      ratio: .init(dryBulb: temperature, humidity: humidity, pressure: totalPressure),
       units: units
     )
   }

@@ -83,17 +83,6 @@ extension SaturationPressure {
         + c5 * pow(T, 3)
         + c6 * log(T)
     }
-
-    fileprivate func derivative(dryBulb temperature: Temperature) -> Double {
-      let T = units.isImperial ? temperature.rankine : temperature.kelvin
-      return (c1 * -1)
-        / pow(T, 2)
-        + c3
-        + 2 * c4 * T
-        - 3 * (c5 * -1) * pow(T, 2)
-        + (c6)
-        / T
-    }
   }
 
   /// Calculate the saturation pressure of air at a given temperature.
@@ -133,33 +122,6 @@ extension SaturationPressure {
 
     self.init(exp(exponent), units: .defaultFor(units: units))
 
-  }
-
-  /// Helper to calculate the saturation pressure derivative of air at a given temperature.  This is the reverse of
-  /// saturation pressure.
-  ///
-  /// - Parameters:
-  ///   - temperature: The temperature to calculate the saturation pressure of.
-  ///   - units: The unit of measure to solve the pressure for, if not supplied then will default to ``Core.environment`` units.
-  public static func saturationPressureDerivative(
-    at temperature: Temperature,
-    units: PsychrometricEnvironment.Units? = nil
-  ) -> Pressure {
-
-    let units = units ?? PsychrometricEnvironment.shared.units
-    let bounds = PsychrometricEnvironment.pressureBounds(for: units)
-    let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
-
-    precondition(
-      temperature >= bounds.low && temperature <= bounds.high
-    )
-
-    let derivative =
-      temperature <= triplePoint
-      ? SaturationConstantsBelowFreezing(units: units).derivative(dryBulb: temperature)
-      : SaturationConstantsAboveFreezing(units: units).derivative(dryBulb: temperature)
-
-    return .init(derivative, units: .defaultFor(units: units))
   }
 }
 

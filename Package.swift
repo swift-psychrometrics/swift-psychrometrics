@@ -6,7 +6,7 @@ var package = Package(
   name: "swift-psychrometrics",
   products: [
     .library(name: "CoreUnitTypes", targets: ["CoreUnitTypes"]),
-    .library(name: "PsychrometricCore", targets: ["PsychrometricCore"]),
+    .library(name: "Psychrometrics", targets: ["Psychrometrics"]),
     .library(name: "TestSupport", targets: ["TestSupport"]),
   ],
   dependencies: [],
@@ -16,58 +16,74 @@ var package = Package(
       name: "CoreTests",
       dependencies: [
         "CoreUnitTypes",
-        "PsychrometricCore",
+        "Psychrometrics",
         "TestSupport",
       ]
     ),
     .testTarget(
       name: "DensityTests",
       dependencies: [
-        "PsychrometricCore",
+        "Psychrometrics",
+        "TestSupport",
+      ]
+    ),
+    .testTarget(
+      name: "DewPointTests",
+      dependencies: [
+        "Psychrometrics",
         "TestSupport",
       ]
     ),
     .testTarget(
       name: "EnthalpyTests",
       dependencies: [
-        "PsychrometricCore",
+        "Psychrometrics",
         "TestSupport",
       ]
     ),
     .testTarget(
       name: "GrainsOfMoistureTests",
       dependencies: [
-        "PsychrometricCore"
+        "Psychrometrics"
       ]
     ),
     .testTarget(
       name: "HumidityRatioTests",
       dependencies: [
-        "PsychrometricCore",
+        "Psychrometrics",
         "TestSupport",
       ]
     ),
     .target(
-      name: "PsychrometricCore",
+      name: "Psychrometrics",
       dependencies: [
         "CoreUnitTypes"
       ]
     ),
     .testTarget(
+      name: "PsychrometricTests",
+      dependencies: [
+        "Psychrometrics",
+        "TestSupport"
+      ]
+    ),
+    .testTarget(
       name: "SpecificHeatTests",
-      dependencies: ["PsychrometricCore"]
+      dependencies: [
+        "Psychrometrics"
+      ]
     ),
     .testTarget(
       name: "SpecificHumidityTests",
       dependencies: [
-        "PsychrometricCore",
+        "Psychrometrics",
         "TestSupport",
       ]
     ),
     .testTarget(
       name: "SpecificVolumeTests",
       dependencies: [
-        "PsychrometricCore",
+        "Psychrometrics",
         "TestSupport",
       ]
     ),
@@ -78,7 +94,7 @@ var package = Package(
     .testTarget(
       name: "WetBulbTests",
       dependencies: [
-        "PsychrometricCore",
+        "Psychrometrics",
         "TestSupport",
       ]
     ),
