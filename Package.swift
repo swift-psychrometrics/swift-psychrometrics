@@ -64,7 +64,7 @@ var package = Package(
       name: "PsychrometricTests",
       dependencies: [
         "Psychrometrics",
-        "TestSupport"
+        "TestSupport",
       ]
     ),
     .testTarget(

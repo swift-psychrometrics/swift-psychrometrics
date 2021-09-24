@@ -1,5 +1,5 @@
-import Foundation
 import CoreUnitTypes
+import Foundation
 
 // TODO: Add Units
 
@@ -12,7 +12,7 @@ public struct SpecificHumidity {
 
   /// The raw value for the given conditions.
   public private(set) var rawValue: Double
-  
+
   public private(set) var units: Units
 
   /// Create a new ``SpecificHumidity`` with the given raw value.
@@ -92,12 +92,12 @@ public struct SpecificHumidity {
 }
 
 extension SpecificHumidity {
-  
+
   public enum Units: UnitOfMeasure {
-    
+
     case poundsOfWaterPerPoundOfAir
     case kilogramsOfWaterPerKilogramOfAir
-    
+
     public static func defaultFor(units: PsychrometricEnvironment.Units) -> SpecificHumidity.Units {
       switch units {
       case .metric: return .kilogramsOfWaterPerKilogramOfAir
@@ -108,11 +108,11 @@ extension SpecificHumidity {
 }
 
 extension SpecificHumidity: NumberWithUnitOfMeasure {
-  
+
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude
-  
+
   public static func keyPath(for units: Units) -> WritableKeyPath<SpecificHumidity, Double> {
     \.rawValue
   }

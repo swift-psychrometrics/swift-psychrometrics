@@ -1,10 +1,10 @@
-import Foundation
 import CoreUnitTypes
+import Foundation
 
 extension DewPoint {
-  
+
   fileprivate struct DewPointConstantsAboveFreezing {
-    
+
     let c1: Double
     let c2: Double
     let c3: Double
@@ -12,7 +12,7 @@ extension DewPoint {
     let c5: Double
     let c6 = 0.1984
     let units: PsychrometricEnvironment.Units
-    
+
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
       self.c1 = units.isImperial ? 100.45 : 6.54
@@ -21,8 +21,7 @@ extension DewPoint {
       self.c4 = units.isImperial ? 0.17074 : 0.09486
       self.c5 = units.isImperial ? 1.2063 : 0.4569
     }
-    
-    
+
     func run(vaporPressure: VaporPressure) -> Double {
       let P = units.isImperial ? vaporPressure.psi : vaporPressure.pascals / 1000
       let logNatural = log(P)
@@ -33,20 +32,20 @@ extension DewPoint {
         + c5 * pow(P, 0.1984)
     }
   }
-  
+
   fileprivate struct DewPointConstantsBelowFreezing {
     let c1: Double
     let c2: Double
     let c3: Double
     let units: PsychrometricEnvironment.Units
-    
+
     init(units: PsychrometricEnvironment.Units) {
       self.units = units
       self.c1 = units.isImperial ? 90.12 : 6.09
       self.c2 = units.isImperial ? 26.142 : 12.608
       self.c3 = units.isImperial ? 0.8927 : 0.4959
     }
-    
+
     func run(vaporPressure: VaporPressure) -> Double {
       let P = units.isImperial ? vaporPressure.psi : vaporPressure.pascals / 1000
       let logNatural = log(P)

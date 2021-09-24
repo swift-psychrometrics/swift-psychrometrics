@@ -1,5 +1,5 @@
-import Foundation
 import CoreUnitTypes
+import Foundation
 
 /// A namespace for a dew-point temperature type.
 public struct DewPointType {}
