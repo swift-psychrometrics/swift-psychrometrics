@@ -9,8 +9,7 @@ var package = Package(
     .library(name: "PsychrometricCore", targets: ["PsychrometricCore"]),
     .library(name: "TestSupport", targets: ["TestSupport"]),
   ],
-  dependencies: [
-  ],
+  dependencies: [],
   targets: [
     .target(name: "CoreUnitTypes"),
     .testTarget(

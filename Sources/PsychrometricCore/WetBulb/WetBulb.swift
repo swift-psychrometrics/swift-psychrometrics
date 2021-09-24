@@ -46,6 +46,6 @@ import Foundation
 //  public typealias IntegerLiteralType = Temperature.IntegerLiteralType
 //}
 
-public struct WetBulbType { }
+public struct WetBulbType {}
 
 public typealias WetBulb = TemperatureEnvelope<WetBulbType>

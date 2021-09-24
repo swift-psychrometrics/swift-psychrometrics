@@ -34,7 +34,7 @@ extension DewPoint {
     vaporPressure pressure: VaporPressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-//    self = pressure.dewPoint(dryBulb: temperature, units: units)
+    //    self = pressure.dewPoint(dryBulb: temperature, units: units)
     self = dewPoint_from_vapor_pressure(temperature, pressure, units ?? environment.units)
   }
 }
@@ -51,7 +51,7 @@ private func dewPoint_from_vapor_pressure(
 
   precondition(
     vaporPressure.rawValue > SaturationPressure(at: bounds.low, units: units).rawValue
-    && vaporPressure.rawValue < SaturationPressure(at: bounds.high, units: units).rawValue
+      && vaporPressure.rawValue < SaturationPressure(at: bounds.high, units: units).rawValue
   )
 
   // First guesses
@@ -65,7 +65,8 @@ private func dewPoint_from_vapor_pressure(
     let logVaporPressure_iteration = log(
       SaturationPressure(at: dewPoint_iteration, units: units).pressure.rawValue
     )
-    let derivative = SaturationPressure.saturationPressureDerivative(at: dewPoint_iteration, units: units)
+    let derivative = SaturationPressure.saturationPressureDerivative(
+      at: dewPoint_iteration, units: units)
 
     // new estimate.
     let dewPointValue =
@@ -93,8 +94,8 @@ private func dewPoint_from_vapor_pressure(
   }
 
   guard dewPoint < dryBulb else {
-    return .init(dryBulb.rawValue, units: .for(units: units))
+    return .init(dryBulb.rawValue, units: .defaultFor(units: units))
   }
 
-  return .init(dewPoint.rawValue, units: .for(units: units))
+  return .init(dewPoint.rawValue, units: .defaultFor(units: units))
 }

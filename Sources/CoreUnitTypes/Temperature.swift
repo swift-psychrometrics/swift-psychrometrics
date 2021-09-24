@@ -15,7 +15,7 @@ public struct Temperature: Hashable {
   /// - Parameters:
   ///   - value: The raw value of the temperature.
   ///   - units: The units for the raw value.
-  public init(_ value: Double, units: Unit = .default) {
+  public init(_ value: Double, units: Unit) {
     self.rawValue = value
     self.units = units
   }
@@ -26,9 +26,9 @@ extension Temperature {
   /// Represents the units of measure for a ``Temperature``.
   public enum Unit: String, Equatable, CaseIterable, Codable, Hashable {
 
-    public static var `default`: Self = .fahrenheit
-    
-    public static func `for`(units: PsychrometricEnvironment.Units) -> Self {
+    //    public static var `default`: Self = .fahrenheit
+
+    public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
       switch units {
       case .metric: return .celsius
       case .imperial: return .fahrenheit

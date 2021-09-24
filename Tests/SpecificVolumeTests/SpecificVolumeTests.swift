@@ -34,9 +34,9 @@ final class SpecificVolumeTests: XCTestCase {
   }
   
   func test_units_returns_appropriatly_for_global_units() {
-    let imperial = SpecificVolumeOf<DryAir>.Units.for(.imperial)
+    let imperial = SpecificVolumeOf<DryAir>.Units.defaultFor(units: .imperial)
     XCTAssertEqual(imperial, .cubicFeetPerPound)
-    let metric = SpecificVolumeOf<DryAir>.Units.for(.metric)
+    let metric = SpecificVolumeOf<DryAir>.Units.defaultFor(units: .metric)
     XCTAssertEqual(metric, .cubicMeterPerKilogram)
   }
   

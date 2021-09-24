@@ -50,7 +50,7 @@ extension SpecificVolume where T == MoistAir {
     let units = units ?? environment.units
     let value = Constants(units: units)
       .run(dryBulb: temperature, ratio: humidityRatio, pressure: totalPressure)
-    self.init(value, units: .for(units))
+    self.init(value, units: .defaultFor(units: units))
   }
 
   /// Calculate the ``SpecificVolume`` for ``Core.MoistAir`` the given temperature,humidity ratio, and total pressure.
@@ -121,7 +121,7 @@ extension Temperature {
 
     let units = units ?? environment.units
 
-    precondition(specificVolume.units == SpecificVolumeUnits.for(units))
+    precondition(specificVolume.units == SpecificVolumeUnits.defaultFor(units: units))
 
     let absoluteTemperature = SpecificVolumeOf<MoistAir>.Constants(units: units)
       .dryBulb(volume: specificVolume, ratio: humidityRatio, pressure: totalPressure)

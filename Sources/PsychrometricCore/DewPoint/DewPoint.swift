@@ -32,6 +32,6 @@ import Foundation
 //  public typealias Magnitude = Temperature.Magnitude
 //}
 
-public struct DewPointType { }
+public struct DewPointType {}
 
 public typealias DewPoint = TemperatureEnvelope<DewPointType>

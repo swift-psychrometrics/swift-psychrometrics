@@ -15,7 +15,7 @@ extension WetBulb {
     pressure totalPressure: Pressure,
     units: PsychrometricEnvironment.Units? = nil
   ) {
-    try? self.init(
+    self.init(
       dryBulb: temperature,
       ratio: .init(for: temperature, at: relativeHumidity, pressure: totalPressure, units: units),
       pressure: totalPressure,

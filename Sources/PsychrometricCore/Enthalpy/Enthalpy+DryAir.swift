@@ -30,6 +30,6 @@ extension Enthalpy where T == DryAir {
   ) {
     let units = units ?? environment.units
     let value = DryAirConstants(units: units).run(temperature)
-    self.init(value, units: .for(units))
+    self.init(value, units: .defaultFor(units: units))
   }
 }

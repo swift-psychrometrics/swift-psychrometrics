@@ -11,7 +11,7 @@ public struct SpecificVolume<T> {
   /// The unit of measure for the raw value.
   public private(set) var units: SpecificVolumeUnits
 
-  public init(_ value: Double, units: SpecificVolumeUnits = .default) {
+  public init(_ value: Double, units: SpecificVolumeUnits) {
     self.rawValue = value
     self.units = units
   }
@@ -22,9 +22,9 @@ public enum SpecificVolumeUnits: UnitOfMeasure {
   case cubicFeetPerPound
   case cubicMeterPerKilogram
 
-  public static var `default`: Self = .cubicFeetPerPound
+  //  public static var `default`: Self = .cubicFeetPerPound
 
-  internal static func `for`(_ units: PsychrometricEnvironment.Units) -> Self {
+  public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
     switch units {
     case .metric: return .cubicMeterPerKilogram
     case .imperial: return .cubicFeetPerPound

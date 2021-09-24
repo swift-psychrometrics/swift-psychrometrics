@@ -4,7 +4,7 @@ import Foundation
 /// to convert the raw value to a different unit of measure for the type.
 public protocol NumericWithUnitOfMeasureRepresentable: NumericType {
 
-  associatedtype Units: UnitOfMeasureRepresentable
+  associatedtype Units: UnitOfMeasure
   associatedtype Number: NumericType
 
   var rawValue: Number { get }
@@ -23,10 +23,10 @@ extension NumericWithUnitOfMeasureRepresentable {
   }
 }
 
-extension NumericWithUnitOfMeasureRepresentable where Units: DefaultRepresentable {
+extension NumericWithUnitOfMeasureRepresentable {
 
   public init(_ value: Number) {
-    self.init(value, units: .default)
+    self.init(value, units: .defaultFor(units: environment.units))
   }
 
 }

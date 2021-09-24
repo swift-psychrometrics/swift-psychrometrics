@@ -1,4 +1,3 @@
-
 extension Temperature {
 
   /// Calculates the ``Enthalpy`` of ``MoistAir`` for the temperature at a given relative humidity and altitude.

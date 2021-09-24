@@ -34,6 +34,6 @@ extension SpecificVolume where T == DryAir {
   ) {
     let units = units ?? environment.units
     let value = Constants(units: units).run(dryBulb: temperature, pressure: pressure)
-    self.init(value, units: .for(units))
+    self.init(value, units: .defaultFor(units: units))
   }
 }

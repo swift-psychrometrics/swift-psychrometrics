@@ -17,7 +17,7 @@ public struct Density<T> {
   /// - Parameters:
   ///   - value: The raw value of the density.
   ///   - units: The unit of measure for the raw value.
-  public init(_ value: Double, units: DensityUnits = .default) {
+  public init(_ value: Double, units: DensityUnits) {
     self.rawValue = value
     self.units = units
   }
@@ -29,9 +29,9 @@ public enum DensityUnits: UnitOfMeasure {
   case poundsPerCubicFoot
   case kilogramPerCubicMeter
 
-  public static var `default`: Self = .poundsPerCubicFoot
+  //  public static var `default`: Self = .poundsPerCubicFoot
 
-  fileprivate static func `for`(_ units: PsychrometricEnvironment.Units) -> Self {
+  public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
     switch units {
     case .imperial: return .poundsPerCubicFoot
     case .metric: return .kilogramPerCubicMeter
@@ -101,7 +101,7 @@ extension Density where T == DryAir {
   ) {
     let units = units ?? environment.units
     let value = Constants(units: units).run(dryBulb: temperature, pressure: totalPressure)
-    self.init(value, units: .for(units))
+    self.init(value, units: .defaultFor(units: units))
   }
 
   /// Create a new ``Density<DryAir>`` for the given temperature and altitude.
@@ -141,7 +141,7 @@ extension Density where T == MoistAir {
 
     self.init(
       (1 + humidityRatio) / specificVolume.rawValue,
-      units: .for(units)
+      units: .defaultFor(units: units)
     )
   }
 

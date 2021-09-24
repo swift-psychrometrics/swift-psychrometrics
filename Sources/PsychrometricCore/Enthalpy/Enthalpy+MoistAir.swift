@@ -47,7 +47,7 @@ extension Enthalpy where T == MoistAir {
     precondition(humidityRatio > 0)
     let units = units ?? environment.units
     let value = Constants(units: units).run(dryBulb: temperature, ratio: humidityRatio)
-    self.init(value, units: .for(units))
+    self.init(value, units: .defaultFor(units: units))
   }
 
   /// Create a new ``Enthalpy`` for the given temperature and pressure.

@@ -17,6 +17,6 @@ extension VaporPressure {
     let units = units ?? environment.units
     let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
     let value = totalPressure * humidityRatio / (HumidityRatio.moleWeightRatio + humidityRatio)
-    self.init(value, units: .for(units))
+    self.init(value, units: .defaultFor(units: units))
   }
 }

@@ -13,7 +13,7 @@ public struct Enthalpy<T> {
   /// - Parameters:
   ///   - value: The raw value for the enthalpy.
   ///   - units: The unit of measure for the raw value.
-  public init(_ value: Double, units: EnthalpyUnits = .default) {
+  public init(_ value: Double, units: EnthalpyUnits) {
     self.rawValue = value
     self.units = units
   }
@@ -21,12 +21,12 @@ public struct Enthalpy<T> {
 
 public enum EnthalpyUnits: UnitOfMeasure {
 
-  public static var `default`: Self = .btuPerPound
+  //  public static var `default`: Self = .btuPerPound
 
   case btuPerPound
   case joulePerKilogram
 
-  internal static func `for`(_ units: PsychrometricEnvironment.Units) -> Self {
+  public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
     switch units {
     case .metric: return .joulePerKilogram
     case .imperial: return .btuPerPound

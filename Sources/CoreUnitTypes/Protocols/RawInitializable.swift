@@ -1,4 +1,4 @@
-/// A raw representable type that has a non-fallable initializer.
+/// A raw representable type that has a non-failable initializer.
 public protocol RawInitializable: RawRepresentable {
 
   /// Create a concrete instance with the given raw value.

@@ -1,4 +1,3 @@
-
 import Foundation
 
 extension HumidityRatio {
@@ -95,18 +94,21 @@ extension HumidityRatio {
 
 extension WetBulb {
 
-  public init(
+  public init?(
     dryBulb temperature: Temperature,
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricEnvironment.Units? = nil
-  ) throws {
-    self = try wetBulb_from_humidity_ratio(
-      dryBulb: temperature,
-      humidityRatio: humidityRatio,
-      pressure: totalPressure,
-      units: units ?? environment.units
-    )
+  ) {
+    guard
+      let wetBulb = try? wetBulb_from_humidity_ratio(
+        dryBulb: temperature,
+        humidityRatio: humidityRatio,
+        pressure: totalPressure,
+        units: units ?? environment.units
+      )
+    else { return nil }
+    self = wetBulb
   }
 }
 
@@ -116,7 +118,7 @@ private func wetBulb_from_humidity_ratio(
   humidityRatio: HumidityRatio,
   pressure: Pressure,
   units: PsychrometricEnvironment.Units
-) throws -> WetBulb {
+) throws -> WetBulb? {
   precondition(humidityRatio > 0)
 
   let dewPoint = DewPoint(dryBulb: dryBulb, ratio: humidityRatio, pressure: pressure, units: units)
@@ -147,8 +149,7 @@ private func wetBulb_from_humidity_ratio(
     wetBulb = (wetBulbSup + wetBulbInf) / 2
 
     if index >= environment.maximumIterationCount {
-      throw MaxIterationError(
-        "Maximum iterations met while trying to solve wet-bulb from humidity ratio. Stopping.")
+      return nil
     }
 
     index += 1

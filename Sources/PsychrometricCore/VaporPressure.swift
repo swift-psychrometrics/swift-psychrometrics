@@ -1,6 +1,6 @@
 import Foundation
 
-public struct VaporPressureType { }
+public struct VaporPressureType {}
 
 public typealias VaporPressure = PressureEnvelope<VaporPressureType>
 
@@ -18,7 +18,8 @@ extension VaporPressure {
     units: PsychrometricEnvironment.Units? = nil
   ) {
     let units = units ?? environment.units
-    let value = SaturationPressure(at: temperature, units: units).pressure.rawValue * humidity.fraction
-    self.init(value, units: .for(units))
+    let value =
+      SaturationPressure(at: temperature, units: units).pressure.rawValue * humidity.fraction
+    self.init(value, units: .defaultFor(units: units))
   }
 }

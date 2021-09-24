@@ -49,7 +49,7 @@ public struct HumidityRatio: Equatable {
   ) {
     self.init(Self.moleWeightRatio * (waterMass / dryAirMass))
   }
-  
+
   internal init(
     totalPressure: Pressure,
     partialPressure: Pressure,
@@ -59,10 +59,10 @@ public struct HumidityRatio: Equatable {
     let partialPressure =
       units.isImperial ? partialPressure.psi : partialPressure.pascals
     let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
-    
+
     self.init(
       Self.moleWeightRatio * partialPressure
-      / (totalPressure - partialPressure)
+        / (totalPressure - partialPressure)
     )
   }
 
@@ -82,7 +82,7 @@ public struct HumidityRatio: Equatable {
       units: units
     )
   }
-  
+
   /// The  humidity ratio of the air for the given total pressure and saturation pressure.
   ///
   /// - Parameters:

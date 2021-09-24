@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SaturationPressureType { }
+public struct SaturationPressureType {}
 
 public typealias SaturationPressure = PressureEnvelope<SaturationPressureType>
 
@@ -131,7 +131,7 @@ extension SaturationPressure {
       ? SaturationConstantsBelowFreezing(units: units).exponent(dryBulb: temperature)
       : SaturationConstantsAboveFreezing(units: units).exponent(dryBulb: temperature)
 
-    self.init(exp(exponent), units: .for(units))
+    self.init(exp(exponent), units: .defaultFor(units: units))
 
   }
 
@@ -159,12 +159,12 @@ extension SaturationPressure {
       ? SaturationConstantsBelowFreezing(units: units).derivative(dryBulb: temperature)
       : SaturationConstantsAboveFreezing(units: units).derivative(dryBulb: temperature)
 
-    return .init(derivative, units: .for(units))
+    return .init(derivative, units: .defaultFor(units: units))
   }
 }
 //
 //extension Pressure {
-//  
+//
 //  public static func saturationPressure(
 //    at temperature: Temperature,
 //    units: PsychrometricEnvironment.Units? = nil
@@ -172,7 +172,6 @@ extension SaturationPressure {
 //    .init(at: temperature, units: units)
 //  }
 //}
-
 
 // MARK: Pressure + RelativeHumidity
 extension RelativeHumidity {
