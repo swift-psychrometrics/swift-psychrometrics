@@ -118,7 +118,7 @@ if #available(macOS 10.15, *),
     .executableTarget(
       name: "swift-psychrometrics",
       dependencies: [
-        "Enthalpy",
+        "Psychrometrics",
         .product(name: "ConsoleKit", package: "console-kit"),
       ]
     )

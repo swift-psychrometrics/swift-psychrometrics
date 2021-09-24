@@ -11,10 +11,7 @@ units of measure.
 
 Psychrometrics are used by Heating Ventilation and Air Conditioning (HVAC) professionals and engineers, as
 well by scientests and metorologists.  This package aims to provide the calculations used for psychrometric
-evaluation.  Most of the psychrometric calculations are based off of ASHRAE Fundamentals (2017).
-Unit conversions were found either in the ASHRAE Fundamentals or online (primarily at 
-  [engineeringtoolbox.com](https://engineeringtoolbox.com)
-)
+evaluation.  Most of the psychrometric calculations are based off of ASHRAE - Fundamentals (2017).
 
 ## Installation
 
@@ -126,7 +123,8 @@ Some of these calculations do not yet support different units of measure.
 ### CLI Utility
 
 This package ships with a command line utility that allows you to explore the different calculations.
-It currently does not support all the calculations or units of measure.
+It currently is pretty generic and still a work in progress.
+So it does not support all the calculations or units of measure.
 
 To use the command line utility you can use the following command from the project root.
 ```swift

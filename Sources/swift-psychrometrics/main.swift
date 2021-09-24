@@ -8,7 +8,7 @@ if #available(macOS 10.15, *) {
 
   var commands = Commands(enableAutocomplete: true)
   commands.use(EnthalpyCommand(), as: "enthalpy", isDefault: false)
-  commands.use(TotalHeatCommand(), as: "total-heat", isDefault: false)
+  //  commands.use(TotalHeatCommand(), as: "total-heat", isDefault: false)
 
   do {
     let group =

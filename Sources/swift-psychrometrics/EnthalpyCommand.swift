@@ -1,7 +1,7 @@
 import ConsoleKit
-import Core
-import Enthalpy
+import CoreUnitTypes
 import Foundation
+import Psychrometrics
 
 @available(macOS 10.15, *)
 struct EnthalpyCommand: Command {
@@ -48,7 +48,8 @@ struct EnthalpyCommand: Command {
       altitude = Double(altitudeString) ?? 0
     }
 
-    let enthalpy = Enthalpy(for: .init(temperature), at: .init(humidity), altitude: .init(altitude))
+    let enthalpy = Enthalpy(
+      dryBulb: .init(temperature), humidity: .init(humidity), altitude: .init(altitude))
     let firstString: String = """
         Input Conditions: \(temperature)°F at humidity: \(humidity)% and altitude: \(altitude) ft.
       """
