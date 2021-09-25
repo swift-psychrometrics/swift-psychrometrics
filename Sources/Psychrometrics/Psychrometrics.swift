@@ -3,7 +3,7 @@ import Foundation
 
 /// Calculate the psychrometric properties of an air sample.
 public struct Psychrometrics {
-  
+
   public let atmosphericPressure: Pressure
   public let degreeOfSaturation: Double
   public let density: DensityOf<MoistAir>
