@@ -31,13 +31,13 @@
     XCTAssertTrue(diff <= tolerance, message, file: file, line: line)
   }
 
-public func XCTApproximatelyEqual<T>(
-  _ lhs: T,
-  _ rhs: T,
-  message: String = "",
-  file: StaticString = #file,
-  line: UInt = #line
-) where T: Numeric, T: Comparable, T: ExpressibleByFloatLiteral, T.FloatLiteralType == Double {
-  XCTApproximatelyEqual(lhs, rhs, tolerance: 1e-6, file: file, line: line)
-}
+  public func XCTApproximatelyEqual<T>(
+    _ lhs: T,
+    _ rhs: T,
+    message: String = "",
+    file: StaticString = #file,
+    line: UInt = #line
+  ) where T: Numeric, T: Comparable, T: ExpressibleByFloatLiteral, T.FloatLiteralType == Double {
+    XCTApproximatelyEqual(lhs, rhs, tolerance: 1e-6, file: file, line: line)
+  }
 #endif
