@@ -378,9 +378,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PsychrometricCore"
-               BuildableName = "PsychrometricCore"
-               BlueprintName = "PsychrometricCore"
+               BlueprintIdentifier = "Psychrometrics"
+               BuildableName = "Psychrometrics"
+               BlueprintName = "Psychrometrics"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -395,20 +395,6 @@
                BlueprintIdentifier = "CoreUnitTypes"
                BuildableName = "CoreUnitTypes"
                BlueprintName = "CoreUnitTypes"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Psychrometrics"
-               BuildableName = "Psychrometrics"
-               BlueprintName = "Psychrometrics"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>

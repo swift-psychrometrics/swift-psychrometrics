@@ -24,7 +24,7 @@ final class SpecificVolumeTests: XCTestCase {
       pressure: .init(altitude: .seaLevel),
       units: .imperial
     )
-    XCTApproximatelyEqual(volume.rawValue, volume3.rawValue)
+    XCTApproximatelyEqual(volume, volume3)
   }
   
   func test_addition() {

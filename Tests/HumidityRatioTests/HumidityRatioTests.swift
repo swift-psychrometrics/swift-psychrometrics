@@ -26,7 +26,7 @@ final class HumidityRatioTests: XCTestCase {
     let ratio = HumidityRatio(totalPressure: 14.175, vaporPressure: 0.45973)
     XCTApproximatelyEqual(ratio.rawValue, 0.020847)
     let vaporPressure = VaporPressure(ratio: ratio, pressure: 14.175)
-    XCTApproximatelyEqual(vaporPressure.rawValue, 0.45973)
+    XCTApproximatelyEqual(vaporPressure, 0.45973)
   }
   
   func test_humidity_ratio_at_different_conditions_imperial() {
