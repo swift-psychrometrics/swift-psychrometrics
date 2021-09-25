@@ -17,12 +17,10 @@ public struct SpecificVolume<T> {
   }
 }
 
-public enum SpecificVolumeUnits: UnitOfMeasure {
+public enum SpecificVolumeUnits: String, UnitOfMeasure {
 
-  case cubicFeetPerPound
-  case cubicMeterPerKilogram
-
-  //  public static var `default`: Self = .cubicFeetPerPound
+  case cubicFeetPerPound = "ft^3/lb"
+  case cubicMeterPerKilogram = "m^3/kg"
 
   public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
     switch units {

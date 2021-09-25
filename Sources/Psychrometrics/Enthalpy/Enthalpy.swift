@@ -19,12 +19,10 @@ public struct Enthalpy<T> {
   }
 }
 
-public enum EnthalpyUnits: UnitOfMeasure {
+public enum EnthalpyUnits: String, UnitOfMeasure {
 
-  //  public static var `default`: Self = .btuPerPound
-
-  case btuPerPound
-  case joulePerKilogram
+  case btuPerPound = "Btu/lb"
+  case joulePerKilogram = "J/kg"
 
   public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
     switch units {

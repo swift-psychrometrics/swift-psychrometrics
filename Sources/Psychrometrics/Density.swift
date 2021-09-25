@@ -24,12 +24,10 @@ public struct Density<T> {
 }
 
 /// The units of measure for a ``Density`` type.
-public enum DensityUnits: UnitOfMeasure {
+public enum DensityUnits: String, UnitOfMeasure {
 
-  case poundsPerCubicFoot
-  case kilogramPerCubicMeter
-
-  //  public static var `default`: Self = .poundsPerCubicFoot
+  case poundsPerCubicFoot = "lb/ft^3"
+  case kilogramPerCubicMeter = "kg/m^3"
 
   public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
     switch units {
