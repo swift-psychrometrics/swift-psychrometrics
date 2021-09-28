@@ -112,9 +112,17 @@ if #available(macOS 10.15, *),
     .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
   ])
   package.products.append(contentsOf: [
+    .library(name: "CLICore", targets: ["CLICore"]),
     .executable(name: "psychrometrics", targets: ["swift-psychrometrics"])
   ])
   package.targets.append(contentsOf: [
+    .target(
+      name: "CLICore",
+      dependencies: [
+        "Psychrometrics",
+        .product(name: "ConsoleKit", package: "console-kit")
+      ]
+    ),
     .executableTarget(
       name: "swift-psychrometrics",
       dependencies: [
