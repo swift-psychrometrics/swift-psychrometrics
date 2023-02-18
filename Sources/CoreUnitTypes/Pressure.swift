@@ -16,8 +16,6 @@ public struct Pressure: Hashable {
   /// Represents the units of measure for ``Pressure``.
   public enum Unit: String, Equatable, Hashable, CaseIterable {
 
-    //    public static var `default`: Self = .psi
-
     public static func defaultFor(units: PsychrometricUnits) -> Self {
       switch units {
       case .metric: return .pascals
@@ -99,6 +97,8 @@ extension Pressure {
 }
 
 // MARK: - Conversions
+
+// TODO: Move conversions somewhere else.
 
 extension Pressure {
 
@@ -191,6 +191,9 @@ extension Pressure: NumberWithUnitOfMeasure {
 }
 
 // MARK: - Pressure + Altitude
+
+// TODO: This needs moved somewhere else.
+
 extension Pressure {
 
   private struct Constants {
@@ -210,8 +213,6 @@ extension Pressure {
       return c1 * pow(1 - c2 * altitude, c3)
     }
   }
-
-  // TODO: This needs moved somewhere else, where it can use environment dependency.
   
   /// Create a new ``Pressure`` for the given altitude.
   ///

@@ -79,6 +79,8 @@ extension Temperature {
   }
 }
 
+// TODO: Move Conversions somewhere else.
+
 extension Temperature {
 
   /// Access / calculate the temperatre in celsius.

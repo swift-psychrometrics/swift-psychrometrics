@@ -27,40 +27,6 @@ var package = Package(
         "TestSupport",
       ]
     ),
-    .testTarget(
-      name: "DensityTests",
-      dependencies: [
-        "Psychrometrics",
-        "TestSupport",
-      ]
-    ),
-    .testTarget(
-      name: "DewPointTests",
-      dependencies: [
-        "Psychrometrics",
-        "TestSupport",
-      ]
-    ),
-    .testTarget(
-      name: "EnthalpyTests",
-      dependencies: [
-        "Psychrometrics",
-        "TestSupport",
-      ]
-    ),
-    .testTarget(
-      name: "GrainsOfMoistureTests",
-      dependencies: [
-        "Psychrometrics"
-      ]
-    ),
-    .testTarget(
-      name: "HumidityRatioTests",
-      dependencies: [
-        "Psychrometrics",
-        "TestSupport",
-      ]
-    ),
     .target(
       name: "PsychrometricEnvironment",
       dependencies: [
@@ -82,36 +48,9 @@ var package = Package(
         "TestSupport",
       ]
     ),
-    .testTarget(
-      name: "SpecificHeatTests",
-      dependencies: [
-        "Psychrometrics"
-      ]
-    ),
-    .testTarget(
-      name: "SpecificHumidityTests",
-      dependencies: [
-        "Psychrometrics",
-        "TestSupport",
-      ]
-    ),
-    .testTarget(
-      name: "SpecificVolumeTests",
-      dependencies: [
-        "Psychrometrics",
-        "TestSupport",
-      ]
-    ),
     .target(
       name: "TestSupport",
       dependencies: []
-    ),
-    .testTarget(
-      name: "WetBulbTests",
-      dependencies: [
-        "Psychrometrics",
-        "TestSupport",
-      ]
     ),
   ]
 )
@@ -127,17 +66,9 @@ if #available(macOS 10.15, *),
     .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
   ])
   package.products.append(contentsOf: [
-    .library(name: "CLICore", targets: ["CLICore"]),
     .executable(name: "psychrometrics", targets: ["swift-psychrometrics"]),
   ])
   package.targets.append(contentsOf: [
-    .target(
-      name: "CLICore",
-      dependencies: [
-        "Psychrometrics",
-        .product(name: "ConsoleKit", package: "console-kit"),
-      ]
-    ),
     .executableTarget(
       name: "swift-psychrometrics",
       dependencies: [

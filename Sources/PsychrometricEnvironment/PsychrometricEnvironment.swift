@@ -2,6 +2,9 @@ import CoreUnitTypes
 import Dependencies
 import Foundation
 
+/// This controls the way psychrometric calculations get ran.  Whether they are for imperial
+/// or metric ``CoreUnitTypes/PsychrometricUnits``
+///
 public struct PsychrometricEnvironment {
 
   /// Maximum iteration count for iterative methods.
@@ -69,11 +72,6 @@ public struct PsychrometricEnvironment {
   }
 
 }
-
-//extension PsychrometricEnvironment {
-//  /// The default  global environment settings.
-//  public static var shared = PsychrometricEnvironment()
-//}
 
 extension PsychrometricEnvironment: DependencyKey {
   public static var liveValue: PsychrometricEnvironment {

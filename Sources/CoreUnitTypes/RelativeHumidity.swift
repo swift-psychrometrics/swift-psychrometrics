@@ -53,6 +53,8 @@ extension RelativeHumidity: RawNumericType {
 
 // MARK: - Temperature + RelativeHumidity
 
+// TODO: Move conversions somewhere else.
+
 extension RelativeHumidity {
 
   /// Calculates the relative humidity based on the dry-bulb temperature and dew-point temperatures.

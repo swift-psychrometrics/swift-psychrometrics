@@ -3,6 +3,8 @@ import Dependencies
 import Foundation
 import PsychrometricEnvironment
 
+// TODO: These types need to be codable.
+
 /// Calculate the psychrometric properties of an air sample.
 public struct Psychrometrics {
   
