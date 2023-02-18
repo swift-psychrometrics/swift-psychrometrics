@@ -1,4 +1,7 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 extension HumidityRatio {
 
@@ -9,9 +12,9 @@ extension HumidityRatio {
     let c3: Double
     let c4: Double
 
-    let units: PsychrometricEnvironment.Units
+    let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.c1 = units.isImperial ? 1093 : 2501
       self.c2 = units.isImperial ? 0.556 : 2.326
       self.c3 = units.isImperial ? 0.24 : 1.006
@@ -37,9 +40,9 @@ extension HumidityRatio {
     let c3: Double
     let c4: Double
     let c5: Double
-    let units: PsychrometricEnvironment.Units
+    let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.c1 = units.isImperial ? 1220 : 2830
       self.c2 = units.isImperial ? 0.04 : 0.24
       self.c3 = units.isImperial ? 0.24 : 1.006
@@ -71,11 +74,13 @@ extension HumidityRatio {
     dryBulb: Temperature,
     wetBulb: WetBulb,
     pressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     precondition(dryBulb > wetBulb.temperature)
+    
+    @Dependency(\.psychrometricEnvironment) var environment
 
-    let units = units ?? PsychrometricEnvironment.shared.units
+    let units = units ?? environment.units
 
     let saturatedHumidityRatio = HumidityRatio(dryBulb: wetBulb.temperature, pressure: pressure)
     if wetBulb.temperature > PsychrometricEnvironment.triplePointOfWater(for: units) {
@@ -98,14 +103,17 @@ extension WetBulb {
     dryBulb temperature: Temperature,
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
+    
+    @Dependency(\.psychrometricEnvironment) var environment
+    
     guard
       let wetBulb = try? wetBulb_from_humidity_ratio(
         dryBulb: temperature,
         humidityRatio: humidityRatio,
         pressure: totalPressure,
-        units: units ?? PsychrometricEnvironment.shared.units
+        units: units ?? environment.units
       )
     else { return nil }
     self = wetBulb
@@ -117,9 +125,11 @@ private func wetBulb_from_humidity_ratio(
   dryBulb: Temperature,
   humidityRatio: HumidityRatio,
   pressure: Pressure,
-  units: PsychrometricEnvironment.Units
+  units: PsychrometricUnits
 ) throws -> WetBulb? {
   precondition(humidityRatio > 0)
+  
+  @Dependency(\.psychrometricEnvironment) var environment
 
   let dewPoint = DewPoint(dryBulb: dryBulb, ratio: humidityRatio, pressure: pressure, units: units)
   let temperatureUnits = units.isImperial ? Temperature.Units.fahrenheit : .celsius
@@ -131,7 +141,7 @@ private func wetBulb_from_humidity_ratio(
 
   var index = 1
 
-  while (wetBulbSup - wetBulbInf) > PsychrometricEnvironment.shared.temperatureTolerance.rawValue {
+  while (wetBulbSup - wetBulbInf) > environment.temperatureTolerance.rawValue {
     let ratio = HumidityRatio(
       dryBulb: dryBulb,
       wetBulb: .init(wetBulb, units: temperatureUnits),
@@ -148,7 +158,7 @@ private func wetBulb_from_humidity_ratio(
     // new guess of wet bulb
     wetBulb = (wetBulbSup + wetBulbInf) / 2
 
-    if index >= PsychrometricEnvironment.shared.maximumIterationCount {
+    if index >= environment.maximumIterationCount {
       return nil
     }
 

@@ -17,7 +17,7 @@ extension DewPoint {
   public init(
     dryBulb temperature: Temperature,
     humidity relativeHumidity: RelativeHumidity,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       dryBulb: temperature,

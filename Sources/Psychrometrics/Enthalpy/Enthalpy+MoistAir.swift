@@ -1,4 +1,7 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 extension Enthalpy where T == MoistAir {
 
@@ -6,9 +9,9 @@ extension Enthalpy where T == MoistAir {
     let c1: Double
     let c2: Double
     let c3: Double
-    let units: PsychrometricEnvironment.Units
+    let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.units = units
       self.c1 = units.isImperial ? 0.24 : 1.006
       self.c2 = units.isImperial ? 1061 : 2501
@@ -42,10 +45,13 @@ extension Enthalpy where T == MoistAir {
   public init(
     dryBulb temperature: Temperature,
     ratio humidityRatio: HumidityRatio,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     precondition(humidityRatio > 0)
-    let units = units ?? PsychrometricEnvironment.shared.units
+    
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     let value = Constants(units: units).run(dryBulb: temperature, ratio: humidityRatio)
     self.init(value, units: .defaultFor(units: units))
   }
@@ -61,7 +67,7 @@ extension Enthalpy where T == MoistAir {
   public init(
     dryBulb temperature: Temperature,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       dryBulb: temperature,
@@ -83,7 +89,7 @@ extension Enthalpy where T == MoistAir {
     dryBulb temperature: Temperature,
     humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       dryBulb: temperature,
@@ -110,7 +116,7 @@ extension Enthalpy where T == MoistAir {
     dryBulb temperature: Temperature,
     humidity: RelativeHumidity,
     altitude: Length = .seaLevel,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       dryBulb: temperature,

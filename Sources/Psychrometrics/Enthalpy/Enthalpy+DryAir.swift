@@ -1,12 +1,15 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 extension Enthalpy where T == DryAir {
 
   private struct DryAirConstants {
     let specificHeat: Double
-    let units: PsychrometricEnvironment.Units
+    let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.units = units
       self.specificHeat = units.isImperial ? 0.24 : 1006
     }
@@ -26,9 +29,11 @@ extension Enthalpy where T == DryAir {
   ///   - units: The unit of measure, if not supplied then we will resolve from the ``Core.environment`` setting.
   public init(
     dryBulb temperature: Temperature,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    let units = units ?? PsychrometricEnvironment.shared.units
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     let value = DryAirConstants(units: units).run(temperature)
     self.init(value, units: .defaultFor(units: units))
   }

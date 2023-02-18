@@ -1,4 +1,7 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 public struct SaturationPressureType {}
 
@@ -18,9 +21,9 @@ extension SaturationPressure {
     let c6: Double
     let c7: Double
 
-    private let units: PsychrometricEnvironment.Units
+    private let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.c1 = units.isImperial ? -1.0214165e4 : -5.6745359e3
       self.c2 = units.isImperial ? -4.8932428 : 6.3925247
       self.c3 = units.isImperial ? -5.3765794e-3 : -9.677843E-03
@@ -62,9 +65,9 @@ extension SaturationPressure {
     let c5: Double
     let c6: Double
 
-    private let units: PsychrometricEnvironment.Units
+    private let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.c1 = units.isImperial ? -1.0440397e4 : -5.8002206e03
       self.c2 = units.isImperial ? -1.1294650e1 : 1.3914993
       self.c3 = units.isImperial ? -2.7022355e-2 : -4.8640239e-2
@@ -104,10 +107,12 @@ extension SaturationPressure {
   ///   - units: The unit of measure to solve the pressure for, if not supplied then will default to ``Core.environment`` units.
   public init(
     at temperature: Temperature,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
 
-    let units = units ?? PsychrometricEnvironment.shared.units
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     let bounds = PsychrometricEnvironment.pressureBounds(for: units)
     let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
 
@@ -137,10 +142,13 @@ extension RelativeHumidity {
   public init(
     dryBulb temperature: Temperature,
     pressure vaporPressure: VaporPressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     precondition(vaporPressure > 0)
-    let units = units ?? PsychrometricEnvironment.shared.units
+    
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     let saturationPressure = SaturationPressure(at: temperature, units: units)
     let fraction = vaporPressure.rawValue / saturationPressure.rawValue
     self.init(fraction * 100)

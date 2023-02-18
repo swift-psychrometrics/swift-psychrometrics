@@ -1,4 +1,7 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 extension HumidityRatio {
 
@@ -6,9 +9,9 @@ extension HumidityRatio {
     let c1: Double
     let c2: Double
     let c3: Double
-    let units: PsychrometricEnvironment.Units
+    let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.units = units
       self.c1 = units.isImperial ? 0.24 : 1.006
       self.c2 = units.isImperial ? 1061 : 2501
@@ -34,9 +37,11 @@ extension HumidityRatio {
   public init(
     enthalpy: EnthalpyOf<MoistAir>,
     dryBulb temperature: Temperature,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    let units = units ?? PsychrometricEnvironment.shared.units
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     let value = Constants(units: units).run(enthalpy: enthalpy, dryBulb: temperature)
     self.init(value)
   }

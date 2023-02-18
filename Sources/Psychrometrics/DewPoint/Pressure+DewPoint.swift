@@ -1,5 +1,7 @@
 import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 extension DewPoint {
 
@@ -11,9 +13,9 @@ extension DewPoint {
     let c4: Double
     let c5: Double
     let c6 = 0.1984
-    let units: PsychrometricEnvironment.Units
+    let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.units = units
       self.c1 = units.isImperial ? 100.45 : 6.54
       self.c2 = units.isImperial ? 33.193 : 14.526
@@ -37,9 +39,9 @@ extension DewPoint {
     let c1: Double
     let c2: Double
     let c3: Double
-    let units: PsychrometricEnvironment.Units
+    let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.units = units
       self.c1 = units.isImperial ? 90.12 : 6.09
       self.c2 = units.isImperial ? 26.142 : 12.608
@@ -65,9 +67,11 @@ extension DewPoint {
   public init(
     dryBulb temperature: Temperature,
     vaporPressure pressure: VaporPressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    let units = units ?? PsychrometricEnvironment.shared.units
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
     let value =
       temperature <= triplePoint

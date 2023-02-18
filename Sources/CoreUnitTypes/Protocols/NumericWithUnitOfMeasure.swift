@@ -23,10 +23,11 @@ extension NumericWithUnitOfMeasureRepresentable {
   }
 }
 
+// TODO: This needs moved somewhere else where it can use environment dependency.
 extension NumericWithUnitOfMeasureRepresentable {
 
   public init(_ value: Number) {
-    self.init(value, units: .defaultFor(units: PsychrometricEnvironment.shared.units))
+    self.init(value, units: .defaultFor(units: .imperial)) // fix.
   }
 
 }

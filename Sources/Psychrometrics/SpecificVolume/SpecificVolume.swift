@@ -1,3 +1,4 @@
+import CoreUnitTypes
 import Foundation
 
 /// Represents the specific volume of air for the conditions.
@@ -22,7 +23,7 @@ public enum SpecificVolumeUnits: String, UnitOfMeasure {
   case cubicFeetPerPound = "ft^3/lb"
   case cubicMeterPerKilogram = "m^3/kg"
 
-  public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
+  public static func defaultFor(units: PsychrometricUnits) -> Self {
     switch units {
     case .metric: return .cubicMeterPerKilogram
     case .imperial: return .cubicFeetPerPound

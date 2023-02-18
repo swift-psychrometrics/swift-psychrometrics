@@ -1,5 +1,7 @@
 import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 // TODO: Add Units
 
@@ -32,11 +34,13 @@ public struct SpecificHumidity {
   public init(
     water waterMass: Double,
     dryAir dryAirMass: Double,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
+    @Dependency(\.psychrometricEnvironment) var environment
+    
     self.init(
       waterMass / (waterMass + dryAirMass),
-      units: .defaultFor(units: units ?? PsychrometricEnvironment.shared.units)
+      units: .defaultFor(units: units ?? environment.units)
     )
   }
 
@@ -46,11 +50,13 @@ public struct SpecificHumidity {
   ///   - ratio: The humidity ratio.
   public init(
     ratio: HumidityRatio,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
+    @Dependency(\.psychrometricEnvironment) var environment
+    
     self.init(
       ratio / (1 + ratio),
-      units: .defaultFor(units: units ?? PsychrometricEnvironment.shared.units)
+      units: .defaultFor(units: units ?? environment.units)
     )
   }
 
@@ -64,7 +70,7 @@ public struct SpecificHumidity {
     for temperature: Temperature,
     with humidity: RelativeHumidity,
     at totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       ratio: HumidityRatio(dryBulb: temperature, humidity: humidity, pressure: totalPressure),
@@ -82,7 +88,7 @@ public struct SpecificHumidity {
     for temperature: Temperature,
     with humidity: RelativeHumidity,
     at altitude: Length,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       ratio: HumidityRatio(dryBulb: temperature, humidity: humidity, altitude: altitude),
@@ -98,7 +104,7 @@ extension SpecificHumidity {
     case poundsOfWaterPerPoundOfAir
     case kilogramsOfWaterPerKilogramOfAir
 
-    public static func defaultFor(units: PsychrometricEnvironment.Units) -> SpecificHumidity.Units {
+    public static func defaultFor(units: PsychrometricUnits) -> SpecificHumidity.Units {
       switch units {
       case .metric: return .kilogramsOfWaterPerKilogramOfAir
       case .imperial: return .poundsOfWaterPerPoundOfAir

@@ -1,3 +1,5 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
 
 public struct PsychrometricEnvironment {
@@ -12,13 +14,13 @@ public struct PsychrometricEnvironment {
   public var temperatureTolerance: Temperature = .celsius(0.001)
 
   /// The unit of measure.
-  public var units: Units = .imperial
+  public var units: PsychrometricUnits = .imperial
 
   /// Returns the freezing point of water for the given units.
   ///
   /// - Parameters:
   ///   - units: The units to return the freezing point of water for.
-  public static func freezingPointOfWater(for units: Units) -> Temperature {
+  public static func freezingPointOfWater(for units: PsychrometricUnits) -> Temperature {
     switch units {
     case .metric:
       return .celsius(0)
@@ -31,7 +33,7 @@ public struct PsychrometricEnvironment {
   ///
   /// - Parameters:
   ///   - units: The units to return the triple point of water for.
-  public static func triplePointOfWater(for units: Units) -> Temperature {
+  public static func triplePointOfWater(for units: PsychrometricUnits) -> Temperature {
     switch units {
     case .metric:
       return .celsius(0.01)
@@ -44,7 +46,7 @@ public struct PsychrometricEnvironment {
   ///
   /// - Parameters:
   ///   - units: The units to return the bounds for.
-  public static func pressureBounds(for units: Units) -> (low: Temperature, high: Temperature) {
+  public static func pressureBounds(for units: PsychrometricUnits) -> (low: Temperature, high: Temperature) {
     switch units {
     case .metric:
       return (low: .celsius(-100), high: .celsius(200))
@@ -57,7 +59,7 @@ public struct PsychrometricEnvironment {
   ///
   /// - Parameters:
   ///   - units: The units to return the triple point of water for.
-  public static func universalGasConstant(for units: Units) -> Double {
+  public static func universalGasConstant(for units: PsychrometricUnits) -> Double {
     switch units {
     case .metric:
       return 287.042
@@ -66,17 +68,26 @@ public struct PsychrometricEnvironment {
     }
   }
 
-  /// Represents unit of measure used in calculations [SI] or [IP].
-  public enum Units: String, CaseIterable {
+}
 
-    case metric, imperial
+//extension PsychrometricEnvironment {
+//  /// The default  global environment settings.
+//  public static var shared = PsychrometricEnvironment()
+//}
 
-    /// Convenience for telling if the units are imperial units.
-    public var isImperial: Bool { self == .imperial }
+extension PsychrometricEnvironment: DependencyKey {
+  public static var liveValue: PsychrometricEnvironment {
+    .init()
+  }
+  
+  public static var testValue: PsychrometricEnvironment {
+    .init()
   }
 }
 
-extension PsychrometricEnvironment {
-  /// The default  global environment settings.
-  public static var shared = PsychrometricEnvironment()
+extension DependencyValues {
+  public var psychrometricEnvironment: PsychrometricEnvironment {
+    get { self[PsychrometricEnvironment.self] }
+    set { self[PsychrometricEnvironment.self] = newValue }
+  }
 }

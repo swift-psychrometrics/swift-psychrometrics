@@ -1,3 +1,4 @@
+import CoreUnitTypes
 import Foundation
 
 public struct Enthalpy<T> {
@@ -24,7 +25,7 @@ public enum EnthalpyUnits: String, UnitOfMeasure {
   case btuPerPound = "Btu/lb"
   case joulePerKilogram = "J/kg"
 
-  public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
+  public static func defaultFor(units: PsychrometricUnits) -> Self {
     switch units {
     case .metric: return .joulePerKilogram
     case .imperial: return .btuPerPound

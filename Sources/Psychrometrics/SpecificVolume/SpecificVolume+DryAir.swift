@@ -1,12 +1,15 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 extension SpecificVolume where T == DryAir {
 
   private struct Constants {
-    let units: PsychrometricEnvironment.Units
+    let units: PsychrometricUnits
     let universalGasConstant: Double
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.units = units
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
@@ -30,9 +33,11 @@ extension SpecificVolume where T == DryAir {
   public init(
     dryBulb temperature: Temperature,
     pressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    let units = units ?? PsychrometricEnvironment.shared.units
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     let value = Constants(units: units).run(dryBulb: temperature, pressure: pressure)
     self.init(value, units: .defaultFor(units: units))
   }

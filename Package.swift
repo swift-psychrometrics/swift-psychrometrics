@@ -4,14 +4,21 @@ import PackageDescription
 
 var package = Package(
   name: "swift-psychrometrics",
+  platforms: [.macOS(.v10_15)],
   products: [
     .library(name: "CoreUnitTypes", targets: ["CoreUnitTypes"]),
+    .library(name: "PsychrometricEnvironment", targets: ["PsychrometricEnvironment"]),
     .library(name: "Psychrometrics", targets: ["Psychrometrics"]),
     .library(name: "TestSupport", targets: ["TestSupport"]),
   ],
-  dependencies: [],
+  dependencies: [
+    .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "0.1.0"),
+  ],
   targets: [
-    .target(name: "CoreUnitTypes"),
+    .target(
+      name: "CoreUnitTypes",
+      dependencies: []
+    ),
     .testTarget(
       name: "CoreTests",
       dependencies: [
@@ -55,9 +62,17 @@ var package = Package(
       ]
     ),
     .target(
+      name: "PsychrometricEnvironment",
+      dependencies: [
+        "CoreUnitTypes",
+        .product(name: "Dependencies", package: "swift-dependencies")
+      ]
+    ),
+    .target(
       name: "Psychrometrics",
       dependencies: [
-        "CoreUnitTypes"
+        "CoreUnitTypes",
+        "PsychrometricEnvironment",
       ]
     ),
     .testTarget(
@@ -105,9 +120,9 @@ var package = Package(
 if #available(macOS 10.15, *),
   ProcessInfo.processInfo.environment["PSYCHROMETRIC_CLI_ENABLED"] != nil
 {
-  package.platforms = [
-    .macOS(.v10_15)
-  ]
+//  package.platforms = [
+//    .macOS(.v10_15)
+//  ]
   package.dependencies.append(contentsOf: [
     .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
   ])

@@ -26,7 +26,7 @@ extension Temperature {
   /// Represents the units of measure for a ``Temperature``.
   public enum Unit: String, Equatable, CaseIterable, Codable, Hashable {
 
-    public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
+    public static func defaultFor(units: PsychrometricUnits) -> Self {
       switch units {
       case .metric: return .celsius
       case .imperial: return .fahrenheit
@@ -178,15 +178,17 @@ extension Temperature: NumberWithUnitOfMeasure {
 
 extension Temperature {
 
+  // TODO: This needs moved somewhere else where it can use environment dependency.
+  
   /// Create a ``Temperature`` as a function of the given altitude.
   ///
   ///  - Parameters:
   ///   - altitude: The altitude to calculate the temperature.
   public static func atAltitude(
     _ altitude: Length,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) -> Temperature {
-    let units = units ?? PsychrometricEnvironment.shared.units
+    let units = units ?? .imperial // fix.
     let altitude = units.isImperial ? altitude.feet : altitude.meters
     guard units.isImperial else {
       return .init(15 - 0.0065 * altitude, units: .defaultFor(units: units))

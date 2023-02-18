@@ -1,8 +1,12 @@
 import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 /// Calculate the psychrometric properties of an air sample.
 public struct Psychrometrics {
+  
+  @Dependency(\.psychrometricEnvironment) static var environment
 
   public let atmosphericPressure: Pressure
   public let degreeOfSaturation: Double
@@ -12,7 +16,7 @@ public struct Psychrometrics {
   public let enthalpy: EnthalpyOf<MoistAir>
   public let humidityRatio: HumidityRatio
   public let relativeHumidity: RelativeHumidity
-  public let units: PsychrometricEnvironment.Units
+  public let units: PsychrometricUnits
   public let vaporPressure: VaporPressure
   public let volume: SpecificVolumeOf<MoistAir>
   public let wetBulb: WetBulb
@@ -21,9 +25,9 @@ public struct Psychrometrics {
     dryBulb temperature: Temperature,
     wetBulb: WetBulb,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    self.units = units ?? PsychrometricEnvironment.shared.units
+    self.units = units ?? Self.environment.units
     self.atmosphericPressure = totalPressure
     self.dryBulb = temperature
     self.wetBulb = wetBulb
@@ -45,9 +49,9 @@ public struct Psychrometrics {
     dryBulb temperature: Temperature,
     humidity relativeHumidity: RelativeHumidity,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    self.units = units ?? PsychrometricEnvironment.shared.units
+    self.units = units ?? Self.environment.units
     self.atmosphericPressure = totalPressure
     self.dryBulb = temperature
     self.relativeHumidity = relativeHumidity
@@ -78,9 +82,9 @@ public struct Psychrometrics {
     dryBulb temperature: Temperature,
     dewPoint: DewPoint,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    self.units = units ?? PsychrometricEnvironment.shared.units
+    self.units = units ?? Self.environment.units
     self.atmosphericPressure = totalPressure
     self.dryBulb = temperature
     self.dewPoint = dewPoint
@@ -110,7 +114,7 @@ public struct Psychrometrics {
     dryBulb temperature: Temperature,
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) -> Double {
     precondition(humidityRatio > 0)
     let saturatedRatio = HumidityRatio.init(

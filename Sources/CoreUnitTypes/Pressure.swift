@@ -18,7 +18,7 @@ public struct Pressure: Hashable {
 
     //    public static var `default`: Self = .psi
 
-    public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
+    public static func defaultFor(units: PsychrometricUnits) -> Self {
       switch units {
       case .metric: return .pascals
       case .imperial: return .psi
@@ -197,9 +197,9 @@ extension Pressure {
     let c1: Double
     let c2: Double
     let c3 = 5.2559
-    let units: PsychrometricEnvironment.Units
+    let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.units = units
       self.c1 = units.isImperial ? 14.696 : 101325
       self.c2 = units.isImperial ? 6.8754e-06 : 2.25577e-05
@@ -211,6 +211,8 @@ extension Pressure {
     }
   }
 
+  // TODO: This needs moved somewhere else, where it can use environment dependency.
+  
   /// Create a new ``Pressure`` for the given altitude.
   ///
   /// - Note:
@@ -221,9 +223,9 @@ extension Pressure {
   ///   - units: The unit of measure to solve the pressure for, if not supplied then will default to ``Core.environment`` units.
   public init(
     altitude: Length,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    let units = units ?? PsychrometricEnvironment.shared.units
+    let units = units ?? .imperial // fix
     let value = Constants(units: units).run(altitude: altitude)
     self.init(value, units: .defaultFor(units: units))
   }

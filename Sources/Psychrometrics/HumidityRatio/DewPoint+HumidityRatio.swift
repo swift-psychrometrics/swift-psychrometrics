@@ -1,3 +1,4 @@
+import CoreUnitTypes
 import Foundation
 
 extension HumidityRatio {
@@ -11,7 +12,7 @@ extension HumidityRatio {
   public init(
     dewPoint: DewPoint,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       totalPressure: totalPressure,
@@ -34,7 +35,7 @@ extension DewPoint {
     dryBulb temperature: Temperature,
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     precondition(humidityRatio > 0)
     self.init(

@@ -1,4 +1,7 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 /// Represents the humidity ratio (or mixing ratio) of a given moist air sample.
 ///
@@ -10,6 +13,9 @@ import Foundation
 /// is valid by calling ``HumidityRatio.ensureHumidityRatio(_:)``.
 ///
 public struct HumidityRatio: Equatable {
+  
+  @Dependency(\.psychrometricEnvironment) static var environment
+  
 
   /// Constant for the mole weight of water.
   public static let moleWeightWater = 18.015268
@@ -21,8 +27,8 @@ public struct HumidityRatio: Equatable {
   public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
 
   public static func ensureHumidityRatio(_ ratio: HumidityRatio) -> HumidityRatio {
-    guard ratio.rawValue > PsychrometricEnvironment.shared.minimumHumidityRatio else {
-      return .init(PsychrometricEnvironment.shared.minimumHumidityRatio)
+    guard ratio.rawValue > environment.minimumHumidityRatio else {
+      return .init(environment.minimumHumidityRatio)
     }
     return ratio
   }
@@ -35,7 +41,7 @@ public struct HumidityRatio: Equatable {
   /// - Parameters:
   ///   - value: The raw humidity ratio value.
   public init(_ value: Double) {
-    self.rawValue = max(value, PsychrometricEnvironment.shared.minimumHumidityRatio)
+    self.rawValue = max(value, Self.environment.minimumHumidityRatio)
   }
 
   /// The humidity ratio of air for the given mass of water and mass of dry air.
@@ -53,9 +59,9 @@ public struct HumidityRatio: Equatable {
   internal init(
     totalPressure: Pressure,
     partialPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    let units = units ?? PsychrometricEnvironment.shared.units
+    let units = units ?? Self.environment.units
     let partialPressure =
       units.isImperial ? partialPressure.psi : partialPressure.pascals
     let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
@@ -74,7 +80,7 @@ public struct HumidityRatio: Equatable {
   public init(
     totalPressure: Pressure,
     vaporPressure: VaporPressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       totalPressure: totalPressure,
@@ -91,7 +97,7 @@ public struct HumidityRatio: Equatable {
   public init(
     totalPressure: Pressure,
     saturationPressure: SaturationPressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       totalPressure: totalPressure,
@@ -108,7 +114,7 @@ public struct HumidityRatio: Equatable {
   public init(
     dryBulb temperature: Temperature,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       totalPressure: totalPressure,
@@ -127,7 +133,7 @@ public struct HumidityRatio: Equatable {
     dryBulb temperature: Temperature,
     humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       totalPressure: totalPressure,
@@ -150,7 +156,7 @@ public struct HumidityRatio: Equatable {
     dryBulb temperature: Temperature,
     humidity: RelativeHumidity,
     altitude: Length,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       dryBulb: temperature,

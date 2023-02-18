@@ -25,7 +25,7 @@ public struct Length: Hashable {
   /// Represents unit of measure used in a ``Length``.
   public enum Unit: String, Equatable, Codable, Hashable, CaseIterable {
 
-    public static func defaultFor(units: PsychrometricEnvironment.Units) -> Length.Unit {
+    public static func defaultFor(units: PsychrometricUnits) -> Length.Unit {
       switch units {
       case .metric: return .meters
       case .imperial: return .feet

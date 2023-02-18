@@ -1,4 +1,7 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 public struct VaporPressureType {}
 
@@ -15,9 +18,11 @@ extension VaporPressure {
   public init(
     dryBulb temperature: Temperature,
     humidity relativeHumidity: RelativeHumidity,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    let units = units ?? PsychrometricEnvironment.shared.units
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     let value =
       SaturationPressure(at: temperature, units: units).rawValue * relativeHumidity.fraction
     self.init(value, units: .defaultFor(units: units))

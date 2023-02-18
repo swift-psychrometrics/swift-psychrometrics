@@ -1,4 +1,7 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 extension VaporPressure {
 
@@ -11,10 +14,12 @@ extension VaporPressure {
   public init(
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     precondition(humidityRatio > 0)
-    let units = units ?? PsychrometricEnvironment.shared.units
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
     let value = totalPressure * humidityRatio / (HumidityRatio.moleWeightRatio + humidityRatio)
     self.init(value, units: .defaultFor(units: units))

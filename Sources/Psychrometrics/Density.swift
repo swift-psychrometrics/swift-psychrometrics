@@ -1,4 +1,7 @@
+import CoreUnitTypes
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 
 /// Represents the mass per unit of volume.
 ///
@@ -29,7 +32,7 @@ public enum DensityUnits: String, UnitOfMeasure {
   case poundsPerCubicFoot = "lb/ft^3"
   case kilogramPerCubicMeter = "kg/m^3"
 
-  public static func defaultFor(units: PsychrometricEnvironment.Units) -> Self {
+  public static func defaultFor(units: PsychrometricUnits) -> Self {
     switch units {
     case .imperial: return .poundsPerCubicFoot
     case .metric: return .kilogramPerCubicMeter
@@ -64,9 +67,9 @@ extension Density where T == DryAir {
 
   private struct Constants {
     let universalGasConstant: Double
-    let units: PsychrometricEnvironment.Units
+    let units: PsychrometricUnits
 
-    init(units: PsychrometricEnvironment.Units) {
+    init(units: PsychrometricUnits) {
       self.units = units
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
@@ -95,9 +98,11 @@ extension Density where T == DryAir {
   public init(
     for temperature: Temperature,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
-    let units = units ?? PsychrometricEnvironment.shared.units
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     let value = Constants(units: units).run(dryBulb: temperature, pressure: totalPressure)
     self.init(value, units: .defaultFor(units: units))
   }
@@ -110,7 +115,7 @@ extension Density where T == DryAir {
   public init(
     for temperature: Temperature,
     altitude: Length = .seaLevel,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(for: temperature, pressure: .init(altitude: altitude), units: units)
   }
@@ -131,11 +136,13 @@ extension Density where T == MoistAir {
   public init(
     volume specificVolume: SpecificVolumeOf<MoistAir>,
     ratio humidityRatio: HumidityRatio,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     precondition(humidityRatio.rawValue > 0)
+    
+    @Dependency(\.psychrometricEnvironment) var environment
 
-    let units = units ?? PsychrometricEnvironment.shared.units
+    let units = units ?? environment.units
 
     self.init(
       (1 + humidityRatio) / specificVolume.rawValue,
@@ -157,7 +164,7 @@ extension Density where T == MoistAir {
     for temperature: Temperature,
     at humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       volume: .init(
@@ -185,7 +192,7 @@ extension Density where T == MoistAir {
     dryBulb temperature: Temperature,
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       volume: .init(

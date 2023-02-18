@@ -1,3 +1,7 @@
+import CoreUnitTypes
+import Dependencies
+import PsychrometricEnvironment
+
 extension Temperature {
 
   /// Calculates the ``Enthalpy`` of ``MoistAir`` for the temperature at a given relative humidity and altitude.
@@ -9,7 +13,7 @@ extension Temperature {
   public func enthalpy(
     at humidity: RelativeHumidity,
     altitude: Length = .seaLevel,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) -> EnthalpyOf<MoistAir> {
     .init(dryBulb: self, humidity: humidity, altitude: altitude, units: units)
   }
@@ -23,7 +27,7 @@ extension Temperature {
   public func enthalpy(
     at humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) -> EnthalpyOf<MoistAir> {
     .init(dryBulb: self, humidity: humidity, pressure: totalPressure, units: units)
   }
@@ -33,7 +37,7 @@ extension Temperature {
   /// - Parameters:
   ///   - units: The units to solve for, if not supplied then this will default to ``Core.environment`` units.
   public func enthalpy(
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) -> EnthalpyOf<DryAir> {
     .init(dryBulb: self, units: units)
   }
@@ -47,10 +51,12 @@ extension Temperature {
   public init(
     enthalpy: EnthalpyOf<MoistAir>,
     ratio humidityRatio: HumidityRatio,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     precondition(humidityRatio.rawValue > 0)
-    let units = units ?? PsychrometricEnvironment.shared.units
+    @Dependency(\.psychrometricEnvironment) var environment
+    
+    let units = units ?? environment.units
     self = EnthalpyOf<MoistAir>.Constants(units: units).dryBulb(
       enthalpy: enthalpy, ratio: humidityRatio)
   }

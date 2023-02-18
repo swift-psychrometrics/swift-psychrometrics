@@ -6,7 +6,7 @@ extension DewPoint {
     dryBulb temperature: Temperature,
     wetBulb: WetBulb,
     pressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     precondition(temperature > wetBulb.temperature)
     let humidityRatio = HumidityRatio(

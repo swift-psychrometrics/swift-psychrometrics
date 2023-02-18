@@ -1,3 +1,4 @@
+import CoreUnitTypes
 import Foundation
 
 extension WetBulb {
@@ -13,7 +14,7 @@ extension WetBulb {
     dryBulb temperature: Temperature,
     humidity relativeHumidity: RelativeHumidity,
     pressure totalPressure: Pressure,
-    units: PsychrometricEnvironment.Units? = nil
+    units: PsychrometricUnits? = nil
   ) {
     self.init(
       dryBulb: temperature,
