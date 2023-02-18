@@ -1,5 +1,5 @@
 import XCTest
-import CoreUnitTypes
+import SharedModels
 
 final class RelativeHumidityTests: XCTestCase {
   

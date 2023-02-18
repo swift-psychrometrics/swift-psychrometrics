@@ -1,6 +1,6 @@
 import XCTest
 import Psychrometrics
-import CoreUnitTypes
+import SharedModels
 import TestSupport
 
 final class EnthalpyTests: XCTestCase {

@@ -1,4 +1,4 @@
-import CoreUnitTypes
+import SharedModels
 import Foundation
 
 /// Represents the specific volume of air for the conditions.

@@ -1,6 +1,6 @@
 import XCTest
 @testable import Psychrometrics
-import CoreUnitTypes
+import SharedModels
 import TestSupport
 
 final class SpecificVolumeTests: XCTestCase {

@@ -6,7 +6,7 @@ var package = Package(
   name: "swift-psychrometrics",
   platforms: [.macOS(.v10_15)],
   products: [
-    .library(name: "CoreUnitTypes", targets: ["CoreUnitTypes"]),
+    .library(name: "SharedModels", targets: ["SharedModels"]),
     .library(name: "PsychrometricEnvironment", targets: ["PsychrometricEnvironment"]),
     .library(name: "Psychrometrics", targets: ["Psychrometrics"]),
     .library(name: "TestSupport", targets: ["TestSupport"]),
@@ -16,13 +16,13 @@ var package = Package(
   ],
   targets: [
     .target(
-      name: "CoreUnitTypes",
+      name: "SharedModels",
       dependencies: []
     ),
     .testTarget(
-      name: "CoreTests",
+      name: "SharedModelsTests",
       dependencies: [
-        "CoreUnitTypes",
+        "SharedModels",
         "Psychrometrics",
         "TestSupport",
       ]
@@ -30,14 +30,14 @@ var package = Package(
     .target(
       name: "PsychrometricEnvironment",
       dependencies: [
-        "CoreUnitTypes",
+        "SharedModels",
         .product(name: "Dependencies", package: "swift-dependencies")
       ]
     ),
     .target(
       name: "Psychrometrics",
       dependencies: [
-        "CoreUnitTypes",
+        "SharedModels",
         "PsychrometricEnvironment",
       ]
     ),

@@ -1,9 +1,9 @@
-import CoreUnitTypes
+import SharedModels
 import Dependencies
 import Foundation
 
 /// This controls the way psychrometric calculations get ran.  Whether they are for imperial
-/// or metric ``CoreUnitTypes/PsychrometricUnits``
+/// or metric ``SharedModels/PsychrometricUnits``
 ///
 public struct PsychrometricEnvironment {
 

@@ -1,4 +1,4 @@
-import CoreUnitTypes
+import SharedModels
 import Foundation
 
 public struct Enthalpy<T> {

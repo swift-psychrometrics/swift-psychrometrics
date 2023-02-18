@@ -1,4 +1,4 @@
-import CoreUnitTypes
+import SharedModels
 import Foundation
 
 /// A namespace for a dew-point temperature type.

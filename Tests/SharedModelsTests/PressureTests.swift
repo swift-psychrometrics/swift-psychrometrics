@@ -1,5 +1,5 @@
 import XCTest
-import CoreUnitTypes
+import SharedModels
 import Psychrometrics
 import TestSupport
 

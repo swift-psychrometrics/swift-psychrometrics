@@ -1,5 +1,5 @@
 import ConsoleKit
-import CoreUnitTypes
+import SharedModels
 import Foundation
 import Psychrometrics
 
