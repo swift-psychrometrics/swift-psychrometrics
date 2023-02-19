@@ -7,13 +7,18 @@ var package = Package(
   platforms: [.macOS(.v10_15), .iOS(.v13)],
   products: [
     .library(name: "SharedModels", targets: ["SharedModels"]),
+    .library(name: "SiteRouter", targets: ["SiteRouter"]),
     .library(name: "PsychrometricEnvironment", targets: ["PsychrometricEnvironment"]),
     .library(name: "Psychrometrics", targets: ["Psychrometrics"]),
     .library(name: "TestSupport", targets: ["TestSupport"]),
   ],
   dependencies: [
+    .package(
+      url: "https://github.com/pointfreeco/swift-custom-dump.git", from: "0.6.1"
+    ),
     .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "0.1.0"),
     .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.6.0"),
+    .package(url: "https://github.com/pointfreeco/swift-url-routing", from: "0.4.0"),
   ],
   targets: [
     .target(
@@ -35,6 +40,21 @@ var package = Package(
       dependencies: [
         "SharedModels",
         .product(name: "Dependencies", package: "swift-dependencies"),
+      ]
+    ),
+    .target(
+      name: "SiteRouter",
+      dependencies: [
+        "SharedModels",
+        .product(name: "Dependencies", package: "swift-dependencies"),
+        .product(name: "URLRouting", package: "swift-url-routing"),
+      ]
+    ),
+    .testTarget(
+      name: "SiteRouterTests",
+      dependencies: [
+        "SiteRouter",
+        .product(name: "CustomDump", package: "swift-custom-dump"),
       ]
     ),
     .target(

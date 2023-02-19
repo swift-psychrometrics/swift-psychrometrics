@@ -440,6 +440,20 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SiteRouter"
+               BuildableName = "SiteRouter"
+               BlueprintName = "SiteRouter"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -616,6 +630,16 @@
                BlueprintIdentifier = "SharedModelsTests"
                BuildableName = "SharedModelsTests"
                BlueprintName = "SharedModelsTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SiteRouterTests"
+               BuildableName = "SiteRouterTests"
+               BlueprintName = "SiteRouterTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
