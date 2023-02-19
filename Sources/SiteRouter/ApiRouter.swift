@@ -28,8 +28,8 @@ public func apiRouter(
           Body(
             .json(
               ServerRoute.Api.Route.Density.DryAir.Pressure.self,
-              decoder: .init(),
-              encoder: .init()
+              decoder: decoder,
+              encoder: encoder
             )
           )
         }
@@ -187,8 +187,8 @@ public func apiRouter(
         )
       )
     }
-    Route(.case(ServerRoute.Api.Route.GrainsOfMoisture.pressure)) {
-      Path(.pressure)
+    Route(.case(ServerRoute.Api.Route.GrainsOfMoisture.totalPressure)) {
+      Path(.totalPressure)
       Method.post
       Body(
         .json(
@@ -249,6 +249,17 @@ public func apiRouter(
           )
         }
       }
+    }
+    Route(.case(ServerRoute.Api.Route.HumidityRatio.specificHumidity)) {
+      Path(.specificHumidity)
+      Method.post
+      Body(
+        .json(
+          ServerRoute.Api.Route.HumidityRatio.SpecificHumidity.self,
+          decoder: decoder,
+          encoder: encoder
+        )
+      )
     }
     Route(.case(ServerRoute.Api.Route.HumidityRatio.wetBulb)) {
       Path(.wetBulb)
@@ -331,7 +342,7 @@ public func apiRouter(
       Method.post
       Body(
         .json(
-          Temperature.self,
+          ServerRoute.Api.Route.SpecificHeat.Water.self,
           decoder: decoder,
           encoder: encoder
         )
@@ -487,6 +498,7 @@ enum PathKey: String, RouteKey {
   case relativeHumidity
   case saturation
   case specificHeat
+  case specificHumidity
   case specificVolume
   case temperature
   case totalPressure
