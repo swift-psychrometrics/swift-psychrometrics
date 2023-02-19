@@ -14,4 +14,3 @@ let encoder: JSONEncoder = {
 let data = ServerRoute.Api.Route.Density.DryAir.Pressure(dryBulb: .zero, totalPressure: .zero)
 let string = String(data: try! encoder.encode(data), encoding: .utf8)
 print(string!)
-

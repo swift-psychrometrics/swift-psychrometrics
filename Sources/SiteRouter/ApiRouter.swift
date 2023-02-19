@@ -134,7 +134,7 @@ public func apiRouter(
         )
       )
     }
-    
+
     Route(.case(ServerRoute.Api.Route.Enthalpy.moistAir)) {
       Path(.moistAir)
       OneOf {
@@ -308,7 +308,7 @@ public func apiRouter(
         )
       )
     }
-    
+
   }
   // MARK: - Relative Humidity
   let relativeHumidityRouter = OneOf {
@@ -349,9 +349,9 @@ public func apiRouter(
       )
     }
   }
-    // MARK: - Specific Volume
+  // MARK: - Specific Volume
   let specificVolumeRouter = OneOf {
-    
+
     Route(.case(ServerRoute.Api.Route.SpecificVolume.dryAir)) {
       Path(.dryAir)
       Method.post
@@ -363,7 +363,7 @@ public func apiRouter(
         )
       )
     }
-    
+
     Route(.case(ServerRoute.Api.Route.SpecificVolume.moistAir)) {
       Path(.moistAir)
       OneOf {
@@ -431,7 +431,7 @@ public func apiRouter(
       )
     }
   }
-  
+
   return OneOf {
     Route(.case(ServerRoute.Api.Route.density)) {
       Path(.density)
@@ -479,7 +479,7 @@ public func apiRouter(
     }
   }
   .eraseToAnyParserPrinter()
-  
+
 }
 
 // MARK: - Path Helpers

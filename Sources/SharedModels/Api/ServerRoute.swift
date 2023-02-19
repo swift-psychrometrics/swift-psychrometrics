@@ -30,7 +30,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
       case specificVolume(SpecificVolume)
       case vaporPressure(VaporPressure)
       case wetBulb(WetBulb)
-      
+
       public enum Key: String, RouteKey {
         case density
         case dewPoint
@@ -50,7 +50,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
         case dryAir(DryAir)
         case moistAir(MoistAir)
         case water(Temperature)
-        
+
         public enum Key: String, RouteKey {
           case dryAir
           case moistAir
@@ -61,7 +61,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
 
           case altitude(Altitude)
           case totalPressure(Pressure)
-          
+
           public enum Key: String, RouteKey {
             case altitude
             case totalPressure
@@ -105,7 +105,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
           case humidityRatio(HumidityRatio)
           case relativeHumidity(RelativeHumidity)
           case specificVolume(SpecificVolume)
-          
+
           public enum Key: String, RouteKey {
             case humidityRatio
             case relativeHumidity
@@ -173,7 +173,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
         case temperature(Temperature)
         case vaporPressure(VaporPressure)
         case wetBulb(WetBulb)
-        
+
         public enum Key: String, RouteKey {
           case temperature
           case vaporPressure
@@ -230,7 +230,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
       public enum Enthalpy: Codable, Equatable, Sendable {
         case dryAir(DryAir)
         case moistAir(MoistAir)
-        
+
         public enum Key: String, RouteKey {
           case dryAir
           case moistAir
@@ -250,7 +250,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
         public enum MoistAir: Codable, Equatable, Sendable {
           case altitude(Altitude)
           case pressure(Pressure)
-          
+
           public enum Key: String, RouteKey {
             case altitude
             case pressure
@@ -303,7 +303,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
         case altitude(Altitude)
         case temperature(Temperature)
         case totalPressure(Pressure)
-        
+
         public enum Key: String, RouteKey {
           case altitude
           case temperature
@@ -365,7 +365,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
         case pressure(Pressure)
         case specificHumidity(SpecificHumidity)
         case wetBulb(WetBulb)
-        
+
         public enum Key: String, RouteKey {
           case dewPoint
           case enthalpy
@@ -393,7 +393,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
         public struct Enthalpy: Codable, Equatable, Sendable {
           public var enthalpy: MoistAirEnthalpy
           public var dryBulb: DryBulb
-          
+
           public init(
             dryBulb: DryBulb,
             enthalpy: MoistAirEnthalpy
@@ -404,19 +404,19 @@ public enum ServerRoute: Codable, Equatable, Sendable {
         }
 
         public enum Pressure: Codable, Equatable, Sendable {
-          
+
           case saturation(Saturation)
           case vapor(Vapor)
-          
+
           public enum Key: String, RouteKey {
             case saturation
             case vapor
           }
-          
+
           public struct Saturation: Codable, Equatable, Sendable {
             public var totalPressure: TotalPressure
             public var saturationPressure: SaturationPressure
-            
+
             public init(
               totalPressure: TotalPressure,
               saturationPressure: SaturationPressure
@@ -425,11 +425,11 @@ public enum ServerRoute: Codable, Equatable, Sendable {
               self.saturationPressure = saturationPressure
             }
           }
-          
+
           public struct Vapor: Codable, Equatable, Sendable {
             public var totalPressure: TotalPressure
             public var vaporPressure: SharedModels.VaporPressure
-            
+
             public init(
               totalPressure: TotalPressure,
               vaporPressure: SharedModels.VaporPressure
@@ -439,21 +439,21 @@ public enum ServerRoute: Codable, Equatable, Sendable {
             }
           }
         }
-        
+
         public struct SpecificHumidity: Codable, Equatable, Sendable {
           public var specificHumidity: SharedModels.SpecificHumidity
-          
+
           public init(specificHumidity: SharedModels.SpecificHumidity) {
             self.specificHumidity = specificHumidity
           }
         }
-        
+
         public struct WetBulb: Codable, Equatable, Sendable {
           public var dryBulb: DryBulb
           public var totalPressure: TotalPressure
           public var wetBulb: SharedModels.WetBulb
           public var units: PsychrometricUnits?
-          
+
           public init(
             dryBulb: DryBulb,
             totalPressure: TotalPressure,
@@ -474,7 +474,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
         case dewPoint(DewPoint)
         case relativeHumidity(RelativeHumidity)
         case wetBulb(WetBulb)
-        
+
         public enum Key: String, RouteKey {
           case dewPoint
           case relativeHumidity
@@ -544,7 +544,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
 
         case humidityRatio(HumidityRatio)
         case vaporPressure(VaporPressure)
-        
+
         public enum Key: String, RouteKey {
           case humidityRatio
           case vaporPressure
@@ -589,14 +589,14 @@ public enum ServerRoute: Codable, Equatable, Sendable {
       // MARK: - Specific Heat
       public enum SpecificHeat: Codable, Equatable, Sendable {
         case water(Water)
-        
+
         public enum Key: String, RouteKey {
           case water
         }
-        
+
         public struct Water: Codable, Equatable, Sendable {
           public var dryBulb: DryBulb
-          
+
           public init(dryBulb: DryBulb) {
             self.dryBulb = dryBulb
           }
@@ -607,12 +607,12 @@ public enum ServerRoute: Codable, Equatable, Sendable {
       public enum SpecificVolume: Codable, Equatable, Sendable {
         case dryAir(DryAir)
         case moistAir(MoistAir)
-        
+
         public enum Key: String, RouteKey {
           case dryAir
           case moistAir
         }
-        
+
         public struct DryAir: Codable, Equatable, Sendable {
           public var dryBulb: DryBulb
           public var totalPressure: TotalPressure
@@ -633,7 +633,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
           case altitude(Altitude)
           case humidityRatio(HumidityRatio)
           case relativeHumidity(RelativeHumidity)
-          
+
           public enum Key: String, RouteKey {
             case altitude
             case humidityRatio
@@ -702,11 +702,11 @@ public enum ServerRoute: Codable, Equatable, Sendable {
       // MARK: - Vapor Pressure
       public enum VaporPressure: Codable, Equatable, Sendable {
         case humidityRatio(HumidityRatio)
-        
+
         public enum Key: String, RouteKey {
           case humidityRatio
         }
-        
+
         public struct HumidityRatio: Codable, Equatable, Sendable {
           public var humidityRatio: SharedModels.HumidityRatio
           public var totalPressure: TotalPressure
@@ -729,11 +729,11 @@ public enum ServerRoute: Codable, Equatable, Sendable {
       public enum WetBulb: Codable, Equatable, Sendable {
 
         case relativeHumidity(RelativeHumidity)
-        
+
         public enum Key: String, RouteKey {
           case relativeHumidity
         }
-        
+
         public struct RelativeHumidity: Codable, Equatable, Sendable {
           public var dryBulb: DryBulb
           public var humidity: SharedModels.RelativeHumidity
