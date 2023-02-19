@@ -1,11 +1,5 @@
-import SharedModels
 import Foundation
-
-/// A namespace for a dew-point temperature type.
-public struct DewPointType {}
-
-/// Represents a dew-point temperature.
-public typealias DewPoint = TemperatureEnvelope<DewPointType>
+import SharedModels
 
 extension DewPoint {
 

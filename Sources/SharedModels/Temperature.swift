@@ -181,7 +181,7 @@ extension Temperature: NumberWithUnitOfMeasure {
 extension Temperature {
 
   // TODO: This needs moved somewhere else where it can use environment dependency.
-  
+
   /// Create a ``Temperature`` as a function of the given altitude.
   ///
   ///  - Parameters:
@@ -190,7 +190,7 @@ extension Temperature {
     _ altitude: Length,
     units: PsychrometricUnits? = nil
   ) -> Temperature {
-    let units = units ?? .imperial // fix.
+    let units = units ?? .imperial  // fix.
     let altitude = units.isImperial ? altitude.feet : altitude.meters
     guard units.isImperial else {
       return .init(15 - 0.0065 * altitude, units: .defaultFor(units: units))

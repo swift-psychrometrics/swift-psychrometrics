@@ -1,4 +1,3 @@
-
 /// Represents the humidity ratio (or mixing ratio) of a given moist air sample.
 ///
 /// Defined as the ratio of the mass of water vapor to the mass of dry air in the sample and is often represented
@@ -10,20 +9,20 @@
 ///
 //public struct HumidityRatio: Codable, Equatable, Sendable {
 extension HumidityRatio {
-  
+
   /// Constant for the mole weight of water.
   public static var moleWeightWater: Double {
     18.015268
   }
-  
+
   /// Constant for the mole weight of air.
   public static var moleWeightAir: Double {
     28.966
   }
-  
+
   /// Constant for the ratio of the mole weight of water over the mole weight of air.
   public static var moleWeightRatio: Double {
     (Self.moleWeightWater / Self.moleWeightAir)
   }
-  
- }
+
+}

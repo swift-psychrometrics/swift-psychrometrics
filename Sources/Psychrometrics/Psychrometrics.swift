@@ -1,13 +1,13 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 // TODO: These types need to be codable.
 
 /// Calculate the psychrometric properties of an air sample.
 public struct Psychrometrics {
-  
+
   @Dependency(\.psychrometricEnvironment) static var environment
 
   public let atmosphericPressure: Pressure

@@ -15,8 +15,10 @@ extension Tagged: Divisible where RawValue: Divisible {
   public static func /= (lhs: inout Tagged<Tag, RawValue>, rhs: Tagged<Tag, RawValue>) {
     lhs.rawValue /= rhs.rawValue
   }
-  
-  public static func / (lhs: Tagged<Tag, RawValue>, rhs: Tagged<Tag, RawValue>) -> Tagged<Tag, RawValue> {
+
+  public static func / (lhs: Tagged<Tag, RawValue>, rhs: Tagged<Tag, RawValue>) -> Tagged<
+    Tag, RawValue
+  > {
     .init(lhs.rawValue / rhs.rawValue)
   }
 }

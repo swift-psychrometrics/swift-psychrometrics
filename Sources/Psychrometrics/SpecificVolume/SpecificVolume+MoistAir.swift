@@ -1,7 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 extension SpecificVolume where T == MoistAir {
 
@@ -51,7 +51,7 @@ extension SpecificVolume where T == MoistAir {
   ) {
     precondition(humidityRatio.rawValue > 0)
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let value = Constants(units: units)
       .run(dryBulb: temperature, ratio: humidityRatio, pressure: totalPressure)
@@ -125,7 +125,7 @@ extension Temperature {
   ) {
 
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
 
     precondition(specificVolume.units == SpecificVolumeUnits.defaultFor(units: units))

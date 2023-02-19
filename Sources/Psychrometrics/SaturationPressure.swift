@@ -1,11 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
-
-public struct SaturationPressureType {}
-
-public typealias SaturationPressure = PressureEnvelope<SaturationPressureType>
+import SharedModels
 
 // Because of rounding errors and notes in ASHRAE Fundamentals 2017, these are sometimes
 // off a little from the tables in the book.
@@ -111,7 +107,7 @@ extension SaturationPressure {
   ) {
 
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let bounds = PsychrometricEnvironment.pressureBounds(for: units)
     let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
@@ -125,7 +121,7 @@ extension SaturationPressure {
       ? SaturationConstantsBelowFreezing(units: units).exponent(dryBulb: temperature)
       : SaturationConstantsAboveFreezing(units: units).exponent(dryBulb: temperature)
 
-    self.init(exp(exponent), units: .defaultFor(units: units))
+    self.init(.init(exp(exponent), units: .defaultFor(units: units)))
 
   }
 }
@@ -145,12 +141,12 @@ extension RelativeHumidity {
     units: PsychrometricUnits? = nil
   ) {
     precondition(vaporPressure > 0)
-    
+
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let saturationPressure = SaturationPressure(at: temperature, units: units)
     let fraction = vaporPressure.rawValue / saturationPressure.rawValue
-    self.init(.init(fraction * 100))
+    self.init(.init(fraction.rawValue * 100))
   }
 }

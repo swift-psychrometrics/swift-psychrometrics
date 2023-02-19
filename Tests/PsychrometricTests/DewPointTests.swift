@@ -8,11 +8,11 @@ final class DewPointTests: XCTestCase {
   func test_calculating_humidity_from_dewPoint() {
     let temperature = Temperature.celsius(24)
     let dewPoint = Temperature.celsius(12.94)
-    XCTAssertEqual(round(RelativeHumidity(temperature: temperature, dewPoint: dewPoint).rawValue), 50)
+    XCTAssertEqual(round(RelativeHumidity(temperature: temperature, dewPoint: dewPoint).rawValue.rawValue), 50)
   }
   
   func test_DewPoint_without_calculation() {
-    let dewPoint = DewPoint(temperature: .fahrenheit(63))
+    let dewPoint = DewPoint(.fahrenheit(63))
     XCTAssertEqual(dewPoint.fahrenheit, 63)
   }
   
@@ -65,6 +65,6 @@ final class DewPointTests: XCTestCase {
   
   func test_dewPoint_from_humidityRatio_imperial() {
     let dewPoint = DewPoint.init(dryBulb: 100, ratio: 0.00523, pressure: 14.696, units: .imperial)
-    XCTApproximatelyEqual(dewPoint.temperature.fahrenheit, 40, tolerance: 0.21)
+    XCTApproximatelyEqual(dewPoint.rawValue.fahrenheit, 40, tolerance: 0.21)
   }
 }

@@ -1,5 +1,5 @@
-import SharedModels
 import Foundation
+import SharedModels
 
 extension WetBulb {
 

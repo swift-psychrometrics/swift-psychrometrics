@@ -1,7 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 extension HumidityRatio {
 
@@ -22,8 +22,8 @@ extension HumidityRatio {
       let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let intermediateValue =
         units.isImperial
-      ? enthalpy.rawValue.rawValue - c1 * T
-      : enthalpy.rawValue.rawValue / 1000 - c1 * T
+        ? enthalpy.rawValue.rawValue - c1 * T
+        : enthalpy.rawValue.rawValue / 1000 - c1 * T
 
       return intermediateValue / (c2 + c3 * T)
     }
@@ -40,7 +40,7 @@ extension HumidityRatio {
     units: PsychrometricUnits? = nil
   ) {
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let value = HumidityRatioConstants(units: units).run(enthalpy: enthalpy, dryBulb: temperature)
     self.init(.init(value))

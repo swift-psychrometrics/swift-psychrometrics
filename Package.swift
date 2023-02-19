@@ -34,7 +34,7 @@ var package = Package(
       name: "PsychrometricEnvironment",
       dependencies: [
         "SharedModels",
-        .product(name: "Dependencies", package: "swift-dependencies")
+        .product(name: "Dependencies", package: "swift-dependencies"),
       ]
     ),
     .target(
@@ -62,14 +62,14 @@ var package = Package(
 if #available(macOS 10.15, *),
   ProcessInfo.processInfo.environment["PSYCHROMETRIC_CLI_ENABLED"] != nil
 {
-//  package.platforms = [
-//    .macOS(.v10_15)
-//  ]
+  //  package.platforms = [
+  //    .macOS(.v10_15)
+  //  ]
   package.dependencies.append(contentsOf: [
     .package(url: "https://github.com/vapor/console-kit.git", from: "4.2.0")
   ])
   package.products.append(contentsOf: [
-    .executable(name: "psychrometrics", targets: ["swift-psychrometrics"]),
+    .executable(name: "psychrometrics", targets: ["swift-psychrometrics"])
   ])
   package.targets.append(contentsOf: [
     .executableTarget(
@@ -78,6 +78,6 @@ if #available(macOS 10.15, *),
         "Psychrometrics",
         .product(name: "ConsoleKit", package: "console-kit"),
       ]
-    ),
+    )
   ])
 }

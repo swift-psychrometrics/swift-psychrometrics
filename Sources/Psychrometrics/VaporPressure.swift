@@ -1,12 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
-
-// TODO: Remove
-public struct VaporPressureType {}
-
-public typealias VaporPressure = PressureEnvelope<VaporPressureType>
+import SharedModels
 
 extension VaporPressure {
 
@@ -22,10 +17,11 @@ extension VaporPressure {
     units: PsychrometricUnits? = nil
   ) {
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let value =
-      SaturationPressure(at: temperature, units: units).rawValue * relativeHumidity.fraction
-    self.init(value, units: .defaultFor(units: units))
+      SaturationPressure(at: temperature, units: units).rawValue.rawValue
+      * relativeHumidity.fraction
+    self.init(.init(value, units: .defaultFor(units: units)))
   }
 }

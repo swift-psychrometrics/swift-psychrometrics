@@ -1,7 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 extension VaporPressure {
 
@@ -18,10 +18,12 @@ extension VaporPressure {
   ) {
     precondition(humidityRatio > 0)
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
-    let value = totalPressure * humidityRatio.rawValue / (HumidityRatio.moleWeightRatio + humidityRatio.rawValue)
-    self.init(value, units: .defaultFor(units: units))
+    let value =
+      totalPressure * humidityRatio.rawValue
+      / (HumidityRatio.moleWeightRatio + humidityRatio.rawValue)
+    self.init(.init(value, units: .defaultFor(units: units)))
   }
 }

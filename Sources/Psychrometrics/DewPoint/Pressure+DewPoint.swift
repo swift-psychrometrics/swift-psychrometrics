@@ -1,7 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 extension DewPoint {
 
@@ -70,13 +70,13 @@ extension DewPoint {
     units: PsychrometricUnits? = nil
   ) {
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
     let value =
       temperature <= triplePoint
       ? DewPointConstantsBelowFreezing(units: units).run(vaporPressure: pressure)
       : DewPointConstantsAboveFreezing(units: units).run(vaporPressure: pressure)
-    self.init(value, units: .defaultFor(units: units))
+    self.init(.init(value, units: .defaultFor(units: units)))
   }
 }

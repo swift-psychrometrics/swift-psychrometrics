@@ -1,7 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 extension DryAirEnthalpy {
 
@@ -32,7 +32,7 @@ extension DryAirEnthalpy {
     units: PsychrometricUnits? = nil
   ) {
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let value = DryAirConstants(units: units).run(temperature)
     self.init(Enthalpy(value, units: .defaultFor(units: units)))

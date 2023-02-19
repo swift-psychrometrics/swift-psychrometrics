@@ -42,7 +42,7 @@ final class HumidityRatioTests: XCTestCase {
     
     for (temp, expected, diff) in values {
       let ratio = HumidityRatio(dryBulb: temp, pressure: 14.696)
-      XCTApproximatelyEqual(ratio.rawValue, expected.rawValue, tolerance: diff)
+      XCTApproximatelyEqual(ratio.rawValue.rawValue, expected.rawValue.rawValue, tolerance: diff)
     }
   }
   
@@ -59,12 +59,12 @@ final class HumidityRatioTests: XCTestCase {
     
     for (temp, expected, diff) in values {
       let ratio = HumidityRatio(dryBulb: .celsius(temp), pressure: .pascals(101325))
-      XCTApproximatelyEqual(ratio.rawValue, expected.rawValue, tolerance: diff)
+      XCTApproximatelyEqual(ratio.rawValue.rawValue, expected.rawValue.rawValue, tolerance: diff)
     }
   }
 
   func test_humidityRatio_and_relativeHumidity_imperial() {
     let relativeHumidity = RelativeHumidity.init(dryBulb: 100, ratio: 0.00523, pressure: 14.696, units: .imperial)
-    XCTAssertEqual(round(relativeHumidity.rawValue), 13)
+    XCTAssertEqual(round(relativeHumidity.rawValue.rawValue), 13)
   }
 }

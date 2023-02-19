@@ -1,7 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 extension HumidityRatio {
 
@@ -76,14 +76,14 @@ extension HumidityRatio {
     pressure: Pressure,
     units: PsychrometricUnits? = nil
   ) {
-    precondition(dryBulb > wetBulb.temperature)
-    
+    precondition(dryBulb > wetBulb.rawValue)
+
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
 
-    let saturatedHumidityRatio = HumidityRatio(dryBulb: wetBulb.temperature, pressure: pressure)
-    if wetBulb.temperature > PsychrometricEnvironment.triplePointOfWater(for: units) {
+    let saturatedHumidityRatio = HumidityRatio(dryBulb: wetBulb.rawValue, pressure: pressure)
+    if wetBulb.rawValue > PsychrometricEnvironment.triplePointOfWater(for: units) {
       self.init(
         .init(
           ConstantsBelowFreezing(units: units)
@@ -109,9 +109,9 @@ extension WetBulb {
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
   ) {
-    
+
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     guard
       let wetBulb = try? wetBulb_from_humidity_ratio(
         dryBulb: temperature,
@@ -132,7 +132,7 @@ private func wetBulb_from_humidity_ratio(
   units: PsychrometricUnits
 ) throws -> WetBulb? {
   precondition(humidityRatio > 0)
-  
+
   @Dependency(\.psychrometricEnvironment) var environment
 
   let dewPoint = DewPoint(dryBulb: dryBulb, ratio: humidityRatio, pressure: pressure, units: units)
@@ -148,7 +148,7 @@ private func wetBulb_from_humidity_ratio(
   while (wetBulbSup - wetBulbInf) > environment.temperatureTolerance.rawValue {
     let ratio = HumidityRatio(
       dryBulb: dryBulb,
-      wetBulb: .init(wetBulb, units: temperatureUnits),
+      wetBulb: .init(.init(wetBulb, units: temperatureUnits)),
       pressure: pressure,
       units: units
     )
@@ -169,5 +169,5 @@ private func wetBulb_from_humidity_ratio(
     index += 1
   }
 
-  return .init(wetBulb, units: temperatureUnits)
+  return .init(.init(wetBulb, units: temperatureUnits))
 }

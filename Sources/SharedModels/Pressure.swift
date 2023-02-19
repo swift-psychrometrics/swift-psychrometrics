@@ -213,7 +213,7 @@ extension Pressure {
       return c1 * pow(1 - c2 * altitude, c3)
     }
   }
-  
+
   /// Create a new ``Pressure`` for the given altitude.
   ///
   /// - Note:
@@ -226,7 +226,7 @@ extension Pressure {
     altitude: Length,
     units: PsychrometricUnits? = nil
   ) {
-    let units = units ?? .imperial // fix
+    let units = units ?? .imperial  // fix
     let value = Constants(units: units).run(altitude: altitude)
     self.init(value, units: .defaultFor(units: units))
   }

@@ -1,7 +1,7 @@
 import ConsoleKit
-import SharedModels
 import Foundation
 import Psychrometrics
+import SharedModels
 
 @available(macOS 10.15, *)
 struct EnthalpyCommand: Command {

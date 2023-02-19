@@ -1,6 +1,6 @@
-import SharedModels
 import Dependencies
 import Foundation
+import SharedModels
 
 /// This controls the way psychrometric calculations get ran.  Whether they are for imperial
 /// or metric ``SharedModels/PsychrometricUnits``
@@ -49,7 +49,9 @@ public struct PsychrometricEnvironment {
   ///
   /// - Parameters:
   ///   - units: The units to return the bounds for.
-  public static func pressureBounds(for units: PsychrometricUnits) -> (low: Temperature, high: Temperature) {
+  public static func pressureBounds(for units: PsychrometricUnits) -> (
+    low: Temperature, high: Temperature
+  ) {
     switch units {
     case .metric:
       return (low: .celsius(-100), high: .celsius(200))
@@ -77,7 +79,7 @@ extension PsychrometricEnvironment: DependencyKey {
   public static var liveValue: PsychrometricEnvironment {
     .init()
   }
-  
+
   public static var testValue: PsychrometricEnvironment {
     .init()
   }

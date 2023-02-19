@@ -1,7 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 extension HumidityRatio {
   @Dependency(\.psychrometricEnvironment) static var environment
@@ -12,7 +12,7 @@ extension HumidityRatio {
     }
     return ratio
   }
-  
+
   /// The humidity ratio of air for the given mass of water and mass of dry air.
   ///
   /// - Parameters:
@@ -38,7 +38,7 @@ extension HumidityRatio {
     self.init(
       .init(
         Self.moleWeightRatio * partialPressure
-        / (totalPressure - partialPressure)
+          / (totalPressure - partialPressure)
       )
     )
   }
@@ -55,7 +55,7 @@ extension HumidityRatio {
   ) {
     self.init(
       totalPressure: totalPressure,
-      partialPressure: vaporPressure.pressure,
+      partialPressure: vaporPressure.rawValue,
       units: units
     )
   }
@@ -72,7 +72,7 @@ extension HumidityRatio {
   ) {
     self.init(
       totalPressure: totalPressure,
-      partialPressure: saturationPressure.pressure,
+      partialPressure: saturationPressure.rawValue,
       units: units
     )
   }
@@ -112,7 +112,7 @@ extension HumidityRatio {
         dryBulb: temperature,
         humidity: humidity,
         units: units
-      ).pressure,
+      ).rawValue,
       units: units
     )
   }

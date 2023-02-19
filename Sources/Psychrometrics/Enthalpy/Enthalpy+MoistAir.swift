@@ -1,7 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 extension MoistAirEnthalpy {
 
@@ -27,8 +27,8 @@ extension MoistAirEnthalpy {
     func dryBulb(enthalpy: MoistAirEnthalpy, ratio: HumidityRatio) -> Temperature {
       let intermediateValue =
         units.isImperial
-      ? enthalpy.rawValue.rawValue - c2 * ratio.rawValue
-      : enthalpy.rawValue.rawValue / 1000 - c2 * ratio.rawValue
+        ? enthalpy.rawValue.rawValue - c2 * ratio.rawValue
+        : enthalpy.rawValue.rawValue / 1000 - c2 * ratio.rawValue
       let value = intermediateValue / (c1 + c3 * ratio.rawValue)
       return units.isImperial ? .fahrenheit(value) : .celsius(value)
     }
@@ -48,9 +48,9 @@ extension MoistAirEnthalpy {
     units: PsychrometricUnits? = nil
   ) {
     precondition(humidityRatio > 0)
-    
+
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let value = Constants(units: units).run(dryBulb: temperature, ratio: humidityRatio)
     self.init(Enthalpy(value, units: .defaultFor(units: units)))

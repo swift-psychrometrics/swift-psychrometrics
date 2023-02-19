@@ -1,6 +1,6 @@
-import SharedModels
 import Dependencies
 import PsychrometricEnvironment
+import SharedModels
 
 extension Temperature {
 
@@ -55,7 +55,7 @@ extension Temperature {
   ) {
     precondition(humidityRatio.rawValue > 0)
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     self = MoistAirEnthalpy.Constants(units: units).dryBulb(
       enthalpy: enthalpy, ratio: humidityRatio)

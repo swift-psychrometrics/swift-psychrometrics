@@ -5,7 +5,9 @@ import Tagged
 /// conversions some of the operations are safe given the units are the same.  If the units are not the same, we try to do the right thing
 /// and convert them to a unified type based on the units for the left side of the operation.  If you are programatically creating values then
 /// it is recommended to work on the underlying raw value of the type.
-public protocol NumericType: Codable, Comparable, Divisible, ExpressibleByFloatLiteral, Hashable, Numeric {}
+public protocol NumericType: Codable, Comparable, Divisible, ExpressibleByFloatLiteral, Hashable,
+  Numeric
+{}
 
 /// Adds ``NumericType`` conformance to ``Double``.
 extension Double: NumericType {}
@@ -100,5 +102,5 @@ where
 public protocol RawNumericType: NumericType, RawInitializable {}
 
 extension Tagged: NumericType where RawValue: NumericType {
-  
+
 }

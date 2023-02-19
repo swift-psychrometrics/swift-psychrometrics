@@ -1,5 +1,5 @@
-import SharedModels
 import Foundation
+import SharedModels
 
 extension HumidityRatio {
 
@@ -16,7 +16,7 @@ extension HumidityRatio {
   ) {
     self.init(
       totalPressure: totalPressure,
-      saturationPressure: SaturationPressure(at: dewPoint.temperature, units: units),
+      saturationPressure: SaturationPressure(at: dewPoint.rawValue, units: units),
       units: units
     )
   }

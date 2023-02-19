@@ -1,7 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 // MARK: - Water
 extension Density where T == Water {
@@ -62,7 +62,7 @@ extension Density where T == DryAir {
     units: PsychrometricUnits? = nil
   ) {
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let value = Constants(units: units).run(dryBulb: temperature, pressure: totalPressure)
     self.init(value, units: .defaultFor(units: units))
@@ -100,7 +100,7 @@ extension Density where T == MoistAir {
     units: PsychrometricUnits? = nil
   ) {
     precondition(humidityRatio.rawValue > 0)
-    
+
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units

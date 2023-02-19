@@ -68,7 +68,7 @@ final class WetBulbTests: XCTestCase {
     // Above freezing
     var humidityRatio = HumidityRatio.init(
       dryBulb: .celsius(30),
-      wetBulb: .init(temperature: .celsius(25)),
+      wetBulb: .init(.celsius(25)),
       pressure: .pascals(95461),
       units: .metric
     )
@@ -85,7 +85,7 @@ final class WetBulbTests: XCTestCase {
     // below freezing
     humidityRatio = .init(
       dryBulb: .celsius(-1),
-      wetBulb: .init(temperature: .celsius(-5)),
+      wetBulb: .init(.celsius(-5)),
       pressure: .pascals(95461),
       units: .metric
     )

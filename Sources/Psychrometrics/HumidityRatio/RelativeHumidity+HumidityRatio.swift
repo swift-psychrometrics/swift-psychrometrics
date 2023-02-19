@@ -1,7 +1,7 @@
-import SharedModels
 import Dependencies
 import Foundation
 import PsychrometricEnvironment
+import SharedModels
 
 extension RelativeHumidity {
 
@@ -11,9 +11,9 @@ extension RelativeHumidity {
     units: PsychrometricUnits? = nil
   ) {
     precondition(vaporPressure > 0)
-    
+
     @Dependency(\.psychrometricEnvironment) var environment
-    
+
     let units = units ?? environment.units
     let saturationPressure = SaturationPressure(at: temperature, units: units)
     let vaporPressure = units.isImperial ? vaporPressure.psi : vaporPressure.pascals

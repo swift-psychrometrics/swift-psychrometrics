@@ -27,7 +27,7 @@ extension NumericWithUnitOfMeasureRepresentable {
 extension NumericWithUnitOfMeasureRepresentable {
 
   public init(_ value: Number) {
-    self.init(value, units: .defaultFor(units: .imperial)) // fix.
+    self.init(value, units: .defaultFor(units: .imperial))  // fix.
   }
 
 }
