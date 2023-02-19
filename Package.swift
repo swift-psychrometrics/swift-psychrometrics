@@ -4,7 +4,7 @@ import PackageDescription
 
 var package = Package(
   name: "swift-psychrometrics",
-  platforms: [.macOS(.v10_15)],
+  platforms: [.macOS(.v10_15), .iOS(.v13)],
   products: [
     .library(name: "SharedModels", targets: ["SharedModels"]),
     .library(name: "PsychrometricEnvironment", targets: ["PsychrometricEnvironment"]),

@@ -36,28 +36,28 @@ extension Double {
   }
 }
 
-func printPsychrometrics(_ psychrometrics: Psychrometrics, units: PsychrometricEnvironment.Units) {
+func printPsychrometrics(_ psychrometrics: Psychrometrics, units: PsychrometricUnits) {
   let message = """
 
   Psychrometrics - \(units == .metric ? "Metric" : "Imperial")
   ------------------------------------
   
   Dry Bulb:               \(psychrometrics.dryBulb.rawValue.numberString) \(psychrometrics.dryBulb.units.rawValue)
-  Dew Point:              \(psychrometrics.dewPoint.rawValue.numberString) \(psychrometrics.dewPoint.units.rawValue)
-  Wet Bulb:               \(psychrometrics.wetBulb.rawValue.numberString) \(psychrometrics.wetBulb.units.rawValue)
-  Relative Humidity:      \(psychrometrics.relativeHumidity.rawValue.numberString)%
-  Humidity Ratio:         \(psychrometrics.humidityRatio.rawValue.numberString)
+  Dew Point:              \(psychrometrics.dewPoint.rawValue.rawValue.numberString) \(psychrometrics.dewPoint.units.rawValue)
+  Wet Bulb:               \(psychrometrics.wetBulb.rawValue.rawValue.numberString) \(psychrometrics.wetBulb.units.rawValue)
+  Relative Humidity:      \(psychrometrics.relativeHumidity.rawValue.rawValue.numberString)%
+  Humidity Ratio:         \(psychrometrics.humidityRatio.rawValue.rawValue.numberString)
   Degree of Saturation:   \(psychrometrics.degreeOfSaturation.numberString)
   Atmospheric Pressure:   \(psychrometrics.atmosphericPressure.rawValue.numberString) \(psychrometrics.atmosphericPressure.units.rawValue)
-  Vapor Pressure:         \(psychrometrics.vaporPressure.rawValue.numberString) \(psychrometrics.vaporPressure.units.rawValue)
+  Vapor Pressure:         \(psychrometrics.vaporPressure.rawValue.rawValue.numberString) \(psychrometrics.vaporPressure.units.rawValue)
   Volume:                 \(psychrometrics.volume.rawValue.numberString) \(psychrometrics.volume.units.rawValue)
   Density:                \(psychrometrics.density.rawValue.numberString) \(psychrometrics.density.units.rawValue)
-  Enthalpy:               \(psychrometrics.enthalpy.rawValue.numberString) \(psychrometrics.enthalpy.units.rawValue)
+  Enthalpy:               \(psychrometrics.enthalpy.rawValue.rawValue.numberString) \(psychrometrics.enthalpy.units.rawValue)
   
   """
   
   print(message)
 }
 
-printPsychrometrics(.imperialMock, units: .imperial)
-printPsychrometrics(.metricMock, units: .metric)
+printPsychrometrics(.imperialMock, units: PsychrometricUnits.imperial)
+printPsychrometrics(.metricMock, units: PsychrometricUnits.metric)
