@@ -17,7 +17,6 @@ public typealias WetBulb = Tagged<MoistAir, Temperature>
 /// Namespace for calculations that can work on water.
 public struct Water {}
 
-// MARK: - Pressure types
 public enum Total { }
 public typealias TotalPressure = Tagged<Total, Pressure>
 
@@ -28,13 +27,12 @@ public enum Vapor { }
 public typealias VaporPressure = Tagged<Vapor, Pressure>
 
 
-// MARK: - Temperature Types
 public enum DewPointTemperature { }
 public typealias DewPoint = Tagged<DewPointTemperature, Temperature>
 
-// MARK: - Humidity
 public enum Specific { }
 public typealias SpecificHumidity = Tagged<Specific, Humidity>
+public typealias SpecificHeat = Tagged<Specific, Temperature>
 
 public enum Relative { }
 public typealias RelativeHumidity = Tagged<Relative, Humidity>

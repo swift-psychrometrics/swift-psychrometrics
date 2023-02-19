@@ -1,16 +1,15 @@
-import SharedModels
 import Foundation
 
 /// Represents the specific volume of air for the conditions.
 ///
 /// Often represented by the symbol `v` in ASHRAE - Fundamentals (2017)
-public struct SpecificVolume<T> {
+public struct SpecificVolume<T>: Codable, Equatable, Sendable {
 
   /// The raw value for the volume.
-  public private(set) var rawValue: Double
+  public var rawValue: Double
 
   /// The unit of measure for the raw value.
-  public private(set) var units: SpecificVolumeUnits
+  public var units: SpecificVolumeUnits
 
   public init(_ value: Double, units: SpecificVolumeUnits) {
     self.rawValue = value
@@ -18,7 +17,7 @@ public struct SpecificVolume<T> {
   }
 }
 
-public enum SpecificVolumeUnits: String, UnitOfMeasure {
+public enum SpecificVolumeUnits: String, UnitOfMeasure, Codable, Sendable {
 
   case cubicFeetPerPound = "ft^3/lb"
   case cubicMeterPerKilogram = "m^3/kg"
