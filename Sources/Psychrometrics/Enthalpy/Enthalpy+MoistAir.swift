@@ -3,7 +3,7 @@ import Dependencies
 import Foundation
 import PsychrometricEnvironment
 
-extension Enthalpy where T == MoistAir {
+extension MoistAirEnthalpy {
 
   internal struct Constants {
     let c1: Double
@@ -24,11 +24,11 @@ extension Enthalpy where T == MoistAir {
       return units.isImperial ? value : value * 1000
     }
 
-    func dryBulb(enthalpy: EnthalpyOf<MoistAir>, ratio: HumidityRatio) -> Temperature {
+    func dryBulb(enthalpy: MoistAirEnthalpy, ratio: HumidityRatio) -> Temperature {
       let intermediateValue =
         units.isImperial
-        ? enthalpy.rawValue - c2 * ratio.rawValue
-        : enthalpy.rawValue / 1000 - c2 * ratio.rawValue
+      ? enthalpy.rawValue.rawValue - c2 * ratio.rawValue
+      : enthalpy.rawValue.rawValue / 1000 - c2 * ratio.rawValue
       let value = intermediateValue / (c1 + c3 * ratio.rawValue)
       return units.isImperial ? .fahrenheit(value) : .celsius(value)
     }
@@ -53,7 +53,7 @@ extension Enthalpy where T == MoistAir {
     
     let units = units ?? environment.units
     let value = Constants(units: units).run(dryBulb: temperature, ratio: humidityRatio)
-    self.init(value, units: .defaultFor(units: units))
+    self.init(Enthalpy(value, units: .defaultFor(units: units)))
   }
 
   /// Create a new ``Enthalpy`` for the given temperature and pressure.

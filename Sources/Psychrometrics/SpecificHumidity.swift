@@ -55,7 +55,7 @@ public struct SpecificHumidity {
     @Dependency(\.psychrometricEnvironment) var environment
     
     self.init(
-      ratio / (1 + ratio),
+      ratio.rawValue / (1 + ratio.rawValue),
       units: .defaultFor(units: units ?? environment.units)
     )
   }

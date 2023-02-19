@@ -1,3 +1,5 @@
+import Tagged
+
 /// A raw representable type that has a non-failable initializer.
 public protocol RawInitializable: RawRepresentable {
 
@@ -13,5 +15,11 @@ extension RawInitializable {
   /// - SeeAlso: ``RawRepresentable``
   public init?(rawValue: RawValue) {
     self.init(rawValue)
+  }
+}
+
+extension Tagged: RawInitializable {
+  public init(_ value: RawValue) {
+    self.init(rawValue: value)
   }
 }

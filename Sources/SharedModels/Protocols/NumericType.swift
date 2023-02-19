@@ -1,4 +1,5 @@
 import Foundation
+import Tagged
 
 /// Represents the numeric operations by most of the types the library exposes.  Because a lot of the types also have unit of measure
 /// conversions some of the operations are safe given the units are the same.  If the units are not the same, we try to do the right thing
@@ -97,3 +98,7 @@ where
 
 /// Represents a type that is both a ``NumericType`` and ``RawInitializable``.
 public protocol RawNumericType: NumericType, RawInitializable {}
+
+extension Tagged: NumericType where RawValue: NumericType {
+  
+}

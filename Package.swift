@@ -13,11 +13,14 @@ var package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "0.1.0"),
+    .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.6.0"),
   ],
   targets: [
     .target(
       name: "SharedModels",
-      dependencies: []
+      dependencies: [
+        .product(name: "Tagged", package: "swift-tagged")
+      ]
     ),
     .testTarget(
       name: "SharedModelsTests",

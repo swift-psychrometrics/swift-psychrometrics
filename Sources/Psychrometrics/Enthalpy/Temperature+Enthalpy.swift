@@ -14,7 +14,7 @@ extension Temperature {
     at humidity: RelativeHumidity,
     altitude: Length = .seaLevel,
     units: PsychrometricUnits? = nil
-  ) -> EnthalpyOf<MoistAir> {
+  ) -> MoistAirEnthalpy {
     .init(dryBulb: self, humidity: humidity, altitude: altitude, units: units)
   }
 
@@ -28,7 +28,7 @@ extension Temperature {
     at humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) -> EnthalpyOf<MoistAir> {
+  ) -> MoistAirEnthalpy {
     .init(dryBulb: self, humidity: humidity, pressure: totalPressure, units: units)
   }
 
@@ -38,7 +38,7 @@ extension Temperature {
   ///   - units: The units to solve for, if not supplied then this will default to ``Core.environment`` units.
   public func enthalpy(
     units: PsychrometricUnits? = nil
-  ) -> EnthalpyOf<DryAir> {
+  ) -> DryAirEnthalpy {
     .init(dryBulb: self, units: units)
   }
 
@@ -49,7 +49,7 @@ extension Temperature {
   ///   - humidityRatio: The humidity ration to solve the temperature for.
   ///   - units: The units to solve for, if not supplied then this will default to ``Core.environment`` units.
   public init(
-    enthalpy: EnthalpyOf<MoistAir>,
+    enthalpy: MoistAirEnthalpy,
     ratio humidityRatio: HumidityRatio,
     units: PsychrometricUnits? = nil
   ) {
@@ -57,7 +57,7 @@ extension Temperature {
     @Dependency(\.psychrometricEnvironment) var environment
     
     let units = units ?? environment.units
-    self = EnthalpyOf<MoistAir>.Constants(units: units).dryBulb(
+    self = MoistAirEnthalpy.Constants(units: units).dryBulb(
       enthalpy: enthalpy, ratio: humidityRatio)
   }
 }

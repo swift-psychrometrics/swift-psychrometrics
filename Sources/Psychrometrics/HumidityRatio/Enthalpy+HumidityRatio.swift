@@ -5,7 +5,7 @@ import PsychrometricEnvironment
 
 extension HumidityRatio {
 
-  private struct Constants {
+  private struct HumidityRatioConstants {
     let c1: Double
     let c2: Double
     let c3: Double
@@ -18,12 +18,12 @@ extension HumidityRatio {
       self.c3 = units.isImperial ? 0.444 : 1.86
     }
 
-    func run(enthalpy: EnthalpyOf<MoistAir>, dryBulb: Temperature) -> Double {
+    func run(enthalpy: MoistAirEnthalpy, dryBulb: Temperature) -> Double {
       let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let intermediateValue =
         units.isImperial
-        ? enthalpy.rawValue - c1 * T
-        : enthalpy.rawValue / 1000 - c1 * T
+      ? enthalpy.rawValue.rawValue - c1 * T
+      : enthalpy.rawValue.rawValue / 1000 - c1 * T
 
       return intermediateValue / (c2 + c3 * T)
     }
@@ -35,19 +35,19 @@ extension HumidityRatio {
   ///   - enthalpy: The enthalpy of the air.
   ///   - temperature: The dry bulb temperature of the air.
   public init(
-    enthalpy: EnthalpyOf<MoistAir>,
+    enthalpy: MoistAirEnthalpy,
     dryBulb temperature: Temperature,
     units: PsychrometricUnits? = nil
   ) {
     @Dependency(\.psychrometricEnvironment) var environment
     
     let units = units ?? environment.units
-    let value = Constants(units: units).run(enthalpy: enthalpy, dryBulb: temperature)
-    self.init(value)
+    let value = HumidityRatioConstants(units: units).run(enthalpy: enthalpy, dryBulb: temperature)
+    self.init(.init(value))
   }
 }
 
-extension Enthalpy where T == MoistAir {
+extension MoistAirEnthalpy {
 
   /// Calculate the ``HumidityRatio`` for the given temperature.
   ///

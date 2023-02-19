@@ -15,7 +15,7 @@ public struct Psychrometrics {
   public let density: DensityOf<MoistAir>
   public let dewPoint: DewPoint
   public let dryBulb: Temperature
-  public let enthalpy: EnthalpyOf<MoistAir>
+  public let enthalpy: MoistAirEnthalpy
   public let humidityRatio: HumidityRatio
   public let relativeHumidity: RelativeHumidity
   public let units: PsychrometricUnits
@@ -121,6 +121,6 @@ public struct Psychrometrics {
     precondition(humidityRatio > 0)
     let saturatedRatio = HumidityRatio.init(
       dryBulb: temperature, pressure: totalPressure, units: units)
-    return humidityRatio.rawValue / saturatedRatio.rawValue
+    return humidityRatio.rawValue.rawValue / saturatedRatio.rawValue.rawValue
   }
 }

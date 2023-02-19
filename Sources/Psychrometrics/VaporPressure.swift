@@ -3,6 +3,7 @@ import Dependencies
 import Foundation
 import PsychrometricEnvironment
 
+// TODO: Remove
 public struct VaporPressureType {}
 
 public typealias VaporPressure = PressureEnvelope<VaporPressureType>

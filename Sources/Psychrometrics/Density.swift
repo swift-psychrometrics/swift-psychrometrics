@@ -145,7 +145,7 @@ extension Density where T == MoistAir {
     let units = units ?? environment.units
 
     self.init(
-      (1 + humidityRatio) / specificVolume.rawValue,
+      (1 + humidityRatio.rawValue) / specificVolume.rawValue,
       units: .defaultFor(units: units)
     )
   }

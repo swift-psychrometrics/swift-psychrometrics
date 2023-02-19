@@ -1,5 +1,5 @@
 /// Represents unit of measure used in calculations [SI] or [IP].
-public enum PsychrometricUnits: String, CaseIterable {
+public enum PsychrometricUnits: String, CaseIterable, Codable, Sendable {
 
   case metric, imperial
 

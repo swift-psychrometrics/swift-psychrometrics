@@ -3,47 +3,16 @@ import Dependencies
 import Foundation
 import PsychrometricEnvironment
 
-/// Represents the humidity ratio (or mixing ratio) of a given moist air sample.
-///
-/// Defined as the ratio of the mass of water vapor to the mass of dry air in the sample and is often represented
-/// by the symbol `W` in the ASHRAE Fundamentals (2017).
-///
-/// This value can not be negative, so it will be set to ``PsychrometricEnvironment.minimumHumidityRatio`` if
-/// initialized with a value that's out of range.  For methods that use a humidity ratio they should check that the humidity ratio
-/// is valid by calling ``HumidityRatio.ensureHumidityRatio(_:)``.
-///
-public struct HumidityRatio: Equatable {
-  
+extension HumidityRatio {
   @Dependency(\.psychrometricEnvironment) static var environment
-  
-
-  /// Constant for the mole weight of water.
-  public static let moleWeightWater = 18.015268
-
-  /// Constant for the mole weight of air.
-  public static let moleWeightAir = 28.966
-
-  /// Constant for the ratio of the mole weight of water over the mole weight of air.
-  public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
 
   public static func ensureHumidityRatio(_ ratio: HumidityRatio) -> HumidityRatio {
-    guard ratio.rawValue > environment.minimumHumidityRatio else {
-      return .init(environment.minimumHumidityRatio)
+    guard ratio.rawValue.rawValue > environment.minimumHumidityRatio else {
+      return .init(.init(environment.minimumHumidityRatio))
     }
     return ratio
   }
-
-  /// The raw humidity ratio.
-  public var rawValue: Double
-
-  /// Create a new ``HumidityRatio`` with the given raw value.
-  ///
-  /// - Parameters:
-  ///   - value: The raw humidity ratio value.
-  public init(_ value: Double) {
-    self.rawValue = max(value, Self.environment.minimumHumidityRatio)
-  }
-
+  
   /// The humidity ratio of air for the given mass of water and mass of dry air.
   ///
   /// - Parameters:
@@ -53,7 +22,7 @@ public struct HumidityRatio: Equatable {
     water waterMass: Double,
     dryAir dryAirMass: Double
   ) {
-    self.init(Self.moleWeightRatio * (waterMass / dryAirMass))
+    self.init(.init(Self.moleWeightRatio * (waterMass / dryAirMass)))
   }
 
   internal init(
@@ -67,8 +36,10 @@ public struct HumidityRatio: Equatable {
     let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
 
     self.init(
-      Self.moleWeightRatio * partialPressure
+      .init(
+        Self.moleWeightRatio * partialPressure
         / (totalPressure - partialPressure)
+      )
     )
   }
 
@@ -167,8 +138,8 @@ public struct HumidityRatio: Equatable {
   }
 }
 
-extension HumidityRatio: RawNumericType {
-  public typealias IntegerLiteralType = Double.IntegerLiteralType
-  public typealias FloatLiteralType = Double.FloatLiteralType
-  public typealias Magnitude = Double.Magnitude
-}
+//extension HumidityRatio: RawNumericType {
+//  public typealias IntegerLiteralType = Double.IntegerLiteralType
+//  public typealias FloatLiteralType = Double.FloatLiteralType
+//  public typealias Magnitude = Double.Magnitude
+//}

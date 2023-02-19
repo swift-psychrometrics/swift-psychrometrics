@@ -29,7 +29,7 @@ extension HumidityRatio {
     ) -> Double {
       let dryBulb = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let wetBulb = units.isImperial ? wetBulb.fahrenheit : wetBulb.celsius
-      return ((c1 - c2 * wetBulb) * saturatedHumidityRatio - c3 * (dryBulb - wetBulb))
+      return ((c1 - c2 * wetBulb) * saturatedHumidityRatio.rawValue - c3 * (dryBulb - wetBulb))
         / (c1 + c4 * dryBulb - wetBulb)
     }
   }
@@ -59,7 +59,7 @@ extension HumidityRatio {
       let dryBulb = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let wetBulb = units.isImperial ? wetBulb.fahrenheit : wetBulb.celsius
       let diff = dryBulb - wetBulb
-      return ((c1 - c2 * wetBulb) * saturatedHumidityRatio - c3 * diff)
+      return ((c1 - c2 * wetBulb) * saturatedHumidityRatio.rawValue - c3 * diff)
         / (c1 + c4 * dryBulb - c5 * wetBulb)
     }
   }
@@ -85,13 +85,17 @@ extension HumidityRatio {
     let saturatedHumidityRatio = HumidityRatio(dryBulb: wetBulb.temperature, pressure: pressure)
     if wetBulb.temperature > PsychrometricEnvironment.triplePointOfWater(for: units) {
       self.init(
-        ConstantsBelowFreezing(units: units)
-          .run(dryBulb: dryBulb, wetBulb: wetBulb, saturatedHumidityRatio: saturatedHumidityRatio)
+        .init(
+          ConstantsBelowFreezing(units: units)
+            .run(dryBulb: dryBulb, wetBulb: wetBulb, saturatedHumidityRatio: saturatedHumidityRatio)
+        )
       )
     } else {
       self.init(
-        ConstantsAboveFreezing(units: units)
-          .run(dryBulb: dryBulb, wetBulb: wetBulb, saturatedHumidityRatio: saturatedHumidityRatio)
+        .init(
+          ConstantsAboveFreezing(units: units)
+            .run(dryBulb: dryBulb, wetBulb: wetBulb, saturatedHumidityRatio: saturatedHumidityRatio)
+        )
       )
     }
   }

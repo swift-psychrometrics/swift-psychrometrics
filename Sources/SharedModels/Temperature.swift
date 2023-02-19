@@ -1,7 +1,7 @@
 import Foundation
 
 /// Represents a temperature in SI and IP units as well as scientific / absolute units.
-public struct Temperature: Hashable {
+public struct Temperature: Hashable, Codable, Sendable {
 
   /// The raw value set on the instance, this should typically not be used. You should access
   /// the value through the units that you need.
@@ -24,7 +24,7 @@ public struct Temperature: Hashable {
 extension Temperature {
 
   /// Represents the units of measure for a ``Temperature``.
-  public enum Unit: String, Equatable, CaseIterable, Codable, Hashable {
+  public enum Unit: String, Equatable, CaseIterable, Codable, Hashable, Sendable {
 
     public static func defaultFor(units: PsychrometricUnits) -> Self {
       switch units {

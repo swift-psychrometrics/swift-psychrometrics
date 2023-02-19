@@ -20,7 +20,7 @@ extension RelativeHumidity {
     let saturationPressureValue =
       units.isImperial ? saturationPressure.psi : saturationPressure.pascals
     let fraction = vaporPressure / saturationPressureValue
-    self.init(fraction * 100)
+    self.init(.init(fraction * 100))
   }
 
   public init(

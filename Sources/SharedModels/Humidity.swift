@@ -8,15 +8,11 @@ import Foundation
 /// ```
 /// let humidity = 50%
 /// ```
-public struct RelativeHumidity: Equatable {
+public struct Humidity: Equatable, Codable, Sendable, RawInitializable {
 
   /// The relative humidity value.
   public var rawValue: Double
 
-  /// The relative humidity as a decimal.
-  public var fraction: Double {
-    rawValue / 100
-  }
 
   /// Create a new ``RelativeHumidity`` with the given value.
   ///
@@ -29,12 +25,19 @@ public struct RelativeHumidity: Equatable {
 
 postfix operator %
 
+extension RelativeHumidity {
+  /// The relative humidity as a decimal.
+  public var fraction: Double {
+    rawValue.rawValue / 100
+  }
+}
+
 /// Create a new ``RelativeHumidity`` for the given value.
 ///
 /// - Parameters:
 ///    - value: The relative humidity value
 public postfix func % (value: Double) -> RelativeHumidity {
-  RelativeHumidity(value)
+  RelativeHumidity(.init(value))
 }
 
 /// Create a new ``RelativeHumidity`` for the given value.
@@ -42,10 +45,10 @@ public postfix func % (value: Double) -> RelativeHumidity {
 /// - Parameters:
 ///    - value: The relative humidity value
 public postfix func % (value: Int) -> RelativeHumidity {
-  RelativeHumidity(Double(value))
+  RelativeHumidity(.init(Double(value)))
 }
 
-extension RelativeHumidity: RawNumericType {
+extension Humidity: RawNumericType {
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude
@@ -68,6 +71,6 @@ extension RelativeHumidity {
       100
       * (exp((17.625 * dewPoint.celsius) / (243.04 + dewPoint.celsius))
         / exp((17.625 * temperature.celsius) / (243.04 + temperature.celsius)))
-    self.init(humidity)
+    self.init(.init(humidity))
   }
 }

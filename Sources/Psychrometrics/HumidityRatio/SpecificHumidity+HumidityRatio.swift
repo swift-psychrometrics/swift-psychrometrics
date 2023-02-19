@@ -12,6 +12,6 @@ extension HumidityRatio {
     precondition(
       specificHumidity.rawValue > 0.0 && specificHumidity.rawValue < 1.0
     )
-    self.init(specificHumidity.rawValue / (1 - specificHumidity.rawValue))
+    self.init(.init(specificHumidity.rawValue / (1 - specificHumidity.rawValue)))
   }
 }

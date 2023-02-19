@@ -1,13 +1,12 @@
-import SharedModels
 import Foundation
 
-public struct Enthalpy<T> {
+public struct Enthalpy: Equatable, Codable, Sendable {
 
   /// The enthalpy of the air based on input state.
-  public private(set) var rawValue: Double
+  public var rawValue: Double
 
   /// The units of measure for the raw value.
-  public private(set) var units: EnthalpyUnits
+  public var units: EnthalpyUnits
 
   /// Create a new ``Enthalpy`` for the given raw value.
   ///
@@ -20,7 +19,7 @@ public struct Enthalpy<T> {
   }
 }
 
-public enum EnthalpyUnits: String, UnitOfMeasure {
+public enum EnthalpyUnits: String, UnitOfMeasure, Codable, Sendable {
 
   case btuPerPound = "Btu/lb"
   case joulePerKilogram = "J/kg"
@@ -39,9 +38,7 @@ extension Enthalpy: NumberWithUnitOfMeasure {
   public typealias Magnitude = Double.Magnitude
   public typealias Units = EnthalpyUnits
 
-  public static func keyPath(for units: EnthalpyUnits) -> WritableKeyPath<Enthalpy<T>, Double> {
+  public static func keyPath(for units: EnthalpyUnits) -> WritableKeyPath<Enthalpy, Double> {
     \.rawValue
   }
 }
-
-public typealias EnthalpyOf<T> = Enthalpy<T>

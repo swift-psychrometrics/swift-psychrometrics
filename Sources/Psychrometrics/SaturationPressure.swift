@@ -151,6 +151,6 @@ extension RelativeHumidity {
     let units = units ?? environment.units
     let saturationPressure = SaturationPressure(at: temperature, units: units)
     let fraction = vaporPressure.rawValue / saturationPressure.rawValue
-    self.init(fraction * 100)
+    self.init(.init(fraction * 100))
   }
 }

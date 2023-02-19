@@ -3,7 +3,7 @@ import Dependencies
 import Foundation
 import PsychrometricEnvironment
 
-extension Enthalpy where T == DryAir {
+extension DryAirEnthalpy {
 
   private struct DryAirConstants {
     let specificHeat: Double
@@ -35,6 +35,6 @@ extension Enthalpy where T == DryAir {
     
     let units = units ?? environment.units
     let value = DryAirConstants(units: units).run(temperature)
-    self.init(value, units: .defaultFor(units: units))
+    self.init(Enthalpy(value, units: .defaultFor(units: units)))
   }
 }

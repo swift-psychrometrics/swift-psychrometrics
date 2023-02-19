@@ -1,7 +1,7 @@
 import Foundation
 
 /// Represents a unit of length in both SI and IP units.
-public struct Length: Hashable {
+public struct Length: Hashable, Codable, Sendable {
 
   /// The raw value of the length for the units set on the instance.
   public private(set) var rawValue: Double
@@ -23,7 +23,7 @@ public struct Length: Hashable {
   }
 
   /// Represents unit of measure used in a ``Length``.
-  public enum Unit: String, Equatable, Codable, Hashable, CaseIterable {
+  public enum Unit: String, Equatable, Codable, Hashable, CaseIterable, Sendable {
 
     public static func defaultFor(units: PsychrometricUnits) -> Length.Unit {
       switch units {

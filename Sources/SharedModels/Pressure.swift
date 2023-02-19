@@ -1,7 +1,7 @@
 import Foundation
 
 /// Represents / calculates pressure for different units.
-public struct Pressure: Hashable {
+public struct Pressure: Hashable, Codable, Sendable {
 
   public private(set) var rawValue: Double
 
@@ -14,7 +14,7 @@ public struct Pressure: Hashable {
 
   // MARK: - Pressure.Unit
   /// Represents the units of measure for ``Pressure``.
-  public enum Unit: String, Equatable, Hashable, CaseIterable {
+  public enum Unit: String, Equatable, Hashable, CaseIterable, Sendable {
 
     public static func defaultFor(units: PsychrometricUnits) -> Self {
       switch units {
