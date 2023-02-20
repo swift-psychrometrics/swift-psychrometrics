@@ -1,10 +1,10 @@
-// swift-tools-version:5.4
+// swift-tools-version:5.7
 import Foundation
 import PackageDescription
 
 var package = Package(
   name: "swift-psychrometrics",
-  platforms: [.macOS(.v10_15), .iOS(.v13)],
+  platforms: [.macOS(.v12), .iOS(.v13)],
   products: [
     .library(name: "ConcurrencyHelpers", targets: ["ConcurrencyHelpers"]),
     .library(name: "SharedModels", targets: ["SharedModels"]),
@@ -21,7 +21,7 @@ var package = Package(
     .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "0.1.0"),
     .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.6.0"),
     .package(url: "https://github.com/pointfreeco/swift-url-routing", from: "0.4.0"),
-    .package(url: "https://github.com/pointgreeco/xctest-dynamic-overlay", from: "0.6.0"),
+    .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", from: "0.6.0"),
   ],
   targets: [
     .target(
@@ -111,11 +111,15 @@ if #available(macOS 10.15, *),
 
 // MARK: - Server
 package.dependencies.append(contentsOf: [
-  
+  .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
+  .package(url: "https://github.com/pointfreeco/vapor-routing.git", from: "0.1.0"),
 ])
 package.products.append(contentsOf: [
+  .executable(name: "server", targets: ["server"]),
   .library(name: "ApiMiddleware", targets: ["ApiMiddleware"]),
   .library(name: "ApiMiddlewareLive", targets: ["ApiMiddlewareLive"]),
+  .library(name: "ServerConfig", targets: ["ServerConfig"]),
+  .library(name: "SiteMiddleware", targets: ["SiteMiddleware"]),
 ])
 package.targets.append(contentsOf: [
   .target(
@@ -123,7 +127,6 @@ package.targets.append(contentsOf: [
     dependencies: [
       "ConcurrencyHelpers",
       "SharedModels",
-      "TestSupport",
       .product(name: "CasePaths", package: "swift-case-paths"),
       .product(name: "Dependencies", package: "swift-dependencies"),
       .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay")
@@ -134,6 +137,33 @@ package.targets.append(contentsOf: [
     dependencies: [
       "ApiMiddleware",
       "Psychrometrics",
+    ]
+  ),
+  .executableTarget(
+    name: "server",
+    dependencies: [
+      "ServerConfig",
+      .product(name: "Vapor", package: "vapor"),
+    ]
+  ),
+  .target(
+    name: "ServerConfig",
+    dependencies: [
+      "ApiMiddlewareLive",
+      "SiteMiddleware",
+      "SiteRouter",
+      .product(name: "Vapor", package: "vapor"),
+      .product(name: "VaporRouting", package: "vapor-routing"),
+    ]
+  ),
+  .target(
+    name: "SiteMiddleware",
+    dependencies: [
+      "ApiMiddleware",
+      "SharedModels",
+      .product(name: "Dependencies", package: "swift-dependencies"),
+      .product(name: "Vapor", package: "vapor"),
+      .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay")
     ]
   ),
 ])

@@ -24,8 +24,8 @@ public typealias TotalPressure = Tagged<Total, Pressure>
 public enum Saturation {}
 public typealias SaturationPressure = Tagged<Saturation, Pressure>
 
-public enum Vapor {}
-public typealias VaporPressure = Tagged<Vapor, Pressure>
+public enum VaporType {}
+public typealias VaporPressure = Tagged<VaporType, Pressure>
 
 public enum DewPointTemperature {}
 public typealias DewPoint = Tagged<DewPointTemperature, Temperature>
