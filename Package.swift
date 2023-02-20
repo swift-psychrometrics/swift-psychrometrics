@@ -6,6 +6,7 @@ var package = Package(
   name: "swift-psychrometrics",
   platforms: [.macOS(.v10_15), .iOS(.v13)],
   products: [
+    .library(name: "ConcurrencyHelpers", targets: ["ConcurrencyHelpers"]),
     .library(name: "SharedModels", targets: ["SharedModels"]),
     .library(name: "SiteRouter", targets: ["SiteRouter"]),
     .library(name: "PsychrometricEnvironment", targets: ["PsychrometricEnvironment"]),
@@ -13,14 +14,20 @@ var package = Package(
     .library(name: "TestSupport", targets: ["TestSupport"]),
   ],
   dependencies: [
+    .package(url: "https://github.com/pointfreeco/swift-case-paths", from: "0.12.0"),
     .package(
       url: "https://github.com/pointfreeco/swift-custom-dump.git", from: "0.6.1"
     ),
     .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "0.1.0"),
     .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.6.0"),
     .package(url: "https://github.com/pointfreeco/swift-url-routing", from: "0.4.0"),
+    .package(url: "https://github.com/pointgreeco/xctest-dynamic-overlay", from: "0.6.0"),
   ],
   targets: [
+    .target(
+      name: "ConcurrencyHelpers",
+      dependencies: []
+    ),
     .target(
       name: "SharedModels",
       dependencies: [
@@ -101,3 +108,32 @@ if #available(macOS 10.15, *),
     )
   ])
 }
+
+// MARK: - Server
+package.dependencies.append(contentsOf: [
+  
+])
+package.products.append(contentsOf: [
+  .library(name: "ApiMiddleware", targets: ["ApiMiddleware"]),
+  .library(name: "ApiMiddlewareLive", targets: ["ApiMiddlewareLive"]),
+])
+package.targets.append(contentsOf: [
+  .target(
+    name: "ApiMiddleware",
+    dependencies: [
+      "ConcurrencyHelpers",
+      "SharedModels",
+      "TestSupport",
+      .product(name: "CasePaths", package: "swift-case-paths"),
+      .product(name: "Dependencies", package: "swift-dependencies"),
+      .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay")
+    ]
+  ),
+  .target(
+    name: "ApiMiddlewareLive",
+    dependencies: [
+      "ApiMiddleware",
+      "Psychrometrics",
+    ]
+  ),
+])

@@ -1,7 +1,8 @@
 import Foundation
+import SharedModels
 
 /// Represents / calculates the specific heat of water.
-public struct SpecificHeat: Equatable {
+fileprivate struct _SpecificHeat: Equatable {
 
   var unit: Unit
 
@@ -26,7 +27,16 @@ public struct SpecificHeat: Equatable {
   ///
   /// - Parameters:
   ///   - temperature: The temperature of the water.
-  public static func water(at temperature: Temperature) -> SpecificHeat {
+  public static func water(at temperature: Temperature) -> _SpecificHeat {
     .init(unit: .water(temperature))
+  }
+}
+
+extension SpecificHeat {
+  
+  public static func water(temperature: DryBulb) -> Self {
+    return .init(
+      _SpecificHeat(unit: .water(temperature.rawValue)).rawValue
+    )
   }
 }

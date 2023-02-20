@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Often represented by `ρ` in ASHRAE Fundamentals (2017)
 ///
-public struct Density<T> {
+public struct Density<T>: Codable, Equatable, Sendable {
 
   /// The raw value of the density.
   public private(set) var rawValue: Double
@@ -24,7 +24,7 @@ public struct Density<T> {
 }
 
 /// The units of measure for a ``Density`` type.
-public enum DensityUnits: String, UnitOfMeasure {
+public enum DensityUnits: String, UnitOfMeasure, Codable, Sendable {
 
   case poundsPerCubicFoot = "lb/ft^3"
   case kilogramPerCubicMeter = "kg/m^3"

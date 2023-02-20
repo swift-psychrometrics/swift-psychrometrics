@@ -341,12 +341,12 @@ public enum ServerRoute: Codable, Equatable, Sendable {
         }
 
         public struct Pressure: Codable, Equatable, Sendable {
-          public var dryBulb: SharedModels.Temperature
+          public var dryBulb: DryBulb
           public var humidity: SharedModels.RelativeHumidity
           public var totalPressure: SharedModels.TotalPressure
 
           public init(
-            dryBulb: SharedModels.Temperature,
+            dryBulb: SharedModels.DryBulb,
             humidity: SharedModels.RelativeHumidity,
             totalPressure: SharedModels.TotalPressure
           ) {
@@ -700,6 +700,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
       }
 
       // MARK: - Vapor Pressure
+      // TODO: Add drybulb & humidity route.
       public enum VaporPressure: Codable, Equatable, Sendable {
         case humidityRatio(HumidityRatio)
 
@@ -710,22 +711,23 @@ public enum ServerRoute: Codable, Equatable, Sendable {
         public struct HumidityRatio: Codable, Equatable, Sendable {
           public var humidityRatio: SharedModels.HumidityRatio
           public var totalPressure: TotalPressure
-          public var unit: PsychrometricUnits?
+          public var units: PsychrometricUnits?
 
           public init(
             humidityRatio: SharedModels.HumidityRatio,
             totalPressure: TotalPressure,
-            unit: PsychrometricUnits? = nil
+            units: PsychrometricUnits? = nil
           ) {
             self.humidityRatio = humidityRatio
             self.totalPressure = totalPressure
-            self.unit = unit
+            self.units = units
           }
         }
       }
 
       // MARK: - Wet Bulb
       // TODO: Add altitude
+      // TODO: add humidity ratio
       public enum WetBulb: Codable, Equatable, Sendable {
 
         case relativeHumidity(RelativeHumidity)
