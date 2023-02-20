@@ -1,5 +1,7 @@
 import Tagged
 
+// TODO: Group Routes based on `Moist` or `Dry` air.
+
 /// Represents the server routes.
 ///
 public enum ServerRoute: Codable, Equatable, Sendable {
