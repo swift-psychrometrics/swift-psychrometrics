@@ -78,7 +78,7 @@ public func apiRouter(
       Method.post
       Body(
         .json(
-          Temperature.self,
+          ServerRoute.Api.Route.Density.Water.self,
           decoder: decoder,
           encoder: encoder
         )

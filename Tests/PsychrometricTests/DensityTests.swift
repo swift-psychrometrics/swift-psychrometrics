@@ -44,25 +44,5 @@ final class DensityTests: XCTestCase {
     )
     XCTApproximatelyEqual(density, 1.08411986348219, tolerance: 0.0003)
   }
-  
-//  func testDensityOfMoistAir() {
-//    let pressure: Pressure = 14.270
-//    let ratio = HumidityRatio(for: 72.9, at: 72.5%, pressure: pressure)
-//    let volume = SpecificVolumeOf<MoistAir>(dryBulb: 72.9, ratio: ratio, pressure: pressure)
-//    let density = DensityOf<MoistAir>(volume: volume, ratio: ratio)
-//    let density2 = DensityOf<MoistAir>(for: 72.9, at: 72.5%, pressure: pressure)
-//    XCTAssertEqual(
-//      round(density.rawValue * 10e7) / 10e7,
-//      0.072
-//    )
-//    XCTAssertEqual(
-//      round(density2.rawValue * 10e7) / 10e7,
-//      round(density.rawValue * 10e7) / 10e7
-//    )
-//  }
-  
-//  func testDensityUnit() {
-//    XCTAssertEqual(DensityUnit.dryAir.label, "Dry Air")
-//    XCTAssertEqual(DensityUnit.water.label, "Water")
-//  }
+
 }

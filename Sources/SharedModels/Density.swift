@@ -1,5 +1,7 @@
 import Foundation
 
+// TOOO: Used `Tagged`
+
 /// Represents the mass per unit of volume.
 ///
 /// Often represented by `ρ` in ASHRAE Fundamentals (2017)
@@ -7,10 +9,10 @@ import Foundation
 public struct Density<T>: Codable, Equatable, Sendable {
 
   /// The raw value of the density.
-  public private(set) var rawValue: Double
+  public var rawValue: Double
 
   /// The units of the raw value.
-  public private(set) var units: DensityUnits
+  public var units: DensityUnits
 
   /// Create a new ``Density`` with the given raw value.
   ///

@@ -51,7 +51,7 @@ public enum ServerRoute: Codable, Equatable, Sendable {
       public enum Density: Codable, Equatable, Sendable {
         case dryAir(DryAir)
         case moistAir(MoistAir)
-        case water(Temperature)
+        case water(Water)
 
         public enum Key: String, RouteKey {
           case dryAir
@@ -166,6 +166,14 @@ public enum ServerRoute: Codable, Equatable, Sendable {
               self.specificVolume = specificVolume
               self.units = units
             }
+          }
+        }
+        
+        public struct Water: Codable, Equatable, Sendable {
+          public var dryBulb: DryBulb
+          
+          public init(dryBulb: DryBulb) {
+            self.dryBulb = dryBulb
           }
         }
       }

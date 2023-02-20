@@ -86,8 +86,8 @@ extension ServerRoute.Api.Route.Density.MoistAir.SpecificVolume {
 }
 
 // MARK: Water
-fileprivate extension Temperature {
+fileprivate extension ServerRoute.Api.Route.Density.Water {
   func response() async throws -> DensityOf<Water> {
-    await .init(for: self)
+    await .init(for: dryBulb.rawValue)
   }
 }

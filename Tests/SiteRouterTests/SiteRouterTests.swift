@@ -180,6 +180,33 @@ final class SiteRouterTests: XCTestCase {
     )
   }
   
+  func test_density_water() throws {
+    
+    @Dependency(\.siteRouter) var router
+    
+    let json = """
+      {
+        "dryBulb": 0
+      }
+    """
+    var request = URLRequest(url: URL(string: "/api/v1/density/water")!)
+    request.httpMethod = "POST"
+    request.httpBody = Data(json.utf8)
+    
+    let route = try router.match(request: request)
+    let expectedRoute = ServerRoute.Api.Route.density(.water(.init(dryBulb: .zero)))
+    
+    XCTAssertNoDifference(
+      route,
+      .api(
+        .init(
+          isDebug: false,
+          route: expectedRoute
+        )
+      )
+    )
+  }
+  
   func test_dewPoint_temperature() throws {
     
     @Dependency(\.siteRouter) var router
