@@ -8,7 +8,7 @@ extension ServerRoute.Api.Route.Psychrometrics {
   func respond() async throws -> PsychrometricResponse {
     switch self {
     case let .dewPoint(dewPoint):
-      guard let value = PsychrometricResponse(
+      guard let value = await PsychrometricResponse(
         dryBulb: dewPoint.dryBulb.rawValue,
         dewPoint: dewPoint.dewPoint,
         pressure: dewPoint.totalPressure.rawValue,
@@ -19,7 +19,7 @@ extension ServerRoute.Api.Route.Psychrometrics {
       }
       return value
     case let .relativeHumidity(relativeHumidity):
-      guard let value = PsychrometricResponse(
+      guard let value = await PsychrometricResponse(
         dryBulb: relativeHumidity.dryBulb.rawValue,
         humidity: relativeHumidity.humidity,
         pressure: relativeHumidity.totalPressure.rawValue,
@@ -30,7 +30,7 @@ extension ServerRoute.Api.Route.Psychrometrics {
       }
       return value
     case let .wetBulb(wetBulb):
-      return .init(
+      return await .init(
         dryBulb: wetBulb.dryBulb.rawValue,
         wetBulb: wetBulb.wetBulb,
         pressure: wetBulb.totalPressure.rawValue,

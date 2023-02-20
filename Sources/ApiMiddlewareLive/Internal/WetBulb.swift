@@ -7,7 +7,7 @@ extension ServerRoute.Api.Route.WetBulb {
   func respond() async throws -> SharedModels.WetBulb {
     switch self {
     case let .relativeHumidity(relativeHumidity):
-      guard let value = SharedModels.WetBulb(
+      guard let value = await SharedModels.WetBulb(
         dryBulb: relativeHumidity.dryBulb.rawValue,
         humidity: relativeHumidity.humidity,
         pressure: relativeHumidity.totalPressure.rawValue,

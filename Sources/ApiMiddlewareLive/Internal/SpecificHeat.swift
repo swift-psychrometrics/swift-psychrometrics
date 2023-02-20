@@ -5,7 +5,7 @@ extension ServerRoute.Api.Route.SpecificHeat {
   func respond() async throws -> SharedModels.SpecificHeat {
     switch self {
     case let .water(water):
-      return .water(temperature: water.dryBulb)
+      return await .water(temperature: water.dryBulb)
     }
   }
 }

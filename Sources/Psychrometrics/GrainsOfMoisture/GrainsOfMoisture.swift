@@ -18,7 +18,7 @@ public struct GrainsOfMoisture {
   public static func saturationHumidity(
     saturationPressure: SaturationPressure,
     totalPressure: Pressure
-  ) -> Double {
+  ) async -> Double {
     7000 * moleWeightRatio
       * saturationPressure.psi
       / (totalPressure.psi - saturationPressure.psi)
@@ -41,8 +41,8 @@ public struct GrainsOfMoisture {
     temperature: Temperature,
     humidity: RelativeHumidity,
     pressure: Pressure
-  ) {
-    let saturationHumidity = Self.saturationHumidity(
+  ) async {
+    let saturationHumidity = await Self.saturationHumidity(
       saturationPressure: SaturationPressure(at: temperature),
       totalPressure: pressure
     )
@@ -59,8 +59,8 @@ public struct GrainsOfMoisture {
     temperature: Temperature,
     humidity: RelativeHumidity,
     altitude: Length = .seaLevel
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       temperature: temperature,
       humidity: humidity,
       pressure: .init(altitude: altitude)
@@ -81,7 +81,7 @@ extension Temperature {
   /// - Parameters:
   ///   - humidity: The relative humidity of the air.
   ///   - altitude: The altitude of the air.
-  public func grains(humidity: RelativeHumidity, altitude: Length = .seaLevel) -> GrainsOfMoisture {
-    .init(temperature: self, humidity: humidity, altitude: altitude)
+  public func grains(humidity: RelativeHumidity, altitude: Length = .seaLevel) async -> GrainsOfMoisture {
+    await .init(temperature: self, humidity: humidity, altitude: altitude)
   }
 }

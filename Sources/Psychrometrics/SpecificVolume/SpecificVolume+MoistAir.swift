@@ -15,7 +15,7 @@ extension SpecificVolume where T == MoistAir {
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
 
-    func run(dryBulb: Temperature, ratio: HumidityRatio, pressure: Pressure) -> Double {
+    func run(dryBulb: Temperature, ratio: HumidityRatio, pressure: Pressure) async -> Double {
       let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
       let P = units.isImperial ? pressure.psi : pressure.pascals
       let intermediateValue = universalGasConstant * T * (1 + c1 * ratio.rawValue)
@@ -24,7 +24,7 @@ extension SpecificVolume where T == MoistAir {
 
     // inverts the calculation to solve for dry-bulb
     func dryBulb(volume: SpecificVolumeOf<MoistAir>, ratio: HumidityRatio, pressure: Pressure)
-      -> Temperature
+      async -> Temperature
     {
       let P = units.isImperial ? pressure.psi : pressure.pascals
       let c2 = units.isImperial ? 144.0 : 1.0
@@ -48,12 +48,12 @@ extension SpecificVolume where T == MoistAir {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     precondition(humidityRatio.rawValue > 0)
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
-    let value = Constants(units: units)
+    let value = await Constants(units: units)
       .run(dryBulb: temperature, ratio: humidityRatio, pressure: totalPressure)
     self.init(value, units: .defaultFor(units: units))
   }
@@ -72,8 +72,8 @@ extension SpecificVolume where T == MoistAir {
     humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       dryBulb: temperature,
       ratio: .init(dryBulb: temperature, pressure: totalPressure),
       pressure: totalPressure,
@@ -95,8 +95,8 @@ extension SpecificVolume where T == MoistAir {
     humidity: RelativeHumidity,
     altitude: Length,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       dryBulb: temperature,
       humidity: humidity,
       pressure: .init(altitude: altitude, units: units),
@@ -122,7 +122,7 @@ extension Temperature {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
 
     @Dependency(\.psychrometricEnvironment) var environment
 
@@ -130,7 +130,8 @@ extension Temperature {
 
     precondition(specificVolume.units == SpecificVolumeUnits.defaultFor(units: units))
 
-    let absoluteTemperature = SpecificVolumeOf<MoistAir>.Constants(units: units)
+    let absoluteTemperature = await SpecificVolumeOf<MoistAir>
+      .Constants(units: units)
       .dryBulb(volume: specificVolume, ratio: humidityRatio, pressure: totalPressure)
 
     print("abs: \(absoluteTemperature)")
@@ -156,8 +157,8 @@ extension Temperature {
     ratio humidityRatio: HumidityRatio,
     altitude: Length,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       volume: specificVolume, ratio: humidityRatio, pressure: .init(altitude: altitude),
       units: units)
   }

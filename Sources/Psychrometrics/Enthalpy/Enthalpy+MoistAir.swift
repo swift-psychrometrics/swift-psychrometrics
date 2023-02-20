@@ -11,20 +11,20 @@ extension MoistAirEnthalpy {
     let c3: Double
     let units: PsychrometricUnits
 
-    init(units: PsychrometricUnits) {
+    init(units: PsychrometricUnits) async {
       self.units = units
       self.c1 = units.isImperial ? 0.24 : 1.006
       self.c2 = units.isImperial ? 1061 : 2501
       self.c3 = units.isImperial ? 0.444 : 1.86
     }
 
-    func run(dryBulb: Temperature, ratio: HumidityRatio) -> Double {
+    func run(dryBulb: Temperature, ratio: HumidityRatio) async -> Double {
       let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let value = c1 * T + ratio.rawValue * (c2 + c3 * T)
       return units.isImperial ? value : value * 1000
     }
 
-    func dryBulb(enthalpy: MoistAirEnthalpy, ratio: HumidityRatio) -> Temperature {
+    func dryBulb(enthalpy: MoistAirEnthalpy, ratio: HumidityRatio) async -> Temperature {
       let intermediateValue =
         units.isImperial
         ? enthalpy.rawValue.rawValue - c2 * ratio.rawValue
@@ -46,13 +46,13 @@ extension MoistAirEnthalpy {
     dryBulb temperature: Temperature,
     ratio humidityRatio: HumidityRatio,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     precondition(humidityRatio > 0)
 
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
-    let value = Constants(units: units).run(dryBulb: temperature, ratio: humidityRatio)
+    let value = await Constants(units: units).run(dryBulb: temperature, ratio: humidityRatio)
     self.init(Enthalpy(value, units: .defaultFor(units: units)))
   }
 
@@ -68,8 +68,8 @@ extension MoistAirEnthalpy {
     dryBulb temperature: Temperature,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       dryBulb: temperature,
       ratio: .init(dryBulb: temperature, pressure: totalPressure, units: units),
       units: units
@@ -90,8 +90,8 @@ extension MoistAirEnthalpy {
     humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       dryBulb: temperature,
       ratio: .init(
         dryBulb: temperature,
@@ -117,8 +117,8 @@ extension MoistAirEnthalpy {
     humidity: RelativeHumidity,
     altitude: Length = .seaLevel,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       dryBulb: temperature,
       humidity: humidity,
       pressure: .init(altitude: altitude, units: units),

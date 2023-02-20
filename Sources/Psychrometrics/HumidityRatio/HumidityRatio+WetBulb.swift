@@ -75,14 +75,18 @@ extension HumidityRatio {
     wetBulb: WetBulb,
     pressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     precondition(dryBulb > wetBulb.rawValue)
 
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
 
-    let saturatedHumidityRatio = HumidityRatio(dryBulb: wetBulb.rawValue, pressure: pressure)
+    let saturatedHumidityRatio = await HumidityRatio(
+      dryBulb: wetBulb.rawValue,
+      pressure: pressure
+    )
+    
     if wetBulb.rawValue > PsychrometricEnvironment.triplePointOfWater(for: units) {
       self.init(
         .init(
@@ -108,12 +112,12 @@ extension WetBulb {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
 
     @Dependency(\.psychrometricEnvironment) var environment
 
     guard
-      let wetBulb = try? wetBulb_from_humidity_ratio(
+      let wetBulb = try? await wetBulb_from_humidity_ratio(
         dryBulb: temperature,
         humidityRatio: humidityRatio,
         pressure: totalPressure,
@@ -130,12 +134,12 @@ private func wetBulb_from_humidity_ratio(
   humidityRatio: HumidityRatio,
   pressure: Pressure,
   units: PsychrometricUnits
-) throws -> WetBulb? {
+) async throws -> WetBulb? {
   precondition(humidityRatio > 0)
 
   @Dependency(\.psychrometricEnvironment) var environment
 
-  let dewPoint = DewPoint(dryBulb: dryBulb, ratio: humidityRatio, pressure: pressure, units: units)
+  let dewPoint = await DewPoint(dryBulb: dryBulb, ratio: humidityRatio, pressure: pressure, units: units)
   let temperatureUnits = units.isImperial ? Temperature.Units.fahrenheit : .celsius
 
   // Initial guesses
@@ -146,7 +150,7 @@ private func wetBulb_from_humidity_ratio(
   var index = 1
 
   while (wetBulbSup - wetBulbInf) > environment.temperatureTolerance.rawValue {
-    let ratio = HumidityRatio(
+    let ratio = await HumidityRatio(
       dryBulb: dryBulb,
       wetBulb: .init(.init(wetBulb, units: temperatureUnits)),
       pressure: pressure,

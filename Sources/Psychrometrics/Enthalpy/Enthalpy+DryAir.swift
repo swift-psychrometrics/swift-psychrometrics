@@ -9,12 +9,12 @@ extension DryAirEnthalpy {
     let specificHeat: Double
     let units: PsychrometricUnits
 
-    init(units: PsychrometricUnits) {
+    init(units: PsychrometricUnits) async {
       self.units = units
       self.specificHeat = units.isImperial ? 0.24 : 1006
     }
 
-    func run(_ dryBulb: Temperature) -> Double {
+    func run(_ dryBulb: Temperature) async -> Double {
       let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       return specificHeat * T
     }
@@ -30,11 +30,11 @@ extension DryAirEnthalpy {
   public init(
     dryBulb temperature: Temperature,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
-    let value = DryAirConstants(units: units).run(temperature)
+    let value = await DryAirConstants(units: units).run(temperature)
     self.init(Enthalpy(value, units: .defaultFor(units: units)))
   }
 }

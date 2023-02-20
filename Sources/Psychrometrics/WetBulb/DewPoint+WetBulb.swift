@@ -7,14 +7,19 @@ extension DewPoint {
     wetBulb: WetBulb,
     pressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     precondition(temperature > wetBulb.rawValue)
-    let humidityRatio = HumidityRatio(
+    let humidityRatio = await HumidityRatio(
       dryBulb: temperature,
       wetBulb: wetBulb,
       pressure: pressure,
       units: units
     )
-    self.init(dryBulb: temperature, ratio: humidityRatio, pressure: pressure, units: units)
+    await self.init(
+      dryBulb: temperature,
+      ratio: humidityRatio,
+      pressure: pressure,
+      units: units
+    )
   }
 }

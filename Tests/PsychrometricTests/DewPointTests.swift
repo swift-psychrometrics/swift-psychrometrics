@@ -46,25 +46,25 @@ final class DewPointTests: XCTestCase {
     XCTAssertEqual(dewPoint2.rawValue, 180)
   }
   
-  func test_humidityRatio_from_dewPoint_imperial() {
+  func test_humidityRatio_from_dewPoint_imperial() async {
     let pressure = Pressure(altitude: .seaLevel, units: .imperial)
-    let ratio = HumidityRatio.init(dryBulb: 75, humidity: 50%, pressure: pressure)
-    let dewPoint = DewPoint.init(dryBulb: 75, ratio: ratio, pressure: pressure, units: .imperial)
-    let ratio2 = HumidityRatio.init(dewPoint: dewPoint, pressure: pressure, units: .imperial)
+    let ratio = await HumidityRatio.init(dryBulb: 75, humidity: 50%, pressure: pressure)
+    let dewPoint = await DewPoint.init(dryBulb: 75, ratio: ratio, pressure: pressure, units: .imperial)
+    let ratio2 = await HumidityRatio.init(dewPoint: dewPoint, pressure: pressure, units: .imperial)
     XCTApproximatelyEqual(ratio.rawValue, ratio2.rawValue, tolerance: 2.2e-5)
   }
   
-  func test_humidityRatio_from_dewPoint_metric() {
+  func test_humidityRatio_from_dewPoint_metric() async {
     let pressure = Pressure(altitude: .seaLevel, units: .metric)
-    let ratio = HumidityRatio.init(dryBulb: .celsius(23.89), humidity: 50%, pressure: pressure, units: .metric)
+    let ratio = await HumidityRatio.init(dryBulb: .celsius(23.89), humidity: 50%, pressure: pressure, units: .metric)
     
-    let dewPoint = DewPoint.init(dryBulb: .celsius(23.89), ratio: ratio, pressure: pressure, units: .metric)
-    let ratio2 = HumidityRatio.init(dewPoint: dewPoint, pressure: pressure, units: .metric)
+    let dewPoint = await DewPoint.init(dryBulb: .celsius(23.89), ratio: ratio, pressure: pressure, units: .metric)
+    let ratio2 = await HumidityRatio.init(dewPoint: dewPoint, pressure: pressure, units: .metric)
     XCTApproximatelyEqual(ratio.rawValue, ratio2.rawValue, tolerance: 0.01)
   }
   
-  func test_dewPoint_from_humidityRatio_imperial() {
-    let dewPoint = DewPoint.init(dryBulb: 100, ratio: 0.00523, pressure: 14.696, units: .imperial)
+  func test_dewPoint_from_humidityRatio_imperial() async {
+    let dewPoint = await DewPoint.init(dryBulb: 100, ratio: 0.00523, pressure: 14.696, units: .imperial)
     XCTApproximatelyEqual(dewPoint.rawValue.fahrenheit, 40, tolerance: 0.21)
   }
 }

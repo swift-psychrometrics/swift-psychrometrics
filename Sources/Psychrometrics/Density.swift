@@ -12,7 +12,7 @@ extension Density where T == Water {
   ///
   /// - Parameters:
   ///   - temperature: The temperature to calculate the density for.
-  public init(for temperature: Temperature) {
+  public init(for temperature: Temperature) async {
     let value =
       62.56
       + 3.413
@@ -35,7 +35,7 @@ extension Density where T == DryAir {
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
 
-    func run(dryBulb: Temperature, pressure: Pressure) -> Double {
+    func run(dryBulb: Temperature, pressure: Pressure) async -> Double {
       let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
       let pressure = units.isImperial ? pressure.psi : pressure.pascals
 
@@ -60,11 +60,11 @@ extension Density where T == DryAir {
     for temperature: Temperature,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
-    let value = Constants(units: units).run(dryBulb: temperature, pressure: totalPressure)
+    let value = await Constants(units: units).run(dryBulb: temperature, pressure: totalPressure)
     self.init(value, units: .defaultFor(units: units))
   }
 
@@ -77,8 +77,8 @@ extension Density where T == DryAir {
     for temperature: Temperature,
     altitude: Length = .seaLevel,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(for: temperature, pressure: .init(altitude: altitude), units: units)
+  ) async {
+    await self.init(for: temperature, pressure: .init(altitude: altitude), units: units)
   }
 }
 
@@ -98,7 +98,7 @@ extension Density where T == MoistAir {
     volume specificVolume: SpecificVolumeOf<MoistAir>,
     ratio humidityRatio: HumidityRatio,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     precondition(humidityRatio.rawValue > 0)
 
     @Dependency(\.psychrometricEnvironment) var environment
@@ -126,8 +126,8 @@ extension Density where T == MoistAir {
     at humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       volume: .init(
         dryBulb: temperature,
         humidity: humidity,
@@ -154,8 +154,8 @@ extension Density where T == MoistAir {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       volume: .init(
         dryBulb: temperature, ratio: humidityRatio, pressure: totalPressure, units: units),
       ratio: humidityRatio,

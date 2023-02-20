@@ -35,27 +35,27 @@ final class WetBulbTests: XCTestCase {
   }
   
   // TODO: Fix tolerances.
-  func test_humidityRatio_and_wetBulb_imperial() throws {
+  func test_humidityRatio_and_wetBulb_imperial() async throws {
     // Above freezing.
-    var ratio = HumidityRatio.init(dryBulb: 86, wetBulb: 77, pressure: 14.175, units: .imperial)
+    var ratio = await HumidityRatio.init(dryBulb: 86, wetBulb: 77, pressure: 14.175, units: .imperial)
     XCTApproximatelyEqual(ratio.rawValue, 0.0187193288418892, tolerance: 0.0003)
     
     // This tolerance is high
-    var wetBulb = WetBulb.init(dryBulb: 77, ratio: ratio, pressure: 14.175, units: .imperial)!
+    var wetBulb = await WetBulb.init(dryBulb: 77, ratio: ratio, pressure: 14.175, units: .imperial)!
     XCTApproximatelyEqual(wetBulb.fahrenheit, 77, tolerance: 2.052)
     
     // Below freezing
-    ratio = .init(dryBulb: 30.2, wetBulb: 23, pressure: 14.175, units: .imperial)
+    ratio = await .init(dryBulb: 30.2, wetBulb: 23, pressure: 14.175, units: .imperial)
     XCTApproximatelyEqual(ratio.rawValue, 0.00114657481090184, tolerance: 0.0003)
     
-    wetBulb = .init(dryBulb: 30.2, ratio: ratio, pressure: 14.175, units: .imperial)!
+    wetBulb = await .init(dryBulb: 30.2, ratio: ratio, pressure: 14.175, units: .imperial)!
     XCTApproximatelyEqual(wetBulb.fahrenheit, 23, tolerance: 0.001)
     
   }
   
   // TODO: Tolerance is a bit high.
-  func test_wetBulb_and_relativeHumidity_metric() {
-    let wetBulb = WetBulb.init(
+  func test_wetBulb_and_relativeHumidity_metric() async {
+    let wetBulb = await WetBulb.init(
       dryBulb: .celsius(7),
       humidity: 61%,
       pressure: .pascals(100000),
@@ -64,9 +64,9 @@ final class WetBulbTests: XCTestCase {
     XCTApproximatelyEqual(wetBulb!.celsius, 3.92667433781955, tolerance: 0.22)
   }
   
-  func test_humidityRatio_and_wetBulb_metric() {
+  func test_humidityRatio_and_wetBulb_metric() async {
     // Above freezing
-    var humidityRatio = HumidityRatio.init(
+    var humidityRatio = await HumidityRatio.init(
       dryBulb: .celsius(30),
       wetBulb: .init(.celsius(25)),
       pressure: .pascals(95461),
@@ -74,7 +74,7 @@ final class WetBulbTests: XCTestCase {
     )
     XCTApproximatelyEqual(humidityRatio.rawValue, 0.0192281274241096, tolerance: 0.0003)
     
-    var wetBulb = WetBulb.init(
+    var wetBulb = await WetBulb.init(
       dryBulb: .celsius(30),
       ratio: humidityRatio,
       pressure: .pascals(95461),
@@ -83,7 +83,7 @@ final class WetBulbTests: XCTestCase {
     XCTApproximatelyEqual(wetBulb.celsius, 25, tolerance: 0.001)
     
     // below freezing
-    humidityRatio = .init(
+    humidityRatio = await .init(
       dryBulb: .celsius(-1),
       wetBulb: .init(.celsius(-5)),
       pressure: .pascals(95461),
@@ -91,7 +91,7 @@ final class WetBulbTests: XCTestCase {
     )
     XCTApproximatelyEqual(humidityRatio, 0.00120399819933844, tolerance: 0.0003)
     
-    wetBulb = .init(
+    wetBulb = await .init(
       dryBulb: .celsius(-1),
       ratio: humidityRatio,
       pressure: .pascals(95461),

@@ -18,7 +18,7 @@ extension HumidityRatio {
       self.c3 = units.isImperial ? 0.444 : 1.86
     }
 
-    func run(enthalpy: MoistAirEnthalpy, dryBulb: Temperature) -> Double {
+    func run(enthalpy: MoistAirEnthalpy, dryBulb: Temperature) async -> Double {
       let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let intermediateValue =
         units.isImperial
@@ -38,11 +38,14 @@ extension HumidityRatio {
     enthalpy: MoistAirEnthalpy,
     dryBulb temperature: Temperature,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
-    let value = HumidityRatioConstants(units: units).run(enthalpy: enthalpy, dryBulb: temperature)
+    
+    let value = await HumidityRatioConstants(units: units)
+      .run(enthalpy: enthalpy, dryBulb: temperature)
+    
     self.init(.init(value))
   }
 }
@@ -53,7 +56,7 @@ extension MoistAirEnthalpy {
   ///
   /// - Parameters:
   ///   - temperature: The dry bulb temperature of the air.
-  public func humidityRatio(at temperature: Temperature) -> HumidityRatio {
-    .init(enthalpy: self, dryBulb: temperature)
+  public func humidityRatio(at temperature: Temperature) async -> HumidityRatio {
+    await .init(enthalpy: self, dryBulb: temperature)
   }
 }

@@ -12,8 +12,8 @@ extension DewPoint {
     dryBulb temperature: Temperature,
     humidity relativeHumidity: RelativeHumidity,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       dryBulb: temperature,
       vaporPressure: .init(dryBulb: temperature, humidity: relativeHumidity, units: units),
       units: units
@@ -27,7 +27,7 @@ extension Temperature {
   ///
   /// - Parameters:
   ///   - humidity: The relative humidity to use to calculate the dew-point.
-  public func dewPoint(humidity: RelativeHumidity) -> DewPoint {
-    .init(dryBulb: self, humidity: humidity)
+  public func dewPoint(humidity: RelativeHumidity) async -> DewPoint {
+    await .init(dryBulb: self, humidity: humidity)
   }
 }

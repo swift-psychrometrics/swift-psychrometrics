@@ -13,8 +13,8 @@ extension HumidityRatio {
     dewPoint: DewPoint,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       totalPressure: totalPressure,
       saturationPressure: SaturationPressure(at: dewPoint.rawValue, units: units),
       units: units
@@ -24,6 +24,8 @@ extension HumidityRatio {
 
 extension DewPoint {
 
+  // TODO: Remove precondition.
+  
   /// Create a new ``DewPoint`` for the given dry bulb temperature, humidity ratio, and atmospheric pressure.
   ///
   /// - Parameters:
@@ -36,9 +38,9 @@ extension DewPoint {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     precondition(humidityRatio > 0)
-    self.init(
+    await self.init(
       dryBulb: temperature,
       vaporPressure: .init(ratio: humidityRatio, pressure: totalPressure),
       units: units

@@ -28,13 +28,13 @@ extension ServerRoute.Api.Route.Density.DryAir {
 }
 extension ServerRoute.Api.Route.Density.DryAir.Altitude {
   func response() async throws -> DensityOf<SharedModels.DryAir> {
-    return .init(for: self.dryBulb.rawValue, altitude: self.altitude, units: self.units)
+    return await .init(for: self.dryBulb.rawValue, altitude: self.altitude, units: self.units)
   }
 }
 
 extension ServerRoute.Api.Route.Density.DryAir.Pressure {
   func response() async throws -> DensityOf<SharedModels.DryAir> {
-    .init(
+    await .init(
       for: self.dryBulb.rawValue,
       pressure: self.totalPressure.rawValue,
       units: self.units
@@ -58,7 +58,7 @@ extension ServerRoute.Api.Route.Density.MoistAir {
 
 extension ServerRoute.Api.Route.Density.MoistAir.HumidityRatio {
   func response() async throws -> DensityOf<SharedModels.MoistAir> {
-    .init(
+    await .init(
       dryBulb: dryBulb.rawValue,
       ratio: humidityRatio,
       pressure: totalPressure.rawValue
@@ -68,7 +68,7 @@ extension ServerRoute.Api.Route.Density.MoistAir.HumidityRatio {
 
 extension ServerRoute.Api.Route.Density.MoistAir.RelativeHumidity {
   func response() async throws -> DensityOf<SharedModels.MoistAir> {
-    .init(
+    await .init(
       for: dryBulb.rawValue,
       at: humidity,
       pressure: totalPressure.rawValue
@@ -78,7 +78,7 @@ extension ServerRoute.Api.Route.Density.MoistAir.RelativeHumidity {
 
 extension ServerRoute.Api.Route.Density.MoistAir.SpecificVolume {
   func response() async throws -> DensityOf<SharedModels.MoistAir> {
-    .init(
+    await .init(
       volume: specificVolume,
       ratio: humidityRatio
     )
@@ -88,6 +88,6 @@ extension ServerRoute.Api.Route.Density.MoistAir.SpecificVolume {
 // MARK: Water
 fileprivate extension Temperature {
   func response() async throws -> DensityOf<Water> {
-    .init(for: self)
+    await .init(for: self)
   }
 }

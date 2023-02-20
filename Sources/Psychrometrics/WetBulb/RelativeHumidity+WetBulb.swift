@@ -15,8 +15,8 @@ extension WetBulb {
     humidity relativeHumidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       dryBulb: temperature,
       ratio: .init(
         dryBulb: temperature, humidity: relativeHumidity, pressure: totalPressure, units: units),

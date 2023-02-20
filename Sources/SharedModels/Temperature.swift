@@ -1,4 +1,5 @@
 import Foundation
+import Tagged
 
 /// Represents a temperature in SI and IP units as well as scientific / absolute units.
 public struct Temperature: Hashable, Codable, Sendable {
@@ -76,6 +77,41 @@ extension Temperature {
   ///   - value: The rankine value of the temperature.
   public static func rankine(_ value: Double) -> Temperature {
     .init(value, units: .rankine)
+  }
+}
+
+extension Tagged where RawValue == Temperature {
+
+  /// Create a new ``Tagged`` with the given value.
+  ///
+  /// - Parameters:
+  ///   - value: The celsius value of the temperature.
+  public static func celsius(_ value: Double) -> Self {
+    .init(.init(value, units: .celsius))
+  }
+
+  /// Create a new ``Tagged`` with the given value.
+  ///
+  /// - Parameters:
+  ///   - value: The fahrenheit value of the temperature.
+  public static func fahrenheit(_ value: Double) -> Self {
+    .init(.init(value, units: .fahrenheit))
+  }
+
+  /// Create a new ``Tagged`` with the given value.
+  ///
+  /// - Parameters:
+  ///   - value: The kelvin value of the temperature.
+  public static func kelvin(_ value: Double) -> Self {
+    .init(.init(value, units: .kelvin))
+  }
+
+  /// Create a new ``Tagged`` with the given value.
+  ///
+  /// - Parameters:
+  ///   - value: The rankine value of the temperature.
+  public static func rankine(_ value: Double) -> Self {
+    .init(.init(value, units: .rankine))
   }
 }
 

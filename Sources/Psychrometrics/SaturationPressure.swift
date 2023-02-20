@@ -30,7 +30,7 @@ extension SaturationPressure {
       self.units = units
     }
 
-    fileprivate func exponent(dryBulb temperature: Temperature) -> Double {
+    fileprivate func exponent(dryBulb temperature: Temperature) async -> Double {
       let T = units.isImperial ? temperature.rankine : temperature.kelvin
       return c1 / T
         + c2
@@ -41,7 +41,7 @@ extension SaturationPressure {
         + c7 * log(T)
     }
 
-    fileprivate func derivative(dryBulb temperature: Temperature) -> Double {
+    fileprivate func derivative(dryBulb temperature: Temperature) async -> Double {
       let T = units.isImperial ? temperature.rankine : temperature.kelvin
       return (c1 * -1)
         / pow(T, 2)
@@ -73,7 +73,7 @@ extension SaturationPressure {
       self.units = units
     }
 
-    fileprivate func exponent(dryBulb temperature: Temperature) -> Double {
+    fileprivate func exponent(dryBulb temperature: Temperature) async -> Double {
       let T = units.isImperial ? temperature.rankine : temperature.kelvin
       return c1 / T
         + c2
@@ -104,7 +104,7 @@ extension SaturationPressure {
   public init(
     at temperature: Temperature,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
 
     @Dependency(\.psychrometricEnvironment) var environment
 
@@ -115,9 +115,8 @@ extension SaturationPressure {
     precondition(
       temperature >= bounds.low && temperature <= bounds.high
     )
-
-    let exponent =
-      temperature <= triplePoint
+    
+    let exponent = await temperature <= triplePoint
       ? SaturationConstantsBelowFreezing(units: units).exponent(dryBulb: temperature)
       : SaturationConstantsAboveFreezing(units: units).exponent(dryBulb: temperature)
 
@@ -139,13 +138,13 @@ extension RelativeHumidity {
     dryBulb temperature: Temperature,
     pressure vaporPressure: VaporPressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     precondition(vaporPressure > 0)
 
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
-    let saturationPressure = SaturationPressure(at: temperature, units: units)
+    let saturationPressure = await SaturationPressure(at: temperature, units: units)
     let fraction = vaporPressure.rawValue / saturationPressure.rawValue
     self.init(.init(fraction.rawValue * 100))
   }

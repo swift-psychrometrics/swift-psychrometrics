@@ -68,7 +68,7 @@ extension DewPoint {
     dryBulb temperature: Temperature,
     vaporPressure pressure: VaporPressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units

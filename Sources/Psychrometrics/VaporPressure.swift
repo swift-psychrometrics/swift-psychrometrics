@@ -15,12 +15,12 @@ extension VaporPressure {
     dryBulb temperature: Temperature,
     humidity relativeHumidity: RelativeHumidity,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
     let value =
-      SaturationPressure(at: temperature, units: units).rawValue.rawValue
+      await SaturationPressure(at: temperature, units: units).rawValue.rawValue
       * relativeHumidity.fraction
     self.init(.init(value, units: .defaultFor(units: units)))
   }

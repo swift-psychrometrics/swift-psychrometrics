@@ -52,9 +52,9 @@ extension SpecificHumidity {
     with humidity: RelativeHumidity,
     at totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     self.init(
-      ratio: HumidityRatio(dryBulb: temperature, humidity: humidity, pressure: totalPressure),
+      ratio: await HumidityRatio(dryBulb: temperature, humidity: humidity, pressure: totalPressure),
       units: units
     )
   }
@@ -70,9 +70,9 @@ extension SpecificHumidity {
     with humidity: RelativeHumidity,
     at altitude: Length,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     self.init(
-      ratio: HumidityRatio(dryBulb: temperature, humidity: humidity, altitude: altitude),
+      ratio: await HumidityRatio(dryBulb: temperature, humidity: humidity, altitude: altitude),
       units: units
     )
   }

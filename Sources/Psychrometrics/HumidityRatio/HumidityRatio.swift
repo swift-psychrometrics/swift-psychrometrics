@@ -6,7 +6,7 @@ import SharedModels
 extension HumidityRatio {
   @Dependency(\.psychrometricEnvironment) static var environment
 
-  public static func ensureHumidityRatio(_ ratio: HumidityRatio) -> HumidityRatio {
+  public static func ensureHumidityRatio(_ ratio: HumidityRatio) async -> HumidityRatio {
     guard ratio.rawValue.rawValue > environment.minimumHumidityRatio else {
       return .init(.init(environment.minimumHumidityRatio))
     }
@@ -21,7 +21,7 @@ extension HumidityRatio {
   public init(
     water waterMass: Double,
     dryAir dryAirMass: Double
-  ) {
+  ) async {
     self.init(.init(Self.moleWeightRatio * (waterMass / dryAirMass)))
   }
 
@@ -29,7 +29,7 @@ extension HumidityRatio {
     totalPressure: Pressure,
     partialPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     let units = units ?? Self.environment.units
     let partialPressure =
       units.isImperial ? partialPressure.psi : partialPressure.pascals
@@ -52,8 +52,8 @@ extension HumidityRatio {
     totalPressure: Pressure,
     vaporPressure: VaporPressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       totalPressure: totalPressure,
       partialPressure: vaporPressure.rawValue,
       units: units
@@ -69,8 +69,8 @@ extension HumidityRatio {
     totalPressure: Pressure,
     saturationPressure: SaturationPressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       totalPressure: totalPressure,
       partialPressure: saturationPressure.rawValue,
       units: units
@@ -86,8 +86,8 @@ extension HumidityRatio {
     dryBulb temperature: Temperature,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       totalPressure: totalPressure,
       saturationPressure: .init(at: temperature, units: units),
       units: units
@@ -105,8 +105,8 @@ extension HumidityRatio {
     humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       totalPressure: totalPressure,
       partialPressure: VaporPressure(
         dryBulb: temperature,
@@ -128,8 +128,8 @@ extension HumidityRatio {
     humidity: RelativeHumidity,
     altitude: Length,
     units: PsychrometricUnits? = nil
-  ) {
-    self.init(
+  ) async {
+    await self.init(
       dryBulb: temperature,
       humidity: humidity,
       pressure: .init(altitude: altitude),
@@ -137,9 +137,3 @@ extension HumidityRatio {
     )
   }
 }
-
-//extension HumidityRatio: RawNumericType {
-//  public typealias IntegerLiteralType = Double.IntegerLiteralType
-//  public typealias FloatLiteralType = Double.FloatLiteralType
-//  public typealias Magnitude = Double.Magnitude
-//}

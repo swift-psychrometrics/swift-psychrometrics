@@ -14,7 +14,7 @@ extension SpecificVolume where T == DryAir {
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
 
-    func run(dryBulb: Temperature, pressure: Pressure) -> Double {
+    func run(dryBulb: Temperature, pressure: Pressure) async -> Double {
       let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
       let P = units.isImperial ? pressure.psi : pressure.pascals
       guard units.isImperial else {
@@ -34,11 +34,11 @@ extension SpecificVolume where T == DryAir {
     dryBulb temperature: Temperature,
     pressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
-    let value = Constants(units: units).run(dryBulb: temperature, pressure: pressure)
+    let value = await Constants(units: units).run(dryBulb: temperature, pressure: pressure)
     self.init(value, units: .defaultFor(units: units))
   }
 }

@@ -9,13 +9,13 @@ extension RelativeHumidity {
     dryBulb temperature: Temperature,
     vaporPressure: VaporPressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     precondition(vaporPressure > 0)
 
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
-    let saturationPressure = SaturationPressure(at: temperature, units: units)
+    let saturationPressure = await SaturationPressure(at: temperature, units: units)
     let vaporPressure = units.isImperial ? vaporPressure.psi : vaporPressure.pascals
     let saturationPressureValue =
       units.isImperial ? saturationPressure.psi : saturationPressure.pascals
@@ -28,8 +28,8 @@ extension RelativeHumidity {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
+  ) async {
     let vaporPressure = VaporPressure(ratio: humidityRatio, pressure: totalPressure, units: units)
-    self.init(dryBulb: temperature, vaporPressure: vaporPressure, units: units)
+    await self.init(dryBulb: temperature, vaporPressure: vaporPressure, units: units)
   }
 }
