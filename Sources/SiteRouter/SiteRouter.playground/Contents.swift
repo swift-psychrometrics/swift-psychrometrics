@@ -5,12 +5,16 @@ import URLRouting
 
 var greeting = "Hello, playground"
 
-let encoder: JSONEncoder = {
-  let encoder = JSONEncoder()
-  encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
-  return encoder
-}()
+let json = """
+{
+  "dryBulb": 0,
+  "totalPressure": 0
+}
+"""
+var request = URLRequest(url: URL(string: "/density")!)
+request.httpMethod = "POST"
+request.httpBody = Data(json.utf8)
 
-let data = ServerRoute.Api.Route.Density.DryAir.Pressure(dryBulb: .zero, totalPressure: .zero)
-let string = String(data: try! encoder.encode(data), encoding: .utf8)
-print(string!)
+let res = try route2DensityRouter.match(request: request)
+
+print(res)

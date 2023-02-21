@@ -515,3 +515,16 @@ extension Path where ComponentParsers == PathBuilder.Component<String> {
     }
   }
 }
+
+public let route2DensityRouter = Route(.memberwise(Route2.DryAir.Density.init)) {
+  Path { "density" }
+  Method.post
+  OneOf {
+    Route(.case(Route2.DryAir.Density.Route.altitude)) {
+      Body(.json(Route2.DryAir.Density.Route.Altitude.self))
+    }
+    Route(.case(Route2.DryAir.Density.Route.totalPressure)) {
+      Body(.json(Route2.DryAir.Density.Route.Pressure.self))
+    }
+  }
+}

@@ -9,10 +9,10 @@ import Foundation
 public struct Density<T>: Codable, Equatable, Sendable {
 
   /// The raw value of the density.
-  public var rawValue: Double
+  public private(set) var rawValue: Double
 
   /// The units of the raw value.
-  public var units: DensityUnits
+  public private(set) var units: DensityUnits
 
   /// Create a new ``Density`` with the given raw value.
   ///

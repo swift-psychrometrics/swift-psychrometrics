@@ -6,9 +6,9 @@
 public struct SpecificHumidity: Codable, Equatable, Sendable {
 
   /// The raw value for the given conditions.
-  public var rawValue: Double
+  public private(set) var rawValue: Double
 
-  public var units: Units
+  public private(set) var units: Units
 
   /// Create a new ``SpecificHumidity`` with the given raw value.
   ///

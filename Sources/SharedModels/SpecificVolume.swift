@@ -6,10 +6,10 @@ import Foundation
 public struct SpecificVolume<T>: Codable, Equatable, Sendable {
 
   /// The raw value for the volume.
-  public var rawValue: Double
+  public private(set) var rawValue: Double
 
   /// The unit of measure for the raw value.
-  public var units: SpecificVolumeUnits
+  public private(set) var units: SpecificVolumeUnits
 
   public init(_ value: Double, units: SpecificVolumeUnits) {
     self.rawValue = value

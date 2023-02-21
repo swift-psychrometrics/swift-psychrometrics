@@ -3,10 +3,10 @@ import Foundation
 public struct Enthalpy: Equatable, Codable, Sendable {
 
   /// The enthalpy of the air based on input state.
-  public var rawValue: Double
+  public private(set) var rawValue: Double
 
   /// The units of measure for the raw value.
-  public var units: EnthalpyUnits
+  public private(set) var units: EnthalpyUnits
 
   /// Create a new ``Enthalpy`` for the given raw value.
   ///
