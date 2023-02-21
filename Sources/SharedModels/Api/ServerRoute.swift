@@ -790,9 +790,9 @@ public enum Route2: Codable, Equatable, Sendable {
       
       public struct Density: Codable, Equatable, Sendable {
         
-        public var route: Route
+        public var route: Self.Route
         
-        public init(route: Route) {
+        public init(route: Self.Route) {
           self.route = route
         }
         
@@ -1040,7 +1040,7 @@ public enum Route2: Codable, Equatable, Sendable {
         
         public enum Route: Codable, Equatable, Sendable {
           case altitude(Altitude)
-          case pressure(Pressure)
+          case totalPressure(Pressure)
           
           public enum Key: String, RouteKey {
             case altitude
@@ -1165,11 +1165,11 @@ public enum Route2: Codable, Equatable, Sendable {
         }
         
         public enum Route: Codable, Equatable, Sendable {
-          case dewPoint(DewPoint)
-          case enthalpy(Enthalpy)
-          case pressure(Pressure)
-          case specificHumidity(SpecificHumidity)
-          case wetBulb(WetBulb)
+          case dewPoint(Self.DewPoint)
+          case enthalpy(Self.Enthalpy)
+          case pressure(Self.Pressure)
+          case specificHumidity(Self.SpecificHumidity)
+          case wetBulb(Self.WetBulb)
           
           public enum Key: String, RouteKey {
             case dewPoint
@@ -1208,39 +1208,48 @@ public enum Route2: Codable, Equatable, Sendable {
             }
           }
           
-          public enum Pressure: Codable, Equatable, Sendable {
+          public struct Pressure: Codable, Equatable, Sendable {
             
-            case saturation(Saturation)
-            case vapor(Vapor)
+            public var route: Self.Route
             
-            public enum Key: String, RouteKey {
-              case saturation
-              case vapor
+            public init(route: Self.Route) {
+              self.route = route
             }
             
-            public struct Saturation: Codable, Equatable, Sendable {
-              public var totalPressure: TotalPressure
-              public var saturationPressure: SaturationPressure
+            public enum Route: Codable, Equatable, Sendable {
               
-              public init(
-                totalPressure: TotalPressure,
-                saturationPressure: SaturationPressure
-              ) {
-                self.totalPressure = totalPressure
-                self.saturationPressure = saturationPressure
+              case saturation(Saturation)
+              case vapor(Vapor)
+              
+              public enum Key: String, RouteKey {
+                case saturation
+                case vapor
               }
-            }
-            
-            public struct Vapor: Codable, Equatable, Sendable {
-              public var totalPressure: TotalPressure
-              public var vaporPressure: SharedModels.VaporPressure
               
-              public init(
-                totalPressure: TotalPressure,
-                vaporPressure: SharedModels.VaporPressure
-              ) {
-                self.totalPressure = totalPressure
-                self.vaporPressure = vaporPressure
+              public struct Saturation: Codable, Equatable, Sendable {
+                public var totalPressure: TotalPressure
+                public var saturationPressure: SaturationPressure
+                
+                public init(
+                  totalPressure: TotalPressure,
+                  saturationPressure: SaturationPressure
+                ) {
+                  self.totalPressure = totalPressure
+                  self.saturationPressure = saturationPressure
+                }
+              }
+              
+              public struct Vapor: Codable, Equatable, Sendable {
+                public var totalPressure: TotalPressure
+                public var vaporPressure: SharedModels.VaporPressure
+                
+                public init(
+                  totalPressure: TotalPressure,
+                  vaporPressure: SharedModels.VaporPressure
+                ) {
+                  self.totalPressure = totalPressure
+                  self.vaporPressure = vaporPressure
+                }
               }
             }
           }

@@ -2,6 +2,31 @@ import Foundation
 import SharedModels
 import URLRouting
 
+struct ApiRouter: SiteRouteRouter {
+  
+  let decoder: JSONDecoder
+  let encoder: JSONEncoder
+  
+  @ParserBuilder
+  var body: AnyParserPrinter<URLRequestData, Route2> {
+    OneOf {
+      Route(.case(Route2.dryAir)) {
+        Path(.dryAir)
+        DryAirRouter(decoder: decoder, encoder: encoder)
+      }
+      Route(.case(Route2.moistAir)) {
+        Path(.moistAir)
+        MoistAirRouter(decoder: decoder, encoder: encoder)
+      }
+      Route(.case(Route2.water)) {
+        Path(.water)
+        WaterRouter(decoder: decoder, enocder: encoder)
+      }
+    }
+    .eraseToAnyParserPrinter()
+  }
+}
+
 public func apiRouter(
   decoder: JSONDecoder,
   encoder: JSONEncoder
@@ -484,47 +509,17 @@ public func apiRouter(
 
 // MARK: - Path Helpers
 
-enum PathKey: String, RouteKey {
-  case altitude
-  case density
-  case dewPoint
-  case dryAir
-  case enthalpy
-  case grainsOfMoisture
-  case humidityRatio
-  case moistAir
-  case pressure
-  case psychrometrics
-  case relativeHumidity
-  case saturation
-  case specificHeat
-  case specificHumidity
-  case specificVolume
-  case temperature
-  case totalPressure
-  case vapor
-  case vaporPressure
-  case water
-  case wetBulb
-}
 
-extension Path where ComponentParsers == PathBuilder.Component<String> {
-  init(_ key: PathKey) {
-    self.init {
-      key.description
-    }
-  }
-}
 
-public let route2DensityRouter = Route(.memberwise(Route2.DryAir.Density.init)) {
+public let route2DensityRouter = Route(.memberwise(Route2.DryAir.Route.Density.init(route:))) {
   Path { "density" }
   Method.post
   OneOf {
-    Route(.case(Route2.DryAir.Density.Route.altitude)) {
-      Body(.json(Route2.DryAir.Density.Route.Altitude.self))
+    Route(.case(Route2.DryAir.Route.Density.Route.altitude)) {
+      Body(.json(Route2.DryAir.Route.Density.Route.Altitude.self))
     }
-    Route(.case(Route2.DryAir.Density.Route.totalPressure)) {
-      Body(.json(Route2.DryAir.Density.Route.Pressure.self))
+    Route(.case(Route2.DryAir.Route.Density.Route.totalPressure)) {
+      Body(.json(Route2.DryAir.Route.Density.Route.Pressure.self))
     }
   }
 }
