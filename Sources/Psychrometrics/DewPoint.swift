@@ -5,6 +5,37 @@ import SharedModels
 
 extension DewPoint {
 
+  /// Creates a new ``DewPoint`` for the given dry bulb temperature and humidity.
+  ///
+  /// - Parameters:
+  ///   - temperature: The dry bulb temperature.
+  ///   - relativeHumidity: The relative humidity.
+  public init(
+    dryBulb temperature: Temperature,
+    humidity relativeHumidity: RelativeHumidity,
+    units: PsychrometricUnits? = nil
+  ) async {
+    await self.init(
+      dryBulb: temperature,
+      vaporPressure: .init(dryBulb: temperature, humidity: relativeHumidity, units: units),
+      units: units
+    )
+  }
+}
+
+extension Temperature {
+
+  /// Calculate the ``DewPoint`` of our current value given the humidity.
+  ///
+  /// - Parameters:
+  ///   - humidity: The relative humidity to use to calculate the dew-point.
+  public func dewPoint(humidity: RelativeHumidity) async -> DewPoint {
+    await .init(dryBulb: self, humidity: humidity)
+  }
+}
+
+extension DewPoint {
+
   fileprivate struct DewPointConstantsAboveFreezing {
 
     let c1: Double
@@ -78,5 +109,59 @@ extension DewPoint {
       ? DewPointConstantsBelowFreezing(units: units).run(vaporPressure: pressure)
       : DewPointConstantsAboveFreezing(units: units).run(vaporPressure: pressure)
     self.init(.init(value, units: .defaultFor(units: units)))
+  }
+}
+
+// MARK: - Wet Bulb
+
+extension DewPoint {
+
+  public init(
+    dryBulb temperature: Temperature,
+    wetBulb: WetBulb,
+    pressure: Pressure,
+    units: PsychrometricUnits? = nil
+  ) async {
+    precondition(temperature > wetBulb.rawValue)
+    let humidityRatio = await HumidityRatio(
+      dryBulb: temperature,
+      wetBulb: wetBulb,
+      pressure: pressure,
+      units: units
+    )
+    await self.init(
+      dryBulb: temperature,
+      ratio: humidityRatio,
+      pressure: pressure,
+      units: units
+    )
+  }
+}
+
+// MARK: - Humidity Ratio
+
+extension DewPoint {
+
+  // TODO: Remove precondition.
+  
+  /// Create a new ``DewPoint`` for the given dry bulb temperature, humidity ratio, and atmospheric pressure.
+  ///
+  /// - Parameters:
+  ///   - temperature: The dry bulb temperature.
+  ///   - humidityRatio: The humidity ratio.
+  ///   - totalPressure: The atmospheric pressure.
+  ///   - units: The units to solve for, if not supplied then ``Core.environment`` units will be used.
+  public init(
+    dryBulb temperature: Temperature,
+    ratio humidityRatio: HumidityRatio,
+    pressure totalPressure: Pressure,
+    units: PsychrometricUnits? = nil
+  ) async {
+    precondition(humidityRatio > 0)
+    await self.init(
+      dryBulb: temperature,
+      vaporPressure: .init(ratio: humidityRatio, pressure: totalPressure),
+      units: units
+    )
   }
 }

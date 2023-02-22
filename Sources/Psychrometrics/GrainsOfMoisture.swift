@@ -1,18 +1,9 @@
 import Foundation
-
-// TODO: Add units of measure.
+import SharedModels
+//
 
 /// Represents / calculates the grains of moisture for air.
-public struct GrainsOfMoisture {
-
-  /// Constant for the mole weight of water.
-  public static let moleWeightWater = 18.02
-
-  /// Constant for the mole weight of air.
-  public static let moleWeightAir = 28.85
-
-  /// Constant for the ratio of the mole weight of water over the mole weight of air.
-  public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
+extension GrainsOfMoisture {
 
   // TODO: Fix for units.
   public static func saturationHumidity(
@@ -22,13 +13,6 @@ public struct GrainsOfMoisture {
     7000 * moleWeightRatio
       * saturationPressure.psi
       / (totalPressure.psi - saturationPressure.psi)
-  }
-
-  /// The calculated grains per pound of air.
-  public var rawValue: Double
-
-  public init(_ value: Double) {
-    self.rawValue = value
   }
 
   /// Create a new ``GrainsOfMoisture`` with the given temperature, humidity, and altitude.
@@ -46,7 +30,7 @@ public struct GrainsOfMoisture {
       saturationPressure: SaturationPressure(at: temperature),
       totalPressure: pressure
     )
-    self.rawValue = saturationHumidity * humidity.fraction
+    self.init(saturationHumidity * humidity.fraction)
   }
 
   /// Create a new ``GrainsOfMoisture`` with the given temperature, humidity, and altitude.
@@ -68,20 +52,3 @@ public struct GrainsOfMoisture {
   }
 }
 
-extension GrainsOfMoisture: RawNumericType {
-  public typealias Magnitude = Double.Magnitude
-  public typealias IntegerLiteralType = Double.IntegerLiteralType
-  public typealias FloatLiteralType = Double.FloatLiteralType
-}
-
-extension Temperature {
-
-  /// Calculates the ``GrainsOfMoisture`` for the temperature at the given humidity and altitude.
-  ///
-  /// - Parameters:
-  ///   - humidity: The relative humidity of the air.
-  ///   - altitude: The altitude of the air.
-  public func grains(humidity: RelativeHumidity, altitude: Length = .seaLevel) async -> GrainsOfMoisture {
-    await .init(temperature: self, humidity: humidity, altitude: altitude)
-  }
-}
