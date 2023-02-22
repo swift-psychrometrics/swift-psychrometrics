@@ -113,13 +113,11 @@ extension Temperature {
         summary: "Units do not match."
       )
     }
-    precondition(specificVolume.units == SpecificVolumeUnits.defaultFor(units: units))
 
     let absoluteTemperature = await SpecificVolumeOf<MoistAir>
       .MoistAirConstants(units: units)
       .dryBulb(volume: specificVolume, ratio: humidityRatio, pressure: totalPressure)
 
-    print("abs: \(absoluteTemperature)")
     // Convert the absolute temperature appropriately for the given units.
     self =
       units.isImperial

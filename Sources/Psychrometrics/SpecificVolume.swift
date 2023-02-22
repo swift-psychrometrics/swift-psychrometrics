@@ -72,7 +72,6 @@ extension SpecificVolume where T == MoistAir {
       let P = units.isImperial ? pressure.psi : pressure.pascals
       let c2 = units.isImperial ? 144.0 : 1.0
       let value = volume.rawValue * (c2 * P) / (universalGasConstant * (1 + c2 * ratio.rawValue))
-      print("value: \(value)")
       return units.isImperial ? .rankine(value) : .kelvin(value)
     }
   }
