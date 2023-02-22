@@ -1,6 +1,6 @@
 import Foundation
 import SharedModels
-import SiteRouter
+@testable import SiteRouter
 import URLRouting
 
 var greeting = "Hello, playground"
@@ -8,13 +8,18 @@ var greeting = "Hello, playground"
 let json = """
 {
   "dryBulb": 0,
-  "totalPressure": 0
+  "humidity": 0,
+  "altitude": 0
 }
 """
-var request = URLRequest(url: URL(string: "/density")!)
+var request = URLRequest(url: URL(string: "/moistAir/enthalpy")!)
 request.httpMethod = "POST"
 request.httpBody = Data(json.utf8)
 
-let res = try route2DensityRouter.match(request: request)
+let router: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route> = apiRouter(
+  decoder: .init(),
+  encoder: .init()
+)
 
+let res = try router.match(request: request)
 print(res)

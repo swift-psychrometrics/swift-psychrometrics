@@ -25,18 +25,12 @@ final class SiteRouterTests: XCTestCase {
         "dryBulb" : 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/density/dryAir/altitude")!)
+    var request = URLRequest(url: URL(string: "/api/v1/dryAir/density")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
     
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.density(.dryAir(.altitude(
-      .init(
-        altitude: .seaLevel,
-        dryBulb: .zero
-      )
-    )))
-    
+    let expectedRoute = ServerRoute.Api.Route.dryAir(.density(.altitude(.init(altitude: .zero, dryBulb: .zero))))
     XCTAssertNoDifference(
       route,
       .api(
@@ -49,24 +43,24 @@ final class SiteRouterTests: XCTestCase {
   }
   
   func test_density_dryAir_totalPressure() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb" : 0,
         "totalPressure" : 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/density/dryAir/totalPressure")!)
+    var request = URLRequest(url: URL(string: "/api/v1/dryAir/density")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.density(.dryAir(.totalPressure(
+    let expectedRoute = ServerRoute.Api.Route.dryAir(.density(.totalPressure(
       .init(dryBulb: .zero, totalPressure: .zero)
     )))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -77,11 +71,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_density_moistAir_humidityRatio() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb" : 0,
@@ -89,19 +83,19 @@ final class SiteRouterTests: XCTestCase {
         "totalPressure" : 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/density/moistAir/humidityRatio")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/density")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.density(.moistAir(.humidityRatio(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.density(.humidityRatio(
       .init(
         dryBulb: .zero,
         humidityRatio: .zero,
         totalPressure: .zero
       )
     )))
-      
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -112,11 +106,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_density_moistAir_relativeHumidity() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb" : 0,
@@ -125,12 +119,12 @@ final class SiteRouterTests: XCTestCase {
         "units": "imperial"
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/density/moistAir/relativeHumidity")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/density")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.density(.moistAir(.relativeHumidity(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.density(.relativeHumidity(
       .init(
         dryBulb: .zero,
         humidity: .zero,
@@ -138,7 +132,7 @@ final class SiteRouterTests: XCTestCase {
         units: .imperial
       )
     )))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -149,26 +143,26 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_density_moistAir_specificVolume() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "humidityRatio": 0,
         "specificVolume" : 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/density/moistAir/specificVolume")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/density")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.density(.moistAir(.specificVolume(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.density(.specificVolume(
       .init(humidityRatio: .zero, specificVolume: .zero)
     )))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -179,23 +173,23 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_density_water() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/density/water")!)
+    var request = URLRequest(url: URL(string: "/api/v1/water/density")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.density(.water(.init(dryBulb: .zero)))
-    
+    let expectedRoute = ServerRoute.Api.Route.water(.density(.init(dryBulb: .zero)))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -206,26 +200,26 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_dewPoint_temperature() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb" : 0,
         "humidity" : 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/dewPoint/temperature")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/dewPoint")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.dewPoint(.temperature(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.dewPoint(.temperature(
       .init(dryBulb: .zero, humidity: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -236,26 +230,26 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_dewPoint_vaporPressure() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb" : 0,
         "vaporPressure" : 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/dewPoint/vaporPressure")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/dewPoint")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.dewPoint(.vaporPressure(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.dewPoint(.vaporPressure(
       .init(dryBulb: .zero, vaporPressure: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -266,11 +260,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_dewPoint_wetBulb() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb" : 0,
@@ -278,15 +272,15 @@ final class SiteRouterTests: XCTestCase {
         "wetBulb" : 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/dewPoint/wetBulb")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/dewPoint")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.dewPoint(.wetBulb(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.dewPoint(.wetBulb(
       .init(dryBulb: .zero, totalPressure: .zero, wetBulb: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -297,26 +291,26 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_enthalpy_dryAir() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb" : 0,
         "units" : "metric"
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/enthalpy/dryAir")!)
+    var request = URLRequest(url: URL(string: "/api/v1/dryAir/enthalpy")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.enthalpy(.dryAir(
+    let expectedRoute = ServerRoute.Api.Route.dryAir(.enthalpy(
       .init(dryBulb: .zero, units: .metric)
     ))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -327,11 +321,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_enthalpy_moistAir_altitude() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "altitude" : 0,
@@ -339,19 +333,19 @@ final class SiteRouterTests: XCTestCase {
         "dryBulb" : 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/enthalpy/moistAir/altitude")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/enthalpy")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.enthalpy(.moistAir(.altitude(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.enthalpy(.altitude(
       .init(
         altitude: .seaLevel,
         dryBulb: .zero,
         humidity: 0%
       )
     )))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -362,11 +356,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_enthalpy_moistAir_pressure() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
@@ -374,19 +368,19 @@ final class SiteRouterTests: XCTestCase {
         "totalPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/enthalpy/moistAir/pressure")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/enthalpy")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.enthalpy(.moistAir(.pressure(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.enthalpy(.totalPressure(
       .init(
         dryBulb: .zero,
         humidity: 0%,
         totalPressure: .zero
       )
     )))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -397,11 +391,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_grainsOfMoisture_altitude() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "altitude": 0,
@@ -409,19 +403,19 @@ final class SiteRouterTests: XCTestCase {
         "humidity": 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/grainsOfMoisture/altitude")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/grainsOfMoisture")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.grainsOfMoisture(.altitude(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.grainsOfMoisture(.altitude(
       .init(
         altitude: .zero,
         dryBulb: .zero,
         humidity: 0%
       )
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -432,26 +426,26 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_grainsOfMoisture_temperature() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb" : 0,
         "humidity" : 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/grainsOfMoisture/temperature")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/grainsOfMoisture")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.grainsOfMoisture(.temperature(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.grainsOfMoisture(.temperature(
       .init(dryBulb: .zero, humidity: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -462,11 +456,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_grainsOfMoisture_pressure() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
@@ -474,15 +468,16 @@ final class SiteRouterTests: XCTestCase {
         "totalPressure": 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/grainsOfMoisture/totalPressure")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/grainsOfMoisture")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.grainsOfMoisture(.totalPressure(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.grainsOfMoisture(.totalPressure(
       .init(dryBulb: .zero, humidity: .zero, totalPressure: .zero)
-    ))
-    
+    )))
+    print(route)
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -493,26 +488,26 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_humidityRatio_dewPoint() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dewPoint": 0,
         "totalPressure": 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/humidityRatio/dewPoint")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/humidityRatio")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.humidityRatio(.dewPoint(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.humidityRatio(.dewPoint(
       .init(dewPoint: .zero, totalPressure: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -523,26 +518,26 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_humidityRatio_enthalpy() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
         "enthalpy": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/humidityRatio/enthalpy")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/humidityRatio")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.humidityRatio(.enthalpy(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.humidityRatio(.enthalpy(
       .init(dryBulb: .zero, enthalpy: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -553,26 +548,26 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_humidityRatio_saturationPressure() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "totalPressure": 0,
         "saturationPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/humidityRatio/pressure/saturation")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/humidityRatio")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.humidityRatio(.pressure(.saturation(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.humidityRatio(.pressure(.saturation(
       .init(totalPressure: .zero, saturationPressure: .zero)
-    )))
-    
+    ))))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -583,7 +578,7 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_humidityRatio_vaporPressure() throws {
 
     @Dependency(\.siteRouter) var router
@@ -594,13 +589,42 @@ final class SiteRouterTests: XCTestCase {
         "vaporPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/humidityRatio/pressure/vapor")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/humidityRatio")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
 
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.humidityRatio(.pressure(.vapor(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.humidityRatio(.pressure(.vapor(
       .init(totalPressure: .zero, vaporPressure: .zero)
+    ))))
+
+    XCTAssertNoDifference(
+      route,
+      .api(
+        .init(
+          isDebug: false,
+          route: expectedRoute
+        )
+      )
+    )
+  }
+
+  func test_humidityRatio_specificHumidity() throws {
+
+    @Dependency(\.siteRouter) var router
+
+    let json = """
+      {
+        "specificHumidity": 0
+      }
+    """
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/humidityRatio")!)
+    request.httpMethod = "POST"
+    request.httpBody = Data(json.utf8)
+
+    let route = try router.match(request: request)
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.humidityRatio(.specificHumidity(
+      .init(specificHumidity: .zero)
     )))
 
     XCTAssertNoDifference(
@@ -613,40 +637,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
-  func test_humidityRatio_specificHumidity() throws {
-    
-    @Dependency(\.siteRouter) var router
-    
-    let json = """
-      {
-        "specificHumidity": 0
-      }
-    """
-    var request = URLRequest(url: URL(string: "/api/v1/humidityRatio/specificHumidity")!)
-    request.httpMethod = "POST"
-    request.httpBody = Data(json.utf8)
-    
-    let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.humidityRatio(.specificHumidity(
-      .init(specificHumidity: .zero)
-    ))
-    
-    XCTAssertNoDifference(
-      route,
-      .api(
-        .init(
-          isDebug: false,
-          route: expectedRoute
-        )
-      )
-    )
-  }
-  
+
   func test_psychrometrics_dewPoint() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dewPoint": 0,
@@ -654,15 +649,15 @@ final class SiteRouterTests: XCTestCase {
         "totalPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/psychrometrics/dewPoint")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/psychrometrics")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.psychrometrics(.dewPoint(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.psychrometrics(.dewPoint(
       .init(dewPoint: .zero, dryBulb: .zero, totalPressure: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -673,11 +668,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_psychrometrics_relativeHumidity() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
@@ -685,15 +680,15 @@ final class SiteRouterTests: XCTestCase {
         "totalPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/psychrometrics/relativeHumidity")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/psychrometrics")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.psychrometrics(.relativeHumidity(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.psychrometrics(.relativeHumidity(
       .init(dryBulb: .zero, humidity: .zero, totalPressure: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -704,11 +699,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_psychrometrics_wetBulb() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
@@ -716,15 +711,15 @@ final class SiteRouterTests: XCTestCase {
         "wetBulb": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/psychrometrics/wetBulb")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/psychrometrics")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.psychrometrics(.wetBulb(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.psychrometrics(.wetBulb(
       .init(dryBulb: .zero, totalPressure: .zero, wetBulb: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -735,11 +730,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_relativeHumidity_humidityRatio() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
@@ -747,15 +742,15 @@ final class SiteRouterTests: XCTestCase {
         "totalPressure": 0
       }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/relativeHumidity/humidityRatio")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/relativeHumidity")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.relativeHumidity(.humidityRatio(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.relativeHumidity(.humidityRatio(
       .init(dryBulb: .zero, humidityRatio: .zero, totalPressure: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -766,26 +761,26 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_relativeHumidity_vaporPressure() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
         "vaporPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/relativeHumidity/vaporPressure")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/relativeHumidity")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.relativeHumidity(.vaporPressure(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.relativeHumidity(.vaporPressure(
       .init(dryBulb: .zero, vaporPressure: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -796,25 +791,25 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_specificHeat_water() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/specificHeat/water")!)
+    var request = URLRequest(url: URL(string: "/api/v1/water/specificHeat")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.specificHeat(.water(
+    let expectedRoute = ServerRoute.Api.Route.water(.specificHeat(
       .init(dryBulb: .zero)
     ))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -825,26 +820,26 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_specificVolume_dryAir() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
         "totalPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/specificVolume/dryAir")!)
+    var request = URLRequest(url: URL(string: "/api/v1/dryAir/specificVolume")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.specificVolume(.dryAir(
+    let expectedRoute = ServerRoute.Api.Route.dryAir(.specificVolume(
       .init(dryBulb: .zero, totalPressure: .zero)
     ))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -855,11 +850,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_specificVolume_moistAir_altitude() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "altitude": 0,
@@ -867,15 +862,15 @@ final class SiteRouterTests: XCTestCase {
         "humidity": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/specificVolume/moistAir/altitude")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/specificVolume")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.specificVolume(.moistAir(.altitude(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.specificVolume(.altitude(
       .init(altitude: .seaLevel, dryBulb: .zero, humidity: .zero)
     )))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -886,11 +881,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_specificVolume_moistAir_humidityRatio() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
@@ -898,15 +893,15 @@ final class SiteRouterTests: XCTestCase {
         "totalPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/specificVolume/moistAir/humidityRatio")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/specificVolume")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.specificVolume(.moistAir(.humidityRatio(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.specificVolume(.humidityRatio(
       .init(dryBulb: .zero, humidityRatio: .zero, totalPressure: .zero)
     )))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -917,11 +912,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_specificVolume_moistAir_relativeHumidity() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
@@ -929,15 +924,15 @@ final class SiteRouterTests: XCTestCase {
         "totalPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/specificVolume/moistAir/relativeHumidity")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/specificVolume")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.specificVolume(.moistAir(.relativeHumidity(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.specificVolume(.relativeHumidity(
       .init(dryBulb: .zero, humidity: .zero, totalPressure: .zero)
     )))
-    
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -950,24 +945,24 @@ final class SiteRouterTests: XCTestCase {
   }
   
   func test_vaporPressure_humidityRatio() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "humidityRatio": 0,
         "totalPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/vaporPressure/humidityRatio")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/vaporPressure")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.vaporPressure(.humidityRatio(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.vaporPressure(.humidityRatio(
       .init(humidityRatio: .zero, totalPressure: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
@@ -978,11 +973,11 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
-  
+
   func test_wetBulb_relativeHumidity() throws {
-    
+
     @Dependency(\.siteRouter) var router
-    
+
     let json = """
       {
         "dryBulb": 0,
@@ -990,15 +985,15 @@ final class SiteRouterTests: XCTestCase {
         "totalPressure": 0
     }
     """
-    var request = URLRequest(url: URL(string: "/api/v1/wetBulb/relativeHumidity")!)
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/wetBulb")!)
     request.httpMethod = "POST"
     request.httpBody = Data(json.utf8)
-    
+
     let route = try router.match(request: request)
-    let expectedRoute = ServerRoute.Api.Route.wetBulb(.relativeHumidity(
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.wetBulb(.relativeHumidity(
       .init(dryBulb: .zero, humidity: .zero, totalPressure: .zero)
-    ))
-    
+    )))
+
     XCTAssertNoDifference(
       route,
       .api(
