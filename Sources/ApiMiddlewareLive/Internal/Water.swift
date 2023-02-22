@@ -6,9 +6,9 @@ extension ServerRoute.Api.Route.Water.Route {
   func respond() async throws -> any Encodable {
     switch self {
     case let .density(density):
-      return await density.respond()
+      return await ResultEnvelope(result: density.respond())
     case let .specificHeat(specificHeat):
-      return await specificHeat.respond()
+      return await ResultEnvelope(result: specificHeat.respond())
     }
   }
 }

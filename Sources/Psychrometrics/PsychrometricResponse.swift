@@ -57,6 +57,7 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
     
   }
 
+
   public init?(
     dryBulb temperature: Temperature,
     humidity relativeHumidity: RelativeHumidity,
@@ -187,6 +188,21 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
 }
 
 extension PsychrometricResponse {
+  
+  public init?(
+    altitude: Length,
+    dryBulb temperature: Temperature,
+    humidity relativeHumidity: RelativeHumidity,
+    units: PsychrometricUnits? = nil
+  ) async {
+    await self.init(
+      dryBulb: temperature,
+      humidity: relativeHumidity,
+      pressure: .init(altitude: altitude, units: units),
+      units: units
+    )
+  }
+  
   public init(
     dryBulb temperature: Temperature,
     wetBulb: WetBulb,

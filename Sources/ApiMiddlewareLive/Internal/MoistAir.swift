@@ -5,25 +5,25 @@ extension ServerRoute.Api.Route.MoistAir.Route {
   func respond() async throws -> any Encodable {
     switch self {
     case let .density(density):
-      return try await density.response()
+      return try await ResultEnvelope(result: density.response())
     case let .dewPoint(dewPoint):
-      return try await dewPoint.respond()
+      return try await ResultEnvelope(result:  dewPoint.respond())
     case let .enthalpy(enthalpy):
-      return try await enthalpy.respond()
+      return try await ResultEnvelope(result: enthalpy.respond())
     case let .grainsOfMoisture(grainsOfMoisture):
-      return try await grainsOfMoisture.respond()
+      return try await ResultEnvelope(result: grainsOfMoisture.respond())
     case let .humidityRatio(humidityRatio):
-      return try await humidityRatio.respond()
+      return try await ResultEnvelope(result: humidityRatio.respond())
     case let .psychrometrics(psychrometrics):
-      return try await psychrometrics.respond()
+      return try await ResultEnvelope(result: psychrometrics.respond())
     case let .relativeHumidity(relativeHumidity):
-      return try await relativeHumidity.respond()
+      return try await ResultEnvelope(result: relativeHumidity.respond())
     case let .specificVolume(specificVolume):
-      return try await specificVolume.respond()
+      return try await ResultEnvelope(result: specificVolume.respond())
     case let .vaporPressure(vaporPressure):
-      return try await vaporPressure.respond()
+      return try await ResultEnvelope(result: vaporPressure.respond())
     case let .wetBulb(wetBulb):
-      return try await wetBulb.respond()
+      return try await ResultEnvelope(result: wetBulb.respond())
     }
   }
 }
@@ -115,7 +115,7 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.DewPoint.Route {
 // MARK: - Enthalpy
 fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Enthalpy.Route {
   
-  func respond() async throws -> any Encodable {
+  func respond() async throws -> MoistAirEnthalpy {
     switch self {
     case let .altitude(altitude):
       return await MoistAirEnthalpy(
@@ -208,6 +208,17 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route 
 
   func respond() async throws -> PsychrometricResponse {
     switch self {
+    case let .altitude(altitude):
+      guard let value = await PsychrometricResponse(
+        altitude: altitude.altitude,
+        dryBulb: altitude.dryBulb.rawValue,
+        humidity: altitude.humidity,
+        units: altitude.units
+        )
+      else {
+        throw PsychrometricError()
+      }
+      return value
     case let .dewPoint(dewPoint):
       guard let value = await PsychrometricResponse(
         dryBulb: dewPoint.dryBulb.rawValue,
@@ -265,7 +276,7 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.RelativeHumidity.Rout
 
 // MARK: - Specific Volume
 fileprivate extension ServerRoute.Api.Route.MoistAir.Route.SpecificVolume.Route {
-  func respond() async throws -> any Encodable {
+  func respond() async throws -> SpecificVolume<SharedModels.MoistAir> {
     switch self {
       case let .altitude(altitude):
         return await SpecificVolume<SharedModels.MoistAir>.init(

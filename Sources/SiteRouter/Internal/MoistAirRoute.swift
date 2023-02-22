@@ -212,6 +212,16 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
   
   var moistAirPsychrometricsRouter: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route> {
     OneOf {
+      Route(.case(ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route.altitude)) {
+        Method.post
+        Body(
+          .json(
+            ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route.Altitude.self,
+            decoder: decoder,
+            encoder: encoder
+          )
+        )
+      }
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route.dewPoint)) {
         Method.post
         Body(

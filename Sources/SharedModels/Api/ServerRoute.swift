@@ -418,11 +418,32 @@ public enum ServerRoute: Codable, Equatable, Sendable {
             }
           }
           
+          // TODO: Add altitude
           public enum Psychrometrics {
             public enum Route: Codable, Equatable, Sendable {
+              case altitude(Self.Altitude)
               case dewPoint(Self.DewPoint)
               case relativeHumidity(Self.RelativeHumidity)
               case wetBulb(Self.WetBulb)
+              
+              public struct Altitude: Codable, Equatable, Sendable {
+                public var altitude: Length
+                public var dryBulb: DryBulb
+                public var humidity: SharedModels.RelativeHumidity
+                public var units: PsychrometricUnits?
+                
+                public init(
+                  altitude: Length,
+                  dryBulb: DryBulb,
+                  humidity: SharedModels.RelativeHumidity,
+                  units: PsychrometricUnits? = nil
+                ) {
+                  self.altitude = altitude
+                  self.dryBulb = dryBulb
+                  self.humidity = humidity
+                  self.units = units
+                }
+              }
               
               public struct DewPoint: Codable, Equatable, Sendable {
                 public var dewPoint: SharedModels.DewPoint

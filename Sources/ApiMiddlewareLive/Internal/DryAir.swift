@@ -4,11 +4,11 @@ extension ServerRoute.Api.Route.DryAir.Route {
   func respond() async throws -> any Encodable {
     switch self {
     case let .density(density):
-      return try await density.response()
+      return try await ResultEnvelope(result: density.response())
     case let .enthalpy(enthalpy):
-      return try await enthalpy.respond()
+      return try await ResultEnvelope(result: enthalpy.respond())
     case let .specificVolume(specificVolume):
-      return await specificVolume.response()
+      return await ResultEnvelope(result: specificVolume.response())
     }
   }
 }

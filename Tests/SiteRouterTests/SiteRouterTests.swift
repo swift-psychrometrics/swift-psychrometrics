@@ -637,6 +637,33 @@ final class SiteRouterTests: XCTestCase {
       )
     )
   }
+  
+  func test_psychrometrics_altitude() throws {
+    
+    @Dependency(\.siteRouter) var router
+    
+    let json = """
+    {
+      "altitude": 0,
+      "dryBulb": 0,
+      "humidity": 0
+    }
+    """
+    
+    var request = URLRequest(url: URL(string: "/api/v1/moistAir/psychrometrics")!)
+    request.httpMethod = "POST"
+    request.httpBody = Data(json.utf8)
+    
+    let route = try router.match(request: request)
+    let expectedRoute = ServerRoute.Api.Route.moistAir(.psychrometrics(.altitude(
+      .init(altitude: .zero, dryBulb: .zero, humidity: 0%)
+    )))
+    
+    XCTAssertNoDifference(
+      route,
+      .api(.init(isDebug: false, route: expectedRoute))
+    )
+  }
 
   func test_psychrometrics_dewPoint() throws {
 
