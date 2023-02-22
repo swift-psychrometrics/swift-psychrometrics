@@ -4,12 +4,12 @@ import SharedModels
 import Vapor
 
 extension SiteMiddleware: DependencyKey {
-  
+
   public static var liveValue: SiteMiddleware {
     @Dependency(\.apiMiddleware) var apiMiddleware
     return .live(apiMiddleware: apiMiddleware)
   }
-  
+
   public static func live(apiMiddleware: ApiMiddleware) -> Self {
     .init(
       respond: { request, route in
@@ -24,7 +24,7 @@ extension SiteMiddleware: DependencyKey {
 
 struct _AnyEncodable: Encodable {
   let value: any Encodable
-  
+
   func encode(to encoder: Encoder) throws {
     try value.encode(to: encoder)
   }

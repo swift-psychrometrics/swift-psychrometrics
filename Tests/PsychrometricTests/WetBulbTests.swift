@@ -37,7 +37,7 @@ final class WetBulbTests: XCTestCase {
   // TODO: Fix tolerances.
   func test_humidityRatio_and_wetBulb_imperial() async throws {
     // Above freezing.
-    var ratio = await HumidityRatio.init(dryBulb: 86, wetBulb: 77, pressure: 14.175, units: .imperial)
+    var ratio = try await HumidityRatio.init(dryBulb: 86, wetBulb: 77, pressure: 14.175, units: .imperial)
     XCTApproximatelyEqual(ratio.rawValue, 0.0187193288418892, tolerance: 0.0003)
     
     // This tolerance is high
@@ -45,7 +45,7 @@ final class WetBulbTests: XCTestCase {
     XCTApproximatelyEqual(wetBulb.fahrenheit, 77, tolerance: 2.052)
     
     // Below freezing
-    ratio = await .init(dryBulb: 30.2, wetBulb: 23, pressure: 14.175, units: .imperial)
+    ratio = try await .init(dryBulb: 30.2, wetBulb: 23, pressure: 14.175, units: .imperial)
     XCTApproximatelyEqual(ratio.rawValue, 0.00114657481090184, tolerance: 0.0003)
     
     wetBulb = await .init(dryBulb: 30.2, ratio: ratio, pressure: 14.175, units: .imperial)!
@@ -54,8 +54,8 @@ final class WetBulbTests: XCTestCase {
   }
   
   // TODO: Tolerance is a bit high.
-  func test_wetBulb_and_relativeHumidity_metric() async {
-    let wetBulb = await WetBulb.init(
+  func test_wetBulb_and_relativeHumidity_metric() async throws {
+    let wetBulb = try await WetBulb.init(
       dryBulb: .celsius(7),
       humidity: 61%,
       pressure: .pascals(100000),
@@ -64,9 +64,9 @@ final class WetBulbTests: XCTestCase {
     XCTApproximatelyEqual(wetBulb!.celsius, 3.92667433781955, tolerance: 0.22)
   }
   
-  func test_humidityRatio_and_wetBulb_metric() async {
+  func test_humidityRatio_and_wetBulb_metric() async throws {
     // Above freezing
-    var humidityRatio = await HumidityRatio.init(
+    var humidityRatio = try await HumidityRatio.init(
       dryBulb: .celsius(30),
       wetBulb: .init(.celsius(25)),
       pressure: .pascals(95461),
@@ -83,7 +83,7 @@ final class WetBulbTests: XCTestCase {
     XCTApproximatelyEqual(wetBulb.celsius, 25, tolerance: 0.001)
     
     // below freezing
-    humidityRatio = await .init(
+    humidityRatio = try await .init(
       dryBulb: .celsius(-1),
       wetBulb: .init(.celsius(-5)),
       pressure: .pascals(95461),

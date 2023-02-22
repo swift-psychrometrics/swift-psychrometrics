@@ -52,24 +52,3 @@ extension Humidity: RawNumericType {
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Magnitude = Double.Magnitude
 }
-
-// MARK: - Temperature + RelativeHumidity
-
-// TODO: Move conversions somewhere else.
-
-extension RelativeHumidity {
-
-  /// Calculates the relative humidity based on the dry-bulb temperature and dew-point temperatures.
-  ///
-  /// - Parameters:
-  ///   - temperature: The dry bulb temperature.
-  ///   - dewPoint: The dew-point temperature.
-  public init(temperature: Temperature, dewPoint: Temperature) {
-
-    let humidity =
-      100
-      * (exp((17.625 * dewPoint.celsius) / (243.04 + dewPoint.celsius))
-        / exp((17.625 * temperature.celsius) / (243.04 + temperature.celsius)))
-    self.init(.init(humidity))
-  }
-}

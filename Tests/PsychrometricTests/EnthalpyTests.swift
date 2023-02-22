@@ -5,21 +5,21 @@ import TestSupport
 
 final class EnthalpyTests: XCTestCase {
   
-  func test_enthalpy() async {
-    let enthalpy = await MoistAirEnthalpy(dryBulb: .fahrenheit(75), humidity: 50%, units: .imperial)
+  func test_enthalpy() async throws {
+    let enthalpy = try await MoistAirEnthalpy(dryBulb: .fahrenheit(75), humidity: 50%, units: .imperial)
     XCTAssertEqual(round(enthalpy.rawValue.rawValue * 100) / 100, 28.11)
     
-    let enthalpy2 = await Temperature.fahrenheit(75)
+    let enthalpy2 = try await Temperature.fahrenheit(75)
       .enthalpy(at: 50%, pressure: .init(altitude: .seaLevel))
     
     XCTAssertEqual(round(enthalpy2.rawValue.rawValue * 100) / 100, 28.11)
   }
   
-  func test_enthalpy_at_altitude() async {
-    let enthalpy = await MoistAirEnthalpy(dryBulb: .fahrenheit(75), humidity: 50%, altitude: 1000, units: .imperial)
+  func test_enthalpy_at_altitude() async throws {
+    let enthalpy = try await MoistAirEnthalpy(dryBulb: .fahrenheit(75), humidity: 50%, altitude: 1000, units: .imperial)
     XCTAssertEqual(round(enthalpy.rawValue.rawValue * 100) / 100, 28.49)
     
-    let enthalpy2 = await Temperature.fahrenheit(75).enthalpy(at: 50%, altitude: 1000)
+    let enthalpy2 = try await Temperature.fahrenheit(75).enthalpy(at: 50%, altitude: 1000)
     XCTAssertEqual(round(enthalpy2.rawValue.rawValue * 100) / 100, 28.49)
   }
   
@@ -52,25 +52,25 @@ final class EnthalpyTests: XCTestCase {
     XCTAssertEqual(enthalpy.rawValue, 40)
   }
   
-  func test_humidityRatio_from_enthalpy() async {
-    let enthalpy = await MoistAirEnthalpy(dryBulb: 75, humidity: 50%, units: .imperial)
-    let ratio = await HumidityRatio(dryBulb: 75, humidity: 50%, altitude: .seaLevel)
+  func test_humidityRatio_from_enthalpy() async throws {
+    let enthalpy = try await MoistAirEnthalpy(dryBulb: 75, humidity: 50%, units: .imperial)
+    let ratio = try await HumidityRatio(dryBulb: 75, humidity: 50%, altitude: .seaLevel)
 //    XCTAssertEqual(
 //      round(enthalpy.humidityRatio(at: 75) * 1000000) / 1000000,
 //      round(ratio * 1000000) / 1000000
 //    )
     
     // Test enthalpy given a dry bulb and humidity ratio.
-    let enthalpy2 = await MoistAirEnthalpy.init(dryBulb: 75, ratio: ratio, units: .imperial)
+    let enthalpy2 = try await MoistAirEnthalpy.init(dryBulb: 75, ratio: ratio, units: .imperial)
     XCTAssertEqual(enthalpy.rawValue, enthalpy2.rawValue)
   }
   
-  func test_temperature_from_enthalpy_and_ratio() async {
+  func test_temperature_from_enthalpy_and_ratio() async throws {
     let temperature: Temperature = 75
     let humidity: RelativeHumidity = 50%
-    let ratio = await HumidityRatio(dryBulb: temperature, humidity: humidity, altitude: .seaLevel)
-    let enthalpy = await MoistAirEnthalpy.init(dryBulb: temperature, ratio: ratio, units: .imperial)
-    let temperature2 = await Temperature(enthalpy: enthalpy, ratio: ratio)
+    let ratio = try await HumidityRatio(dryBulb: temperature, humidity: humidity, altitude: .seaLevel)
+    let enthalpy = try await MoistAirEnthalpy.init(dryBulb: temperature, ratio: ratio, units: .imperial)
+    let temperature2 = try await Temperature(enthalpy: enthalpy, ratio: ratio)
     XCTAssertEqual(
       round(temperature2.fahrenheit * 100) / 100,
       75
@@ -93,7 +93,7 @@ final class EnthalpyTests: XCTestCase {
   }
   
   // The tolerance is decent but exponentially worse at higher temperatures.
-  func test_saturated_enthalpy_imperial() async {
+  func test_saturated_enthalpy_imperial() async throws {
     let values: [(Temperature, Double, Double)] = [
       (.fahrenheit(-58), -13.906, 0.1),
       (.fahrenheit(-4), -0.286, 0.1),
@@ -105,13 +105,13 @@ final class EnthalpyTests: XCTestCase {
     ]
     
     for (temp, expected, tolerance) in values {
-      let saturatedEnthalpy = await MoistAirEnthalpy.init(dryBulb: temp, pressure: 14.696, units: .imperial)
+      let saturatedEnthalpy = try await MoistAirEnthalpy.init(dryBulb: temp, pressure: 14.696, units: .imperial)
       XCTApproximatelyEqual(saturatedEnthalpy.rawValue.rawValue, expected, tolerance: tolerance)
     }
   }
   
   // TODO: Fix tolerances.
-  func test_saturated_enthalpy_metric() async {
+  func test_saturated_enthalpy_metric() async throws {
     let values: [(Temperature, Double, Double)] = [
       (.celsius(-50), -50222, 19.778),
       (.celsius(-20), -18542, 14.791),
@@ -123,7 +123,7 @@ final class EnthalpyTests: XCTestCase {
     ]
     
     for (temp, expected, tolerance) in values {
-      let saturatedEnthalpy = await MoistAirEnthalpy.init(
+      let saturatedEnthalpy = try await MoistAirEnthalpy.init(
         dryBulb: temp,
         pressure: .pascals(101325),
         units: .metric
@@ -132,8 +132,8 @@ final class EnthalpyTests: XCTestCase {
     }
   }
   
-  func test_dryBulb_from_enthalpy_and_humidityRatio_metric() async {
-    let temperature = await Temperature.init(
+  func test_dryBulb_from_enthalpy_and_humidityRatio_metric() async throws {
+    let temperature = try await Temperature.init(
       enthalpy: 81316,
       ratio: 0.02,
       units: .metric
@@ -145,7 +145,7 @@ final class EnthalpyTests: XCTestCase {
 //    let temperature = Temperature.ini
 //  }
   
-  func test_humidityRatio_from_dryBulb_and_enthalpy_metric() async {
+  func test_humidityRatio_from_dryBulb_and_enthalpy_metric() async{
     let ratio = await HumidityRatio.init(
       enthalpy: .init(.init(81316, units: .joulePerKilogram)),
       dryBulb: .celsius(30),
@@ -154,8 +154,8 @@ final class EnthalpyTests: XCTestCase {
     XCTApproximatelyEqual(ratio.rawValue, 0.02, tolerance: 0.001)
   }
   
-  func test_moistAir_enthalpy_metric() async {
-    let enthalpy = await MoistAirEnthalpy.init(dryBulb: .celsius(30), ratio: 0.02, units: .metric)
+  func test_moistAir_enthalpy_metric() async throws {
+    let enthalpy = try await MoistAirEnthalpy.init(dryBulb: .celsius(30), ratio: 0.02, units: .metric)
     XCTApproximatelyEqual(enthalpy, 81316, tolerance: 0.0003)
   }
   

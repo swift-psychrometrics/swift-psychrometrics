@@ -14,8 +14,8 @@ extension DewPoint {
     dryBulb temperature: Temperature,
     humidity relativeHumidity: RelativeHumidity,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       dryBulb: temperature,
       vaporPressure: .init(dryBulb: temperature, humidity: relativeHumidity, units: units),
       units: units
@@ -29,8 +29,8 @@ extension Temperature {
   ///
   /// - Parameters:
   ///   - humidity: The relative humidity to use to calculate the dew-point.
-  public func dewPoint(humidity: RelativeHumidity) async -> DewPoint {
-    await .init(dryBulb: self, humidity: humidity)
+  public func dewPoint(humidity: RelativeHumidity) async throws -> DewPoint {
+    try await .init(dryBulb: self, humidity: humidity)
   }
 }
 
@@ -121,15 +121,19 @@ extension DewPoint {
     wetBulb: WetBulb,
     pressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    precondition(temperature > wetBulb.rawValue)
-    let humidityRatio = await HumidityRatio(
+  ) async throws {
+    guard temperature > wetBulb.rawValue else {
+      throw ValidationError(
+        summary: "Wet bulb temperature should be less than dry bulb temperature."
+      )
+    }
+    let humidityRatio = try await HumidityRatio(
       dryBulb: temperature,
       wetBulb: wetBulb,
       pressure: pressure,
       units: units
     )
-    await self.init(
+    try await self.init(
       dryBulb: temperature,
       ratio: humidityRatio,
       pressure: pressure,
@@ -141,8 +145,6 @@ extension DewPoint {
 // MARK: - Humidity Ratio
 
 extension DewPoint {
-
-  // TODO: Remove precondition.
   
   /// Create a new ``DewPoint`` for the given dry bulb temperature, humidity ratio, and atmospheric pressure.
   ///
@@ -156,9 +158,12 @@ extension DewPoint {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    precondition(humidityRatio > 0)
-    await self.init(
+  ) async throws {
+    guard humidityRatio > 0 else {
+      throw ValidationError(summary: "Humidity ratio should be greater than 0.")
+    }
+    
+    try await self.init(
       dryBulb: temperature,
       vaporPressure: .init(ratio: humidityRatio, pressure: totalPressure),
       units: units

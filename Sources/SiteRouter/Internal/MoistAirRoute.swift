@@ -1,10 +1,14 @@
 import Foundation
 import SharedModels
 import URLRouting
- 
-func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route> {
-  
-  var moistAirDensityRouter: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.Density.Route> {
+
+func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrinter<
+  URLRequestData, ServerRoute.Api.Route.MoistAir.Route
+> {
+
+  var moistAirDensityRouter:
+    AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.Density.Route>
+  {
     OneOf {
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.Density.Route.humidityRatio)) {
         Method.post
@@ -39,8 +43,10 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
     }
     .eraseToAnyParserPrinter()
   }
-  
-  var moistAirDewPointRouter: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.DewPoint.Route> {
+
+  var moistAirDewPointRouter:
+    AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.DewPoint.Route>
+  {
     OneOf {
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.DewPoint.Route.temperature)) {
         Method.post
@@ -75,8 +81,10 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
     }
     .eraseToAnyParserPrinter()
   }
-  
-  var moistAirEnthalpyRouter: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.Enthalpy.Route> {
+
+  var moistAirEnthalpyRouter:
+    AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.Enthalpy.Route>
+  {
     OneOf {
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.Enthalpy.Route.altitude)) {
         Method.post
@@ -101,8 +109,10 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
     }
     .eraseToAnyParserPrinter()
   }
-  
-  var moistAirGrainsOfMoistureRouter: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.GrainsOfMoisture.Route> {
+
+  var moistAirGrainsOfMoistureRouter:
+    AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.GrainsOfMoisture.Route>
+  {
     OneOf {
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.GrainsOfMoisture.Route.altitude)) {
         Method.post
@@ -139,8 +149,10 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
     }
     .eraseToAnyParserPrinter()
   }
-  
-  var moistAirHumidityRatio: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route> {
+
+  var moistAirHumidityRatio:
+    AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route>
+  {
     OneOf {
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route.dewPoint)) {
         Method.post
@@ -164,17 +176,23 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
       }
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route.pressure)) {
         OneOf {
-          Route(.case(ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route.Pressure.Route.saturation)) {
+          Route(
+            .case(
+              ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route.Pressure.Route.saturation)
+          ) {
             Method.post
             Body(
               .json(
-                ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route.Pressure.Route.Saturation.self,
+                ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route.Pressure.Route.Saturation
+                  .self,
                 decoder: decoder,
                 encoder: encoder
               )
             )
           }
-          Route(.case(ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route.Pressure.Route.vapor)) {
+          Route(
+            .case(ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route.Pressure.Route.vapor)
+          ) {
             Method.post
             Body(
               .json(
@@ -209,8 +227,10 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
     }
     .eraseToAnyParserPrinter()
   }
-  
-  var moistAirPsychrometricsRouter: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route> {
+
+  var moistAirPsychrometricsRouter:
+    AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route>
+  {
     OneOf {
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route.altitude)) {
         Method.post
@@ -255,8 +275,10 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
     }
     .eraseToAnyParserPrinter()
   }
-  
-  var moistAirRelativeHumidityRouter: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.RelativeHumidity.Route> {
+
+  var moistAirRelativeHumidityRouter:
+    AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.RelativeHumidity.Route>
+  {
     OneOf {
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.RelativeHumidity.Route.humidityRatio)) {
         Method.post
@@ -281,8 +303,10 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
     }
     .eraseToAnyParserPrinter()
   }
-  
-  var moistAirSpecificVolumeRouter: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.SpecificVolume.Route> {
+
+  var moistAirSpecificVolumeRouter:
+    AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.SpecificVolume.Route>
+  {
     OneOf {
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.SpecificVolume.Route.altitude)) {
         Method.post
@@ -317,8 +341,10 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
     }
     .eraseToAnyParserPrinter()
   }
-  
-  var moistAirVaporPressureRouter: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.VaporPressure.Route> {
+
+  var moistAirVaporPressureRouter:
+    AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.VaporPressure.Route>
+  {
     OneOf {
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.VaporPressure.Route.humidityRatio)) {
         Method.post
@@ -333,8 +359,10 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
     }
     .eraseToAnyParserPrinter()
   }
-  
-  var moistAirWetBulbRouter: AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.WetBulb.Route> {
+
+  var moistAirWetBulbRouter:
+    AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.MoistAir.Route.WetBulb.Route>
+  {
     OneOf {
       Route(.case(ServerRoute.Api.Route.MoistAir.Route.WetBulb.Route.relativeHumidity)) {
         Method.post
@@ -349,7 +377,7 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
     }
     .eraseToAnyParserPrinter()
   }
-  
+
   return OneOf {
     Route(.case(ServerRoute.Api.Route.MoistAir.Route.density)) {
       Path(.density)
@@ -394,4 +422,3 @@ func moistAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrin
   }
   .eraseToAnyParserPrinter()
 }
-

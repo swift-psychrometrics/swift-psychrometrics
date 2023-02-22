@@ -2,7 +2,9 @@ import Foundation
 import SharedModels
 import URLRouting
 
-func waterRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.Water.Route> {
+func waterRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrinter<
+  URLRequestData, ServerRoute.Api.Route.Water.Route
+> {
   OneOf {
     Route(.case(ServerRoute.Api.Route.Water.Route.density)) {
       Path(.density)

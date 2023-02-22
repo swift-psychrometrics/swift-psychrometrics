@@ -1,17 +1,18 @@
 import Foundation
 import SharedModels
-@testable import SiteRouter
 import URLRouting
+
+@testable import SiteRouter
 
 var greeting = "Hello, playground"
 
 let json = """
-{
-  "dryBulb": 0,
-  "humidity": 0,
-  "altitude": 0
-}
-"""
+  {
+    "dryBulb": 0,
+    "humidity": 0,
+    "altitude": 0
+  }
+  """
 var request = URLRequest(url: URL(string: "/moistAir/enthalpy")!)
 request.httpMethod = "POST"
 request.httpBody = Data(json.utf8)

@@ -1,6 +1,5 @@
-
 public struct PsychrometricResponse: Codable, Equatable, Sendable {
-  
+
   public let atmosphericPressure: Pressure
   public let degreeOfSaturation: Double
   public let density: DensityOf<MoistAir>
@@ -13,7 +12,7 @@ public struct PsychrometricResponse: Codable, Equatable, Sendable {
   public let volume: SpecificVolumeOf<MoistAir>
   public let wetBulb: WetBulb
   public let units: PsychrometricUnits
-  
+
   public init(
     atmosphericPressure: Pressure,
     degreeOfSaturation: Double,

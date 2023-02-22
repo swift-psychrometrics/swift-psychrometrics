@@ -104,17 +104,20 @@ extension SaturationPressure {
   public init(
     at temperature: Temperature,
     units: PsychrometricUnits? = nil
-  ) async {
+  ) async throws {
 
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
     let bounds = PsychrometricEnvironment.pressureBounds(for: units)
     let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
-
-    precondition(
-      temperature >= bounds.low && temperature <= bounds.high
-    )
+    
+    guard temperature >= bounds.low && temperature <= bounds.high else {
+      throw ValidationError(
+        label: "Saturation Pressure",
+        summary: "Temperature should be between \(bounds.low)-\(bounds.high)"
+      )
+    }
     
     let exponent = await temperature <= triplePoint
       ? SaturationConstantsBelowFreezing(units: units).exponent(dryBulb: temperature)
@@ -138,13 +141,18 @@ extension RelativeHumidity {
     dryBulb temperature: Temperature,
     pressure vaporPressure: VaporPressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    precondition(vaporPressure > 0)
+  ) async throws {
+    guard vaporPressure > 0 else {
+      throw ValidationError(
+        label: "Relative Humidity",
+        summary: "Vapor pressure should be greater than 0."
+      )
+    }
 
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
-    let saturationPressure = await SaturationPressure(at: temperature, units: units)
+    let saturationPressure = try await SaturationPressure(at: temperature, units: units)
     let fraction = vaporPressure.rawValue / saturationPressure.rawValue
     self.init(.init(fraction.rawValue * 100))
   }

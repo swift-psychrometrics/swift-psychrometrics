@@ -25,8 +25,8 @@ extension GrainsOfMoisture {
     temperature: Temperature,
     humidity: RelativeHumidity,
     pressure: Pressure
-  ) async {
-    let saturationHumidity = await Self.saturationHumidity(
+  ) async throws {
+    let saturationHumidity = try await Self.saturationHumidity(
       saturationPressure: SaturationPressure(at: temperature),
       totalPressure: pressure
     )
@@ -43,8 +43,8 @@ extension GrainsOfMoisture {
     temperature: Temperature,
     humidity: RelativeHumidity,
     altitude: Length = .seaLevel
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       temperature: temperature,
       humidity: humidity,
       pressure: .init(altitude: altitude)

@@ -85,8 +85,14 @@ extension MoistAirEnthalpy {
     dryBulb temperature: Temperature,
     ratio humidityRatio: HumidityRatio,
     units: PsychrometricUnits? = nil
-  ) async {
-    precondition(humidityRatio > 0)
+  ) async throws {
+    
+    guard humidityRatio > 0 else {
+      throw ValidationError(
+        label: "Moist Air Enthalpy",
+        summary: "Humidity ratio should be greater than 0."
+      )
+    }
 
     @Dependency(\.psychrometricEnvironment) var environment
 
@@ -107,8 +113,8 @@ extension MoistAirEnthalpy {
     dryBulb temperature: Temperature,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       dryBulb: temperature,
       ratio: .init(dryBulb: temperature, pressure: totalPressure, units: units),
       units: units
@@ -129,8 +135,8 @@ extension MoistAirEnthalpy {
     humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       dryBulb: temperature,
       ratio: .init(
         dryBulb: temperature,
@@ -156,8 +162,8 @@ extension MoistAirEnthalpy {
     humidity: RelativeHumidity,
     altitude: Length = .seaLevel,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       dryBulb: temperature,
       humidity: humidity,
       pressure: .init(altitude: altitude, units: units),

@@ -15,8 +15,8 @@ extension Temperature {
     at humidity: RelativeHumidity,
     altitude: Length = .seaLevel,
     units: PsychrometricUnits? = nil
-  ) async -> MoistAirEnthalpy {
-    await .init(dryBulb: self, humidity: humidity, altitude: altitude, units: units)
+  ) async throws -> MoistAirEnthalpy {
+    try await .init(dryBulb: self, humidity: humidity, altitude: altitude, units: units)
   }
 
   /// Calculates the ``Enthalpy`` of ``MoistAir``  for the temperature at a given relative humidity and pressure.
@@ -29,8 +29,8 @@ extension Temperature {
     at humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async -> MoistAirEnthalpy {
-    await .init(dryBulb: self, humidity: humidity, pressure: totalPressure, units: units)
+  ) async throws -> MoistAirEnthalpy {
+    try await .init(dryBulb: self, humidity: humidity, pressure: totalPressure, units: units)
   }
 
   /// Calculates the ``Enthalpy`` of ``DryAir``  for the temperature.
@@ -53,8 +53,13 @@ extension Temperature {
     enthalpy: MoistAirEnthalpy,
     ratio humidityRatio: HumidityRatio,
     units: PsychrometricUnits? = nil
-  ) async {
-    precondition(humidityRatio.rawValue > 0)
+  ) async throws {
+    guard humidityRatio > 0 else {
+      throw ValidationError(
+        label: "Temperature",
+        summary: "Humidity Ratio should be greater than 0."
+      )
+    }
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
@@ -72,8 +77,8 @@ extension Temperature {
   /// - Parameters:
   ///   - humidity: The relative humidity of the air.
   ///   - altitude: The altitude of the air.
-  public func grains(humidity: RelativeHumidity, altitude: Length = .seaLevel) async -> GrainsOfMoisture {
-    await .init(temperature: self, humidity: humidity, altitude: altitude)
+  public func grains(humidity: RelativeHumidity, altitude: Length = .seaLevel) async throws -> GrainsOfMoisture {
+    try await .init(temperature: self, humidity: humidity, altitude: altitude)
   }
 }
 
@@ -96,12 +101,18 @@ extension Temperature {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
+  ) async throws {
 
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
 
+    guard specificVolume.units == SpecificVolumeUnits.defaultFor(units: units) else {
+      throw ValidationError(
+        label: "Temperature",
+        summary: "Units do not match."
+      )
+    }
     precondition(specificVolume.units == SpecificVolumeUnits.defaultFor(units: units))
 
     let absoluteTemperature = await SpecificVolumeOf<MoistAir>
@@ -131,8 +142,8 @@ extension Temperature {
     ratio humidityRatio: HumidityRatio,
     altitude: Length,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       volume: specificVolume, ratio: humidityRatio, pressure: .init(altitude: altitude),
       units: units)
   }

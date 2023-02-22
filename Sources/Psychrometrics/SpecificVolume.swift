@@ -91,8 +91,13 @@ extension SpecificVolume where T == MoistAir {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    precondition(humidityRatio.rawValue > 0)
+  ) async throws {
+    guard humidityRatio.rawValue > 0 else {
+      throw ValidationError(
+        label: "Specific Volume",
+        summary: "Humidity ratio should be greater than 0."
+      )
+    }
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
@@ -115,8 +120,8 @@ extension SpecificVolume where T == MoistAir {
     humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       dryBulb: temperature,
       ratio: .init(dryBulb: temperature, pressure: totalPressure),
       pressure: totalPressure,
@@ -138,8 +143,8 @@ extension SpecificVolume where T == MoistAir {
     humidity: RelativeHumidity,
     altitude: Length,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       dryBulb: temperature,
       humidity: humidity,
       pressure: .init(altitude: altitude, units: units),

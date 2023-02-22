@@ -86,8 +86,8 @@ extension HumidityRatio {
     dryBulb temperature: Temperature,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       totalPressure: totalPressure,
       saturationPressure: .init(at: temperature, units: units),
       units: units
@@ -105,8 +105,8 @@ extension HumidityRatio {
     humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       totalPressure: totalPressure,
       partialPressure: VaporPressure(
         dryBulb: temperature,
@@ -128,8 +128,8 @@ extension HumidityRatio {
     humidity: RelativeHumidity,
     altitude: Length,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       dryBulb: temperature,
       humidity: humidity,
       pressure: .init(altitude: altitude),
@@ -147,10 +147,19 @@ extension HumidityRatio {
   ///
   /// - Parameters:
   ///   - specificHumidity: The specific humidity.
-  public init(specificHumidity: SpecificHumidity) {
-    precondition(
-      specificHumidity.rawValue > 0.0 && specificHumidity.rawValue < 1.0
-    )
+  public init(specificHumidity: SpecificHumidity) throws {
+    guard specificHumidity.rawValue > 0.0 else {
+      throw ValidationError(
+        label: "Humidity Ratio",
+        summary: "Specific humidity should be greater than 0"
+      )
+    }
+    guard specificHumidity.rawValue < 1.0 else {
+      throw ValidationError(
+        label: "Humidity Ratio",
+        summary: "Specific humidity should be less than 1.0"
+      )
+    }
     self.init(.init(specificHumidity.rawValue / (1 - specificHumidity.rawValue)))
   }
 }
@@ -229,14 +238,19 @@ extension HumidityRatio {
     wetBulb: WetBulb,
     pressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    precondition(dryBulb > wetBulb.rawValue)
+  ) async throws {
+    guard dryBulb > wetBulb.rawValue else {
+      throw ValidationError(
+        label: "Humidity Ratio",
+        summary: "Wet bulb temperature should be less than dry bulb temperature."
+      )
+    }
 
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
 
-    let saturatedHumidityRatio = await HumidityRatio(
+    let saturatedHumidityRatio = try await HumidityRatio(
       dryBulb: wetBulb.rawValue,
       pressure: pressure
     )
@@ -320,8 +334,8 @@ extension HumidityRatio {
     dewPoint: DewPoint,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       totalPressure: totalPressure,
       saturationPressure: SaturationPressure(at: dewPoint.rawValue, units: units),
       units: units

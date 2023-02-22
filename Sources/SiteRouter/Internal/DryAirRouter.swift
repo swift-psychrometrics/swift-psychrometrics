@@ -2,7 +2,9 @@ import Foundation
 import SharedModels
 import URLRouting
 
-func dryAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrinter<URLRequestData, ServerRoute.Api.Route.DryAir.Route> {
+func dryAirRouter(decoder: JSONDecoder, encoder: JSONEncoder) -> AnyParserPrinter<
+  URLRequestData, ServerRoute.Api.Route.DryAir.Route
+> {
   OneOf {
     Route(.case(ServerRoute.Api.Route.DryAir.Route.density)) {
       Path(.density)

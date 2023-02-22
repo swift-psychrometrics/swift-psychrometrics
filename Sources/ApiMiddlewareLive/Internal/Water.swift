@@ -2,7 +2,7 @@ import Psychrometrics
 import SharedModels
 
 extension ServerRoute.Api.Route.Water.Route {
-  
+
   func respond() async throws -> any Encodable {
     switch self {
     case let .density(density):
@@ -13,14 +13,14 @@ extension ServerRoute.Api.Route.Water.Route {
   }
 }
 
-fileprivate extension ServerRoute.Api.Route.Water.Route.SpecificHeat {
-  func respond() async -> SharedModels.SpecificHeat {
+extension ServerRoute.Api.Route.Water.Route.SpecificHeat {
+  fileprivate func respond() async -> SharedModels.SpecificHeat {
     return await .water(temperature: self.dryBulb)
   }
 }
 
-fileprivate extension ServerRoute.Api.Route.Water.Route.Density {
-  func respond() async -> DensityOf<Water> {
+extension ServerRoute.Api.Route.Water.Route.Density {
+  fileprivate func respond() async -> DensityOf<Water> {
     await .init(for: dryBulb.rawValue)
   }
 }

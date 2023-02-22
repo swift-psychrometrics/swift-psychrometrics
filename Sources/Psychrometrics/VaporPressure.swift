@@ -16,12 +16,12 @@ extension VaporPressure {
     dryBulb temperature: Temperature,
     humidity relativeHumidity: RelativeHumidity,
     units: PsychrometricUnits? = nil
-  ) async {
+  ) async throws {
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units
     let value =
-      await SaturationPressure(at: temperature, units: units).rawValue.rawValue
+      try await SaturationPressure(at: temperature, units: units).rawValue.rawValue
       * relativeHumidity.fraction
     self.init(.init(value, units: .defaultFor(units: units)))
   }
@@ -40,8 +40,13 @@ extension VaporPressure {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) {
-    precondition(humidityRatio > 0)
+  ) throws {
+    guard humidityRatio > 0 else {
+      throw ValidationError(
+        label: "Vapor Pressure",
+        summary: "Humidity ratio should be greater than 0."
+      )
+    }
     @Dependency(\.psychrometricEnvironment) var environment
 
     let units = units ?? environment.units

@@ -4,7 +4,7 @@ import SharedModels
 import TestSupport
 
 final class SpecificHumidityTests: XCTestCase {
-  func test_specificHumidity() async {
+  func test_specificHumidity() async throws {
     XCTAssertEqual(
       round(SpecificHumidity(water: 14.7, dryAir: 18.3).rawValue * 100) / 100,
       0.45
@@ -13,7 +13,7 @@ final class SpecificHumidityTests: XCTestCase {
     let humidity: RelativeHumidity = 50%
     let altitude: Length = 1000
     let pressure: Pressure = .init(altitude: altitude)
-    let ratio = await HumidityRatio(
+    let ratio = try await HumidityRatio(
       dryBulb: temperature, humidity: humidity, pressure: pressure
     )
     
@@ -21,13 +21,13 @@ final class SpecificHumidityTests: XCTestCase {
       round(SpecificHumidity(ratio: ratio).rawValue * 100) / 100,
       0.01
     )
-    var sut = await SpecificHumidity(
+    var sut = try await SpecificHumidity(
         for: temperature, with: humidity, at: pressure).rawValue * 1000
     XCTAssertEqual(
       round(sut) / 1000,
       0.009
     )
-    sut = await SpecificHumidity(
+    sut = try await SpecificHumidity(
         for: temperature, with: humidity, at: altitude).rawValue * 1000
     XCTAssertEqual(
       round(sut) / 1000,
@@ -35,10 +35,10 @@ final class SpecificHumidityTests: XCTestCase {
     )
   }
   
-  func test_conversions_between_specificHumidity_and_humidityRatio() {
+  func test_conversions_between_specificHumidity_and_humidityRatio() throws {
     let specific = SpecificHumidity(ratio: 0.006)
     XCTApproximatelyEqual(specific.rawValue,  0.00596421471)
-    let ratio = HumidityRatio(specificHumidity: 0.00596421471)
+    let ratio = try HumidityRatio(specificHumidity: 0.00596421471)
     XCTApproximatelyEqual(ratio.rawValue, 0.006)
   }
 }

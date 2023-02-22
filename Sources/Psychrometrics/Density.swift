@@ -98,8 +98,10 @@ extension Density where T == MoistAir {
     volume specificVolume: SpecificVolumeOf<MoistAir>,
     ratio humidityRatio: HumidityRatio,
     units: PsychrometricUnits? = nil
-  ) async {
-    precondition(humidityRatio.rawValue > 0)
+  ) async throws {
+    guard humidityRatio.rawValue > 0 else {
+      throw ValidationError(summary: "Humidity ratio should be greater than 0")
+    }
 
     @Dependency(\.psychrometricEnvironment) var environment
 
@@ -126,8 +128,8 @@ extension Density where T == MoistAir {
     at humidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       volume: .init(
         dryBulb: temperature,
         humidity: humidity,
@@ -154,8 +156,8 @@ extension Density where T == MoistAir {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       volume: .init(
         dryBulb: temperature, ratio: humidityRatio, pressure: totalPressure, units: units),
       ratio: humidityRatio,

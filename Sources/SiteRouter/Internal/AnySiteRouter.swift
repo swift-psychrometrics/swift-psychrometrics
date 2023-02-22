@@ -1,15 +1,15 @@
 import URLRouting
 
 protocol SiteRouteRouter: ParserPrinter {
-  
+
   associatedtype SiteRoute
-  
+
   @ParserBuilder
   var body: AnyParserPrinter<URLRequestData, SiteRoute> { get }
 }
 
 extension SiteRouteRouter {
-  
+
   public func parse(_ input: inout URLRequestData) throws -> Self.SiteRoute {
     try body.parse(input)
   }

@@ -17,8 +17,8 @@ extension WetBulb {
     humidity relativeHumidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       dryBulb: temperature,
       ratio: .init(
         dryBulb: temperature, humidity: relativeHumidity, pressure: totalPressure, units: units),
@@ -58,11 +58,16 @@ private func wetBulb_from_humidity_ratio(
   pressure: Pressure,
   units: PsychrometricUnits
 ) async throws -> WetBulb? {
-  precondition(humidityRatio > 0)
+  guard humidityRatio > 0 else {
+    throw ValidationError(
+      label: "Wet Bulb",
+      summary: "Humidity ratio should be greater than 0."
+    )
+  }
 
   @Dependency(\.psychrometricEnvironment) var environment
 
-  let dewPoint = await DewPoint(dryBulb: dryBulb, ratio: humidityRatio, pressure: pressure, units: units)
+  let dewPoint = try await DewPoint(dryBulb: dryBulb, ratio: humidityRatio, pressure: pressure, units: units)
   let temperatureUnits = units.isImperial ? Temperature.Units.fahrenheit : .celsius
 
   // Initial guesses
@@ -73,7 +78,7 @@ private func wetBulb_from_humidity_ratio(
   var index = 1
 
   while (wetBulbSup - wetBulbInf) > environment.temperatureTolerance.rawValue {
-    let ratio = await HumidityRatio(
+    let ratio = try await HumidityRatio(
       dryBulb: dryBulb,
       wetBulb: .init(.init(wetBulb, units: temperatureUnits)),
       pressure: pressure,

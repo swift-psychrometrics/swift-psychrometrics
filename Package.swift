@@ -129,7 +129,7 @@ package.targets.append(contentsOf: [
       "SharedModels",
       .product(name: "CasePaths", package: "swift-case-paths"),
       .product(name: "Dependencies", package: "swift-dependencies"),
-      .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay")
+      .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay"),
     ]
   ),
   .target(
@@ -163,7 +163,7 @@ package.targets.append(contentsOf: [
       "SharedModels",
       .product(name: "Dependencies", package: "swift-dependencies"),
       .product(name: "Vapor", package: "vapor"),
-      .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay")
+      .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay"),
     ]
   ),
 ])

@@ -4,9 +4,9 @@ import SharedModels
 
 final class GrainsOfMoistureTests: XCTestCase {
   
-  func test_grains() async {
+  func test_grains() async throws {
     let temperature = Temperature.fahrenheit(75)
-    let grains = await temperature.grains(humidity: 50%)
+    let grains = try await temperature.grains(humidity: 50%)
     XCTAssertEqual(round(grains.rawValue * 100) / 100, 65.91)
   }
   

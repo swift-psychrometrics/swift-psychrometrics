@@ -12,11 +12,11 @@ extension ApiMiddleware: DependencyKey {
   }
 }
 
-fileprivate func respond(api: ServerRoute.Api) async throws -> any Encodable {
+private func respond(api: ServerRoute.Api) async throws -> any Encodable {
   return try await apiRespond(route: api.route)
 }
 
-fileprivate func apiRespond(route: ServerRoute.Api.Route) async throws -> any Encodable {
+private func apiRespond(route: ServerRoute.Api.Route) async throws -> any Encodable {
   switch route {
   case let .dryAir(dryAir):
     return try await dryAir.respond()

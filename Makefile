@@ -20,13 +20,7 @@ test-linux:
 test-all: test test-linux
 	
 format:
-	@docker run \
-		--rm \
-		--workdir "/work" \
-		--volume "$(PWD):/work" \
-		--platform linux/amd64 \
-		mhoush/swift-format:latest \
-		format \
+	swift format \
 		--in-place \
 		--recursive \
 		./Package.swift \
@@ -50,3 +44,6 @@ cli:
 	@swift package clean \
 		&& PSYCHROMETRIC_CLI_ENABLED=1 swift build -c release
 	@open .build/release
+
+clean:
+	rm -rf .build/*

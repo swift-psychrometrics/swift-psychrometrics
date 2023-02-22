@@ -7,7 +7,7 @@ extension ServerRoute.Api.Route.MoistAir.Route {
     case let .density(density):
       return try await ResultEnvelope(result: density.response())
     case let .dewPoint(dewPoint):
-      return try await ResultEnvelope(result:  dewPoint.respond())
+      return try await ResultEnvelope(result: dewPoint.respond())
     case let .enthalpy(enthalpy):
       return try await ResultEnvelope(result: enthalpy.respond())
     case let .grainsOfMoisture(grainsOfMoisture):
@@ -30,9 +30,9 @@ extension ServerRoute.Api.Route.MoistAir.Route {
 
 // MARK: - Density
 
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Density.Route {
+extension ServerRoute.Api.Route.MoistAir.Route.Density.Route {
 
-  func respond() async throws -> any Encodable {
+  fileprivate func respond() async throws -> any Encodable {
     switch self {
     case let .humidityRatio(humidityRatio):
       return try await humidityRatio.response()
@@ -44,8 +44,8 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Density.Route {
   }
 }
 
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Density.Route {
-  func response() async throws -> DensityOf<SharedModels.MoistAir> {
+extension ServerRoute.Api.Route.MoistAir.Route.Density.Route {
+  fileprivate func response() async throws -> DensityOf<SharedModels.MoistAir> {
     switch self {
     case let .humidityRatio(humidityRatio):
       return try await humidityRatio.response()
@@ -57,8 +57,8 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Density.Route {
   }
 }
 
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Density.Route.HumidityRatio {
-  func response() async throws -> DensityOf<SharedModels.MoistAir> {
+extension ServerRoute.Api.Route.MoistAir.Route.Density.Route.HumidityRatio {
+  fileprivate func response() async throws -> DensityOf<SharedModels.MoistAir> {
     await .init(
       dryBulb: dryBulb.rawValue,
       ratio: humidityRatio,
@@ -67,8 +67,8 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Density.Route.Humidit
   }
 }
 
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Density.Route.RelativeHumidity {
-  func response() async throws -> DensityOf<SharedModels.MoistAir> {
+extension ServerRoute.Api.Route.MoistAir.Route.Density.Route.RelativeHumidity {
+  fileprivate func response() async throws -> DensityOf<SharedModels.MoistAir> {
     await .init(
       for: dryBulb.rawValue,
       at: humidity,
@@ -77,8 +77,8 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Density.Route.Relativ
   }
 }
 
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Density.Route.SpecificVolume {
-  func response() async throws -> DensityOf<SharedModels.MoistAir> {
+extension ServerRoute.Api.Route.MoistAir.Route.Density.Route.SpecificVolume {
+  fileprivate func response() async throws -> DensityOf<SharedModels.MoistAir> {
     await .init(
       volume: specificVolume,
       ratio: humidityRatio
@@ -87,9 +87,9 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Density.Route.Specifi
 }
 
 // MARK: - Dew Point
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.DewPoint.Route {
-  
-  func respond() async throws -> DewPoint {
+extension ServerRoute.Api.Route.MoistAir.Route.DewPoint.Route {
+
+  fileprivate func respond() async throws -> DewPoint {
     switch self {
     case let .temperature(temperature):
       return await DewPoint(
@@ -113,9 +113,9 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.DewPoint.Route {
 }
 
 // MARK: - Enthalpy
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Enthalpy.Route {
-  
-  func respond() async throws -> MoistAirEnthalpy {
+extension ServerRoute.Api.Route.MoistAir.Route.Enthalpy.Route {
+
+  fileprivate func respond() async throws -> MoistAirEnthalpy {
     switch self {
     case let .altitude(altitude):
       return await MoistAirEnthalpy(
@@ -136,8 +136,8 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Enthalpy.Route {
 }
 
 // MARK: - Grains of Moisture
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.GrainsOfMoisture.Route {
-  func respond() async throws -> GrainsOfMoisture {
+extension ServerRoute.Api.Route.MoistAir.Route.GrainsOfMoisture.Route {
+  fileprivate func respond() async throws -> GrainsOfMoisture {
     switch self {
     case let .altitude(altitude):
       return await .init(
@@ -161,8 +161,8 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.GrainsOfMoisture.Rout
 }
 
 // MARK: Humidity Ratio
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route {
-  func respond() async throws -> SharedModels.HumidityRatio {
+extension ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route {
+  fileprivate func respond() async throws -> SharedModels.HumidityRatio {
     switch self {
     case let .dewPoint(dewPoint):
       return await .init(
@@ -202,41 +202,44 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.HumidityRatio.Route {
 }
 
 // MARK: - Psychrometrics
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route {
-  
-  struct PsychrometricError: Error { }
+extension ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route {
 
-  func respond() async throws -> PsychrometricResponse {
+  fileprivate struct PsychrometricError: Error {}
+
+  fileprivate func respond() async throws -> PsychrometricResponse {
     switch self {
     case let .altitude(altitude):
-      guard let value = await PsychrometricResponse(
-        altitude: altitude.altitude,
-        dryBulb: altitude.dryBulb.rawValue,
-        humidity: altitude.humidity,
-        units: altitude.units
+      guard
+        let value = await PsychrometricResponse(
+          altitude: altitude.altitude,
+          dryBulb: altitude.dryBulb.rawValue,
+          humidity: altitude.humidity,
+          units: altitude.units
         )
       else {
         throw PsychrometricError()
       }
       return value
     case let .dewPoint(dewPoint):
-      guard let value = await PsychrometricResponse(
-        dryBulb: dewPoint.dryBulb.rawValue,
-        dewPoint: dewPoint.dewPoint,
-        pressure: dewPoint.totalPressure.rawValue,
-        units: dewPoint.units
-      )
+      guard
+        let value = await PsychrometricResponse(
+          dryBulb: dewPoint.dryBulb.rawValue,
+          dewPoint: dewPoint.dewPoint,
+          pressure: dewPoint.totalPressure.rawValue,
+          units: dewPoint.units
+        )
       else {
         throw PsychrometricError()
       }
       return value
     case let .relativeHumidity(relativeHumidity):
-      guard let value = await PsychrometricResponse(
-        dryBulb: relativeHumidity.dryBulb.rawValue,
-        humidity: relativeHumidity.humidity,
-        pressure: relativeHumidity.totalPressure.rawValue,
-        units: relativeHumidity.units
-      )
+      guard
+        let value = await PsychrometricResponse(
+          dryBulb: relativeHumidity.dryBulb.rawValue,
+          humidity: relativeHumidity.humidity,
+          pressure: relativeHumidity.totalPressure.rawValue,
+          units: relativeHumidity.units
+        )
       else {
         throw PsychrometricError()
       }
@@ -253,9 +256,9 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.Psychrometrics.Route 
 }
 
 // MARK: - Relative Humidity
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.RelativeHumidity.Route {
-  
-  func respond() async throws -> SharedModels.RelativeHumidity {
+extension ServerRoute.Api.Route.MoistAir.Route.RelativeHumidity.Route {
+
+  fileprivate func respond() async throws -> SharedModels.RelativeHumidity {
     switch self {
     case let .humidityRatio(humidityRatio):
       return await .init(
@@ -275,37 +278,37 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.RelativeHumidity.Rout
 }
 
 // MARK: - Specific Volume
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.SpecificVolume.Route {
-  func respond() async throws -> SpecificVolume<SharedModels.MoistAir> {
+extension ServerRoute.Api.Route.MoistAir.Route.SpecificVolume.Route {
+  fileprivate func respond() async throws -> SpecificVolume<SharedModels.MoistAir> {
     switch self {
-      case let .altitude(altitude):
-        return await SpecificVolume<SharedModels.MoistAir>.init(
-          dryBulb: altitude.dryBulb.rawValue,
-          humidity: altitude.humidity,
-          altitude: altitude.altitude,
-          units: altitude.units
-        )
-      case let .humidityRatio(humidityRatio):
-        return await SpecificVolume<SharedModels.MoistAir>.init(
-          dryBulb: humidityRatio.dryBulb.rawValue,
-          ratio: humidityRatio.humidityRatio,
-          pressure: humidityRatio.totalPressure.rawValue,
-          units: humidityRatio.units
-        )
-      case let .relativeHumidity(relativeHumidity):
-        return await SpecificVolume<SharedModels.MoistAir>.init(
-          dryBulb: relativeHumidity.dryBulb.rawValue,
-          humidity: relativeHumidity.humidity,
-          pressure: relativeHumidity.totalPressure.rawValue,
-          units: relativeHumidity.units
-        )
+    case let .altitude(altitude):
+      return await SpecificVolume<SharedModels.MoistAir>.init(
+        dryBulb: altitude.dryBulb.rawValue,
+        humidity: altitude.humidity,
+        altitude: altitude.altitude,
+        units: altitude.units
+      )
+    case let .humidityRatio(humidityRatio):
+      return await SpecificVolume<SharedModels.MoistAir>.init(
+        dryBulb: humidityRatio.dryBulb.rawValue,
+        ratio: humidityRatio.humidityRatio,
+        pressure: humidityRatio.totalPressure.rawValue,
+        units: humidityRatio.units
+      )
+    case let .relativeHumidity(relativeHumidity):
+      return await SpecificVolume<SharedModels.MoistAir>.init(
+        dryBulb: relativeHumidity.dryBulb.rawValue,
+        humidity: relativeHumidity.humidity,
+        pressure: relativeHumidity.totalPressure.rawValue,
+        units: relativeHumidity.units
+      )
     }
   }
 }
 
 // MARK: - Vapor Pressure
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.VaporPressure.Route {
-  func respond() async throws -> SharedModels.VaporPressure {
+extension ServerRoute.Api.Route.MoistAir.Route.VaporPressure.Route {
+  fileprivate func respond() async throws -> SharedModels.VaporPressure {
     switch self {
     case let .humidityRatio(humidityRatio):
       return .init(
@@ -318,18 +321,19 @@ fileprivate extension ServerRoute.Api.Route.MoistAir.Route.VaporPressure.Route {
 }
 
 // MARK: - Wet Bulb
-fileprivate extension ServerRoute.Api.Route.MoistAir.Route.WetBulb.Route {
-  
-  struct WetBulbError: Error { }
-  func respond() async throws -> SharedModels.WetBulb {
+extension ServerRoute.Api.Route.MoistAir.Route.WetBulb.Route {
+
+  fileprivate struct WetBulbError: Error {}
+  fileprivate func respond() async throws -> SharedModels.WetBulb {
     switch self {
     case let .relativeHumidity(relativeHumidity):
-      guard let value = await SharedModels.WetBulb(
-        dryBulb: relativeHumidity.dryBulb.rawValue,
-        humidity: relativeHumidity.humidity,
-        pressure: relativeHumidity.totalPressure.rawValue,
-        units: relativeHumidity.units
-      )
+      guard
+        let value = await SharedModels.WetBulb(
+          dryBulb: relativeHumidity.dryBulb.rawValue,
+          humidity: relativeHumidity.humidity,
+          pressure: relativeHumidity.totalPressure.rawValue,
+          units: relativeHumidity.units
+        )
       else {
         throw WetBulbError()
       }

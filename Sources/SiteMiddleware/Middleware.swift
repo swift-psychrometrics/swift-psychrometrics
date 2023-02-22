@@ -4,9 +4,9 @@ import Vapor
 import XCTestDynamicOverlay
 
 public struct SiteMiddleware {
-  
+
   public var respond: (Request, ServerRoute) async throws -> AsyncResponseEncodable
-  
+
   public init(
     respond: @escaping (Request, ServerRoute) async throws -> AsyncResponseEncodable
   ) {
@@ -15,7 +15,8 @@ public struct SiteMiddleware {
 }
 
 extension SiteMiddleware: TestDependencyKey {
-  public static let testValue: SiteMiddleware = .init(respond: unimplemented("\(Self.self).respond"))
+  public static let testValue: SiteMiddleware = .init(
+    respond: unimplemented("\(Self.self).respond"))
 }
 
 extension DependencyValues {

@@ -35,8 +35,8 @@ final class DensityTests: XCTestCase {
     XCTApproximatelyEqual(density.rawValue, 1.18441, tolerance: 0.003)
   }
   
-  func test_density_of_moistAir_metric() async {
-    let density = await DensityOf<MoistAir>.init(
+  func test_density_of_moistAir_metric() async throws {
+    let density = try await DensityOf<MoistAir>.init(
       dryBulb: .celsius(30),
       ratio: 0.02,
       pressure: .pascals(95461),

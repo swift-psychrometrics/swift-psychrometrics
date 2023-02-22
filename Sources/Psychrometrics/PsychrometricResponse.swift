@@ -14,22 +14,22 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
     wetBulb: WetBulb,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
+  ) async throws {
     let units = units ?? Self.environment.units
-    let humidityRatio = await HumidityRatio(
+    let humidityRatio = try await HumidityRatio(
       dryBulb: temperature,
       wetBulb: wetBulb,
       pressure: totalPressure,
       units: units
     )
-    let relativeHumidity = await RelativeHumidity.init(
+    let relativeHumidity = try await RelativeHumidity.init(
       dryBulb: temperature,
       ratio: humidityRatio,
       pressure: totalPressure,
       units: units
     )
     
-    self.psychrometrics = await .init(
+    self.psychrometrics = try await .init(
       atmosphericPressure: totalPressure,
       degreeOfSaturation: Self.degreeOfSaturation(
         dryBulb: temperature,
@@ -63,11 +63,11 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
     humidity relativeHumidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
+  ) async throws {
     
     let units = units ?? Self.environment.units
     
-    guard let wetBulb = await WetBulb(
+    guard let wetBulb = try await WetBulb(
         dryBulb: temperature,
         humidity: relativeHumidity,
         pressure: totalPressure,
@@ -75,14 +75,14 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
       )
     else { return nil }
    
-    let humidityRatio = await HumidityRatio(
+    let humidityRatio = try await HumidityRatio(
       dryBulb: temperature,
       humidity: relativeHumidity,
       pressure: totalPressure,
       units: units
     )
     
-    self.psychrometrics = await .init(
+    self.psychrometrics = try await .init(
       atmosphericPressure: totalPressure,
       degreeOfSaturation: Self.degreeOfSaturation(
         dryBulb: temperature,
@@ -119,10 +119,10 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
     dewPoint: DewPoint,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
+  ) async throws {
     let units = units ?? Self.environment.units
     
-    let humidityRatio = await HumidityRatio(
+    let humidityRatio = try await HumidityRatio(
       dewPoint: dewPoint,
       pressure: totalPressure,
       units: units
@@ -137,14 +137,14 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
       )
     else { return nil }
     
-    let relativeHumidity = await RelativeHumidity.init(
+    let relativeHumidity = try await RelativeHumidity.init(
       dryBulb: temperature,
       ratio: humidityRatio,
       pressure: totalPressure,
       units: units
     )
     
-    self.psychrometrics = await .init(
+    self.psychrometrics = try await .init(
       atmosphericPressure: totalPressure,
       degreeOfSaturation:  Self.degreeOfSaturation(
         dryBulb: temperature,
@@ -176,9 +176,14 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
     ratio humidityRatio: HumidityRatio,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async -> Double {
-    precondition(humidityRatio > 0)
-    let saturatedRatio = await HumidityRatio.init(
+  ) async throws -> Double {
+    guard humidityRatio > 0 else {
+      throw ValidationError(
+        label: "Psychrometrics.degreeOfSaturation",
+        summary: "Humidity ratio should be greater than 0."
+      )
+    }
+    let saturatedRatio = try await HumidityRatio.init(
       dryBulb: temperature,
       pressure: totalPressure,
       units: units
@@ -194,8 +199,8 @@ extension PsychrometricResponse {
     dryBulb temperature: Temperature,
     humidity relativeHumidity: RelativeHumidity,
     units: PsychrometricUnits? = nil
-  ) async {
-    await self.init(
+  ) async throws {
+    try await self.init(
       dryBulb: temperature,
       humidity: relativeHumidity,
       pressure: .init(altitude: altitude, units: units),
@@ -208,8 +213,8 @@ extension PsychrometricResponse {
     wetBulb: WetBulb,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    self = await PsychrometricResponseEnvelope(
+  ) async throws {
+    self = try await PsychrometricResponseEnvelope(
       dryBulb: temperature,
       wetBulb: wetBulb,
       pressure: totalPressure,
@@ -222,8 +227,8 @@ extension PsychrometricResponse {
     humidity relativeHumidity: RelativeHumidity,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    guard let value = await PsychrometricResponseEnvelope(
+  ) async throws {
+    guard let value = try await PsychrometricResponseEnvelope(
       dryBulb: temperature,
       humidity: relativeHumidity,
       pressure: totalPressure,
@@ -238,8 +243,8 @@ extension PsychrometricResponse {
     dewPoint: DewPoint,
     pressure totalPressure: Pressure,
     units: PsychrometricUnits? = nil
-  ) async {
-    guard let value = await PsychrometricResponseEnvelope(
+  ) async throws {
+    guard let value = try await PsychrometricResponseEnvelope(
       dryBulb: temperature,
       dewPoint: dewPoint,
       pressure: totalPressure,
