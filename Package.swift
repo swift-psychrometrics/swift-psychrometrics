@@ -4,7 +4,7 @@ import PackageDescription
 
 var package = Package(
   name: "swift-psychrometrics",
-  platforms: [.macOS(.v12), .iOS(.v13)],
+  platforms: [.macOS(.v12), .iOS(.v15)],
   products: [
     .library(name: "ConcurrencyHelpers", targets: ["ConcurrencyHelpers"]),
     .library(name: "SharedModels", targets: ["SharedModels"]),
@@ -84,6 +84,25 @@ var package = Package(
     ),
   ]
 )
+
+// MARK: - Client
+if ProcessInfo.processInfo.environment["TEST_SERVER"] == nil {
+  package.dependencies.append(contentsOf: [
+    .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "0.51.0")
+  ])
+  package.products.append(contentsOf: [
+    .library(name: "DewPointCalcFeature", targets: ["DewPointCalcFeature"])
+  ])
+  package.targets.append(contentsOf: [
+    .target(
+      name: "DewPointCalcFeature",
+      dependencies: [
+        "Psychrometrics",
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+      ]
+    ),
+  ])
+}
 
 // #MARK: - CLI
 if #available(macOS 10.15, *),
