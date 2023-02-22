@@ -18,27 +18,11 @@ fileprivate func respond(api: ServerRoute.Api) async throws -> any Encodable {
 
 fileprivate func apiRespond(route: ServerRoute.Api.Route) async throws -> any Encodable {
   switch route {
-  case let .density(density):
-    return try await density.respond()
-  case let .dewPoint(dewPoint):
-    return try await dewPoint.respond()
-  case let .enthalpy(enthalpy):
-    return try await enthalpy.respond()
-  case let .grainsOfMoisture(grainsOfMoisture):
-    return try await grainsOfMoisture.respond()
-  case let .humidityRatio(humidityRatio):
-    return try await humidityRatio.respond()
-  case let .psychrometrics(psychrometrics):
-    return try await psychrometrics.respond()
-  case let .relativeHumidity(relativeHumidity):
-    return try await relativeHumidity.respond()
-  case let .specificHeat(specificHeat):
-    return try await specificHeat.respond()
-  case let .specificVolume(specificVolume):
-    return try await specificVolume.respond()
-  case let .vaporPressure(vaporPressure):
-    return try await vaporPressure.respond()
-  case let .wetBulb(wetBulb):
-    return try await wetBulb.respond()
+  case let .dryAir(dryAir):
+    return try await dryAir.respond()
+  case let .moistAir(moistAir):
+    return try await moistAir.respond()
+  case let .water(water):
+    return try await water.respond()
   }
 }
