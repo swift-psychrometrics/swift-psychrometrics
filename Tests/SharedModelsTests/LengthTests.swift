@@ -1,5 +1,5 @@
 import XCTest
-@testable import SharedModels
+import SharedModels
 
 final class LengthTests: XCTestCase {
   

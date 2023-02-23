@@ -1,5 +1,5 @@
 import XCTest
-@testable import Psychrometrics
+import Psychrometrics
 import SharedModels
 import TestSupport
 

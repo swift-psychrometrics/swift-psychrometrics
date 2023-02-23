@@ -1,3 +1,7 @@
+PLATFORM_IOS = iOS Simulator,name=iPhone 14,OS=16.2
+PLATFORM_MACOS = macOS
+PLATFORM_MAC_CATALYST = macOS,variant=Mac Catalyst
+CONFIG = debug
 DOCC_BUILD_PATH := /tmp/swift-web-playground-build
 LLVM_PATH := /usr/local/opt/llvm/bin/llvm-cov
 BIN_PATH = $(shell swift build --show-bin-path)
@@ -18,7 +22,32 @@ test-linux:
 		swift:5.7-focal \
 		swift package clean && swift test
 
-test-all: test test-linux
+test-server:
+	for platform in "$(PLATFORM_MACOS)"; do \
+		xcodebuild test \
+			-configuration $(CONFIG) \
+			-workspace .swiftpm/xcode/package.xcworkspace \
+			-scheme swift-psychrometrics-Package \
+			-destination platform="$$platform" || exit 1; \
+	done
+
+test-psychrometrics:
+	for platform in "$(PLATFORM_IOS)"; do \
+		xcodebuild test \
+			-configuration $(CONFIG) \
+			-workspace .swiftpm/xcode/package.xcworkspace \
+			-scheme Psychrometrics \
+			-destination platform="$$platform" || exit 1; \
+	done
+
+test-library:
+	$(MAKE) CONFIG=debug test-server
+	$(MAKE) CONFIG=release test-server
+	$(MAKE) CONFIG=debug test-psychrometrics
+	$(MAKE) CONFIG=release test-psychrometrics
+
+
+test-all: test-linux test-library
 
 format:
 	swift format \

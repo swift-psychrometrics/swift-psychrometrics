@@ -1,4 +1,3 @@
-#if DEBUG
   import XCTest
 
   public func XCTApproximatelyEqual<T>(
@@ -40,4 +39,3 @@
   ) where T: Numeric, T: Comparable, T: ExpressibleByFloatLiteral, T.FloatLiteralType == Double {
     XCTApproximatelyEqual(lhs, rhs, tolerance: 1e-6, file: file, line: line)
   }
-#endif

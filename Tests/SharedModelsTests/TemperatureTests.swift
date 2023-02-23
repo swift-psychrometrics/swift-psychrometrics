@@ -1,5 +1,5 @@
 import XCTest
-@testable import SharedModels
+import SharedModels
 
 class TemperatureTests: XCTestCase {
   

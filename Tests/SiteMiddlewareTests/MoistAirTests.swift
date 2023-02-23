@@ -341,4 +341,356 @@ final class MoistAirApiTests: XCTestCase {
       tolerance: 0.001
     )
   }
+  
+  func test_psychrometrics_altitude() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.psychrometrics(.altitude(.init(
+      altitude: .seaLevel,
+      dryBulb: 75,
+      humidity: 50%
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<PsychrometricResponse>.self
+    )
+    
+    XCTApproximatelyEqual(
+      sut.result.degreeOfSaturation,
+      0.493,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.enthalpy.rawValue,
+      28.107,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.dewPoint.rawValue,
+      55.182,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.density.rawValue,
+      0.073,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.humidityRatio.rawValue,
+      0.009,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.volume.rawValue,
+      13.679,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.vaporPressure.rawValue,
+      0.215,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.wetBulb.rawValue,
+      61.957,
+      tolerance: 0.001
+    )
+  }
+  
+  func test_psychrometrics_dewPoint() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.psychrometrics(.dewPoint(.init(
+      dewPoint: 55.182,
+      dryBulb: 75,
+      totalPressure: 14.696
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<PsychrometricResponse>.self
+    )
+    
+    XCTApproximatelyEqual(
+      sut.result.degreeOfSaturation,
+      0.493,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.enthalpy.rawValue,
+      28.107,
+      tolerance: 0.03
+    )
+    XCTApproximatelyEqual(
+      sut.result.dewPoint.rawValue,
+      55.182,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.density.rawValue,
+      0.073,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.humidityRatio.rawValue,
+      0.009,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.volume.rawValue,
+      13.679,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.vaporPressure.rawValue,
+      0.215,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.wetBulb.rawValue,
+      61.957,
+      tolerance: 0.04
+    )
+  }
+  
+  func test_psychrometrics_relativeHumidity() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.psychrometrics(.relativeHumidity(.init(
+      dryBulb: 75,
+      humidity: 50%,
+      totalPressure: 14.696
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<PsychrometricResponse>.self
+    )
+    
+    XCTApproximatelyEqual(
+      sut.result.degreeOfSaturation,
+      0.493,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.enthalpy.rawValue,
+      28.107,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.dewPoint.rawValue,
+      55.182,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.density.rawValue,
+      0.073,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.humidityRatio.rawValue,
+      0.009,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.volume.rawValue,
+      13.679,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.vaporPressure.rawValue,
+      0.215,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.wetBulb.rawValue,
+      61.957,
+      tolerance: 0.001
+    )
+  }
+  
+  func test_psychrometrics_wetBulb() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.psychrometrics(.wetBulb(.init(
+      dryBulb: 75,
+      totalPressure: 14.696,
+      wetBulb: 61.957
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<PsychrometricResponse>.self
+    )
+    
+    XCTApproximatelyEqual(
+      sut.result.degreeOfSaturation,
+      0.493,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.enthalpy.rawValue,
+      28.107,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.dewPoint.rawValue,
+      55.182,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.density.rawValue,
+      0.073,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.humidityRatio.rawValue,
+      0.009,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.volume.rawValue,
+      13.679,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.vaporPressure.rawValue,
+      0.215,
+      tolerance: 0.001
+    )
+    XCTApproximatelyEqual(
+      sut.result.wetBulb.rawValue,
+      61.957,
+      tolerance: 0.001
+    )
+  }
+  
+  func test_relativeHumidity_humidityRatio() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.relativeHumidity(.humidityRatio(.init(
+      dryBulb: 75,
+      humidityRatio: 0.009,
+      totalPressure: 14.696
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<RelativeHumidity>.self
+    )
+    XCTApproximatelyEqual(
+      sut.result.rawValue.rawValue,
+      48.742,
+      tolerance: 0.001
+    )
+  }
+  
+  func test_relativeHumidity_vaporPressure() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.relativeHumidity(.vaporPressure(.init(
+      dryBulb: 75,
+      vaporPressure: 0.215
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<RelativeHumidity>.self
+    )
+    XCTApproximatelyEqual(
+      sut.result.rawValue.rawValue,
+      49.991,
+      tolerance: 0.001
+    )
+  }
+  
+  func test_specificVolume_altitude() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.specificVolume(.altitude(.init(
+      altitude: .seaLevel,
+      dryBulb: 75,
+      humidity: 50%
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<SpecificVolume<MoistAir>>.self
+    )
+    XCTApproximatelyEqual(
+      sut.result.rawValue,
+      13.885,
+      tolerance: 0.001
+    )
+  }
+  
+  func test_specificVolume_humidityRatio() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.specificVolume(.humidityRatio(.init(
+      dryBulb: 75,
+      humidityRatio: 0.009,
+      totalPressure: 14.696
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<SpecificVolume<MoistAir>>.self
+    )
+    XCTApproximatelyEqual(
+      sut.result.rawValue,
+      13.674,
+      tolerance: 0.001
+    )
+  }
+  
+  func test_specificVolume_relativeHumidity() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.specificVolume(.relativeHumidity(.init(
+      dryBulb: 75,
+      humidity: 50%,
+      totalPressure: 14.696
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<SpecificVolume<MoistAir>>.self
+    )
+    XCTApproximatelyEqual(
+      sut.result.rawValue,
+      13.885,
+      tolerance: 0.001
+    )
+  }
+  
+  func test_vaporPressure_humidityRatio() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.vaporPressure(.humidityRatio(.init(
+      humidityRatio: 0.009,
+      totalPressure: 14.696
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<VaporPressure>.self
+    )
+    XCTApproximatelyEqual(
+      sut.result.rawValue.rawValue,
+      0.209,
+      tolerance: 0.001
+    )
+  }
+  
+  func test_wetBulb_relativeHumidity() async throws {
+    @Dependency(\.siteMiddleware) var middleware
+    
+    let route = ServerRoute.Api.Route.moistAir(.wetBulb(.relativeHumidity(.init(
+      dryBulb: 75,
+      humidity: 50%,
+      totalPressure: 14.696
+    ))))
+    let sut = try await middleware.apiRespond(
+      route: .init(isDebug: true, route: route),
+      as: ResultEnvelope<WetBulb>.self
+    )
+    XCTApproximatelyEqual(
+      sut.result.rawValue.rawValue,
+      61.957,
+      tolerance: 0.001
+    )
+  }
 }
+
