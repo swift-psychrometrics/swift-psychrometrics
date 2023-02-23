@@ -185,4 +185,12 @@ package.targets.append(contentsOf: [
       .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay"),
     ]
   ),
+  .testTarget(
+    name: "SiteMiddlewareTests",
+    dependencies: [
+      "ApiMiddlewareLive",
+      "SiteMiddleware",
+      "TestSupport",
+    ]
+  ),
 ])

@@ -41,6 +41,11 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
       dewPoint: await .init(dryBulb: temperature, humidity: relativeHumidity, units: units),
       dryBulb: temperature,
       enthalpy: .init(dryBulb: temperature, ratio: humidityRatio, units: units),
+      grainsOfMoisture: .init(
+        temperature: temperature,
+        humidity: relativeHumidity,
+        pressure: totalPressure
+      ),
       humidityRatio: humidityRatio,
       relativeHumidity: relativeHumidity,
       vaporPressure: .init(ratio: humidityRatio, pressure: totalPressure, units: units),
@@ -99,6 +104,11 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
       ),
       dryBulb: temperature,
       enthalpy: .init(dryBulb: temperature, ratio: humidityRatio, units: units),
+      grainsOfMoisture: .init(
+        temperature: temperature,
+        humidity: relativeHumidity,
+        pressure: totalPressure
+      ),
       humidityRatio: humidityRatio,
       relativeHumidity: relativeHumidity,
       vaporPressure: .init(ratio: humidityRatio, pressure: totalPressure, units: units),
@@ -156,6 +166,11 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
       dewPoint: dewPoint,
       dryBulb: temperature,
       enthalpy: .init(dryBulb: temperature, ratio: humidityRatio, units: units),
+      grainsOfMoisture: .init(
+        temperature: temperature,
+        humidity: relativeHumidity,
+        pressure: totalPressure
+      ),
       humidityRatio: humidityRatio,
       relativeHumidity: relativeHumidity,
       vaporPressure: .init(ratio: humidityRatio, pressure: totalPressure, units: units),

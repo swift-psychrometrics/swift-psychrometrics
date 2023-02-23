@@ -5,6 +5,8 @@ import SharedModels
 //import TestSupport
 import XCTestDynamicOverlay
 
+public struct InvalidTypeError: Error { }
+
 public struct ApiMiddleware {
   public var apiResponse: (ServerRoute.Api.Route) async throws -> any Encodable
   public var respond: (ServerRoute.Api) async throws -> any Encodable
@@ -15,6 +17,28 @@ public struct ApiMiddleware {
   ) {
     self.apiResponse = apiResponse
     self.respond = respond
+  }
+  
+  public func apiResponse<V: Encodable>(
+    route: ServerRoute.Api.Route,
+    as type: V.Type
+  ) async throws -> V {
+    let response = try await apiResponse(route)
+    guard let strongResponse = response as? V else {
+      throw InvalidTypeError()
+    }
+    return strongResponse
+  }
+  
+  public func respond<V: Encodable>(
+    route: ServerRoute.Api,
+    as type: V.Type
+  ) async throws -> V {
+    let response = try await respond(route)
+    guard let strongResponse = response as? V else {
+      throw InvalidTypeError()
+    }
+    return strongResponse
   }
 }
 

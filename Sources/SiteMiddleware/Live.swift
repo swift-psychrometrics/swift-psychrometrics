@@ -20,6 +20,14 @@ extension SiteMiddleware: DependencyKey {
       }
     )
   }
+  
+  public func apiRespond<V: Encodable>(
+    route: ServerRoute.Api,
+    as type: V.Type
+  ) async throws -> V {
+    @Dependency(\.apiMiddleware) var apiMiddleware
+    return try await apiMiddleware.respond(route: route, as: V.self)
+  }
 }
 
 struct _AnyEncodable: Encodable {

@@ -3,7 +3,7 @@ import Foundation
 // TODO: Add units of measure.
 
 /// Represents / calculates the grains of moisture for air.
-public struct GrainsOfMoisture {
+public struct GrainsOfMoisture: Codable, Equatable, Sendable {
 
   /// Constant for the mole weight of water.
   public static let moleWeightWater = 18.02

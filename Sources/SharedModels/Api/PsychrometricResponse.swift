@@ -6,6 +6,7 @@ public struct PsychrometricResponse: Codable, Equatable, Sendable {
   public let dewPoint: DewPoint
   public let dryBulb: Temperature
   public let enthalpy: MoistAirEnthalpy
+  public let grainsOfMoisture: GrainsOfMoisture
   public let humidityRatio: HumidityRatio
   public let relativeHumidity: RelativeHumidity
   public let vaporPressure: VaporPressure
@@ -20,6 +21,7 @@ public struct PsychrometricResponse: Codable, Equatable, Sendable {
     dewPoint: DewPoint,
     dryBulb: Temperature,
     enthalpy: MoistAirEnthalpy,
+    grainsOfMoisture: GrainsOfMoisture,
     humidityRatio: HumidityRatio,
     relativeHumidity: RelativeHumidity,
     vaporPressure: VaporPressure,
@@ -33,6 +35,7 @@ public struct PsychrometricResponse: Codable, Equatable, Sendable {
     self.dewPoint = dewPoint
     self.dryBulb = dryBulb
     self.enthalpy = enthalpy
+    self.grainsOfMoisture = grainsOfMoisture
     self.humidityRatio = humidityRatio
     self.relativeHumidity = relativeHumidity
     self.vaporPressure = vaporPressure

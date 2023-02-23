@@ -1,10 +1,11 @@
+import PlaygroundSupport
 import Psychrometrics
 import Foundation
 
-extension Psychrometrics {
+extension PsychrometricResponse {
   
-  static var imperialMock: Self {
-    Self.init(
+  static func imperialMock() async throws -> Self {
+    try await Self.init(
       dryBulb: .fahrenheit(75),
       humidity: 50%,
       pressure: .init(altitude: .seaLevel, units: .imperial),
@@ -12,8 +13,8 @@ extension Psychrometrics {
     )!
   }
   
-  static var metricMock: Self {
-    Self.init(
+  static func metricMock() async throws -> Self {
+      try await Self.init(
       dryBulb: .celsius(24),
       humidity: 50%,
       pressure: .pascals(101325),
@@ -36,7 +37,7 @@ extension Double {
   }
 }
 
-func printPsychrometrics(_ psychrometrics: Psychrometrics, units: PsychrometricUnits) {
+func printPsychrometrics(_ psychrometrics: PsychrometricResponse, units: PsychrometricUnits) {
   let message = """
 
   Psychrometrics - \(units == .metric ? "Metric" : "Imperial")
@@ -59,5 +60,9 @@ func printPsychrometrics(_ psychrometrics: Psychrometrics, units: PsychrometricU
   print(message)
 }
 
-printPsychrometrics(.imperialMock, units: PsychrometricUnits.imperial)
-printPsychrometrics(.metricMock, units: PsychrometricUnits.metric)
+let imperial = try await PsychrometricResponse.imperialMock()
+let metric = try await PsychrometricResponse.metricMock()
+
+//
+//printPsychrometrics(imperial, units: PsychrometricUnits.imperial)
+//printPsychrometrics(metric, units: PsychrometricUnits.metric)

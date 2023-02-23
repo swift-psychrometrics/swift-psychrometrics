@@ -1,3 +1,3 @@
-struct ResultEnvelope<V: Encodable>: Encodable {
-  var result: V
+public struct ResultEnvelope<V: Encodable>: Encodable {
+  public var result: V
 }
