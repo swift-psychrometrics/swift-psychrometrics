@@ -65,4 +65,33 @@ final class PsychrometricTests: XCTestCase {
     XCTApproximatelyEqual(psychrometrics.enthalpy, 29.8, tolerance: 1.1)
     XCTApproximatelyEqual(psychrometrics.volume, 14.22, tolerance: 0.031)
   }
+  
+//  func test_airString() async throws {
+//    
+//    let encoder = JSONEncoder()
+//    encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
+//    let enthalpy1 = try await PsychrometricResponse.init(altitude: .seaLevel, dryBulb: 75, humidity: 50%)
+//    let enthalpy2 = try await PsychrometricResponse.init( altitude: .seaLevel, dryBulb: 93, humidity: 30%)
+//    
+//    let string1 = try String(data: encoder.encode(enthalpy1), encoding: .utf8)
+//    let string2 = try String(data: encoder.encode(enthalpy2), encoding: .utf8)
+//    
+//    
+//    print("Return:")
+//    print(string1!)
+//    
+//    print("Supply:")
+//    print(string2!)
+//    
+//    let grainsDiff = enthalpy1!.grainsOfMoisture - enthalpy2!.grainsOfMoisture
+//    print()
+//    print("Grains Difference / hr:")
+//    print(grainsDiff)
+//    
+//    print("Grains (lbs) / day")
+//    print(grainsDiff * 24)
+//    print()
+//    
+//    XCTFail()
+//  }
 }

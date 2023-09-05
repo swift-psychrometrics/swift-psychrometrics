@@ -60,9 +60,12 @@ func printPsychrometrics(_ psychrometrics: PsychrometricResponse, units: Psychro
   print(message)
 }
 
-let imperial = try await PsychrometricResponse.imperialMock()
-let metric = try await PsychrometricResponse.metricMock()
+//let imperial = try await PsychrometricResponse.imperialMock()
+//let metric = try await PsychrometricResponse.metricMock()
 
 //
 //printPsychrometrics(imperial, units: PsychrometricUnits.imperial)
 //printPsychrometrics(metric, units: PsychrometricUnits.metric)
+
+let enthalpy1 = try? await MoistAirEnthalpy.init(dryBulb: 75, humidity: 50%)
+let enthalpy2 = try? await MoistAirEnthalpy.init(dryBulb: 93, humidity: 30%)
