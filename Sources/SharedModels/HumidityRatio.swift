@@ -1,3 +1,5 @@
+import Tagged
+
 /// Represents the humidity ratio (or mixing ratio) of a given moist air sample.
 ///
 /// Defined as the ratio of the mass of water vapor to the mass of dry air in the sample and is often represented
@@ -7,6 +9,8 @@
 /// initialized with a value that's out of range.  For methods that use a humidity ratio they should check that the humidity ratio
 /// is valid by calling ``HumidityRatio.ensureHumidityRatio(_:)``.
 ///
+public typealias HumidityRatio = Tagged<Ratio, Humidity>
+
 //public struct HumidityRatio: Codable, Equatable, Sendable {
 extension HumidityRatio {
 

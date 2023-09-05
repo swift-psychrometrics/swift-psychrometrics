@@ -1,5 +1,6 @@
 import Foundation
 import SharedModels
+import Tagged
 
 extension SpecificHeat {
 

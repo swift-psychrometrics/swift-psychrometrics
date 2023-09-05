@@ -12,7 +12,20 @@
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [
-
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "PsychrometricTests",
+        "name" : "PsychrometricTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SharedModelsTests",
+        "name" : "SharedModelsTests"
+      }
+    }
   ],
   "version" : 1
 }

@@ -1,4 +1,5 @@
 import Foundation
+import Tagged
 
 /// Represents relative humidity as a percentage.  These are stored and initialized in their whole number state and you can access
 /// the decimal equivalent through the the ``RelativeHumidity.fraction `` property.
@@ -8,6 +9,9 @@ import Foundation
 /// ```
 /// let humidity = 50%
 /// ```
+public typealias RelativeHumidity = Tagged<Relative, Humidity>
+
+/// A container for holding onto humidity values.
 public struct Humidity: Equatable, Codable, Sendable, RawInitializable {
 
   /// The relative humidity value.

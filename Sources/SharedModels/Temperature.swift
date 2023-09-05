@@ -1,6 +1,18 @@
 import Foundation
 import Tagged
 
+/// Represents the dew-point temperature of moist air.
+public typealias DewPoint = Tagged<DewPointTemperature, Temperature>
+
+/// Represents a dry-bulb temperature.
+public typealias DryBulb = Tagged<DryAir, Temperature>
+
+/// Represents the specific heat of a substance.
+public typealias SpecificHeat = Tagged<Specific, Temperature>
+
+/// Represents the wet-bulb temperature of moist air.
+public typealias WetBulb = Tagged<MoistAir, Temperature>
+
 /// Represents a temperature in SI and IP units as well as scientific / absolute units.
 public struct Temperature: Hashable, Codable, Sendable {
 

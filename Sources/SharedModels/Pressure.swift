@@ -1,4 +1,14 @@
 import Foundation
+import Tagged
+
+/// Represents the saturation pressure.
+public typealias SaturationPressure = Tagged<Saturation, Pressure>
+
+/// Represents the total pressure.
+public typealias TotalPressure = Tagged<Total, Pressure>
+
+/// Represents the vapor pressure.
+public typealias VaporPressure = Tagged<VaporType, Pressure>
 
 /// Represents / calculates pressure for different units.
 public struct Pressure: Hashable, Codable, Sendable {

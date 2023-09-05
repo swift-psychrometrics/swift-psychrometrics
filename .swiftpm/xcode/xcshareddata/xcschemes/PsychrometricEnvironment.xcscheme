@@ -14,37 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Psychrometrics"
-               BuildableName = "Psychrometrics"
-               BlueprintName = "Psychrometrics"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PsychrometricTests"
-               BuildableName = "PsychrometricTests"
-               BlueprintName = "PsychrometricTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SharedModelsTests"
-               BuildableName = "SharedModelsTests"
-               BlueprintName = "SharedModelsTests"
+               BlueprintIdentifier = "PsychrometricEnvironment"
+               BuildableName = "PsychrometricEnvironment"
+               BlueprintName = "PsychrometricEnvironment"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -54,13 +26,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <TestPlans>
-         <TestPlanReference
-            reference = "container:Tests/TestPlans/Psychrometrics.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-      </TestPlans>
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -82,9 +49,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Psychrometrics"
-            BuildableName = "Psychrometrics"
-            BlueprintName = "Psychrometrics"
+            BlueprintIdentifier = "PsychrometricEnvironment"
+            BuildableName = "PsychrometricEnvironment"
+            BlueprintName = "PsychrometricEnvironment"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
