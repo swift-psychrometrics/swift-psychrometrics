@@ -59,6 +59,7 @@ var package = Package(
       name: "PsychrometricClient",
       dependencies: [
         "SharedModels",
+        "PsychrometricEnvironment",
       ]
     ),
     .target(

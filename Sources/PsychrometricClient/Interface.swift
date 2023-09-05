@@ -1,4 +1,6 @@
+import Dependencies
 import Foundation
+import PsychrometricEnvironment
 import SharedModels
 
 /// Performs calculations for different psychrometric properties.
@@ -86,16 +88,16 @@ public struct PsychrometricClient {
     }
 
     public struct DryAirRequest: Equatable, Sendable {
-      public let temperature: Temperature
+      public let dryBulb: DryBulb
       public let totalPressure: TotalPressure
       public let units: PsychrometricUnits?
 
       public init(
-        temperature: Temperature,
+        dryBulb: DryBulb,
         totalPressure: TotalPressure,
         units: PsychrometricUnits? = nil
       ) {
-        self.temperature = temperature
+        self.dryBulb = dryBulb
         self.totalPressure = totalPressure
         self.units = units
       }
@@ -115,6 +117,7 @@ public struct PsychrometricClient {
         self.specificVolume = specificVolume
         self.units = units
       }
+
     }
 
   }
@@ -186,10 +189,27 @@ public struct PsychrometricClient {
   }
 
   public enum HumidityRatioRequest: Equatable, Sendable {
-    case enthalpy(MoistAirEnthalpy, dryBulb: DryBulb)
-    case totalPressure(TotalPressure, vaporPressure: VaporPressure, units: PsychrometricUnits? = nil)
+    case enthalpy(
+      MoistAirEnthalpy,
+      dryBulb: DryBulb,
+      units: PsychrometricUnits? = nil
+    )
+
+    case totalPressure(
+      TotalPressure,
+      partialPressure: Pressure,
+      units: PsychrometricUnits? = nil
+    )
+
+    case specificHumidity(SpecificHumidity)
+
     case waterMass(Double, dryAirMass: Double)
-    case wetBulb(WetBulb, dryBulb: DryBulb, saturatedHumidityRatio: HumidityRatio)
+
+    case wetBulb(
+      WetBulb,
+      dryBulb: DryBulb,
+      saturatedHumidityRatio: HumidityRatio
+    )
   }
 
   public enum RelativeHumidityRequest: Equatable, Sendable {
@@ -243,6 +263,18 @@ public struct PsychrometricClient {
         self.totalPressure = totalPressure
         self.units = units
       }
+
+      public static func dryBulb(
+        _ dryBulb: DryBulb,
+        altitude: Length,
+        units: PsychrometricUnits? = nil
+      ) -> Self {
+        .init(
+          dryBulb: dryBulb,
+          totalPressure: .init(altitude: altitude, units: units),
+          units: units
+        )
+      }
     }
 
     public struct MoistAirRequest: Equatable, Sendable {
@@ -262,11 +294,304 @@ public struct PsychrometricClient {
         self.totalPressure = totalPressure
         self.units = units
       }
+
+      public static func dryBulb(
+        _ dryBulb: DryBulb,
+        humidityRatio: HumidityRatio,
+        totalPressure: TotalPressure,
+        units: PsychrometricUnits? = nil
+      ) -> Self {
+        .init(
+          dryBulb: dryBulb,
+          humidityRatio: humidityRatio,
+          totalPressure: totalPressure,
+          units: units
+        )
+      }
     }
   }
 
   public enum VaporPressureRequest: Equatable, Sendable {
-    case humidityRatio(HumidityRatio, totalPressure: TotalPressure, units: PsychrometricUnits? = nil)
-    case relativeHumidity(RelativeHumidity, dryBulb: DryBulb, units: PsychrometricUnits? = nil)
+
+    case humidityRatio(
+      HumidityRatio,
+      totalPressure: TotalPressure,
+      units: PsychrometricUnits? = nil
+    )
+
+    case relativeHumidity(
+      RelativeHumidity,
+      dryBulb: DryBulb,
+      units: PsychrometricUnits? = nil
+    )
+  }
+}
+
+// MARK: - Extensions
+extension PsychrometricClient.DensityClient.DryAirRequest {
+
+  public init(
+    dryBulb: DryBulb,
+    altitude: Length = .seaLevel,
+    units: PsychrometricUnits? = nil
+  ) {
+    self.init(
+      dryBulb: dryBulb,
+      totalPressure: .init(altitude: altitude, units: units),
+      units: units
+    )
+  }
+}
+
+//extension PsychrometricClient.DensityClient.MoistAirRequest {
+//
+//  public static func dryBulb(
+//    _ dryBulb: DryBulb,
+//    humidity: RelativeHumidity,
+//    totalPressure: TotalPressure,
+//    units: PsychrometricUnits? = nil
+//  ) async throws -> Self {
+//
+//    @Dependency(\.psychrometricClient) var client
+//
+//    let specificVolume = try await client.specificVolume(
+//      .moistAir(
+//    )
+//  }
+//}
+
+extension PsychrometricClient.HumidityRatioRequest {
+
+  /// Create a new ``HumidityRatio`` for the given dew point temperature and atmospheric pressure.
+  ///
+  ///  - Parameters:
+  ///   - dewPoint: The dew point temperature.
+  ///   - totalPressure: The total atmospheric pressure
+  ///   - units: The units to solve for, if not supplied then ``Core.environment`` units will be used.
+  public static func dewPoint(
+    _ dewPoint: DewPoint,
+    totalPressure: TotalPressure,
+    units: PsychrometricUnits? = nil
+  ) async throws -> Self {
+    @Dependency(\.psychrometricClient) var client
+
+    let saturationPressure = try await client.saturationPressure(
+      .init(temperature: dewPoint.rawValue, units: units)
+    )
+
+    return .totalPressure(
+      totalPressure,
+      saturationPressure: saturationPressure,
+      units: units
+    )
+  }
+
+  /// Create a new ``HumidityRatio`` for the given dew point temperature and atmospheric pressure.
+  ///
+  ///  - Parameters:
+  ///   - dewPoint: The dew point temperature.
+  ///   - altitude: The altitude.
+  ///   - units: The units to solve for.
+  public static func dewPoint(
+    _ dewPoint: DewPoint,
+    altitude: Length,
+    units: PsychrometricUnits? = nil
+  ) async throws -> Self {
+    return try await .dewPoint(
+      dewPoint,
+      totalPressure: .init(altitude: altitude, units: units),
+      units: units
+    )
+  }
+
+  /// Request to calculate the humidity ratio of the air for the given
+  /// dry bulb temperature and total pressure.
+  ///
+  /// - Parameters:
+  ///   - dryBulb: The dry bulb temperature of the air.
+  ///   - totalPressure: The total pressure of the air.
+  ///   - units: The units for the calculation.
+  public static func dryBulb(
+    _ dryBulb: DryBulb,
+    totalPressure: TotalPressure,
+    units: PsychrometricUnits? = nil
+  ) async throws -> Self {
+    @Dependency(\.psychrometricClient) var client
+    @Dependency(\.psychrometricEnvironment) var environment
+
+    let vaporPressure = try await client.saturationPressure(
+      .init(temperature: dryBulb.rawValue, units: units)
+    )
+
+    return .totalPressure(
+      totalPressure,
+      partialPressure: vaporPressure.rawValue,
+      units: units
+    )
+  }
+
+  /// The humidity ratio of the air for the given temperature, humidity, and pressure.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the air.
+  ///   - humidity: The humidity of the air.
+  ///   - totalPressure: The pressure of the air.
+  ///   - units: The units for the calculation.
+  public static func dryBulb(
+    _ dryBulb: DryBulb,
+    humidity: RelativeHumidity,
+    totalPressure: TotalPressure,
+    units: PsychrometricUnits? = nil
+  ) async throws -> Self {
+    @Dependency(\.psychrometricClient) var client
+    @Dependency(\.psychrometricEnvironment) var environment
+
+    let vaporPressure = try await client.vaporPressure(
+      .relativeHumidity(humidity, dryBulb: dryBulb, units: units)
+    )
+
+    return .totalPressure(
+      totalPressure,
+      partialPressure: vaporPressure.rawValue,
+      units: units
+    )
+  }
+
+  /// The humidity ratio of the air for the given temperature, humidity, and pressure.
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature of the air.
+  ///   - humidity: The humidity of the air.
+  ///   - altitude: The pressure of the air.
+  ///   - units: The units for the calculation.
+  public static func dryBulb(
+    _ dryBulb: DryBulb,
+    humidity: RelativeHumidity,
+    altitude: Length = .seaLevel,
+    units: PsychrometricUnits? = nil
+  ) async throws -> Self {
+    try await .dryBulb(
+      dryBulb,
+      humidity: humidity,
+      totalPressure: .init(altitude: altitude, units: units),
+      units: units
+    )
+  }
+
+  /// Request that will calculate the humidity ratio of the air for the given total pressure and
+  /// the vapor pressure.
+  ///
+  /// - Parameters:
+  ///   - totalPressure: The total pressure of the air.
+  ///   - vaporPressure: The partial pressure of the air.
+  public static func totalPressure(
+    _ totalPressure: TotalPressure,
+    vaporPressure: VaporPressure,
+    units: PsychrometricUnits? = nil
+  ) -> Self {
+    .totalPressure(
+      totalPressure,
+      partialPressure: vaporPressure.rawValue,
+      units: units
+    )
+  }
+
+
+  /// The  humidity ratio of the air for the given total pressure and saturation pressure.
+  ///
+  /// - Parameters:
+  ///   - totalPressure: The total pressure of the air.
+  ///   - saturationPressure: The saturation of the air.
+  public static func totalPressure(
+    _ totalPressure: TotalPressure,
+    saturationPressure: SaturationPressure,
+    units: PsychrometricUnits? = nil
+  ) -> Self {
+    .totalPressure(
+      totalPressure,
+      partialPressure: saturationPressure.rawValue,
+      units: units
+    )
+  }
+
+  public static func wetBulb(
+    _ wetBulb: WetBulb,
+    dryBulb: DryBulb,
+    totalPressure: TotalPressure,
+    units: PsychrometricUnits? = nil
+  ) async throws -> Self {
+    guard dryBulb.rawValue > wetBulb.rawValue else {
+      throw ValidationError(
+        label: "Humidity Ratio",
+        summary: "Wet bulb temperature should be less than dry bulb temperature."
+      )
+    }
+
+    @Dependency(\.psychrometricClient) var client;
+
+    let saturatedHumidityRatio = try await client.humidityRatio(
+      .dryBulb(.init(wetBulb.rawValue), totalPressure: totalPressure, units: units)
+    )
+
+    return .wetBulb(
+      wetBulb,
+      dryBulb: dryBulb,
+      saturatedHumidityRatio: saturatedHumidityRatio
+    )
+  }
+}
+
+extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
+
+  /// Calculate the ``SpecificVolume`` for  the given temperature, humidity, and total pressure.
+  ///
+  /// **References**: ASHRAE - Fundamentals (2017) ch. 1 eq. 26
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature to calculate the specific volume for.
+  ///   - humidity: The relative humidity to calculate the specific volume for.
+  ///   - totalPressure: The altitude to calculate the specific volume for.
+  ///   - units: The unit of measure to solve for, if not supplied then ``Core.environment`` value will be used.
+  public static func dryBulb(
+    _ dryBulb: DryBulb,
+    humidity: RelativeHumidity,
+    totalPressure: TotalPressure,
+    units: PsychrometricUnits? = nil
+  ) async throws -> Self {
+    @Dependency(\.psychrometricClient) var client
+
+    let humidityRatio = try await client.humidityRatio(
+      .dryBulb(dryBulb, humidity: humidity, totalPressure: totalPressure, units: units)
+    )
+
+    return .dryBulb(
+      dryBulb,
+      humidityRatio: humidityRatio,
+      totalPressure: totalPressure,
+      units: units
+    )
+  }
+
+  /// Calculate the ``SpecificVolume`` for  the given temperature, humidity, and total pressure.
+  ///
+  /// **References**: ASHRAE - Fundamentals (2017) ch. 1 eq. 26
+  ///
+  /// - Parameters:
+  ///   - temperature: The temperature to calculate the specific volume for.
+  ///   - humidity: The relative humidity to calculate the specific volume for.
+  ///   - totalPressure: The altitude to calculate the specific volume for.
+  ///   - units: The unit of measure to solve for, if not supplied then ``Core.environment`` value will be used.
+  public static func dryBulb(
+    _ dryBulb: DryBulb,
+    humidity: RelativeHumidity,
+    altitude: Length = .seaLevel,
+    units: PsychrometricUnits? = nil
+  ) async throws -> Self {
+    try await .dryBulb(
+      dryBulb,
+      humidity: humidity,
+      totalPressure: .init(altitude: altitude, units: units),
+      units: units
+    )
   }
 }

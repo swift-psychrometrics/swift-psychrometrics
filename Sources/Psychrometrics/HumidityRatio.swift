@@ -43,6 +43,7 @@ extension HumidityRatio {
     )
   }
 
+  // TODO: Remove
   /// The  humidity ratio of the air for the given total pressure and vapor pressure.
   ///
   /// - Parameters:
@@ -60,6 +61,7 @@ extension HumidityRatio {
     )
   }
 
+  // TODO: Remove
   /// The  humidity ratio of the air for the given total pressure and saturation pressure.
   ///
   /// - Parameters:
@@ -77,6 +79,7 @@ extension HumidityRatio {
     )
   }
 
+  // TODO: Remove
   /// The  humidity ratio of the air for the given dry bulb temperature and total pressure.
   ///
   /// - Parameters:
@@ -94,6 +97,7 @@ extension HumidityRatio {
     )
   }
 
+  // TODO: Remove
   /// The humidity ratio of the air for the given temperature, humidity, and pressure.
   ///
   /// - Parameters:
@@ -117,6 +121,7 @@ extension HumidityRatio {
     )
   }
 
+  // TODO: Remove
   /// The humidity ratio of the air for the given temperature, humidity, and altitude.
   ///
   /// - Parameters:
@@ -227,6 +232,8 @@ extension HumidityRatio {
     }
   }
 
+  // TODO: Remove
+
   /// Create a new ``HumidityRatio`` for the given dry bulb temperature, wet bulb temperature and pressure.
   ///
   ///  - Parameters:
@@ -324,6 +331,7 @@ extension HumidityRatio {
 // MARK: - Dew Point
 extension HumidityRatio {
 
+  // TODO: Remove.
   /// Create a new ``HumidityRatio`` for the given dew point temperature and atmospheric pressure.
   ///
   ///  - Parameters:
