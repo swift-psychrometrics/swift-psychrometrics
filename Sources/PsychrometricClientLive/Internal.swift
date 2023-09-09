@@ -523,3 +523,142 @@ extension PsychrometricClient.SaturationPressureRequest {
     ))
   }
 }
+
+// MARK: - Specific Heat
+extension Temperature {
+  
+  func waterSpecificHeat() async -> SpecificHeat {
+    let specificHeat =
+      1.012481 - 3.079704 * pow(10, -4) * fahrenheit
+      + 1.752657 * pow(pow(10, -6) * fahrenheit, 2)
+      - 2.078224 * pow(pow(10, -9) * fahrenheit, 3)
+
+    return .fahrenheit(specificHeat)
+  }
+}
+
+// MARK: - Specific Humidity
+extension PsychrometricClient.SpecificHumidityRequest {
+  
+  func specificHumidity(environment: PsychrometricEnvironment) async -> SpecificHumidity {
+    
+    switch self {
+    case let .humidityRatio(humidityRatio, units: units):
+      return .init(
+        humidityRatio.rawValue / (1 + humidityRatio.rawValue),
+        units: .defaultFor(units: units ?? environment.units)
+      )
+      
+    case let .waterMass(waterMass, dryAirMass: dryAirmass, units: units):
+      return .init(
+        waterMass / (waterMass + dryAirmass),
+        units: .defaultFor(units: units ?? environment.units)
+      )
+    }
+  }
+}
+
+// MARK: - Specific Volume
+extension PsychrometricClient.SpecificVolumeClient.DryAirRequest {
+  private struct Constants {
+    let units: PsychrometricUnits
+    let universalGasConstant: Double
+
+    init(units: PsychrometricUnits) {
+      self.units = units
+      self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
+    }
+
+    func run(dryBulb: Temperature, pressure: Pressure) async -> Double {
+      let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
+      let P = units.isImperial ? pressure.psi : pressure.pascals
+      guard units.isImperial else {
+        return universalGasConstant * T / P
+      }
+      return universalGasConstant * T / (144 * P)
+    }
+  }
+  
+  func specificVolume(environment: PsychrometricEnvironment) async -> SpecificVolumeOf<DryAir> {
+    let units = units ?? environment.units
+    let value = await Constants(units: units).run(
+      dryBulb: dryBulb.rawValue,
+      pressure: totalPressure.rawValue
+    )
+    return .init(value, units: .defaultFor(units: units))
+  }
+}
+
+extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
+  private struct Constants {
+    let universalGasConstant: Double
+    let c1: Double = 1.607858
+    let units: PsychrometricUnits
+
+    init(units: PsychrometricUnits) {
+      self.units = units
+      self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
+    }
+
+    func run(dryBulb: Temperature, ratio: HumidityRatio, pressure: Pressure) async -> Double {
+      let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
+      let P = units.isImperial ? pressure.psi : pressure.pascals
+      let intermediateValue = universalGasConstant * T * (1 + c1 * ratio.rawValue)
+      return units.isImperial ? intermediateValue / (144 * P) : intermediateValue / P
+    }
+
+    // inverts the calculation to solve for dry-bulb
+    func dryBulb(volume: SpecificVolumeOf<MoistAir>, ratio: HumidityRatio, pressure: Pressure)
+      async -> Temperature
+    {
+      let P = units.isImperial ? pressure.psi : pressure.pascals
+      let c2 = units.isImperial ? 144.0 : 1.0
+      let value = volume.rawValue * (c2 * P) / (universalGasConstant * (1 + c2 * ratio.rawValue))
+      return units.isImperial ? .rankine(value) : .kelvin(value)
+    }
+  }
+  
+  func specificVolume(environment: PsychrometricEnvironment) async -> SpecificVolumeOf<MoistAir> {
+    let units = units ?? environment.units
+    let value = await Constants(units: units).run(
+      dryBulb: dryBulb.rawValue,
+      ratio: humidityRatio,
+      pressure: totalPressure.rawValue
+    )
+    return .init(value, units: .defaultFor(units: units))
+  }
+}
+
+// MARK: - Vapor Pressure
+extension PsychrometricClient.VaporPressureRequest {
+  
+  func vaporPressure(environment: PsychrometricEnvironment) async throws -> VaporPressure {
+    
+    switch self {
+    case let .humidityRatio(humidityRatio, totalPressure: totalPressure, units: units):
+      guard humidityRatio > 0 else {
+        throw ValidationError(
+          label: "Vapor Pressure",
+          summary: "Humidity ratio should be greater than 0."
+        )
+      }
+      
+      let units = units ?? environment.units
+      let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
+      let value =
+        totalPressure * humidityRatio.rawValue
+        / (HumidityRatio.moleWeightRatio + humidityRatio.rawValue)
+      return .init(.init(value, units: .defaultFor(units: units)))
+      
+    case let .relativeHumidity(relativeHumidity, dryBulb: dryBulb, units: units):
+      let units = units ?? environment.units
+      let saturationPressure = try await PsychrometricClient.SaturationPressureRequest(
+        temperature: dryBulb.rawValue,
+        units: units
+      ).saturationPressure(environment: environment)
+      let value = saturationPressure.rawValue.rawValue * relativeHumidity.fraction
+      return .init(.init(value, units: .defaultFor(units: units)))
+      
+    }
+  }
+}

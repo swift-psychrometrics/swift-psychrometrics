@@ -23,24 +23,14 @@ extension PsychrometricClient: DependencyKey {
       relativeHumidity: { try await $0.relativeHumdity(environment: environment) },
       saturationPressure: { try await $0.saturationPressure(environment: environment) },
       specificHeat: .init(
-        water: { temperature in
-          fatalError()
-        }
+        water: { await $0.waterSpecificHeat() }
       ),
-      specificHumidity: { request in
-        fatalError()
-      },
+      specificHumidity: { await $0.specificHumidity(environment: environment) },
       specificVolume: SpecificVolumeClient(
-        dryAir: { request in
-          fatalError()
-        },
-        moistAir: { request in
-          fatalError()
-        }
+        dryAir: { await $0.specificVolume(environment: environment) },
+        moistAir: { await $0.specificVolume(environment: environment) }
       ),
-      vaporPressure: { request in
-        fatalError()
-      }
+      vaporPressure: { try await $0.vaporPressure(environment: environment) }
     )
   }
   
