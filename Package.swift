@@ -10,9 +10,10 @@ var package = Package(
   ],
   products: [
     .library(name: "SharedModels", targets: ["SharedModels"]),
+    .library(name: "PsychrometricClient", targets: ["PsychrometricClient"]),
+    .library(name: "PsychrometricClientLive", targets: ["PsychrometricClientLive"]),
     .library(name: "PsychrometricEnvironment", targets: ["PsychrometricEnvironment"]),
     .library(name: "Psychrometrics", targets: ["Psychrometrics"]),
-    .library(name: "PsychrometricClient", targets: ["PsychrometricClient"]),
     .library(name: "TestSupport", targets: ["TestSupport"]),
   ],
   dependencies: [
@@ -59,6 +60,13 @@ var package = Package(
       name: "PsychrometricClient",
       dependencies: [
         "SharedModels",
+        "PsychrometricEnvironment",
+      ]
+    ),
+    .target(
+      name: "PsychrometricClientLive",
+      dependencies: [
+        "PsychrometricClient",
         "PsychrometricEnvironment",
       ]
     ),

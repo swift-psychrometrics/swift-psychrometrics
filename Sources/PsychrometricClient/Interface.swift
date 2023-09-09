@@ -13,7 +13,7 @@ public struct PsychrometricClient {
   public var dewPoint: @Sendable (DewPointRequest) async -> DewPoint
 
   /// Perform enthalpy calculations / conversions.
-  public var enthalpy: Enthalpy
+  public var enthalpy: EnthalpyClient
 
   /// Perform grains of moisture calculations / conversions.
   public var grainsOfMoisture: @Sendable (GrainsOfMoistureRequest) async throws -> GrainsOfMoisture
@@ -41,8 +41,8 @@ public struct PsychrometricClient {
 
   public init(
     density: DensityClient, 
-    dewPoint: @escaping @Sendable (DewPointRequest) -> DewPoint,
-    enthalpy: Enthalpy,
+    dewPoint: @escaping @Sendable (DewPointRequest) async -> DewPoint,
+    enthalpy: EnthalpyClient,
     grainsOfMoisture: @escaping @Sendable (GrainsOfMoistureRequest) async throws -> GrainsOfMoisture,
     humidityRatio: @escaping @Sendable (HumidityRatioRequest) async throws -> HumidityRatio,
     relativeHumidity: @escaping @Sendable (RelativeHumidityRequest) async throws -> RelativeHumidity,
@@ -138,9 +138,17 @@ public struct PsychrometricClient {
     }
   }
 
-  public struct Enthalpy {
+  public struct EnthalpyClient {
     public var dryAir: (DryAirRequest) async -> DryAirEnthalpy
     public var moistAir: (MoistAirRequest) async throws -> MoistAirEnthalpy
+    
+    public init(
+      dryAir: @escaping (DryAirRequest) async -> DryAirEnthalpy,
+      moistAir: @escaping (MoistAirRequest) async throws -> MoistAirEnthalpy
+    ) {
+      self.dryAir = dryAir
+      self.moistAir = moistAir
+    }
 
     public struct DryAirRequest: Equatable, Sendable {
       public let temperature: DryBulb
@@ -208,12 +216,14 @@ public struct PsychrometricClient {
     case wetBulb(
       WetBulb,
       dryBulb: DryBulb,
-      saturatedHumidityRatio: HumidityRatio
+      saturatedHumidityRatio: HumidityRatio,
+      units: PsychrometricUnits? = nil
     )
   }
 
   public enum RelativeHumidityRequest: Equatable, Sendable {
-    case totalPressure(TotalPressure, dryBulb: DryBulb, humidityRatio: HumidityRatio, units: PsychrometricUnits? = nil)
+    case dewPoint(DewPoint, dryBulb: DryBulb)
+//    case totalPressure(TotalPressure, dryBulb: DryBulb, humidityRatio: HumidityRatio, units: PsychrometricUnits? = nil)
     case vaporPressure(VaporPressure, dryBulb: DryBulb, units: PsychrometricUnits? = nil)
   }
 
@@ -248,6 +258,14 @@ public struct PsychrometricClient {
   public struct SpecificVolumeClient {
     public var dryAir: @Sendable (DryAirRequest) async -> SpecificVolumeOf<DryAir>
     public var moistAir: @Sendable (MoistAirRequest) async throws -> SpecificVolumeOf<MoistAir>
+    
+    public init(
+      dryAir: @escaping @Sendable (DryAirRequest) async -> SpecificVolumeOf<DryAir>,
+      moistAir: @escaping @Sendable (MoistAirRequest) async throws -> SpecificVolumeOf<MoistAir>
+    ) {
+      self.dryAir = dryAir
+      self.moistAir = moistAir
+    }
 
     public struct DryAirRequest: Equatable, Sendable {
       public let dryBulb: DryBulb
@@ -536,8 +554,26 @@ extension PsychrometricClient.HumidityRatioRequest {
     return .wetBulb(
       wetBulb,
       dryBulb: dryBulb,
-      saturatedHumidityRatio: saturatedHumidityRatio
+      saturatedHumidityRatio: saturatedHumidityRatio, 
+      units: units
     )
+  }
+}
+
+extension PsychrometricClient.RelativeHumidityRequest {
+  public static func totalPressure(
+    _ totalPressure: TotalPressure,
+    dryBulb: DryBulb,
+    humidityRatio: HumidityRatio,
+    units: PsychrometricUnits? = nil
+  ) async throws -> Self {
+    @Dependency(\.psychrometricClient) var client;
+    let vaporPressure = try await client.vaporPressure(.humidityRatio(
+      humidityRatio,
+      totalPressure: totalPressure,
+      units: units
+    ))
+    return .vaporPressure(vaporPressure, dryBulb: dryBulb, units: units)
   }
 }
 
