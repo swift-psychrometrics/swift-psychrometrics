@@ -1,12 +1,17 @@
-import XCTest
+import Dependencies
+import PsychrometricClientLive
 import Psychrometrics
 import SharedModels
+import XCTest
 
-final class GrainsOfMoistureTests: XCTestCase {
+final class GrainsOfMoistureTests: PsychrometricTestCase {
   
   func test_grains() async throws {
-    let temperature = Temperature.fahrenheit(75)
-    let grains = try await temperature.grains(humidity: 50%)
+    @Dependency(\.psychrometricClient) var client;
+    let grains = try await client.grainsOfMoisture(.dryBulb(
+      .fahrenheit(75),
+      relativeHumidity: 50%
+    ))
     XCTAssertEqual(round(grains.rawValue * 100) / 100, 65.91)
   }
   

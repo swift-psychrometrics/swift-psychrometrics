@@ -35,6 +35,7 @@ extension PsychrometricClient: TestDependencyKey {
       dryAir: unimplemented("\(Self.self).specificVolume.dryAir", placeholder: .zero),
       moistAir: unimplemented("\(Self.self).specificVolume.moistAir", placeholder: .zero)
     ),
-    vaporPressure: unimplemented("\(Self.self).vaporPressure", placeholder: .zero)
+    vaporPressure: unimplemented("\(Self.self).vaporPressure", placeholder: .zero),
+    wetBulb: unimplemented("\(Self.self).wetBulb", placeholder: .zero)
   )
 }

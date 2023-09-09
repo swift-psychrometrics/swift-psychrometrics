@@ -1,26 +1,42 @@
-import XCTest
+import Dependencies
+import PsychrometricClientLive
 import Psychrometrics
 import SharedModels
 import TestSupport
+import XCTest
 
-final class EnthalpyTests: XCTestCase {
+final class EnthalpyTests: PsychrometricTestCase {
   
   func test_enthalpy() async throws {
-    let enthalpy = try await MoistAirEnthalpy(dryBulb: .fahrenheit(75), humidity: 50%, units: .imperial)
+    @Dependency(\.psychrometricClient) var client;
+    
+    let enthalpy = try await client.enthalpy.moistAir(.dryBulb(
+      .fahrenheit(75),
+      relativeHumidity: 50%
+    ))
     XCTAssertEqual(round(enthalpy.rawValue.rawValue * 100) / 100, 28.11)
     
-    let enthalpy2 = try await Temperature.fahrenheit(75)
-      .enthalpy(at: 50%, pressure: .init(altitude: .seaLevel))
-    
-    XCTAssertEqual(round(enthalpy2.rawValue.rawValue * 100) / 100, 28.11)
+//    let enthalpy2 = try await Temperature.fahrenheit(75)
+//      .enthalpy(at: 50%, pressure: .init(altitude: .seaLevel))
+//    
+//    XCTAssertEqual(round(enthalpy2.rawValue.rawValue * 100) / 100, 28.11)
   }
   
   func test_enthalpy_at_altitude() async throws {
-    let enthalpy = try await MoistAirEnthalpy(dryBulb: .fahrenheit(75), humidity: 50%, altitude: 1000, units: .imperial)
+    @Dependency(\.psychrometricClient) var client;
+    
+//    let enthalpy = try await MoistAirEnthalpy(dryBulb: .fahrenheit(75), humidity: 50%, altitude: 1000, units: .imperial)
+    let enthalpy = try await client.enthalpy.moistAir(.dryBulb(
+      75,
+      relativeHumidity: 50%,
+      altitude: 1000,
+      units: .imperial
+    ))
+    
     XCTAssertEqual(round(enthalpy.rawValue.rawValue * 100) / 100, 28.49)
     
-    let enthalpy2 = try await Temperature.fahrenheit(75).enthalpy(at: 50%, altitude: 1000)
-    XCTAssertEqual(round(enthalpy2.rawValue.rawValue * 100) / 100, 28.49)
+//    let enthalpy2 = try await Temperature.fahrenheit(75).enthalpy(at: 50%, altitude: 1000)
+//    XCTAssertEqual(round(enthalpy2.rawValue.rawValue * 100) / 100, 28.49)
   }
   
   func test_addition_and_subtraction() {
@@ -52,16 +68,21 @@ final class EnthalpyTests: XCTestCase {
     XCTAssertEqual(enthalpy.rawValue, 40)
   }
   
-  func test_humidityRatio_from_enthalpy() async throws {
-    let enthalpy = try await MoistAirEnthalpy(dryBulb: 75, humidity: 50%, units: .imperial)
-    let ratio = try await HumidityRatio(dryBulb: 75, humidity: 50%, altitude: .seaLevel)
-//    XCTAssertEqual(
-//      round(enthalpy.humidityRatio(at: 75) * 1000000) / 1000000,
-//      round(ratio * 1000000) / 1000000
-//    )
+  func test_enthalpy_from_humidityRatio() async throws {
+    @Dependency(\.psychrometricClient) var client;
     
-    // Test enthalpy given a dry bulb and humidity ratio.
-    let enthalpy2 = try await MoistAirEnthalpy.init(dryBulb: 75, ratio: ratio, units: .imperial)
+    let enthalpy = try await client.enthalpy.moistAir(.dryBulb(
+      75,
+      relativeHumidity: 50%
+    ))
+    
+    let ratio = try await client.humidityRatio(.dryBulb(75, relativeHumidity: 50%))
+
+    let enthalpy2 = try await client.enthalpy.moistAir(.dryBulb(
+      75,
+      humidityRatio: ratio,
+      units: .imperial
+    ))
     XCTAssertEqual(enthalpy.rawValue, enthalpy2.rawValue)
   }
   
@@ -82,19 +103,23 @@ final class EnthalpyTests: XCTestCase {
   }
   
   func test_dry_air_enthalpy_imperial() async {
-    let enthalpy = await Temperature.fahrenheit(77).enthalpy(units: .imperial)
+    @Dependency(\.psychrometricClient) var client;
+    let enthalpy = await client.enthalpy.dryAir(.dryBulb(77))
     XCTAssertEqual(round(enthalpy.rawValue.rawValue * 10e8) / 10e8, 18.48)
   }
   
   // TODO: Tolerance is a bit high.
   func test_dry_air_enthalpy_metric() async {
-    let enthalpy = await Temperature.celsius(25).enthalpy(units: .metric)
+    @Dependency(\.psychrometricClient) var client;
+    let enthalpy = await client.enthalpy.dryAir(.dryBulb(.celsius(25), units: .metric))
     XCTApproximatelyEqual(enthalpy.rawValue, 25148, tolerance: 2)
   }
   
   // The tolerance is decent but exponentially worse at higher temperatures.
   func test_saturated_enthalpy_imperial() async throws {
-    let values: [(Temperature, Double, Double)] = [
+    @Dependency(\.psychrometricClient) var client;
+    
+    let values: [(DryBulb, Double, Double)] = [
       (.fahrenheit(-58), -13.906, 0.1),
       (.fahrenheit(-4), -0.286, 0.1),
       (.fahrenheit(23), 8.186, 0.1),
@@ -105,14 +130,19 @@ final class EnthalpyTests: XCTestCase {
     ]
     
     for (temp, expected, tolerance) in values {
-      let saturatedEnthalpy = try await MoistAirEnthalpy.init(dryBulb: temp, pressure: 14.696, units: .imperial)
+      let saturatedEnthalpy = try await client.enthalpy.moistAir(.dryBulb(
+        temp, 
+        totalPressure: 14.696
+      ))
       XCTApproximatelyEqual(saturatedEnthalpy.rawValue.rawValue, expected, tolerance: tolerance)
     }
   }
   
   // TODO: Fix tolerances.
   func test_saturated_enthalpy_metric() async throws {
-    let values: [(Temperature, Double, Double)] = [
+    @Dependency(\.psychrometricClient) var client;
+    
+    let values: [(DryBulb, Double, Double)] = [
       (.celsius(-50), -50222, 19.778),
       (.celsius(-20), -18542, 14.791),
       (.celsius(-5), 1164, 24.82),
@@ -123,11 +153,11 @@ final class EnthalpyTests: XCTestCase {
     ]
     
     for (temp, expected, tolerance) in values {
-      let saturatedEnthalpy = try await MoistAirEnthalpy.init(
-        dryBulb: temp,
-        pressure: .pascals(101325),
+      let saturatedEnthalpy = try await client.enthalpy.moistAir(.dryBulb(
+        temp,
+        totalPressure: .pascals(101325),
         units: .metric
-      )
+      ))
       XCTApproximatelyEqual(saturatedEnthalpy.rawValue.rawValue, expected, tolerance: tolerance)
     }
   }
@@ -145,17 +175,15 @@ final class EnthalpyTests: XCTestCase {
 //    let temperature = Temperature.ini
 //  }
   
-  func test_humidityRatio_from_dryBulb_and_enthalpy_metric() async{
-    let ratio = await HumidityRatio.init(
-      enthalpy: .init(.init(81316, units: .joulePerKilogram)),
-      dryBulb: .celsius(30),
-      units: .metric
-    )
-    XCTApproximatelyEqual(ratio.rawValue, 0.02, tolerance: 0.001)
-  }
+
   
   func test_moistAir_enthalpy_metric() async throws {
-    let enthalpy = try await MoistAirEnthalpy.init(dryBulb: .celsius(30), ratio: 0.02, units: .metric)
+    @Dependency(\.psychrometricClient) var client;
+    let enthalpy = try await client.enthalpy.moistAir(.dryBulb(
+      .celsius(30),
+      humidityRatio: 0.02,
+      units: .metric
+    ))
     XCTApproximatelyEqual(enthalpy, 81316, tolerance: 0.0003)
   }
   

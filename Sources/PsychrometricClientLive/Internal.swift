@@ -662,3 +662,62 @@ extension PsychrometricClient.VaporPressureRequest {
     }
   }
 }
+
+extension PsychrometricClient.WetBulbRequest {
+  
+  func wetBulb(environment: PsychrometricEnvironment) async throws -> WetBulb {
+    guard humidityRatio > 0 else {
+      throw ValidationError(
+        label: "Wet Bulb",
+        summary: "Humidity ratio should be greater than 0."
+      )
+    }
+    
+    let units = units ?? environment.units
+    
+    let dewPoint = try await PsychrometricClient.DewPointRequest.dryBulb(
+      dryBulb,
+      humidityRatio: humidityRatio,
+      totalPressure: totalPressure,
+      units: units
+    ).dewPoint(environment: environment)
+    
+    let temperatureUnits = units.isImperial ? Temperature.Units.fahrenheit : .celsius
+
+    // Initial guesses
+    var wetBulbSup = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
+    var wetBulbInf = units.isImperial ? dewPoint.fahrenheit : dewPoint.celsius
+    var wetBulb = (wetBulbInf + wetBulbSup) / 2
+
+    var index = 1
+
+    while (wetBulbSup - wetBulbInf) > environment.temperatureTolerance.rawValue {
+
+      let ratio = try await PsychrometricClient.HumidityRatioRequest.wetBulb(
+        .init(.init(wetBulb, units: temperatureUnits)),
+        dryBulb: dryBulb,
+        totalPressure: totalPressure,
+        units: units
+      ).humidityRatio(environment: environment)
+
+      if ratio > humidityRatio {
+        wetBulbSup = wetBulb
+      } else {
+        wetBulbInf = wetBulb
+      }
+
+      // new guess of wet bulb
+      wetBulb = (wetBulbSup + wetBulbInf) / 2
+
+      if index >= environment.maximumIterationCount {
+        throw MaxIterationError()
+      }
+
+      index += 1
+    }
+
+    return .init(.init(wetBulb, units: temperatureUnits))
+  }
+}
+
+struct MaxIterationError: Error { }

@@ -30,7 +30,8 @@ extension PsychrometricClient: DependencyKey {
         dryAir: { await $0.specificVolume(environment: environment) },
         moistAir: { await $0.specificVolume(environment: environment) }
       ),
-      vaporPressure: { try await $0.vaporPressure(environment: environment) }
+      vaporPressure: { try await $0.vaporPressure(environment: environment) },
+      wetBulb: { try await $0.wetBulb(environment: environment) }
     )
   }
   

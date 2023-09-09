@@ -24,6 +24,8 @@ public struct Humidity: Equatable, Codable, Sendable, RawInitializable {
   public init(_ value: Double) {
     self.rawValue = value
   }
+  
+  public var value: Double { rawValue }
 }
 
 postfix operator %

@@ -106,6 +106,65 @@ extension Pressure {
   }
 }
 
+extension Tagged where RawValue == Pressure {
+  
+  /// Create a new ``Tagged`` with the given atmosphere value.
+  ///
+  /// - Parameters:
+  ///    - value: The atmosphere value.
+  public static func atmosphere(_ value: Double) -> Self {
+    .init(.atmosphere(value))
+  }
+  
+  /// Create a new ``Tagged`` with the given value.
+  ///
+  /// - Parameters:
+  ///    - value: The bar value.
+  public static func bar(_ value: Double) -> Self {
+    .init(.bar(value))
+  }
+  
+  /// Create a new ``Tagged`` with the given value.
+  ///
+  /// - Parameters:
+  ///    - value: The inches of water column value.
+  public static func inchesWater(_ value: Double) -> Self {
+    .init(.inchesWater(value))
+  }
+  
+  /// Create a new ``Tagged`` with the given value.
+  ///
+  /// - Parameters:
+  ///    - value: The millibar value.
+  public static func millibar(_ value: Double) -> Self {
+    .init(.millibar(value))
+  }
+  
+  /// Create a new ``Tagged`` with the given value.
+  ///
+  /// - Parameters:
+  ///    - value: The pascals value.
+  public static func pascals(_ value: Double) -> Self {
+    .init(.pascals(value))
+  }
+  
+  /// Create a new ``Tagged`` with the given value.
+  ///
+  /// - Parameters:
+  ///    - value: The psi guage value.
+  public static func psi(_ value: Double) -> Self {
+    .init(.psi(value))
+  }
+  
+  /// Create a new ``Tagged`` with the given value.
+  ///
+  /// - Parameters:
+  ///    - value: The torr value.
+  public static func torr(_ value: Double) -> Self {
+    .init(.torr(value))
+  }
+}
+
 // MARK: - Conversions
 
 // TODO: Move conversions somewhere else.

@@ -1,36 +1,60 @@
-import XCTest
+import Dependencies
+import PsychrometricClientLive
 import Psychrometrics
 import SharedModels
 import TestSupport
+import XCTest
 
-final class SpecificHumidityTests: XCTestCase {
+final class SpecificHumidityTests: PsychrometricTestCase {
+  
   func test_specificHumidity() async throws {
+    @Dependency(\.psychrometricClient) var client;
+    
+    let sut1 = await client.specificHumidity(.waterMass(14.7, dryAirMass: 18.3))
+    
     XCTAssertEqual(
-      round(SpecificHumidity(water: 14.7, dryAir: 18.3).rawValue * 100) / 100,
+      round(sut1.rawValue * 100) / 100,
       0.45
     )
-    let temperature: Temperature = 75
+    
+    let temperature: DryBulb = 75
     let humidity: RelativeHumidity = 50%
     let altitude: Length = 1000
-    let pressure: Pressure = .init(altitude: altitude)
-    let ratio = try await HumidityRatio(
-      dryBulb: temperature, humidity: humidity, pressure: pressure
-    )
+    let pressure: TotalPressure = .init(altitude: altitude)
+    
+//    let ratio = try await HumidityRatio(
+//      dryBulb: temperature, humidity: humidity, pressure: pressure
+//    )
+    let ratio = try await client.humidityRatio(.dryBulb(
+      temperature,
+      relativeHumidity: 50%,
+      totalPressure: pressure
+    ))
     
     XCTAssertEqual(
       round(SpecificHumidity(ratio: ratio).rawValue * 100) / 100,
       0.01
     )
-    var sut = try await SpecificHumidity(
-        for: temperature, with: humidity, at: pressure).rawValue * 1000
+    
+    var sut = try await client.specificHumidity(.dryBulb(
+      temperature,
+      relativeHumidity: humidity,
+      totalPressure: pressure
+    ))
+    
     XCTAssertEqual(
-      round(sut) / 1000,
+      round(sut.rawValue * 1000) / 1000,
       0.009
     )
-    sut = try await SpecificHumidity(
-        for: temperature, with: humidity, at: altitude).rawValue * 1000
+    
+    sut = try await client.specificHumidity(.dryBulb(
+      temperature,
+      altitude: altitude,
+      relativeHumidity: humidity
+    ))
+    
     XCTAssertEqual(
-      round(sut) / 1000,
+      round(sut.rawValue * 1000) / 1000,
       0.009
     )
   }

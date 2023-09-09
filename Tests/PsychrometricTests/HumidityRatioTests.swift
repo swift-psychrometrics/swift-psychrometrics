@@ -1,11 +1,17 @@
-import XCTest
+import Dependencies
 import Psychrometrics
+import PsychrometricClientLive
 import SharedModels
 import TestSupport
+import XCTest
 
-final class HumidityRatioTests: XCTestCase {
-  func test_humidityRatio_as_mass() async {
-    let ratio = await HumidityRatio(water: 14.7, dryAir: 18.3)
+final class HumidityRatioTests: PsychrometricTestCase {
+  
+  func test_humidityRatio_as_mass() async throws {
+    @Dependency(\.psychrometricClient) var client;
+    
+    let ratio = try await client.humidityRatio(.waterMass(14.7, dryAirMass: 18.3))
+    
     XCTAssertEqual(
       round(ratio.rawValue * 100) / 100,
       0.50
@@ -13,25 +19,37 @@ final class HumidityRatioTests: XCTestCase {
   }
   
   func test_humidityRatio_and_partialPressure() async throws {
-    let partialPressure = try await VaporPressure(dryBulb: 75, humidity: 50%)
-    let humidityRatio = await HumidityRatio(
-      totalPressure: .init(altitude: .seaLevel),
-      vaporPressure: partialPressure
-    )
+    @Dependency(\.psychrometricClient) var client;
+    
+    let partialPressure = try await client.vaporPressure(.relativeHumidity(50%, dryBulb: 75))
+    
+    let humidityRatio = try await client.humidityRatio(.totalPressure(
+      .init(altitude: .seaLevel),
+      partialPressure: partialPressure.rawValue
+    ))
+    
     XCTAssertEqual(round(humidityRatio.rawValue * 10000) / 10000, 0.0092)
     XCTAssertEqual(round(partialPressure.psi * 10000) / 10000, 0.215)
   }
   
   func test_humidityRatio_and_vapor_pressure() async throws {
+    @Dependency(\.psychrometricClient) var client;
+    
     // conditions at 77°F and standard pressure at 1000'
-    let ratio = await HumidityRatio(totalPressure: 14.175, vaporPressure: 0.45973)
+    let ratio = try await client.humidityRatio(.totalPressure(
+      14.175,
+      vaporPressure: 0.45973
+    ))
     XCTApproximatelyEqual(ratio.rawValue, 0.020847)
-    let vaporPressure = try VaporPressure(ratio: ratio, pressure: 14.175)
+    
+    let vaporPressure = try await client.vaporPressure(.humidityRatio(ratio, totalPressure: 14.175))
     XCTApproximatelyEqual(vaporPressure, 0.45973)
   }
   
   func test_humidity_ratio_at_different_conditions_imperial() async throws {
-    let values: [(Temperature, HumidityRatio, Double)] = [
+    @Dependency(\.psychrometricClient) var client;
+    
+    let values: [(DryBulb, HumidityRatio, Double)] = [
       (-58, 0.0000243, 0.01),
       (-4, 0.0006373, 0.01),
       (23, 0.0024863, 0.005),
@@ -42,12 +60,14 @@ final class HumidityRatioTests: XCTestCase {
     ]
     
     for (temp, expected, diff) in values {
-      let ratio = try await HumidityRatio(dryBulb: temp, pressure: 14.696)
+      let ratio = try await client.humidityRatio(.dryBulb(temp, totalPressure: 14.696))
       XCTApproximatelyEqual(ratio.rawValue.rawValue, expected.rawValue.rawValue, tolerance: diff)
     }
   }
   
   func test_humidity_ratio_at_different_conditions_metric() async throws {
+    @Dependency(\.psychrometricClient) var client;
+    
     let values: [(Double, HumidityRatio, Double)] = [
       (-50, 0.0000243, 0.01),
       (-20, 0.0006373, 0.01),
@@ -59,13 +79,41 @@ final class HumidityRatioTests: XCTestCase {
     ]
     
     for (temp, expected, diff) in values {
-      let ratio = try await HumidityRatio(dryBulb: .celsius(temp), pressure: .pascals(101325))
+      let ratio = try await client.humidityRatio(.dryBulb(
+        .celsius(temp),
+        totalPressure: .pascals(101325),
+        units: .metric
+      ))
       XCTApproximatelyEqual(ratio.rawValue.rawValue, expected.rawValue.rawValue, tolerance: diff)
     }
   }
 
   func test_humidityRatio_and_relativeHumidity_imperial() async throws {
-    let relativeHumidity = try await RelativeHumidity.init(dryBulb: 100, ratio: 0.00523, pressure: 14.696, units: .imperial)
+    @Dependency(\.psychrometricClient) var client;
+    
+    let relativeHumidity = try await client.relativeHumidity(.totalPressure(
+      14.696,
+      dryBulb: 100,
+      humidityRatio: 0.00523
+    ))
     XCTAssertEqual(round(relativeHumidity.rawValue.rawValue), 13)
+    
+    let relativeHumidity2 = try await client.relativeHumidity(.dryBulb(
+      100,
+      humidityRatio: 0.00523,
+      totalPressure: 14.696
+    ))
+    XCTAssertEqual(relativeHumidity, relativeHumidity2)
+  }
+  
+  func test_humidityRatio_from_dryBulb_and_enthalpy_metric() async throws {
+    @Dependency(\.psychrometricClient) var client;
+    
+    let ratio = try await client.humidityRatio(.enthalpy(
+      .init(.init(81316, units: .joulePerKilogram)),
+      dryBulb: .celsius(30),
+      units: .metric
+    ))
+    XCTApproximatelyEqual(ratio.rawValue, 0.02, tolerance: 0.001)
   }
 }

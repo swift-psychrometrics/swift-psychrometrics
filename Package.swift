@@ -81,6 +81,7 @@ var package = Package(
       name: "PsychrometricTests",
       dependencies: [
         "Psychrometrics",
+        "PsychrometricClientLive",
         "TestSupport",
       ]
     ),
