@@ -17,7 +17,7 @@ public struct Humidity: Equatable, Codable, Sendable, RawInitializable {
   /// The relative humidity value.
   public var rawValue: Double
 
-  /// Create a new ``RelativeHumidity`` with the given value.
+  /// Create a new ``Humidity`` with the given value.
   ///
   /// - Parameters:
   ///   - value: The percentage.

@@ -8,6 +8,7 @@ extension PsychrometricClient: DependencyKey {
   
   public static func live(environment: PsychrometricEnvironment) -> PsychrometricClient {
     PsychrometricClient.init(
+      degreeOfSaturation: { try await $0.degreeOfSaturation(environment: environment) },
       density: DensityClient(
         dryAir: { await $0.density(environment: environment) },
         moistAir: { try await $0.density(environment: environment) },

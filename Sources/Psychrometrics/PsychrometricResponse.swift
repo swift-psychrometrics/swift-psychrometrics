@@ -203,7 +203,7 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
       pressure: totalPressure,
       units: units
     )
-    return humidityRatio.rawValue.rawValue / saturatedRatio.rawValue.rawValue
+    return humidityRatio.value / saturatedRatio.value
   }
 }
 

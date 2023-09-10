@@ -5,6 +5,9 @@ import SharedModels
 
 /// Performs calculations for different psychrometric properties.
 public struct PsychrometricClient {
+  
+  /// Perform degree of saturation calculations  / conversions
+  public var degreeOfSaturation: @Sendable (DegreeOfSaturationRequest) async throws -> DegreeOfSaturation
 
   /// Perform density calculations / conversions.
   public var density: DensityClient
@@ -42,7 +45,8 @@ public struct PsychrometricClient {
   public var wetBulb: @Sendable (WetBulbRequest) async throws -> WetBulb
 
   public init(
-    density: DensityClient, 
+    degreeOfSaturation: @escaping @Sendable (DegreeOfSaturationRequest) async throws -> DegreeOfSaturation,
+    density: DensityClient,
     dewPoint: @escaping @Sendable (DewPointRequest) async -> DewPoint,
     enthalpy: EnthalpyClient,
     grainsOfMoisture: @escaping @Sendable (GrainsOfMoistureRequest) async throws -> GrainsOfMoisture,
@@ -55,6 +59,7 @@ public struct PsychrometricClient {
     vaporPressure: @escaping @Sendable (VaporPressureRequest) async throws -> VaporPressure,
     wetBulb: @escaping @Sendable (WetBulbRequest) async throws -> WetBulb
   ) {
+    self.degreeOfSaturation = degreeOfSaturation
     self.density = density
     self.dewPoint = dewPoint
     self.enthalpy = enthalpy
@@ -67,6 +72,27 @@ public struct PsychrometricClient {
     self.specificVolume = specificVolume
     self.vaporPressure = vaporPressure
     self.wetBulb = wetBulb
+  }
+  
+  public struct DegreeOfSaturationRequest: Equatable, Sendable {
+    public let dryBulb: DryBulb
+    public let humidityRatio: HumidityRatio
+    public let totalPressure: TotalPressure
+    public let units: PsychrometricUnits?
+    
+    public static func dryBulb(
+      _ dryBulb: DryBulb,
+      humidityRatio: HumidityRatio,
+      totalPressure: TotalPressure,
+      units: PsychrometricUnits? = nil
+    ) -> Self {
+      .init(
+        dryBulb: dryBulb,
+        humidityRatio: humidityRatio,
+        totalPressure: totalPressure,
+        units: units
+      )
+    }
   }
 
   /// Perform density calculations.

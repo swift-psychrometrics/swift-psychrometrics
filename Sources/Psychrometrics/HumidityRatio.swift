@@ -4,15 +4,17 @@ import PsychrometricEnvironment
 import SharedModels
 
 extension HumidityRatio {
-  @Dependency(\.psychrometricEnvironment) static var environment
 
   public static func ensureHumidityRatio(_ ratio: HumidityRatio) async -> HumidityRatio {
+    @Dependency(\.psychrometricEnvironment) var environment;
+    
     guard ratio.rawValue.rawValue > environment.minimumHumidityRatio else {
       return .init(.init(environment.minimumHumidityRatio))
     }
     return ratio
   }
 
+  // TODO: Remove
   /// The humidity ratio of air for the given mass of water and mass of dry air.
   ///
   /// - Parameters:
@@ -25,12 +27,15 @@ extension HumidityRatio {
     self.init(.init(Self.moleWeightRatio * (waterMass / dryAirMass)))
   }
 
+  // TODO: Remove
   internal init(
     totalPressure: Pressure,
     partialPressure: Pressure,
     units: PsychrometricUnits? = nil
   ) async {
-    let units = units ?? Self.environment.units
+    @Dependency(\.psychrometricEnvironment) var environment;
+    
+    let units = units ?? environment.units
     let partialPressure =
       units.isImperial ? partialPressure.psi : partialPressure.pascals
     let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals

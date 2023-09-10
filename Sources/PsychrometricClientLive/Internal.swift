@@ -3,6 +3,31 @@ import PsychrometricClient
 import PsychrometricEnvironment
 import SharedModels
 
+// MARK: - Degree Of Saturation
+extension PsychrometricClient.DegreeOfSaturationRequest {
+  
+  func degreeOfSaturation(
+    environment: PsychrometricEnvironment
+  ) async throws -> DegreeOfSaturation {
+    guard humidityRatio > 0 else {
+      throw ValidationError(
+        label: "Psychrometrics.degreeOfSaturation",
+        summary: "Humidity ratio should be greater than 0."
+      )
+    }
+    let saturatedHumidityRatio = try await PsychrometricClient.HumidityRatioRequest.dryBulb(
+      dryBulb,
+      totalPressure: totalPressure,
+      units: units
+    ).humidityRatio(environment: environment)
+    
+    return .init(
+      humidityRatio.value / saturatedHumidityRatio.value
+    )
+    
+  }
+}
+
 // MARK: - Density
 extension PsychrometricClient.DensityClient.DryAirRequest {
   

@@ -13,6 +13,7 @@ extension DependencyValues {
 extension PsychrometricClient: TestDependencyKey {
 
   public static let testValue: Self = Self.init(
+    degreeOfSaturation: unimplemented("\(Self.self).degreeOfSaturation", placeholder: .zero),
     density: .init(
       dryAir: unimplemented("\(Self.self).density.dryAir", placeholder: .zero),
       moistAir: unimplemented("\(Self.self).density.moistAir", placeholder: .zero),
