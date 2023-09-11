@@ -104,7 +104,9 @@ if ProcessInfo.processInfo.environment["TEST_SERVER"] == nil {
     .target(
       name: "DewPointCalcFeature",
       dependencies: [
-        "Psychrometrics",
+//        "Psychrometrics",
+        "PsychrometricClient",
+        "PsychrometricClientLive",
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ]
     ),

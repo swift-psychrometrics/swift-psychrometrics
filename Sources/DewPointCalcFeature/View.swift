@@ -1,100 +1,176 @@
+import ComposableArchitecture
+import PsychrometricClient
+import SharedModels
 import SwiftUI
-import Psychrometrics
+import Tagged
 
-public struct DewPointCalcFeature {
+public struct DewPointCalcFeature: Reducer {
   public struct State: Equatable {
-    public var solvingFor: SolveFor = .dewPoint
-    
-    public enum SolveFor: Equatable, CaseIterable, Identifiable {
-      case dewPoint
-      case relativeHumidity
-      case temperature
-      
-      public var id: Self { self }
-      
-      public var label: String {
-        switch self {
-        case .dewPoint: return "Dew Point"
-        case .relativeHumidity: return "% RH"
-        case .temperature: return "°F"
+
+    public var calculateDewPointRequestInFlight: Bool = false
+    public var dewPoint: DewPoint? = nil
+    @BindingState public var dryBulb: Double = 75
+    public var errorDescription: String?
+    @BindingState public var relativeHumidity: Double = 50
+    @BindingState public var units: PsychrometricUnits = .imperial
+
+    public init(
+      dewPoint: DewPoint? = nil,
+      dryBulb: Double = 75,
+      errorDescription: String? = nil,
+      relativeHumidity: Double = 50,
+      units: PsychrometricUnits = .imperial
+    ) {
+      self.dewPoint = dewPoint
+      self.dryBulb = dryBulb
+      self.errorDescription = errorDescription
+      self.relativeHumidity = relativeHumidity
+      self.units = units
+    }
+  }
+  
+  public enum Action: BindableAction, Equatable {
+    case binding(BindingAction<State>)
+    case receiveDewPoint(TaskResult<DewPoint>)
+    case onTask
+  }
+
+  @Dependency(\.psychrometricClient) var client;
+
+  public var body: some ReducerOf<Self> {
+    BindingReducer()
+    Reduce { state, action in
+      switch action {
+
+      case .binding(\.$relativeHumidity):
+        if state.relativeHumidity > 100 {
+          state.relativeHumidity = 100
+        }
+        if state.relativeHumidity < 0 {
+          state.relativeHumidity = 0
+        }
+        prepareToCalculateDewPoint(&state)
+        return .run { [state = state] send in
+          await send(.receiveDewPoint(calculateDewPoint(state: state)))
+        }
+
+      case .binding(\.$units):
+        if state.units == .metric {
+          state.dryBulb = Temperature(state.dryBulb, units: .fahrenheit).celsius
+        } else {
+          state.dryBulb = Temperature(state.dryBulb, units: .celsius).fahrenheit
+        }
+        prepareToCalculateDewPoint(&state)
+        return .run { [state = state] send in
+          await send(.receiveDewPoint(calculateDewPoint(state: state)))
+        }
+
+      case .binding:
+        prepareToCalculateDewPoint(&state)
+        return .run { [state = state] send in
+          await send(.receiveDewPoint(calculateDewPoint(state: state)))
+        }
+
+      case let .receiveDewPoint(.failure(error)):
+        state.calculateDewPointRequestInFlight = false
+        state.errorDescription = String(describing: error)
+        return .none
+
+      case let .receiveDewPoint(.success(dewPoint)):
+        state.calculateDewPointRequestInFlight = false
+        state.dewPoint = dewPoint
+        return .none
+
+      case .onTask:
+        prepareToCalculateDewPoint(&state)
+        return .run { [state = state] send in
+          await send(.receiveDewPoint(calculateDewPoint(state: state)))
         }
       }
     }
   }
-  
-  public enum Action: Equatable {
-    case dewPointDidChange
-    case relativeHumidityDidChange
-    case solvingForDidChange
-    case temperatureDidChange
+
+
+  func prepareToCalculateDewPoint(_ state: inout State) {
+    state.calculateDewPointRequestInFlight = true
+    state.errorDescription = nil
   }
+
+  func calculateDewPoint(state: State) async -> TaskResult<DewPoint> {
+    await TaskResult {
+      try await client.dewPoint(.dryBulb(
+        .fahrenheit(state.dryBulb),
+        relativeHumidity: state.relativeHumidity%,
+        units: state.units
+      ))
+    }
+  }
+
 }
 
 public struct DewPointCalcView: View {
-  
-  @State var temperature: Double = 75.0
-  @State var relativeHumidity: Double = 50
-  @State var dewPoint: Double = 55
-  @State var solvingFor: DewPointCalcFeature.State.SolveFor = .dewPoint
-  
+  let store: StoreOf<DewPointCalcFeature>
+
+  public init(store: StoreOf<DewPointCalcFeature>) {
+    self.store = store
+  }
+
   public var body: some View {
-    NavigationView {
-      VStack {
-        Text("Solve For:")
-        
-        Picker("Solve For", selection: $solvingFor) {
-          ForEach(DewPointCalcFeature.State.SolveFor.allCases) { value in
-            Text(value.label)
-              .tag(value)
+    WithViewStore(store, observe: { $0 }) { viewStore in
+      Form {
+        Section("Units") {
+          Picker("Units", selection: viewStore.$units) {
+            ForEach(PsychrometricUnits.allCases, id: \.self) {
+              Text($0.rawValue.capitalized)
+                .tag($0)
+            }
+          }
+          .pickerStyle(.segmented)
+        }
+        Section("Dry Bulb") {
+          TextField(
+            "Dry Bulb",
+            value: viewStore.$dryBulb,
+            format: .number.precision(.fractionLength(1))
+          )
+          #if os(iOS)
+            .keyboardType(.decimalPad)
+          #endif
+          Slider(value: viewStore.$dryBulb, in: 0...200)
+        }
+        Section("Relative Humidity") {
+          TextField(
+            "Relative Humidity",
+            value: viewStore.$relativeHumidity,
+            format: .number.precision(.fractionLength(1))
+          )
+          #if os(iOS)
+            .keyboardType(.decimalPad)
+          #endif
+          Slider(value: viewStore.$relativeHumidity, in: 0...100)
+        }
+        Section {
+          if let dewPoint = viewStore.dewPoint {
+            Text(dewPoint.fahrenheit, format: .number.precision(.fractionLength(1)))
+          }
+        } header: {
+          HStack {
+            Text("Dew Point")
+            if viewStore.calculateDewPointRequestInFlight {
+              Spacer()
+              ProgressView()
+            }
           }
         }
-        .padding(.bottom, 50)
-        .pickerStyle(.segmented)
-        
-        Text("\(numberFormatter.string(for: temperature) ?? "0")").foregroundColor(.red)
-        
-        Slider(
-          value: $temperature,
-          in: -4...150,
-          step: 1
-        ) {
-          Text("Temperature")
+        Section {
+          if let error = viewStore.errorDescription {
+            Text(error)
+              .foregroundStyle(Color.red)
+              .font(.callout)
+          }
         }
-        .tint(.red)
-        .disabled(solvingFor == .temperature)
-        Text("Temperature").foregroundColor(.red)
-          .padding(.bottom)
-        
-        Text("\(numberFormatter.string(for: relativeHumidity) ?? "0")").foregroundColor(.blue)
-        Slider(
-          value: $relativeHumidity,
-          in: 0...100,
-          step: 1
-        ) {
-          Text("Relative Humidity")
-        }
-        .tint(.blue)
-        .disabled(solvingFor == .relativeHumidity)
-        Text("Relative Humidity").foregroundColor(.blue)
-          .padding(.bottom)
-        
-        Text("\(numberFormatter.string(for: dewPoint) ?? "0")").foregroundColor(.green)
-        Slider(
-          value: $dewPoint,
-          in: -85...150,
-          step: 1
-        ) {
-          Text("Dew Point")
-        }
-        .tint(.green)
-        .disabled(solvingFor == .dewPoint)
-        
-//        Text("Dew Point").foregroundColor(.green)
-//          .padding(.bottom)
-        
       }
-      .navigationTitle("Dew Point Calculator")
-      .padding()
+      .task { await viewStore.send(.onTask).finish() }
     }
   }
 }
@@ -106,131 +182,47 @@ fileprivate let numberFormatter: NumberFormatter = {
   return formatter
 }()
 
-struct DewPointCalcView_Preview: PreviewProvider {
-  
-  struct NumberView: View {
-    let label: String
-    let number: Double
-    let units: String
-    
-    var body: some View {
-      HStack {
-        Text(label)
-          .foregroundColor(.gray)
-        Spacer()
-        Text(numberFormatter.string(for: number)!)
-        Text(units)
-      }
-      .padding([.leading, .trailing])
-    }
-  }
-  
-  struct PsychroView: View {
-    
-    @State var psychrometrics: PsychrometricResponse? = nil
-    
-    var body: some View {
-      VStack {
-        if psychrometrics == nil {
-          Text("loading...")
-        } else {
-          VStack {
-            Text("Inputs")
-            Divider()
-            NumberView(
-              label: "Altitude",
-              number: 0,
-              units: "Ft."
-            )
-            NumberView(
-              label: "Dry Bulb",
-              number: 75,
-              units: "°F"
-            )
-            NumberView(
-              label: "Humidity",
-              number: 50,
-              units: "%"
-            )
-            Divider()
-          }
-          .padding(.bottom, 50)
-          Text("Outputs")
-          Divider()
-          part1
-          NumberView(
-            label: "Vapor Pressure",
-            number: psychrometrics!.vaporPressure.rawValue.rawValue,
-            units: psychrometrics!.vaporPressure.units.symbol
-          )
-          NumberView(
-            label: "Wet Bulb",
-            number: psychrometrics!.wetBulb.rawValue.rawValue,
-            units: psychrometrics!.wetBulb.rawValue.units.symbol
-          )
-        }
-      }
-      .font(.body.bold())
-      .onAppear {
-        Task {
-          psychrometrics = try? await PsychrometricResponse(
-            altitude: .seaLevel,
-            dryBulb: 75,
-            humidity: 50%,
-            units: .imperial
-          )
-        }
-      }
-    }
-    
-    var part1: some View {
-      Group {
-        NumberView(
-          label: "Absolute Humidity",
-          number: psychrometrics!.grainsOfMoisture.rawValue,
-          units: "lb/lb"
-        )
-        NumberView(
-          label: "Atmospheric Pressure",
-          number: psychrometrics!.atmosphericPressure.rawValue,
-          units: psychrometrics!.atmosphericPressure.units.symbol
-        )
-        NumberView(
-          label: "Degree of Saturation",
-          number: psychrometrics!.degreeOfSaturation,
-          units: ""
-        )
-        NumberView(
-          label: "Dew Point",
-          number: psychrometrics!.dewPoint.rawValue.rawValue,
-          units: psychrometrics!.dewPoint.rawValue.units.symbol
-        )
-        NumberView(
-          label: "Density",
-          number: psychrometrics!.density.rawValue,
-          units: psychrometrics!.density.units.rawValue
-        )
-        NumberView(
-          label: "Enthalpy",
-          number: psychrometrics!.enthalpy.rawValue.rawValue,
-          units: psychrometrics!.enthalpy.units.rawValue
-        )
-        NumberView(
-          label: "Humidity Ratio",
-          number: psychrometrics!.humidityRatio.rawValue.rawValue,
-          units: ""
-        )
-        NumberView(
-          label: "Specific Volume",
-          number: psychrometrics!.volume.rawValue,
-          units: psychrometrics!.volume.units.rawValue
-        )
-      }
-    }
-  }
-  
-  static var previews: some View {
-    PsychroView()
-//    DewPointCalcView()
+#if DEBUG
+import PsychrometricClientLive
+
+struct TestError: Error, CustomDebugStringConvertible {
+
+  var debugDescription: String { localizedDescription }
+
+  var localizedDescription: String {
+    "This is a test error description."
   }
 }
+
+struct DewPointCalcView_Preview: PreviewProvider {
+
+  static var previews: some View {
+    DewPointCalcView(
+      store: .init(initialState: .init()) {
+        DewPointCalcFeature()
+      } withDependencies: {
+        $0.psychrometricClient.override(
+          \.dewPoint,
+           closure: PsychrometricClient.liveValue.dewPoint
+        )
+        $0.psychrometricClient.override(
+          \.vaporPressure,
+           closure: PsychrometricClient.liveValue.vaporPressure
+        )
+      }
+    )
+    .previewDisplayName("Live View")
+
+    DewPointCalcView(
+      store: .init(initialState: .init()) {
+        DewPointCalcFeature()
+      } withDependencies: {
+        $0.psychrometricClient.override(\.dewPoint) { _ in
+          throw TestError()
+        }
+      }
+    )
+    .previewDisplayName("Error View")
+  }
+}
+#endif

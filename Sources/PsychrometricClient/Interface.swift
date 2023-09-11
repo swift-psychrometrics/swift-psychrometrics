@@ -13,7 +13,7 @@ public struct PsychrometricClient {
   public var density: DensityClient
 
   /// Perform dew-point temperature calculations / conversions.
-  public var dewPoint: @Sendable (DewPointRequest) async -> DewPoint
+  public var dewPoint: @Sendable (DewPointRequest) async throws -> DewPoint
 
   /// Perform enthalpy calculations / conversions.
   public var enthalpy: EnthalpyClient
@@ -37,7 +37,7 @@ public struct PsychrometricClient {
   public var specificHeat: SpecificHeatClient
 
   /// Perform specific humidity calculations / conversions.
-  public var specificHumidity: @Sendable (SpecificHumidityRequest) async -> SpecificHumidity
+  public var specificHumidity: @Sendable (SpecificHumidityRequest) async throws -> SpecificHumidity
 
   /// Perform specific volume calculations / conversions.
   public var specificVolume: SpecificVolumeClient
@@ -51,7 +51,7 @@ public struct PsychrometricClient {
   public init(
     degreeOfSaturation: @escaping @Sendable (DegreeOfSaturationRequest) async throws -> DegreeOfSaturation,
     density: DensityClient,
-    dewPoint: @escaping @Sendable (DewPointRequest) async -> DewPoint,
+    dewPoint: @escaping @Sendable (DewPointRequest) async throws -> DewPoint,
     enthalpy: EnthalpyClient,
     grainsOfMoisture: @escaping @Sendable (GrainsOfMoistureRequest) async throws -> GrainsOfMoisture,
     humidityRatio: @escaping @Sendable (HumidityRatioRequest) async throws -> HumidityRatio,
@@ -59,7 +59,7 @@ public struct PsychrometricClient {
     relativeHumidity: @escaping @Sendable (RelativeHumidityRequest) async throws -> RelativeHumidity,
     saturationPressure: @escaping @Sendable (SaturationPressureRequest) async throws -> SaturationPressure,
     specificHeat: SpecificHeatClient,
-    specificHumidity: @escaping @Sendable (SpecificHumidityRequest) async -> SpecificHumidity,
+    specificHumidity: @escaping @Sendable (SpecificHumidityRequest) async throws -> SpecificHumidity,
     specificVolume: SpecificVolumeClient,
     vaporPressure: @escaping @Sendable (VaporPressureRequest) async throws -> VaporPressure,
     wetBulb: @escaping @Sendable (WetBulbRequest) async throws -> WetBulb
@@ -105,18 +105,18 @@ public struct PsychrometricClient {
   public struct DensityClient {
 
     /// Calculate the density of dry air for the given request.
-    public var dryAir: @Sendable (DryAirRequest) async -> Density<DryAir>
+    public var dryAir: @Sendable (DryAirRequest) async throws -> Density<DryAir>
 
     /// Calculate the density of moist air for the given request.
     public var moistAir: @Sendable (MoistAirRequest) async throws -> Density<MoistAir>
 
     /// Calculate the density of water for the given temperature.
-    public var water: @Sendable (Temperature) async -> Density<Water>
+    public var water: @Sendable (Temperature) async throws -> Density<Water>
 
     public init(
-      dryAir: @escaping @Sendable (DryAirRequest) async -> Density<DryAir>,
+      dryAir: @escaping @Sendable (DryAirRequest) async throws -> Density<DryAir>,
       moistAir: @escaping @Sendable (MoistAirRequest) async throws -> Density<MoistAir>,
-      water: @escaping @Sendable (Temperature) async -> Density<Water>
+      water: @escaping @Sendable (Temperature) async throws -> Density<Water>
     ) {
       self.dryAir = dryAir
       self.moistAir = moistAir
@@ -175,11 +175,11 @@ public struct PsychrometricClient {
   }
 
   public struct EnthalpyClient {
-    public var dryAir: (DryAirRequest) async -> EnthalpyOf<DryAir>
+    public var dryAir: (DryAirRequest) async throws -> EnthalpyOf<DryAir>
     public var moistAir: (MoistAirRequest) async throws -> EnthalpyOf<MoistAir>
 
     public init(
-      dryAir: @escaping (DryAirRequest) async -> EnthalpyOf<DryAir>,
+      dryAir: @escaping (DryAirRequest) async throws -> EnthalpyOf<DryAir>,
       moistAir: @escaping (MoistAirRequest) async throws -> EnthalpyOf<MoistAir>
     ) {
       self.dryAir = dryAir
@@ -293,10 +293,10 @@ public struct PsychrometricClient {
   }
 
   public struct SpecificHeatClient {
-    public var water: @Sendable (Temperature) async -> SpecificHeat
+    public var water: @Sendable (Temperature) async throws -> SpecificHeat
 
     public init(
-      water: @escaping @Sendable (Temperature) async -> SpecificHeat
+      water: @escaping @Sendable (Temperature) async throws -> SpecificHeat
     ) {
       self.water = water
     }
@@ -308,11 +308,11 @@ public struct PsychrometricClient {
   }
 
   public struct SpecificVolumeClient {
-    public var dryAir: @Sendable (DryAirRequest) async -> SpecificVolumeOf<DryAir>
+    public var dryAir: @Sendable (DryAirRequest) async throws -> SpecificVolumeOf<DryAir>
     public var moistAir: @Sendable (MoistAirRequest) async throws -> SpecificVolumeOf<MoistAir>
     
     public init(
-      dryAir: @escaping @Sendable (DryAirRequest) async -> SpecificVolumeOf<DryAir>,
+      dryAir: @escaping @Sendable (DryAirRequest) async throws -> SpecificVolumeOf<DryAir>,
       moistAir: @escaping @Sendable (MoistAirRequest) async throws -> SpecificVolumeOf<MoistAir>
     ) {
       self.dryAir = dryAir

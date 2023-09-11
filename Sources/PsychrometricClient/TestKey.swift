@@ -40,4 +40,19 @@ extension PsychrometricClient: TestDependencyKey {
     vaporPressure: unimplemented("\(Self.self).vaporPressure", placeholder: .zero),
     wetBulb: unimplemented("\(Self.self).wetBulb", placeholder: .zero)
   )
+
+  /// Override a value with the given closure.
+  ///
+  /// This is useful in tests or previews, instead of using a live client you can override the parts required for the test
+  /// or preview to work properly.
+  ///
+  /// - Parameters:
+  ///   - keyPath: The key path to override.
+  ///   - closure: The closure to use when called.
+  public mutating func override<Request, Response>(
+    _ keyPath: WritableKeyPath<Self, (@Sendable (Request) async throws -> Response)>,
+    closure: @escaping @Sendable (Request) async throws -> Response
+  ) {
+    self[keyPath: keyPath] = closure
+  }
 }
