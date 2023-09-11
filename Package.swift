@@ -128,7 +128,8 @@ if #available(macOS 10.15, *),
     .executableTarget(
       name: "swift-psychrometrics",
       dependencies: [
-        "Psychrometrics",
+//        "Psychrometrics",
+        "PsychrometricClientLive",
         .product(name: "ConsoleKit", package: "console-kit"),
       ]
     )

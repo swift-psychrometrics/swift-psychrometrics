@@ -26,6 +26,7 @@ extension PsychrometricClient: TestDependencyKey {
     ),
     grainsOfMoisture: unimplemented("\(Self.self).grainsOfMoisture", placeholder: .zero),
     humidityRatio: unimplemented("\(Self.self).humidityRatio", placeholder: .zero),
+    psychrometricProperties: unimplemented("\(Self.self).psychrometricProperties", placeholder: .zero),
     relativeHumidity: unimplemented("\(Self.self).relativeHumidity", placeholder: 0%),
     saturationPressure: unimplemented("\(Self.self).saturationPressure", placeholder: .zero),
     specificHeat: .init(

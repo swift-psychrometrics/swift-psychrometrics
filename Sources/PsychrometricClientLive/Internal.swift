@@ -409,6 +409,78 @@ extension PsychrometricClient.HumidityRatioRequest {
   }
 }
 
+// MARK: - Psychrometric Properties
+extension PsychrometricClient.PsychrometricPropertiesRequest {
+
+  func psychrometricProperties(
+    environment: PsychrometricEnvironment
+  ) async throws -> PsychrometricProperties {
+    let units = self.units ?? environment.units
+
+    let humidityRatio = try await PsychrometricClient.HumidityRatioRequest.wetBulb(
+      wetBulb,
+      dryBulb: dryBulb,
+      totalPressure: totalPressure,
+      units: units
+    ).humidityRatio(environment: environment)
+
+    let relativeHumidity = try await PsychrometricClient.RelativeHumidityRequest.dryBulb(
+      dryBulb,
+      humidityRatio: humidityRatio,
+      totalPressure: totalPressure,
+      units: units
+    ).relativeHumdity(environment: environment)
+
+    return try await .init(
+      atmosphericPressure: totalPressure,
+      degreeOfSaturation: PsychrometricClient.DegreeOfSaturationRequest.dryBulb(
+        dryBulb,
+        humidityRatio: humidityRatio,
+        totalPressure: totalPressure,
+        units: units
+      ).degreeOfSaturation(environment: environment),
+      density: PsychrometricClient.DensityClient.MoistAirRequest.dryBulb(
+        dryBulb,
+        humidityRatio: humidityRatio,
+        totalPressure: totalPressure,
+        units: units
+      ).density(environment: environment),
+      dewPoint: PsychrometricClient.DewPointRequest.dryBulb(
+        dryBulb,
+        humidityRatio: humidityRatio,
+        totalPressure: totalPressure,
+        units: units
+      ).dewPoint(environment: environment),
+      dryBulb: dryBulb,
+      enthalpy: PsychrometricClient.EnthalpyClient.MoistAirRequest.dryBulb(
+        dryBulb,
+        humidityRatio: humidityRatio,
+        units: units
+      ).enthalpy(environment: environment),
+      grainsOfMoisture: PsychrometricClient.GrainsOfMoistureRequest.dryBulb(
+        dryBulb,
+        relativeHumidity: relativeHumidity,
+        totalPressure: totalPressure
+      ).grainsOfMoisture(environment: environment),
+      humidityRatio: humidityRatio,
+      relativeHumidity: relativeHumidity,
+      specificVolume: PsychrometricClient.SpecificVolumeClient.MoistAirRequest.dryBulb(
+        dryBulb,
+        humidityRatio: humidityRatio,
+        totalPressure: totalPressure,
+        units: units
+      ).specificVolume(environment: environment),
+      vaporPressure: PsychrometricClient.VaporPressureRequest.humidityRatio(
+        humidityRatio,
+        totalPressure: totalPressure,
+        units: units
+      ).vaporPressure(environment: environment),
+      wetBulb: wetBulb,
+      units: units
+    )
+  }
+}
+
 // MARK: - Relative Humidity
 extension PsychrometricClient.RelativeHumidityRequest {
   

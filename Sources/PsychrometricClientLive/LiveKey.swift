@@ -21,6 +21,7 @@ extension PsychrometricClient: DependencyKey {
       ),
       grainsOfMoisture: { try await $0.grainsOfMoisture(environment: environment) },
       humidityRatio: { try await $0.humidityRatio(environment: environment) },
+      psychrometricProperties: { try await $0.psychrometricProperties(environment: environment) },
       relativeHumidity: { try await $0.relativeHumdity(environment: environment) },
       saturationPressure: { try await $0.saturationPressure(environment: environment) },
       specificHeat: .init(

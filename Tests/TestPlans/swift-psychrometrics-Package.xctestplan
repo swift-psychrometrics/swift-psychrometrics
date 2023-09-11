@@ -1,0 +1,34 @@
+{
+  "configurations" : [
+    {
+      "id" : "DBD3BFE0-BE6A-4EDF-B320-C3300FDB2256",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "addressSanitizer" : {
+      "detectStackUseAfterReturn" : true,
+      "enabled" : true
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "PsychrometricTests",
+        "name" : "PsychrometricTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SharedModelsTests",
+        "name" : "SharedModelsTests"
+      }
+    }
+  ],
+  "version" : 1
+}

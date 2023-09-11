@@ -9,6 +9,7 @@ XCTEST_PATH = $(shell find $(BIN_PATH) -name '*.xctest')
 COV_BIN := .build/debug/swift-psychrometricsPackageTests.xctest/Contents/MacOS/swift-psychrometricsPackageTests
 COV_OUTPUT_PATH = "/tmp/swift-psychrometrics.lcov"
 DOCKER_PLATFORM ?= linux/arm64
+SCHEME := swift-psychrometrics-Package
 
 test:
 	swift test --enable-code-coverage
@@ -27,7 +28,7 @@ test-server:
 		xcodebuild test \
 			-configuration $(CONFIG) \
 			-workspace .swiftpm/xcode/package.xcworkspace \
-			-scheme swift-psychrometrics-Package \
+			-scheme "$(SCHEME)" \
 			-destination platform="$$platform" || exit 1; \
 	done
 
@@ -36,7 +37,7 @@ test-psychrometrics:
 		xcodebuild test \
 			-configuration $(CONFIG) \
 			-workspace .swiftpm/xcode/package.xcworkspace \
-			-scheme Psychrometrics \
+			-scheme "$(SCHEME)" \
 			-destination platform="$$platform" || exit 1; \
 	done
 

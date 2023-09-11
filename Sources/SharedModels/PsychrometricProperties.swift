@@ -1,32 +1,33 @@
-// TODO: - Remove
-public struct PsychrometricResponse: Codable, Equatable, Sendable {
+import Foundation
 
-  public let atmosphericPressure: Pressure
-  public let degreeOfSaturation: Double
+public struct PsychrometricProperties: Codable, Equatable, Sendable {
+
+  public let atmosphericPressure: TotalPressure
+  public let degreeOfSaturation: DegreeOfSaturation
   public let density: DensityOf<MoistAir>
   public let dewPoint: DewPoint
-  public let dryBulb: Temperature
+  public let dryBulb: DryBulb
   public let enthalpy: EnthalpyOf<MoistAir>
   public let grainsOfMoisture: GrainsOfMoisture
   public let humidityRatio: HumidityRatio
   public let relativeHumidity: RelativeHumidity
   public let vaporPressure: VaporPressure
-  public let volume: SpecificVolumeOf<MoistAir>
+  public let specificVolume: SpecificVolumeOf<MoistAir>
   public let wetBulb: WetBulb
   public let units: PsychrometricUnits
 
   public init(
-    atmosphericPressure: Pressure,
-    degreeOfSaturation: Double,
+    atmosphericPressure: TotalPressure,
+    degreeOfSaturation: DegreeOfSaturation,
     density: DensityOf<MoistAir>,
     dewPoint: DewPoint,
-    dryBulb: Temperature,
+    dryBulb: DryBulb,
     enthalpy: EnthalpyOf<MoistAir>,
     grainsOfMoisture: GrainsOfMoisture,
     humidityRatio: HumidityRatio,
     relativeHumidity: RelativeHumidity,
+    specificVolume: SpecificVolumeOf<MoistAir>,
     vaporPressure: VaporPressure,
-    volume: SpecificVolumeOf<MoistAir>,
     wetBulb: WetBulb,
     units: PsychrometricUnits
   ) {
@@ -39,9 +40,27 @@ public struct PsychrometricResponse: Codable, Equatable, Sendable {
     self.grainsOfMoisture = grainsOfMoisture
     self.humidityRatio = humidityRatio
     self.relativeHumidity = relativeHumidity
+    self.specificVolume = specificVolume
     self.vaporPressure = vaporPressure
-    self.volume = volume
     self.wetBulb = wetBulb
     self.units = units
   }
+}
+
+extension PsychrometricProperties {
+  public static var zero = Self.init(
+    atmosphericPressure: .zero,
+    degreeOfSaturation: .zero,
+    density: .zero,
+    dewPoint: .zero,
+    dryBulb: .zero,
+    enthalpy: .zero,
+    grainsOfMoisture: .zero,
+    humidityRatio: .zero,
+    relativeHumidity: .zero,
+    specificVolume: .zero,
+    vaporPressure: .zero,
+    wetBulb: .zero,
+    units: .imperial
+  )
 }

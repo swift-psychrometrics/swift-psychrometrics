@@ -1,6 +1,8 @@
 import ConsoleKit
+import Dependencies
 import Foundation
-import Psychrometrics
+//import Psychrometrics
+import PsychrometricClientLive
 import SharedModels
 
 @available(macOS 10.15, *)
@@ -23,6 +25,7 @@ struct EnthalpyCommand: Command {
   }
 
   func run(using context: CommandContext, signature: Signature) throws {
+    @Dependency(\.psychrometricClient) var client;
 
     var temperature: Double
     if let inputTemp = signature.temperature {

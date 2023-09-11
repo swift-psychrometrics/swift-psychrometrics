@@ -40,7 +40,7 @@ final class EnthalpyTests: PsychrometricTestCase {
   }
   
   func test_addition_and_subtraction() {
-    var enthalpy: MoistAirEnthalpy = 28
+    var enthalpy: EnthalpyOf<MoistAir> = 28
     enthalpy += 1
     XCTAssertEqual(enthalpy.rawValue, 29)
     enthalpy -= 2
@@ -50,19 +50,19 @@ final class EnthalpyTests: PsychrometricTestCase {
   }
   
   func test_equality() {
-    XCTAssertEqual(MoistAirEnthalpy.init(28.11), 28.11)
+    XCTAssertEqual(EnthalpyOf<MoistAir>.init(28.11), 28.11)
   }
   
   func test_comparable() {
-    XCTAssertTrue(MoistAirEnthalpy.init(exactly: 30)! > 28)
+    XCTAssertTrue(EnthalpyOf<MoistAir>.init(exactly: 30)! > 28)
   }
   
   func test_magnitude() {
-    XCTAssertEqual(MoistAirEnthalpy.init(10).magnitude, 10.magnitude)
+    XCTAssertEqual(EnthalpyOf<MoistAir>.init(10).magnitude, 10.magnitude)
   }
   
   func test_multiplication() {
-    var enthalpy: MoistAirEnthalpy = 10 * 2
+    var enthalpy: EnthalpyOf<MoistAir> = 10 * 2
     XCTAssertEqual(enthalpy.rawValue, 20)
     enthalpy *= 2
     XCTAssertEqual(enthalpy.rawValue, 40)
@@ -90,7 +90,7 @@ final class EnthalpyTests: PsychrometricTestCase {
     let temperature: Temperature = 75
     let humidity: RelativeHumidity = 50%
     let ratio = try await HumidityRatio(dryBulb: temperature, humidity: humidity, altitude: .seaLevel)
-    let enthalpy = try await MoistAirEnthalpy.init(dryBulb: temperature, ratio: ratio, units: .imperial)
+    let enthalpy = try await EnthalpyOf<MoistAir>.init(dryBulb: temperature, ratio: ratio, units: .imperial)
     let temperature2 = try await Temperature(enthalpy: enthalpy, ratio: ratio)
     XCTAssertEqual(
       round(temperature2.fahrenheit * 100) / 100,

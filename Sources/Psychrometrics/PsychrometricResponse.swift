@@ -3,6 +3,8 @@ import Foundation
 import PsychrometricEnvironment
 import SharedModels
 
+// TODO: - Remove
+
 /// Calculate the psychrometric properties of an air sample.
 fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
 
@@ -61,7 +63,6 @@ fileprivate struct PsychrometricResponseEnvelope: Codable, Equatable, Sendable {
     
     
   }
-
 
   public init?(
     dryBulb temperature: Temperature,

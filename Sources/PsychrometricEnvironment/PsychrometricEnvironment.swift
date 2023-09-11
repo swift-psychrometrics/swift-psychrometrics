@@ -19,6 +19,18 @@ public struct PsychrometricEnvironment {
   /// The unit of measure.
   public var units: PsychrometricUnits = .imperial
 
+  public init(
+    maximumIterationCount: Int = 100,
+    minimumHumidityRatio: Double = 1e-7,
+    temperatureTolerance: Temperature = .celsius(0.001),
+    units: PsychrometricUnits = .imperial
+  ) {
+    self.maximumIterationCount = maximumIterationCount
+    self.minimumHumidityRatio = minimumHumidityRatio
+    self.temperatureTolerance = temperatureTolerance
+    self.units = units
+  }
+
   /// Returns the freezing point of water for the given units.
   ///
   /// - Parameters:
