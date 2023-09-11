@@ -9,7 +9,7 @@ import Tagged
 /// initialized with a value that's out of range.  For methods that use a humidity ratio they should check that the humidity ratio
 /// is valid by calling ``HumidityRatio.ensureHumidityRatio(_:)``.
 ///
-public typealias HumidityRatio = Tagged<Ratio, Humidity>
+public typealias HumidityRatio = Tagged<Ratio, Humidity<Ratio>>
 
 //public struct HumidityRatio: Codable, Equatable, Sendable {
 extension HumidityRatio {

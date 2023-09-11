@@ -11,8 +11,11 @@ public protocol DensityType {}
 /// Namespace for calculations that can work on dry air.
 public struct DryAir: DensityType, EnthalpyType {}
 
-/// Represents types that can be used in density calculations / conversions.
+/// Represents types that can be used in enthalpy calculations / conversions.
 public protocol EnthalpyType {}
+
+/// Represents types that can be used in humidity calculations / conversions.
+public protocol HumidityType {}
 
 /// Namespace for calculations that can work on moist air.
 public struct MoistAir: DensityType, EnthalpyType {}
@@ -30,6 +33,6 @@ public enum DewPointTemperature {}
 
 public enum Specific {}
 
-public enum Relative {}
+public enum Relative: HumidityType {}
 
-public enum Ratio {}
+public enum Ratio: HumidityType {}

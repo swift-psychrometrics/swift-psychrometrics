@@ -9,10 +9,10 @@ import Tagged
 /// ```
 /// let humidity = 50%
 /// ```
-public typealias RelativeHumidity = Tagged<Relative, Humidity>
+public typealias RelativeHumidity = Tagged<Relative, Humidity<Relative>>
 
 /// A container for holding onto humidity values.
-public struct Humidity: Equatable, Codable, Sendable, RawInitializable {
+public struct Humidity<T: HumidityType>: Equatable, Codable, Sendable, RawInitializable {
 
   /// The relative humidity value.
   public var rawValue: Double
