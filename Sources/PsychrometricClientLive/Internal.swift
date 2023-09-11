@@ -40,7 +40,7 @@ extension PsychrometricClient.DensityClient.DryAirRequest {
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
 
-    func run(dryBulb: DryBulb, pressure: Pressure) async -> Double {
+    func run(dryBulb: DryBulb, pressure: TotalPressure) async -> Double {
       let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
       let pressure = units.isImperial ? pressure.psi : pressure.pascals
 
@@ -57,7 +57,7 @@ extension PsychrometricClient.DensityClient.DryAirRequest {
     let units = self.units ?? environment.units
     let density = await Constants(units: units).run(
       dryBulb: self.dryBulb,
-      pressure: self.totalPressure.rawValue
+      pressure: self.totalPressure
     )
     return .init(.init(density, units: .defaultFor(units: units)))
   }
@@ -224,7 +224,7 @@ extension PsychrometricClient.GrainsOfMoistureRequest {
 
   private func saturationHumidity(
     saturationPressure: SaturationPressure,
-    totalPressure: Pressure
+    totalPressure: TotalPressure
   ) async -> Double {
     7000 * GrainsOfMoisture.moleWeightRatio
       * saturationPressure.psi
@@ -238,7 +238,7 @@ extension PsychrometricClient.GrainsOfMoistureRequest {
     ).saturationPressure(environment: environment)
     let saturationHumidity = await saturationHumidity(
       saturationPressure: saturationPressure,
-      totalPressure: totalPressure.rawValue
+      totalPressure: totalPressure
     )
     return .init(saturationHumidity * humidity.fraction)
   }
@@ -674,7 +674,7 @@ extension PsychrometricClient.SpecificVolumeClient.DryAirRequest {
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
 
-    func run(dryBulb: DryBulb, pressure: Pressure) async -> Double {
+    func run(dryBulb: DryBulb, pressure: TotalPressure) async -> Double {
       let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
       let P = units.isImperial ? pressure.psi : pressure.pascals
       guard units.isImperial else {
@@ -688,7 +688,7 @@ extension PsychrometricClient.SpecificVolumeClient.DryAirRequest {
     let units = units ?? environment.units
     let value = await Constants(units: units).run(
       dryBulb: dryBulb,
-      pressure: totalPressure.rawValue
+      pressure: totalPressure
     )
     return .init(value, units: .defaultFor(units: units))
   }
@@ -705,7 +705,7 @@ extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
 
-    func run(dryBulb: DryBulb, ratio: HumidityRatio, pressure: Pressure) async -> Double {
+    func run(dryBulb: DryBulb, ratio: HumidityRatio, pressure: TotalPressure) async -> Double {
       let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
       let P = units.isImperial ? pressure.psi : pressure.pascals
       let intermediateValue = universalGasConstant * T * (1 + c1 * ratio.rawValue)
@@ -713,7 +713,7 @@ extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
     }
 
     // inverts the calculation to solve for dry-bulb
-    func dryBulb(volume: SpecificVolumeOf<MoistAir>, ratio: HumidityRatio, pressure: Pressure)
+    func dryBulb(volume: SpecificVolumeOf<MoistAir>, ratio: HumidityRatio, pressure: TotalPressure)
       async -> DryBulb
     {
       let P = units.isImperial ? pressure.psi : pressure.pascals
@@ -728,7 +728,7 @@ extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
     let value = await Constants(units: units).run(
       dryBulb: dryBulb,
       ratio: humidityRatio,
-      pressure: totalPressure.rawValue
+      pressure: totalPressure
     )
     return .init(value, units: .defaultFor(units: units))
   }

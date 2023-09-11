@@ -2,48 +2,54 @@ import Foundation
 import Tagged
 
 /// Represents the saturation pressure.
-public typealias SaturationPressure = Tagged<Saturation, Pressure>
+public typealias SaturationPressure = Tagged<Saturation, Pressure<Saturation>>
 
 /// Represents the total pressure.
-public typealias TotalPressure = Tagged<Total, Pressure>
+public typealias TotalPressure = Tagged<Total, Pressure<Total>>
 
 /// Represents the vapor pressure.
-public typealias VaporPressure = Tagged<VaporType, Pressure>
+public typealias VaporPressure = Tagged<VaporType, Pressure<VaporType>>
 
 /// Represents / calculates pressure for different units.
-public struct Pressure: Hashable, Codable, Sendable {
+public struct Pressure<T: PressureType>: Hashable, Codable, Sendable {
 
   public private(set) var rawValue: Double
 
-  public private(set) var units: Unit
+  public private(set) var units: PressureUnit
 
-  public init(_ value: Double, units: Unit) {
+  public init(_ value: Double, units: PressureUnit) {
     self.rawValue = value
     self.units = units
   }
 
-  // MARK: - Pressure.Unit
-  /// Represents the units of measure for ``Pressure``.
-  public enum Unit: String, Equatable, Hashable, CaseIterable, Sendable {
+  /// Access the underlying raw-value.
+  ///
+  /// This is useful when wrapped in a `Tagged` type.
+  ///
+  public var value: Double { rawValue }
+}
 
-    public static func defaultFor(units: PsychrometricUnits) -> Self {
-      switch units {
-      case .metric: return .pascals
-      case .imperial: return .psi
-      }
+// MARK: - Pressure.Unit
+/// Represents the units of measure for ``Pressure``.
+public enum PressureUnit: String, Equatable, Hashable, CaseIterable, Sendable {
+
+  public static func defaultFor(units: PsychrometricUnits) -> Self {
+    switch units {
+    case .metric: return .pascals
+    case .imperial: return .psi
     }
+  }
 
-    case atmosphere = "atm"
-    case bar = "bar"
-    case inchesWater = "inH2O"
-    case millibar = "mb"
-    case pascals = "Pa"
-    case psi = "psi"
-    case torr = "torr"
+  case atmosphere = "atm"
+  case bar = "bar"
+  case inchesWater = "inH2O"
+  case millibar = "mb"
+  case pascals = "Pa"
+  case psi = "psi"
+  case torr = "torr"
 
-    public var symbol: String {
-      return rawValue
-    }
+  public var symbol: String {
+    return rawValue
   }
 }
 
@@ -106,13 +112,15 @@ extension Pressure {
   }
 }
 
-extension Tagged where RawValue == Pressure {
+extension Tagged {
 
   /// Create a new ``Tagged`` with the given atmosphere value.
   ///
   /// - Parameters:
   ///    - value: The atmosphere value.
-  public static func atmosphere(_ value: Double) -> Self {
+  public static func atmosphere<T>(
+    _ value: Double
+  ) -> Self where RawValue == Pressure<T> {
     .init(.atmosphere(value))
   }
 
@@ -120,7 +128,9 @@ extension Tagged where RawValue == Pressure {
   ///
   /// - Parameters:
   ///    - value: The bar value.
-  public static func bar(_ value: Double) -> Self {
+  public static func bar<T>(
+    _ value: Double
+  ) -> Self where RawValue == Pressure<T> {
     .init(.bar(value))
   }
 
@@ -128,7 +138,9 @@ extension Tagged where RawValue == Pressure {
   ///
   /// - Parameters:
   ///    - value: The inches of water column value.
-  public static func inchesWater(_ value: Double) -> Self {
+  public static func inchesWater<T>(
+    _ value: Double
+  ) -> Self where RawValue == Pressure<T> {
     .init(.inchesWater(value))
   }
 
@@ -136,7 +148,9 @@ extension Tagged where RawValue == Pressure {
   ///
   /// - Parameters:
   ///    - value: The millibar value.
-  public static func millibar(_ value: Double) -> Self {
+  public static func millibar<T>(
+    _ value: Double
+  ) -> Self where RawValue == Pressure<T> {
     .init(.millibar(value))
   }
 
@@ -144,7 +158,9 @@ extension Tagged where RawValue == Pressure {
   ///
   /// - Parameters:
   ///    - value: The pascals value.
-  public static func pascals(_ value: Double) -> Self {
+  public static func pascals<T>(
+    _ value: Double
+  ) -> Self where RawValue == Pressure<T> {
     .init(.pascals(value))
   }
 
@@ -152,7 +168,9 @@ extension Tagged where RawValue == Pressure {
   ///
   /// - Parameters:
   ///    - value: The psi guage value.
-  public static func psi(_ value: Double) -> Self {
+  public static func psi<T>(
+    _ value: Double
+  ) -> Self where RawValue == Pressure<T> {
     .init(.psi(value))
   }
 
@@ -160,7 +178,9 @@ extension Tagged where RawValue == Pressure {
   ///
   /// - Parameters:
   ///    - value: The torr value.
-  public static func torr(_ value: Double) -> Self {
+  public static func torr<T>(
+    _ value: Double
+  ) -> Self where RawValue == Pressure<T> {
     .init(.torr(value))
   }
 }
@@ -231,15 +251,16 @@ extension Pressure {
   }
 }
 
-extension Pressure.Unit: UnitOfMeasure {}
+extension PressureUnit: UnitOfMeasure {}
 
 extension Pressure: NumberWithUnitOfMeasure {
+
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias Magnitude = Double.Magnitude
-  public typealias Units = Unit
+  public typealias Units = PressureUnit
 
-  public static func keyPath(for units: Unit) -> WritableKeyPath<Pressure, Double> {
+  public static func keyPath(for units: PressureUnit) -> WritableKeyPath<Pressure, Double> {
     switch units {
     case .atmosphere:
       return \.atmosphere

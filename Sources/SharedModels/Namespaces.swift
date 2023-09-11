@@ -20,17 +20,20 @@ public protocol HumidityType {}
 /// Namespace for calculations that can work on moist air.
 public struct MoistAir: DensityType, EnthalpyType, TemperatureType {}
 
+/// Represents types that can be used in pressure calculations / conversions.
+public protocol PressureType {}
+
 /// Represents types that can be used in temperature calculations / conversions.
 public protocol TemperatureType {}
 
 /// Namespace for calculations that can work on water.
 public struct Water: DensityType {}
 
-public enum Total {}
+public enum Total: PressureType {}
 
-public enum Saturation {}
+public enum Saturation: PressureType {}
 
-public enum VaporType {}
+public enum VaporType: PressureType {}
 
 public enum DewPointTemperature: TemperatureType {}
 

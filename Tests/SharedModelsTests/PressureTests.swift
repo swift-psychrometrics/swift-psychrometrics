@@ -16,86 +16,86 @@ final class PressureTests: XCTestCase {
   }
 
   func test_converting_to_atmosphere() {
-    XCTAssertEqual(Pressure.atmosphere(10).atmosphere, 10)
-    XCTAssertEqual(Pressure.psi(10).atmosphere, 0.6804596377991787)
-    XCTAssertEqual(Pressure.bar(10).atmosphere, 9.8692316931427)
-    XCTAssertEqual(Pressure.inchesWater(10).atmosphere, 0.0245832)
-    XCTAssertEqual(Pressure.millibar(10).atmosphere, 0.0098692316931427)
-    XCTAssertEqual(Pressure.pascals(10).atmosphere, 9.869231693142701e-5)
-    XCTAssertEqual(Pressure.psi(10).atmosphere, 0.6804596377991787)
-    XCTAssertEqual(Pressure.torr(10).atmosphere, 0.013157893594088999)
-    
-    var temp = Pressure.atmosphere(10)
+    XCTAssertEqual(TotalPressure.atmosphere(10).atmosphere, 10)
+    XCTAssertEqual(TotalPressure.psi(10).atmosphere, 0.6804596377991787)
+    XCTAssertEqual(TotalPressure.bar(10).atmosphere, 9.8692316931427)
+    XCTAssertEqual(TotalPressure.inchesWater(10).atmosphere, 0.0245832)
+    XCTAssertEqual(TotalPressure.millibar(10).atmosphere, 0.0098692316931427)
+    XCTAssertEqual(TotalPressure.pascals(10).atmosphere, 9.869231693142701e-5)
+    XCTAssertEqual(TotalPressure.psi(10).atmosphere, 0.6804596377991787)
+    XCTAssertEqual(TotalPressure.torr(10).atmosphere, 0.013157893594088999)
+
+    var temp = TotalPressure.atmosphere(10)
     XCTAssertEqual(temp.atmosphere, 10)
     temp.atmosphere = 20
     XCTAssertEqual(temp.atmosphere, 20)
   }
   
   func test_converting_to_bar() {
-    XCTAssertEqual(Pressure.torr(42).bar, 0.0559953954000001)
-    
-    var temp = Pressure.bar(10)
+    XCTAssertEqual(TotalPressure.torr(42).bar, 0.0559953954000001)
+
+    var temp = TotalPressure.bar(10)
     XCTAssertEqual(temp.bar, 10)
     temp.bar = 20
     XCTAssertEqual(temp.bar, 20)
   }
   
   func test_converting_to_inchesWaterColumn() {
-    XCTAssertEqual(Pressure.pascals(100).inchesWater, 0.4014624496868878)
-    var temp = Pressure.inchesWater(10)
+    XCTAssertEqual(TotalPressure.pascals(100).inchesWater, 0.4014624496868878)
+    var temp = TotalPressure.inchesWater(10)
     XCTAssertEqual(temp.inchesWater, 10)
     temp.inchesWater = 20
     XCTAssertEqual(temp.inchesWater, 20)
   }
   
   func test_converting_to_millibar() {
-    XCTAssertEqual(Pressure.psi(112).millibar, 7722.128915714985)
-    var temp = Pressure.millibar(10)
+    XCTAssertEqual(TotalPressure.psi(112).millibar, 7722.128915714985)
+    var temp = TotalPressure.millibar(10)
     XCTAssertEqual(temp.millibar, 10)
     temp.millibar = 20
     XCTAssertEqual(temp.millibar, 20)
   }
   
   func test_converting_to_pascals() {
-    XCTAssertEqual(Pressure.inchesWater(0.4014624496868878).pascals, 100)
-    var temp = Pressure.pascals(10)
+    XCTAssertEqual(TotalPressure.inchesWater(0.4014624496868878).pascals, 100)
+    var temp = TotalPressure.pascals(10)
     XCTAssertEqual(temp.pascals, 10)
     temp.pascals = 20
     XCTAssertEqual(temp.pascals, 20)
   }
   
   func test_converting_to_psig() {
-    XCTAssertEqual(Pressure.atmosphere(13).psi, 191.04733444655298)
-    var temp = Pressure.psi(10)
+    XCTAssertEqual(TotalPressure.atmosphere(13).psi, 191.04733444655298)
+    var temp = TotalPressure.psi(10)
     XCTAssertEqual(temp.psi, 10)
     temp.psi = 20
     XCTAssertEqual(temp.psi, 20)
   }
   
   func test_converting_to_torr() {
-    XCTAssertEqual(Pressure.bar(0.0559953954000001).torr, 42)
-    var temp = Pressure.torr(10)
+    XCTAssertEqual(TotalPressure.bar(0.0559953954000001).torr, 42)
+    var temp = TotalPressure.torr(10)
     XCTAssertEqual(temp.torr, 10)
     temp.torr = 20
     XCTAssertEqual(temp.torr, 20)
   }
   
   func test_pressure_for_altitude() {
-    let pressure = Pressure(altitude: .feet(1000))
+    let pressure = TotalPressure(altitude: .feet(1000))
     XCTApproximatelyEqual(pressure.rawValue, 14.175, tolerance: 0.0024)
 //    XCTAssertEqual(round(pressure.psi * 100) / 100, 14.17)
   }
   
   func test_comparable() {
-    XCTAssertTrue(Pressure.psi(10) > 5)
+    XCTAssertTrue(TotalPressure.psi(10) > 5)
   }
   
   func test_equality() {
-    XCTAssertEqual(Pressure.psi(14.695948803580999), Pressure.atmosphere(1))
+    XCTAssertEqual(TotalPressure.psi(14.695948803580999), TotalPressure.atmosphere(1))
   }
   
   func test_addition_and_subtraction() {
-    var pressure: Pressure = 20.1
+    var pressure: TotalPressure = 20.1
     XCTAssertEqual(pressure.psi, 20.1)
     pressure += 10
     XCTAssertEqual(pressure.psi, 30.1)
@@ -104,7 +104,7 @@ final class PressureTests: XCTestCase {
   }
   
   func test_multiplication() {
-    var pressure: Pressure = .init(exactly: 10)! * 10
+    var pressure: TotalPressure = .init(exactly: 10)! * 10
     XCTAssertEqual(pressure.psi, 100)
     pressure *= 2
     XCTAssertEqual(pressure.psi, 200)
@@ -115,17 +115,17 @@ final class PressureTests: XCTestCase {
 //  }
   
   func test_PressureUnit_symbol() {
-    XCTAssertEqual(Pressure.Unit.atmosphere.symbol, "atm")
-    XCTAssertEqual(Pressure.Unit.bar.symbol, "bar")
-    XCTAssertEqual(Pressure.Unit.inchesWater.symbol, "inH2O")
-    XCTAssertEqual(Pressure.Unit.millibar.symbol, "mb")
-    XCTAssertEqual(Pressure.Unit.pascals.symbol, "Pa")
-    XCTAssertEqual(Pressure.Unit.psi.symbol, "psi")
-    XCTAssertEqual(Pressure.Unit.torr.symbol, "torr")
+    XCTAssertEqual(PressureUnit.atmosphere.symbol, "atm")
+    XCTAssertEqual(PressureUnit.bar.symbol, "bar")
+    XCTAssertEqual(PressureUnit.inchesWater.symbol, "inH2O")
+    XCTAssertEqual(PressureUnit.millibar.symbol, "mb")
+    XCTAssertEqual(PressureUnit.pascals.symbol, "Pa")
+    XCTAssertEqual(PressureUnit.psi.symbol, "psi")
+    XCTAssertEqual(PressureUnit.torr.symbol, "torr")
   }
   
   func test_PressureUnit_pressureKeyPath() {
-    var pressure = Pressure.atmosphere(10)
+    var pressure = TotalPressure.atmosphere(10)
     XCTAssertEqual(pressure[.atmosphere], 10)
     
     pressure.bar = 10
@@ -153,7 +153,7 @@ final class PressureTests: XCTestCase {
   func test_saturation_pressure_imperial() async throws {
     @Dependency(\.psychrometricClient) var client;
 
-    let tempsAndExpectation: [(DryBulb, Pressure, Double)] = [
+    let tempsAndExpectation: [(DryBulb, TotalPressure, Double)] = [
       (.fahrenheit(-76), .psi(0.000157), 0.00001),
       (.fahrenheit(-30), .psi(0.00344), 0.0003),
       (.fahrenheit(-4), .psi(0.014974), 0.0003),
@@ -169,14 +169,14 @@ final class PressureTests: XCTestCase {
     
     for (temp, expected, tolerance) in tempsAndExpectation {
       let pressure = try await client.saturationPressure(.init(temperature: temp, units: .imperial))
-      XCTApproximatelyEqual(pressure.rawValue.rawValue, expected.rawValue, tolerance: tolerance)
+      XCTApproximatelyEqual(pressure.value, expected.value, tolerance: tolerance)
     }
   }
   
   func test_saturation_pressure_metric() async throws {
     @Dependency(\.psychrometricClient) var client;
 
-    let tempsAndExpectation: [(DryBulb, Pressure, Double)] = [
+    let tempsAndExpectation: [(DryBulb, TotalPressure, Double)] = [
       (.celsius(-60), .pascals(1.08), 0.01),
       (.celsius(-20), .pascals(103.24), 0.024),
       (.celsius(-5), .pascals(401.74), 0.0242),
@@ -189,7 +189,7 @@ final class PressureTests: XCTestCase {
     
     for (temp, expected, tolerance) in tempsAndExpectation {
       let pressure = try await client.saturationPressure(.init(temperature: temp, units: .metric))
-      XCTApproximatelyEqual(pressure.rawValue.rawValue, expected.rawValue, tolerance: tolerance)
+      XCTApproximatelyEqual(pressure.value, expected.value, tolerance: tolerance)
     }
   }
   

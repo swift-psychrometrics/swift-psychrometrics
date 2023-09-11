@@ -245,7 +245,7 @@ public struct PsychrometricClient {
 
     case totalPressure(
       TotalPressure,
-      partialPressure: Pressure,
+      partialPressure: VaporPressure,
       units: PsychrometricUnits? = nil
     )
 
@@ -759,13 +759,13 @@ extension PsychrometricClient.HumidityRatioRequest {
     @Dependency(\.psychrometricClient) var client
     @Dependency(\.psychrometricEnvironment) var environment
 
-    let vaporPressure = try await client.saturationPressure(
+    let saturationPressure = try await client.saturationPressure(
       .init(temperature: dryBulb, units: units)
     )
 
     return .totalPressure(
       totalPressure,
-      partialPressure: vaporPressure.rawValue,
+      partialPressure: .init(.init(saturationPressure.value, units: saturationPressure.units)),
       units: units
     )
   }
@@ -792,7 +792,7 @@ extension PsychrometricClient.HumidityRatioRequest {
 
     return .totalPressure(
       totalPressure,
-      partialPressure: vaporPressure.rawValue,
+      partialPressure: vaporPressure,
       units: units
     )
   }
@@ -831,7 +831,7 @@ extension PsychrometricClient.HumidityRatioRequest {
   ) -> Self {
     .totalPressure(
       totalPressure,
-      partialPressure: vaporPressure.rawValue,
+      partialPressure: vaporPressure,
       units: units
     )
   }
@@ -848,7 +848,7 @@ extension PsychrometricClient.HumidityRatioRequest {
   ) -> Self {
     .totalPressure(
       totalPressure,
-      partialPressure: saturationPressure.rawValue,
+      partialPressure: .init(.init(saturationPressure.value, units: saturationPressure.units)),
       units: units
     )
   }

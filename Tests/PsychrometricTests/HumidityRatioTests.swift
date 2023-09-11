@@ -24,7 +24,7 @@ final class HumidityRatioTests: PsychrometricTestCase {
     
     let humidityRatio = try await client.humidityRatio(.totalPressure(
       .init(altitude: .seaLevel),
-      partialPressure: partialPressure.rawValue
+      partialPressure: partialPressure
     ))
     
     XCTAssertEqual(round(humidityRatio.rawValue * 10000) / 10000, 0.0092)
