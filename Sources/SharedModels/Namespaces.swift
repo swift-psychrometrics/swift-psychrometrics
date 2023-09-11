@@ -6,13 +6,16 @@ import Tagged
 public struct Air {}
 
 /// Represents types that can be used in density calculations / conversions.
-public protocol DensityType { }
+public protocol DensityType {}
 
 /// Namespace for calculations that can work on dry air.
-public struct DryAir: DensityType {}
+public struct DryAir: DensityType, EnthalpyType {}
+
+/// Represents types that can be used in density calculations / conversions.
+public protocol EnthalpyType {}
 
 /// Namespace for calculations that can work on moist air.
-public struct MoistAir: DensityType {}
+public struct MoistAir: DensityType, EnthalpyType {}
 
 /// Namespace for calculations that can work on water.
 public struct Water: DensityType {}

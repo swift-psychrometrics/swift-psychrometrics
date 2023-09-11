@@ -60,7 +60,7 @@ final class EnthalpyTests: PsychrometricTestCase {
   }
   
   func test_magnitude() {
-    XCTAssertEqual(Enthalpy(10, units: .btuPerPound).magnitude, 10.magnitude)
+    XCTAssertEqual(Enthalpy<DryAir>(10, units: .btuPerPound).magnitude, 10.magnitude)
   }
   
   func test_multiplication() {

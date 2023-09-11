@@ -3,7 +3,7 @@ import Tagged
 
 /// A container for holding enthalpy values and their unit of measure.
 ///
-public struct Enthalpy: Equatable, Codable, Sendable {
+public struct Enthalpy<T: EnthalpyType>: Equatable, Codable, Sendable {
 
   /// The enthalpy of the air based on input state.
   public private(set) var rawValue: Double
@@ -22,7 +22,7 @@ public struct Enthalpy: Equatable, Codable, Sendable {
   }
 }
 
-public typealias EnthalpyOf<T> = Tagged<T, Enthalpy>
+public typealias EnthalpyOf<T: EnthalpyType> = Tagged<T, Enthalpy<T>>
 
 public enum EnthalpyUnits: String, UnitOfMeasure, Codable, Sendable {
 
