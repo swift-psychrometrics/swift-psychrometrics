@@ -1,31 +1,30 @@
 import Dependencies
 import PsychrometricClientLive
-import Psychrometrics
 import SharedModels
 import TestSupport
 import XCTest
 
 final class DensityTests: PsychrometricTestCase {
   
-  func testDensityOfWater() async {
+  func testDensityOfWater() async throws {
     @Dependency(\.psychrometricClient) var client;
-    let density = await client.density.water(.fahrenheit(50))
+    let density = try await client.density.water(.fahrenheit(50))
     XCTAssertEqual(
       round(density.rawValue * 100) / 100,
       62.58
     )
   }
   
-  func testDensityOfAir_imperial() async {
+  func testDensityOfAir_imperial() async throws {
     @Dependency(\.psychrometricClient) var client;
-    let density = await client.density.dryAir(
+    let density = try await client.density.dryAir(
       .init(dryBulb: .fahrenheit(60), totalPressure: .psi(14.7))
     )
     XCTAssertEqual(
       round(density.rawValue * 1000) / 1000,
       0.076
     )
-    let density2 = await client.density.dryAir(
+    let density2 = try await client.density.dryAir(
       .init(dryBulb: .fahrenheit(60), altitude: .seaLevel)
     )
     XCTAssertEqual(
@@ -34,9 +33,9 @@ final class DensityTests: PsychrometricTestCase {
     )
   }
   
-  func test_density_of_dryAir_metric() async {
+  func test_density_of_dryAir_metric() async throws {
     @Dependency(\.psychrometricClient) var client;
-    let density = await client.density.dryAir(
+    let density = try await client.density.dryAir(
       .init(dryBulb: .celsius(25), totalPressure: .pascals(101325), units: .metric)
     )
     XCTApproximatelyEqual(density.rawValue, 1.18441, tolerance: 0.003)

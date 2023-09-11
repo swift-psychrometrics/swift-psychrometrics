@@ -1,6 +1,5 @@
 import Dependencies
 import PsychrometricClientLive
-import Psychrometrics
 import SharedModels
 import TestSupport
 import XCTest

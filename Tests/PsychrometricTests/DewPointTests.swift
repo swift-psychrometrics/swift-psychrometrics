@@ -1,5 +1,4 @@
 import Dependencies
-import Psychrometrics
 import SharedModels
 import TestSupport
 import XCTest

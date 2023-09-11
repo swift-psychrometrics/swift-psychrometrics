@@ -1,7 +1,7 @@
 import Dependencies
 import PsychrometricClientLive
-import Psychrometrics
 import TestSupport
+import SharedModels
 import XCTest
 
 final class PsychrometricTests: PsychrometricTestCase {

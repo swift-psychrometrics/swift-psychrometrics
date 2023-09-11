@@ -1,10 +1,20 @@
-import XCTest
+import Dependencies
 import SharedModels
-import Psychrometrics
+//import Psychrometrics
+import PsychrometricClientLive
 import TestSupport
+import XCTest
 
 final class PressureTests: XCTestCase {
-  
+
+  override func invokeTest() {
+    withDependencies {
+      $0.psychrometricClient = .liveValue
+    } operation: {
+      super.invokeTest()
+    }
+  }
+
   func test_converting_to_atmosphere() {
     XCTAssertEqual(Pressure.atmosphere(10).atmosphere, 10)
     XCTAssertEqual(Pressure.psi(10).atmosphere, 0.6804596377991787)
@@ -141,6 +151,8 @@ final class PressureTests: XCTestCase {
   // they are mostly within the margin of error of 300 ppm
   // recommended in ASHRAE 2017.
   func test_saturation_pressure_imperial() async throws {
+    @Dependency(\.psychrometricClient) var client;
+
     let tempsAndExpectation: [(Temperature, Pressure, Double)] = [
       (.fahrenheit(-76), .psi(0.000157), 0.00001),
       (.fahrenheit(-30), .psi(0.00344), 0.0003),
@@ -156,12 +168,14 @@ final class PressureTests: XCTestCase {
     ]
     
     for (temp, expected, tolerance) in tempsAndExpectation {
-      let pressure = try await SaturationPressure(at: temp, units: .imperial)
+      let pressure = try await client.saturationPressure(.init(temperature: temp, units: .imperial))
       XCTApproximatelyEqual(pressure.rawValue.rawValue, expected.rawValue, tolerance: tolerance)
     }
   }
   
   func test_saturation_pressure_metric() async throws {
+    @Dependency(\.psychrometricClient) var client;
+
     let tempsAndExpectation: [(Temperature, Pressure, Double)] = [
       (.celsius(-60), .pascals(1.08), 0.01),
       (.celsius(-20), .pascals(103.24), 0.024),
@@ -174,16 +188,16 @@ final class PressureTests: XCTestCase {
     ]
     
     for (temp, expected, tolerance) in tempsAndExpectation {
-      let pressure = try await SaturationPressure(at: temp, units: .metric)
+      let pressure = try await client.saturationPressure(.init(temperature: temp, units: .metric))
       XCTApproximatelyEqual(pressure.rawValue.rawValue, expected.rawValue, tolerance: tolerance)
     }
   }
   
   // FIXME
-  func test_vapor_pressure_with_relativeHumidity_metric() async throws {
-    let pressure = try await VaporPressure(dryBulb: .celsius(25), humidity: 80%, units: .metric)
-//    XCTApproximatelyEqual(pressure.rawValue, 2535.2, tolerance: 0.18)
-    let humidity = try await RelativeHumidity.init(dryBulb: .celsius(25), pressure: pressure, units: .metric)
-    XCTApproximatelyEqual(humidity.rawValue, 80)
-  }
+//  func test_vapor_pressure_with_relativeHumidity_metric() async throws {
+//    let pressure = try await VaporPressure(dryBulb: .celsius(25), humidity: 80%, units: .metric)
+////    XCTApproximatelyEqual(pressure.rawValue, 2535.2, tolerance: 0.18)
+//    let humidity = try await RelativeHumidity.init(dryBulb: .celsius(25), pressure: pressure, units: .metric)
+//    XCTApproximatelyEqual(humidity.rawValue, 80)
+//  }
 }

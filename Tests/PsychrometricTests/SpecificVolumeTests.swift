@@ -1,6 +1,5 @@
 import Dependencies
 import PsychrometricClientLive
-import Psychrometrics
 import SharedModels
 import TestSupport
 import XCTest
@@ -51,15 +50,15 @@ final class SpecificVolumeTests: PsychrometricTestCase {
     XCTAssertEqual(metric, .cubicMeterPerKilogram)
   }
   
-  func test_dry_air_imperial() async {
+  func test_dry_air_imperial() async throws {
     @Dependency(\.psychrometricClient) var client;
-    let volume = await client.specificVolume.dryAir(.dryBulb(77, totalPressure: 14.696))
+    let volume = try await client.specificVolume.dryAir(.dryBulb(77, totalPressure: 14.696))
     XCTApproximatelyEqual(volume, 13.5251, tolerance: 0.0047)
   }
   
-  func test_dry_air_metric() async {
+  func test_dry_air_metric() async throws {
     @Dependency(\.psychrometricClient) var client;
-    let volume = await client.specificVolume.dryAir(.dryBulb(
+    let volume = try await client.specificVolume.dryAir(.dryBulb(
       .celsius(24),
       totalPressure: .pascals(101325),
       units: .metric
