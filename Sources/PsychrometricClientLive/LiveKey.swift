@@ -5,7 +5,7 @@ import Foundation
 import SharedModels
 
 extension PsychrometricClient: DependencyKey {
-  
+
   public static func live(environment: PsychrometricEnvironment) -> PsychrometricClient {
     PsychrometricClient.init(
       degreeOfSaturation: { try await $0.degreeOfSaturation(environment: environment) },
@@ -36,9 +36,9 @@ extension PsychrometricClient: DependencyKey {
       wetBulb: { try await $0.wetBulb(environment: environment) }
     )
   }
-  
+
   public static var liveValue: PsychrometricClient {
-    @Dependency(\.psychrometricEnvironment) var environment;
+    @Dependency(\.psychrometricEnvironment) var environment
     return .live(environment: environment)
   }
 }

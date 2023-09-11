@@ -107,7 +107,7 @@ extension Pressure {
 }
 
 extension Tagged where RawValue == Pressure {
-  
+
   /// Create a new ``Tagged`` with the given atmosphere value.
   ///
   /// - Parameters:
@@ -115,7 +115,7 @@ extension Tagged where RawValue == Pressure {
   public static func atmosphere(_ value: Double) -> Self {
     .init(.atmosphere(value))
   }
-  
+
   /// Create a new ``Tagged`` with the given value.
   ///
   /// - Parameters:
@@ -123,7 +123,7 @@ extension Tagged where RawValue == Pressure {
   public static func bar(_ value: Double) -> Self {
     .init(.bar(value))
   }
-  
+
   /// Create a new ``Tagged`` with the given value.
   ///
   /// - Parameters:
@@ -131,7 +131,7 @@ extension Tagged where RawValue == Pressure {
   public static func inchesWater(_ value: Double) -> Self {
     .init(.inchesWater(value))
   }
-  
+
   /// Create a new ``Tagged`` with the given value.
   ///
   /// - Parameters:
@@ -139,7 +139,7 @@ extension Tagged where RawValue == Pressure {
   public static func millibar(_ value: Double) -> Self {
     .init(.millibar(value))
   }
-  
+
   /// Create a new ``Tagged`` with the given value.
   ///
   /// - Parameters:
@@ -147,7 +147,7 @@ extension Tagged where RawValue == Pressure {
   public static func pascals(_ value: Double) -> Self {
     .init(.pascals(value))
   }
-  
+
   /// Create a new ``Tagged`` with the given value.
   ///
   /// - Parameters:
@@ -155,7 +155,7 @@ extension Tagged where RawValue == Pressure {
   public static func psi(_ value: Double) -> Self {
     .init(.psi(value))
   }
-  
+
   /// Create a new ``Tagged`` with the given value.
   ///
   /// - Parameters:

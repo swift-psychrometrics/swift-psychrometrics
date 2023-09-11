@@ -101,7 +101,7 @@ where
 /// Represents a type that is both a ``NumericType`` and ``RawInitializable``.
 public protocol RawNumericType: NumericType, RawInitializable {}
 
-extension Tagged: NumericType where RawValue: NumericType { }
+extension Tagged: NumericType where RawValue: NumericType {}
 //extension Tagged where RawValue: RawNumericType, RawValue: RawRepresentable, RawValue.FloatLiteralType == Double {
 //  public var double: Double { self.rawValue.rawValue }
 //}

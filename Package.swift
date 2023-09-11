@@ -6,7 +6,7 @@ var package = Package(
   name: "swift-psychrometrics",
   platforms: [
     .macOS(.v12),
-      .iOS(.v15)
+    .iOS(.v15),
   ],
   products: [
     .library(name: "SharedModels", targets: ["SharedModels"]),
@@ -39,7 +39,7 @@ var package = Package(
         "SharedModels",
         "TestSupport",
         .product(name: "Dependencies", package: "swift-dependencies"),
-        .product(name: "Tagged", package: "swift-tagged")
+        .product(name: "Tagged", package: "swift-tagged"),
       ]
     ),
     .target(
@@ -69,7 +69,7 @@ var package = Package(
         "PsychrometricClientLive",
         "TestSupport",
         .product(name: "Dependencies", package: "swift-dependencies"),
-        .product(name: "Tagged", package: "swift-tagged")
+        .product(name: "Tagged", package: "swift-tagged"),
       ]
     ),
     .target(

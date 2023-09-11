@@ -5,7 +5,7 @@ import SharedModels
 
 // MARK: - Degree Of Saturation
 extension PsychrometricClient.DegreeOfSaturationRequest {
-  
+
   func degreeOfSaturation(
     environment: PsychrometricEnvironment
   ) async throws -> DegreeOfSaturation {
@@ -20,39 +20,39 @@ extension PsychrometricClient.DegreeOfSaturationRequest {
       totalPressure: totalPressure,
       units: units
     ).humidityRatio(environment: environment)
-    
+
     return .init(
       humidityRatio.value / saturatedHumidityRatio.value
     )
-    
+
   }
 }
 
 // MARK: - Density
 extension PsychrometricClient.DensityClient.DryAirRequest {
-  
+
   fileprivate struct Constants {
     let universalGasConstant: Double
     let units: PsychrometricUnits
-    
+
     init(units: PsychrometricUnits) {
       self.units = units
       self.universalGasConstant = PsychrometricEnvironment.universalGasConstant(for: units)
     }
-    
+
     func run(dryBulb: Temperature, pressure: Pressure) async -> Double {
       let T = units.isImperial ? dryBulb.rankine : dryBulb.kelvin
       let pressure = units.isImperial ? pressure.psi : pressure.pascals
-      
+
       guard units.isImperial else {
         return pressure / universalGasConstant / T
       }
-      
+
       /// Convert pressure in pounds per square inch to pounds per cubic foot.
       return (pressure * 144) / universalGasConstant / T
     }
   }
-  
+
   func density(environment: PsychrometricEnvironment) async -> DensityOf<DryAir> {
     let units = self.units ?? environment.units
     let density = await Constants(units: units).run(
@@ -64,7 +64,7 @@ extension PsychrometricClient.DensityClient.DryAirRequest {
 }
 
 extension PsychrometricClient.DensityClient.MoistAirRequest {
-  
+
   func density(
     environment: PsychrometricEnvironment
   ) async throws -> DensityOf<MoistAir> {
@@ -73,11 +73,11 @@ extension PsychrometricClient.DensityClient.MoistAirRequest {
         summary: "Humidity ratio should be greater than 0"
       )
     }
-    
+
     let units = self.units ?? environment.units
     let density = (1 + self.humidityRatio.rawValue) / self.specificVolume.rawValue
     return .init(density, units: .defaultFor(units: units))
-    
+
   }
 }
 
@@ -85,22 +85,22 @@ func waterDensity(
   _ temperature: Temperature,
   environment: PsychrometricEnvironment
 ) async -> DensityOf<Water> {
-  
+
   let value =
-  62.56
-  + 3.413
-  * (pow(10, -4) * temperature.fahrenheit)
-  - 6.255
-  * pow((pow(10, -5) * temperature.fahrenheit), 2)
-  
+    62.56
+    + 3.413
+    * (pow(10, -4) * temperature.fahrenheit)
+    - 6.255
+    * pow((pow(10, -5) * temperature.fahrenheit), 2)
+
   return .init(value, units: .poundsPerCubicFoot)
 }
 
 // MARK: - Dew Point
 extension PsychrometricClient.DewPointRequest {
-  
+
   fileprivate struct ConstantsAboveFreezing {
-    
+
     let c1: Double
     let c2: Double
     let c3: Double
@@ -108,7 +108,7 @@ extension PsychrometricClient.DewPointRequest {
     let c5: Double
     let c6 = 0.1984
     let units: PsychrometricUnits
-    
+
     init(units: PsychrometricUnits) {
       self.units = units
       self.c1 = units.isImperial ? 100.45 : 6.54
@@ -117,46 +117,47 @@ extension PsychrometricClient.DewPointRequest {
       self.c4 = units.isImperial ? 0.17074 : 0.09486
       self.c5 = units.isImperial ? 1.2063 : 0.4569
     }
-    
+
     func run(vaporPressure: VaporPressure) -> Double {
       let P = units.isImperial ? vaporPressure.psi : vaporPressure.pascals / 1000
       let logNatural = log(P)
       return c1
-      + c2 * logNatural
-      + c3 * pow(logNatural, 2)
-      + c4 * pow(logNatural, 3)
-      + c5 * pow(P, 0.1984)
+        + c2 * logNatural
+        + c3 * pow(logNatural, 2)
+        + c4 * pow(logNatural, 3)
+        + c5 * pow(P, 0.1984)
     }
   }
-  
+
   fileprivate struct ConstantsBelowFreezing {
     let c1: Double
     let c2: Double
     let c3: Double
     let units: PsychrometricUnits
-    
+
     init(units: PsychrometricUnits) {
       self.units = units
       self.c1 = units.isImperial ? 90.12 : 6.09
       self.c2 = units.isImperial ? 26.142 : 12.608
       self.c3 = units.isImperial ? 0.8927 : 0.4959
     }
-    
+
     func run(vaporPressure: VaporPressure) -> Double {
       let P = units.isImperial ? vaporPressure.psi : vaporPressure.pascals / 1000
       let logNatural = log(P)
       return c1
-      + c2 * logNatural
-      + c3 * pow(logNatural, 2)
+        + c2 * logNatural
+        + c3 * pow(logNatural, 2)
     }
   }
-  
+
   func dewPoint(environment: PsychrometricEnvironment) async -> DewPoint {
     let units = self.units ?? environment.units
     let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
-    let value = temperature.rawValue <= triplePoint
-    ? ConstantsBelowFreezing(units: units).run(vaporPressure: vaporPressure)
-    : ConstantsAboveFreezing(units: units).run(vaporPressure: vaporPressure)
+    let value =
+      temperature.rawValue <= triplePoint
+      ? ConstantsBelowFreezing(units: units).run(vaporPressure: vaporPressure)
+      : ConstantsAboveFreezing(units: units).run(vaporPressure: vaporPressure)
     return .init(.init(value, units: .defaultFor(units: units)))
   }
 }
@@ -169,10 +170,11 @@ extension PsychrometricClient.EnthalpyClient.DryAirRequest {
     let units = self.units ?? environment.units
     let specificHeat = units.isImperial ? 0.24 : 1006
     let temperature = units.isImperial ? temperature.fahrenheit : temperature.celsius
-    return .init(.init(
-      specificHeat * temperature,
-      units: .defaultFor(units: units)
-    ))
+    return .init(
+      .init(
+        specificHeat * temperature,
+        units: .defaultFor(units: units)
+      ))
   }
 }
 
@@ -182,30 +184,30 @@ extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
     let c2: Double
     let c3: Double
     let units: PsychrometricUnits
-    
+
     init(units: PsychrometricUnits) {
       self.units = units
       self.c1 = units.isImperial ? 0.24 : 1.006
       self.c2 = units.isImperial ? 1061 : 2501
       self.c3 = units.isImperial ? 0.444 : 1.86
     }
-    
+
     func run(dryBulb: Temperature, ratio: HumidityRatio) async -> Double {
       let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let value = c1 * T + ratio.rawValue * (c2 + c3 * T)
       return units.isImperial ? value : value * 1000
     }
-    
+
     func dryBulb(enthalpy: EnthalpyOf<MoistAir>, ratio: HumidityRatio) async -> Temperature {
       let intermediateValue =
-      units.isImperial
-      ? enthalpy.rawValue.rawValue - c2 * ratio.rawValue
-      : enthalpy.rawValue.rawValue / 1000 - c2 * ratio.rawValue
+        units.isImperial
+        ? enthalpy.rawValue.rawValue - c2 * ratio.rawValue
+        : enthalpy.rawValue.rawValue / 1000 - c2 * ratio.rawValue
       let value = intermediateValue / (c1 + c3 * ratio.rawValue)
       return units.isImperial ? .fahrenheit(value) : .celsius(value)
     }
   }
-  
+
   func enthalpy(environment: PsychrometricEnvironment) async -> EnthalpyOf<MoistAir> {
     let units = self.units ?? environment.units
     let value = await Constants(units: units).run(
@@ -213,13 +215,13 @@ extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
       ratio: humidityRatio
     )
     return .init(.init(value, units: .defaultFor(units: units)))
-   
+
   }
 }
 
 // MARK: - Grains of Moisture
 extension PsychrometricClient.GrainsOfMoistureRequest {
-  
+
   private func saturationHumidity(
     saturationPressure: SaturationPressure,
     totalPressure: Pressure
@@ -228,7 +230,7 @@ extension PsychrometricClient.GrainsOfMoistureRequest {
       * saturationPressure.psi
       / (totalPressure.psi - saturationPressure.psi)
   }
-  
+
   func grainsOfMoisture(environment: PsychrometricEnvironment) async throws -> GrainsOfMoisture {
     let saturationPressure = try await PsychrometricClient.SaturationPressureRequest(
       temperature: temperature.rawValue,
@@ -240,40 +242,40 @@ extension PsychrometricClient.GrainsOfMoistureRequest {
     )
     return .init(saturationHumidity * humidity.fraction)
   }
-  
+
 }
 
 // MARK: - Humidity Ratio
 extension PsychrometricClient.HumidityRatioRequest {
-  
+
   private var moleWeightRatio: Double {
     HumidityRatio.moleWeightRatio
   }
-  
+
   private struct EnthalpyConstants {
     let c1: Double
     let c2: Double
     let c3: Double
     let units: PsychrometricUnits
-    
+
     init(units: PsychrometricUnits) {
       self.units = units
       self.c1 = units.isImperial ? 0.24 : 1.006
       self.c2 = units.isImperial ? 1061 : 2501
       self.c3 = units.isImperial ? 0.444 : 1.86
     }
-    
+
     func run(enthalpy: EnthalpyOf<MoistAir>, dryBulb: Temperature) async -> Double {
       let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let intermediateValue =
-      units.isImperial
-      ? enthalpy.rawValue.rawValue - c1 * T
-      : enthalpy.rawValue.rawValue / 1000 - c1 * T
-      
+        units.isImperial
+        ? enthalpy.rawValue.rawValue - c1 * T
+        : enthalpy.rawValue.rawValue / 1000 - c1 * T
+
       return intermediateValue / (c2 + c3 * T)
     }
   }
-  
+
   private struct ConstantsAboveFreezing {
 
     let c1: Double
@@ -332,11 +334,11 @@ extension PsychrometricClient.HumidityRatioRequest {
         / (c1 + c4 * dryBulb - c5 * wetBulb)
     }
   }
-  
+
   func humidityRatio(environment: PsychrometricEnvironment) async throws -> HumidityRatio {
-    
+
     switch self {
-      
+
     case let .enthalpy(enthalpy, dryBulb: dryBulb, units: units):
       let units = units ?? environment.units
       let value = await EnthalpyConstants(units: units).run(
@@ -344,17 +346,17 @@ extension PsychrometricClient.HumidityRatioRequest {
         dryBulb: dryBulb.rawValue
       )
       return .init(.init(value))
-      
+
     case let .totalPressure(totalPressure, partialPressure: partialPressure, units: units):
       let units = units ?? environment.units
       let partialPressure = units.isImperial ? partialPressure.psi : partialPressure.pascals
       let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
-     
-      return .init(.init(
-        moleWeightRatio * partialPressure /
-        (totalPressure - partialPressure)
-      ))
-      
+
+      return .init(
+        .init(
+          moleWeightRatio * partialPressure / (totalPressure - partialPressure)
+        ))
+
     case let .specificHumidity(specificHumidity):
       guard specificHumidity.rawValue > 0.0 else {
         throw ValidationError(
@@ -368,43 +370,47 @@ extension PsychrometricClient.HumidityRatioRequest {
           summary: "Specific humidity should be less than 1.0"
         )
       }
-      return .init(.init(
-        specificHumidity.rawValue /
-        (1 - specificHumidity.rawValue)
-      ))
-      
+      return .init(
+        .init(
+          specificHumidity.rawValue / (1 - specificHumidity.rawValue)
+        ))
+
     case let .waterMass(waterMass, dryAirMass: dryAirMass):
-      return .init(.init(
-        moleWeightRatio * (waterMass / dryAirMass)
-      ))
-      
-    case let .wetBulb(wetBulb, dryBulb: dryBulb, saturatedHumidityRatio: saturatedHumidityRatio, units: units):
+      return .init(
+        .init(
+          moleWeightRatio * (waterMass / dryAirMass)
+        ))
+
+    case let .wetBulb(
+      wetBulb, dryBulb: dryBulb, saturatedHumidityRatio: saturatedHumidityRatio, units: units):
       guard dryBulb.rawValue > wetBulb.rawValue else {
         throw ValidationError(
           label: "Humidity Ratio",
           summary: "Wet bulb temperature should be less than dry bulb temperature."
         )
       }
-      
+
       let units = units ?? environment.units
-      
+
       let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
       guard wetBulb.rawValue > triplePoint else {
-        return .init(.init(
-          ConstantsAboveFreezing(units: units).run(
+        return .init(
+          .init(
+            ConstantsAboveFreezing(units: units).run(
+              dryBulb: dryBulb.rawValue,
+              wetBulb: wetBulb,
+              saturatedHumidityRatio: saturatedHumidityRatio
+            )
+          ))
+      }
+      return .init(
+        .init(
+          ConstantsBelowFreezing(units: units).run(
             dryBulb: dryBulb.rawValue,
             wetBulb: wetBulb,
             saturatedHumidityRatio: saturatedHumidityRatio
           )
         ))
-      }
-      return .init(.init(
-        ConstantsBelowFreezing(units: units).run(
-          dryBulb: dryBulb.rawValue,
-          wetBulb: wetBulb,
-          saturatedHumidityRatio: saturatedHumidityRatio
-        )
-      ))
     }
   }
 }
@@ -483,9 +489,9 @@ extension PsychrometricClient.PsychrometricPropertiesRequest {
 
 // MARK: - Relative Humidity
 extension PsychrometricClient.RelativeHumidityRequest {
-  
+
   func relativeHumdity(environment: PsychrometricEnvironment) async throws -> RelativeHumidity {
-    
+
     switch self {
     case let .dewPoint(dewPoint, dryBulb: dryBulb):
       let humidity =
@@ -493,7 +499,7 @@ extension PsychrometricClient.RelativeHumidityRequest {
         * (exp((17.625 * dewPoint.celsius) / (243.04 + dewPoint.celsius))
           / exp((17.625 * dryBulb.celsius) / (243.04 + dryBulb.celsius)))
       return .init(.init(humidity))
-      
+
     case let .vaporPressure(vaporPressure, dryBulb: dryBulb, units: units):
       guard vaporPressure > 0 else {
         throw ValidationError(
@@ -501,7 +507,7 @@ extension PsychrometricClient.RelativeHumidityRequest {
           summary: "Vapor pressure should be greater than 0."
         )
       }
-      
+
       let units = units ?? environment.units
       let saturationPressure = try await PsychrometricClient.SaturationPressureRequest(
         temperature: dryBulb.rawValue,
@@ -518,7 +524,7 @@ extension PsychrometricClient.RelativeHumidityRequest {
 
 // MARK: - Saturation Pressure
 extension PsychrometricClient.SaturationPressureRequest {
- 
+
   private struct ConstantsBelowFreezing {
     let c1: Double
     let c2: Double
@@ -594,14 +600,14 @@ extension PsychrometricClient.SaturationPressureRequest {
         + c6 * log(T)
     }
   }
-  
+
   func saturationPressure(
     environment: PsychrometricEnvironment
   ) async throws -> SaturationPressure {
     let units = self.units ?? environment.units
     let bounds = PsychrometricEnvironment.pressureBounds(for: units)
     let triplePoint = PsychrometricEnvironment.triplePointOfWater(for: units)
-    
+
     guard temperature >= bounds.low && temperature <= bounds.high
     else {
       throw ValidationError(
@@ -609,21 +615,23 @@ extension PsychrometricClient.SaturationPressureRequest {
         summary: "Temperature should be between \(bounds.low)-\(bounds.high)"
       )
     }
-    
-    let exponent = await temperature <= triplePoint
+
+    let exponent =
+      await temperature <= triplePoint
       ? ConstantsBelowFreezing(units: units).exponent(dryBulb: temperature)
       : ConstantsAboveFreezing(units: units).exponent(dryBulb: temperature)
-    
-    return .init(.init(
-      exp(exponent),
-      units: .defaultFor(units: units)
-    ))
+
+    return .init(
+      .init(
+        exp(exponent),
+        units: .defaultFor(units: units)
+      ))
   }
 }
 
 // MARK: - Specific Heat
 extension Temperature {
-  
+
   func waterSpecificHeat() async -> SpecificHeat {
     let specificHeat =
       1.012481 - 3.079704 * pow(10, -4) * fahrenheit
@@ -636,16 +644,16 @@ extension Temperature {
 
 // MARK: - Specific Humidity
 extension PsychrometricClient.SpecificHumidityRequest {
-  
+
   func specificHumidity(environment: PsychrometricEnvironment) async -> SpecificHumidity {
-    
+
     switch self {
     case let .humidityRatio(humidityRatio, units: units):
       return .init(
         humidityRatio.rawValue / (1 + humidityRatio.rawValue),
         units: .defaultFor(units: units ?? environment.units)
       )
-      
+
     case let .waterMass(waterMass, dryAirMass: dryAirmass, units: units):
       return .init(
         waterMass / (waterMass + dryAirmass),
@@ -675,7 +683,7 @@ extension PsychrometricClient.SpecificVolumeClient.DryAirRequest {
       return universalGasConstant * T / (144 * P)
     }
   }
-  
+
   func specificVolume(environment: PsychrometricEnvironment) async -> SpecificVolumeOf<DryAir> {
     let units = units ?? environment.units
     let value = await Constants(units: units).run(
@@ -714,7 +722,7 @@ extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
       return units.isImperial ? .rankine(value) : .kelvin(value)
     }
   }
-  
+
   func specificVolume(environment: PsychrometricEnvironment) async -> SpecificVolumeOf<MoistAir> {
     let units = units ?? environment.units
     let value = await Constants(units: units).run(
@@ -728,9 +736,9 @@ extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
 
 // MARK: - Vapor Pressure
 extension PsychrometricClient.VaporPressureRequest {
-  
+
   func vaporPressure(environment: PsychrometricEnvironment) async throws -> VaporPressure {
-    
+
     switch self {
     case let .humidityRatio(humidityRatio, totalPressure: totalPressure, units: units):
       guard humidityRatio > 0 else {
@@ -739,14 +747,14 @@ extension PsychrometricClient.VaporPressureRequest {
           summary: "Humidity ratio should be greater than 0."
         )
       }
-      
+
       let units = units ?? environment.units
       let totalPressure = units.isImperial ? totalPressure.psi : totalPressure.pascals
       let value =
         totalPressure * humidityRatio.rawValue
         / (HumidityRatio.moleWeightRatio + humidityRatio.rawValue)
       return .init(.init(value, units: .defaultFor(units: units)))
-      
+
     case let .relativeHumidity(relativeHumidity, dryBulb: dryBulb, units: units):
       let units = units ?? environment.units
       let saturationPressure = try await PsychrometricClient.SaturationPressureRequest(
@@ -755,13 +763,13 @@ extension PsychrometricClient.VaporPressureRequest {
       ).saturationPressure(environment: environment)
       let value = saturationPressure.rawValue.rawValue * relativeHumidity.fraction
       return .init(.init(value, units: .defaultFor(units: units)))
-      
+
     }
   }
 }
 
 extension PsychrometricClient.WetBulbRequest {
-  
+
   func wetBulb(environment: PsychrometricEnvironment) async throws -> WetBulb {
     guard humidityRatio > 0 else {
       throw ValidationError(
@@ -769,16 +777,16 @@ extension PsychrometricClient.WetBulbRequest {
         summary: "Humidity ratio should be greater than 0."
       )
     }
-    
+
     let units = units ?? environment.units
-    
+
     let dewPoint = try await PsychrometricClient.DewPointRequest.dryBulb(
       dryBulb,
       humidityRatio: humidityRatio,
       totalPressure: totalPressure,
       units: units
     ).dewPoint(environment: environment)
-    
+
     let temperatureUnits = units.isImperial ? Temperature.Units.fahrenheit : .celsius
 
     // Initial guesses
@@ -817,4 +825,4 @@ extension PsychrometricClient.WetBulbRequest {
   }
 }
 
-struct MaxIterationError: Error { }
+struct MaxIterationError: Error {}
