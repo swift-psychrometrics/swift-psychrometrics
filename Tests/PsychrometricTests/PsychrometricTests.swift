@@ -31,6 +31,8 @@ final class PsychrometricTests: PsychrometricTestCase {
       units: .metric
     ))
 
+    print(psychrometrics)
+
     XCTApproximatelyEqual(psychrometrics.humidityRatio.rawValue, 0.0065, tolerance: 0.001)
 //    XCTApproximatelyEqual(psychrometrics.dewPoint, 7.49, tolerance: 2.84) // Fix
     XCTApproximatelyEqual(psychrometrics.relativeHumidity, 14, tolerance: 2.3)

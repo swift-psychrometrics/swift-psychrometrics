@@ -6,6 +6,11 @@ import SharedModels
 
 extension PsychrometricClient: DependencyKey {
 
+  /// Generate a live ``PsychrometricClient`` instance with the given environment.
+  ///
+  /// - Parameters:
+  ///   - environment: The psychrometric environment used for the live client.
+  ///
   public static func live(environment: PsychrometricEnvironment) -> PsychrometricClient {
     PsychrometricClient.init(
       degreeOfSaturation: { try await $0.degreeOfSaturation(environment: environment) },

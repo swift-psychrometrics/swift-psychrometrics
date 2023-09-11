@@ -1,7 +1,7 @@
-import Dependencies
+@_exported import Dependencies
 import Foundation
-import PsychrometricEnvironment
-import SharedModels
+@_exported import PsychrometricEnvironment
+@_exported import SharedModels
 
 /// Performs calculations for different psychrometric properties.
 public struct PsychrometricClient {
