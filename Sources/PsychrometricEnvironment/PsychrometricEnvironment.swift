@@ -14,7 +14,7 @@ public struct PsychrometricEnvironment {
   public var minimumHumidityRatio: Double = 1e-7
 
   /// Temperature tolerance for iterative temperature calculations.
-  public var temperatureTolerance: Temperature = .celsius(0.001)
+  public var temperatureTolerance: DryBulb = .celsius(0.001)
 
   /// The unit of measure.
   public var units: PsychrometricUnits = .imperial
@@ -22,7 +22,7 @@ public struct PsychrometricEnvironment {
   public init(
     maximumIterationCount: Int = 100,
     minimumHumidityRatio: Double = 1e-7,
-    temperatureTolerance: Temperature = .celsius(0.001),
+    temperatureTolerance: DryBulb = .celsius(0.001),
     units: PsychrometricUnits = .imperial
   ) {
     self.maximumIterationCount = maximumIterationCount
@@ -35,7 +35,7 @@ public struct PsychrometricEnvironment {
   ///
   /// - Parameters:
   ///   - units: The units to return the freezing point of water for.
-  public static func freezingPointOfWater(for units: PsychrometricUnits) -> Temperature {
+  public static func freezingPointOfWater(for units: PsychrometricUnits) -> DryBulb {
     switch units {
     case .metric:
       return .celsius(0)
@@ -48,7 +48,7 @@ public struct PsychrometricEnvironment {
   ///
   /// - Parameters:
   ///   - units: The units to return the triple point of water for.
-  public static func triplePointOfWater(for units: PsychrometricUnits) -> Temperature {
+  public static func triplePointOfWater(for units: PsychrometricUnits) -> DryBulb {
     switch units {
     case .metric:
       return .celsius(0.01)
@@ -62,7 +62,7 @@ public struct PsychrometricEnvironment {
   /// - Parameters:
   ///   - units: The units to return the bounds for.
   public static func pressureBounds(for units: PsychrometricUnits) -> (
-    low: Temperature, high: Temperature
+    low: DryBulb, high: DryBulb
   ) {
     switch units {
     case .metric:

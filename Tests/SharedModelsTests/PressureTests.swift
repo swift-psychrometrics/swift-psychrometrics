@@ -153,7 +153,7 @@ final class PressureTests: XCTestCase {
   func test_saturation_pressure_imperial() async throws {
     @Dependency(\.psychrometricClient) var client;
 
-    let tempsAndExpectation: [(Temperature, Pressure, Double)] = [
+    let tempsAndExpectation: [(DryBulb, Pressure, Double)] = [
       (.fahrenheit(-76), .psi(0.000157), 0.00001),
       (.fahrenheit(-30), .psi(0.00344), 0.0003),
       (.fahrenheit(-4), .psi(0.014974), 0.0003),
@@ -176,7 +176,7 @@ final class PressureTests: XCTestCase {
   func test_saturation_pressure_metric() async throws {
     @Dependency(\.psychrometricClient) var client;
 
-    let tempsAndExpectation: [(Temperature, Pressure, Double)] = [
+    let tempsAndExpectation: [(DryBulb, Pressure, Double)] = [
       (.celsius(-60), .pascals(1.08), 0.01),
       (.celsius(-20), .pascals(103.24), 0.024),
       (.celsius(-5), .pascals(401.74), 0.0242),

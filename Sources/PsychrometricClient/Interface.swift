@@ -120,12 +120,12 @@ public struct PsychrometricClient {
     public var moistAir: @Sendable (MoistAirRequest) async throws -> DensityOf<MoistAir>
 
     /// Calculate the density of water for the given temperature.
-    public var water: @Sendable (Temperature) async throws -> DensityOf<Water>
+    public var water: @Sendable (DryBulb) async throws -> DensityOf<Water>
 
     public init(
       dryAir: @escaping @Sendable (DryAirRequest) async throws -> DensityOf<DryAir>,
       moistAir: @escaping @Sendable (MoistAirRequest) async throws -> DensityOf<MoistAir>,
-      water: @escaping @Sendable (Temperature) async throws -> DensityOf<Water>
+      water: @escaping @Sendable (DryBulb) async throws -> DensityOf<Water>
     ) {
       self.dryAir = dryAir
       self.moistAir = moistAir
@@ -288,11 +288,11 @@ public struct PsychrometricClient {
   }
 
   public struct SaturationPressureRequest: Equatable, Sendable {
-    public let temperature: Temperature
+    public let temperature: DryBulb
     public let units: PsychrometricUnits?
 
     public init(
-      temperature: Temperature,
+      temperature: DryBulb,
       units: PsychrometricUnits? = nil
     ) {
       self.temperature = temperature
@@ -301,10 +301,10 @@ public struct PsychrometricClient {
   }
 
   public struct SpecificHeatClient {
-    public var water: @Sendable (Temperature) async throws -> SpecificHeat
+    public var water: @Sendable (DryBulb) async throws -> SpecificHeat
 
     public init(
-      water: @escaping @Sendable (Temperature) async throws -> SpecificHeat
+      water: @escaping @Sendable (DryBulb) async throws -> SpecificHeat
     ) {
       self.water = water
     }
@@ -567,7 +567,7 @@ extension PsychrometricClient.DewPointRequest {
   ) async throws -> Self {
     @Dependency(\.psychrometricClient) var client
 
-    guard dryBulb.rawValue > wetBulb.rawValue else {
+    guard dryBulb.value > wetBulb.value else {
       throw ValidationError(
         summary: "Wet bulb temperature should be less than dry bulb temperature."
       )
@@ -716,7 +716,7 @@ extension PsychrometricClient.HumidityRatioRequest {
     @Dependency(\.psychrometricClient) var client
 
     let saturationPressure = try await client.saturationPressure(
-      .init(temperature: dewPoint.rawValue, units: units)
+      .init(temperature: .init(.init(dewPoint.value, units: dewPoint.units)), units: units)
     )
 
     return .totalPressure(
@@ -760,7 +760,7 @@ extension PsychrometricClient.HumidityRatioRequest {
     @Dependency(\.psychrometricEnvironment) var environment
 
     let vaporPressure = try await client.saturationPressure(
-      .init(temperature: dryBulb.rawValue, units: units)
+      .init(temperature: dryBulb, units: units)
     )
 
     return .totalPressure(
@@ -859,7 +859,7 @@ extension PsychrometricClient.HumidityRatioRequest {
     totalPressure: TotalPressure,
     units: PsychrometricUnits? = nil
   ) async throws -> Self {
-    guard dryBulb.rawValue > wetBulb.rawValue else {
+    guard dryBulb.value > wetBulb.value else {
       throw ValidationError(
         label: "Humidity Ratio",
         summary: "Wet bulb temperature should be less than dry bulb temperature."
@@ -869,7 +869,11 @@ extension PsychrometricClient.HumidityRatioRequest {
     @Dependency(\.psychrometricClient) var client
 
     let saturatedHumidityRatio = try await client.humidityRatio(
-      .dryBulb(.init(wetBulb.rawValue), totalPressure: totalPressure, units: units)
+      .dryBulb(
+        .init(.init(wetBulb.value, units: wetBulb.units)),
+        totalPressure: totalPressure,
+        units: units
+      )
     )
 
     return .wetBulb(
