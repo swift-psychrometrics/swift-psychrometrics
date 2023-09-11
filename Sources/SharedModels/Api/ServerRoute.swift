@@ -345,12 +345,12 @@ public enum ServerRoute: Codable, Equatable, Sendable {
               }
 
               public struct Enthalpy: Codable, Equatable, Sendable {
-                public var enthalpy: MoistAirEnthalpy
+                public var enthalpy: EnthalpyOf<MoistAir>
                 public var dryBulb: DryBulb
 
                 public init(
                   dryBulb: DryBulb,
-                  enthalpy: MoistAirEnthalpy
+                  enthalpy: EnthalpyOf<MoistAir>
                 ) {
                   self.enthalpy = enthalpy
                   self.dryBulb = dryBulb

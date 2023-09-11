@@ -42,6 +42,7 @@ public struct PsychrometricClient {
   /// Perform vapor pressure calculations / conversions.
   public var vaporPressure: @Sendable (VaporPressureRequest) async throws -> VaporPressure
   
+  /// Perform wet-bulb calculations / conversions.
   public var wetBulb: @Sendable (WetBulbRequest) async throws -> WetBulb
 
   public init(

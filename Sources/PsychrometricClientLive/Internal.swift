@@ -196,7 +196,7 @@ extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
       return units.isImperial ? value : value * 1000
     }
     
-    func dryBulb(enthalpy: MoistAirEnthalpy, ratio: HumidityRatio) async -> Temperature {
+    func dryBulb(enthalpy: EnthalpyOf<MoistAir>, ratio: HumidityRatio) async -> Temperature {
       let intermediateValue =
       units.isImperial
       ? enthalpy.rawValue.rawValue - c2 * ratio.rawValue
@@ -263,7 +263,7 @@ extension PsychrometricClient.HumidityRatioRequest {
       self.c3 = units.isImperial ? 0.444 : 1.86
     }
     
-    func run(enthalpy: MoistAirEnthalpy, dryBulb: Temperature) async -> Double {
+    func run(enthalpy: EnthalpyOf<MoistAir>, dryBulb: Temperature) async -> Double {
       let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let intermediateValue =
       units.isImperial

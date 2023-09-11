@@ -301,7 +301,7 @@ extension HumidityRatio {
       self.c3 = units.isImperial ? 0.444 : 1.86
     }
 
-    func run(enthalpy: MoistAirEnthalpy, dryBulb: Temperature) async -> Double {
+    func run(enthalpy: EnthalpyOf<MoistAir>, dryBulb: Temperature) async -> Double {
       let T = units.isImperial ? dryBulb.fahrenheit : dryBulb.celsius
       let intermediateValue =
         units.isImperial
@@ -318,7 +318,7 @@ extension HumidityRatio {
   ///   - enthalpy: The enthalpy of the air.
   ///   - temperature: The dry bulb temperature of the air.
   public init(
-    enthalpy: MoistAirEnthalpy,
+    enthalpy: EnthalpyOf<MoistAir>,
     dryBulb temperature: Temperature,
     units: PsychrometricUnits? = nil
   ) async {

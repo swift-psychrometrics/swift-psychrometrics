@@ -5,7 +5,7 @@ public struct PsychrometricResponse: Codable, Equatable, Sendable {
   public let density: DensityOf<MoistAir>
   public let dewPoint: DewPoint
   public let dryBulb: Temperature
-  public let enthalpy: MoistAirEnthalpy
+  public let enthalpy: EnthalpyOf<MoistAir>
   public let grainsOfMoisture: GrainsOfMoisture
   public let humidityRatio: HumidityRatio
   public let relativeHumidity: RelativeHumidity
@@ -20,7 +20,7 @@ public struct PsychrometricResponse: Codable, Equatable, Sendable {
     density: DensityOf<MoistAir>,
     dewPoint: DewPoint,
     dryBulb: Temperature,
-    enthalpy: MoistAirEnthalpy,
+    enthalpy: EnthalpyOf<MoistAir>,
     grainsOfMoisture: GrainsOfMoisture,
     humidityRatio: HumidityRatio,
     relativeHumidity: RelativeHumidity,

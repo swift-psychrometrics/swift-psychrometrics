@@ -6,7 +6,7 @@ import SharedModels
 // TODO: Remove
 
 // MARK: - Dry Air
-extension DryAirEnthalpy {
+extension EnthalpyOf<DryAir> {
 
   private struct DryAirConstants {
     let specificHeat: Double
@@ -44,7 +44,7 @@ extension DryAirEnthalpy {
 
 // MARK: - Moist Air
 
-extension MoistAirEnthalpy {
+extension EnthalpyOf<MoistAir> {
 
   internal struct Constants {
     let c1: Double
@@ -65,7 +65,7 @@ extension MoistAirEnthalpy {
       return units.isImperial ? value : value * 1000
     }
 
-    func dryBulb(enthalpy: MoistAirEnthalpy, ratio: HumidityRatio) async -> Temperature {
+    func dryBulb(enthalpy: EnthalpyOf<MoistAir>, ratio: HumidityRatio) async -> Temperature {
       let intermediateValue =
         units.isImperial
         ? enthalpy.rawValue.rawValue - c2 * ratio.rawValue
@@ -174,7 +174,7 @@ extension MoistAirEnthalpy {
   }
 }
 
-extension MoistAirEnthalpy {
+extension EnthalpyOf<MoistAir> {
 
   /// Calculate the ``HumidityRatio`` for the given temperature.
   ///

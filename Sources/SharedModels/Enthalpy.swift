@@ -1,15 +1,6 @@
 import Foundation
 import Tagged
 
-// TODO: Remove these typealias's and use EnthalpyOf<T>
-
-/// Represents the enthalpy of dry air.
-public typealias DryAirEnthalpy = Tagged<DryAir, Enthalpy>
-
-/// Represents the enthalpy of moist air.
-public typealias MoistAirEnthalpy = Tagged<MoistAir, Enthalpy>
-
-
 /// A container for holding enthalpy values and their unit of measure.
 ///
 public struct Enthalpy: Equatable, Codable, Sendable {
