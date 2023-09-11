@@ -10,7 +10,7 @@ final class DensityTests: PsychrometricTestCase {
     @Dependency(\.psychrometricClient) var client;
     let density = try await client.density.water(.fahrenheit(50))
     XCTAssertEqual(
-      round(density.rawValue * 100) / 100,
+      round(density.value * 100) / 100,
       62.58
     )
   }
@@ -21,14 +21,14 @@ final class DensityTests: PsychrometricTestCase {
       .init(dryBulb: .fahrenheit(60), totalPressure: .psi(14.7))
     )
     XCTAssertEqual(
-      round(density.rawValue * 1000) / 1000,
+      round(density.value * 1000) / 1000,
       0.076
     )
     let density2 = try await client.density.dryAir(
       .init(dryBulb: .fahrenheit(60), altitude: .seaLevel)
     )
     XCTAssertEqual(
-      round(density2.rawValue * 1000) / 1000,
+      round(density2.value * 1000) / 1000,
       0.076
     )
   }

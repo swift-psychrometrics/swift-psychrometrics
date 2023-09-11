@@ -114,18 +114,18 @@ public struct PsychrometricClient {
   public struct DensityClient {
 
     /// Calculate the density of dry air for the given request.
-    public var dryAir: @Sendable (DryAirRequest) async throws -> Density<DryAir>
+    public var dryAir: @Sendable (DryAirRequest) async throws -> DensityOf<DryAir>
 
     /// Calculate the density of moist air for the given request.
-    public var moistAir: @Sendable (MoistAirRequest) async throws -> Density<MoistAir>
+    public var moistAir: @Sendable (MoistAirRequest) async throws -> DensityOf<MoistAir>
 
     /// Calculate the density of water for the given temperature.
-    public var water: @Sendable (Temperature) async throws -> Density<Water>
+    public var water: @Sendable (Temperature) async throws -> DensityOf<Water>
 
     public init(
-      dryAir: @escaping @Sendable (DryAirRequest) async throws -> Density<DryAir>,
-      moistAir: @escaping @Sendable (MoistAirRequest) async throws -> Density<MoistAir>,
-      water: @escaping @Sendable (Temperature) async throws -> Density<Water>
+      dryAir: @escaping @Sendable (DryAirRequest) async throws -> DensityOf<DryAir>,
+      moistAir: @escaping @Sendable (MoistAirRequest) async throws -> DensityOf<MoistAir>,
+      water: @escaping @Sendable (Temperature) async throws -> DensityOf<Water>
     ) {
       self.dryAir = dryAir
       self.moistAir = moistAir

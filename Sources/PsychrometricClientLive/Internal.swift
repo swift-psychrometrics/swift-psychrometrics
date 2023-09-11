@@ -59,7 +59,7 @@ extension PsychrometricClient.DensityClient.DryAirRequest {
       dryBulb: self.dryBulb.rawValue,
       pressure: self.totalPressure.rawValue
     )
-    return .init(density, units: .defaultFor(units: units))
+    return .init(.init(density, units: .defaultFor(units: units)))
   }
 }
 
@@ -76,7 +76,7 @@ extension PsychrometricClient.DensityClient.MoistAirRequest {
 
     let units = self.units ?? environment.units
     let density = (1 + self.humidityRatio.rawValue) / self.specificVolume.rawValue
-    return .init(density, units: .defaultFor(units: units))
+    return .init(.init(density, units: .defaultFor(units: units)))
 
   }
 }
@@ -93,7 +93,7 @@ func waterDensity(
     - 6.255
     * pow((pow(10, -5) * temperature.fahrenheit), 2)
 
-  return .init(value, units: .poundsPerCubicFoot)
+  return .init(.init(value, units: .poundsPerCubicFoot))
 }
 
 // MARK: - Dew Point

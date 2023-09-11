@@ -1,12 +1,11 @@
 import Foundation
-
-// TOOO: Used `Tagged`
+import Tagged
 
 /// Represents the mass per unit of volume.
 ///
 /// Often represented by `ρ` in ASHRAE Fundamentals (2017)
 ///
-public struct Density<T>: Codable, Equatable, Sendable {
+public struct Density<T: DensityType>: Codable, Equatable, Sendable {
 
   /// The raw value of the density.
   public private(set) var rawValue: Double
@@ -23,6 +22,12 @@ public struct Density<T>: Codable, Equatable, Sendable {
     self.rawValue = value
     self.units = units
   }
+
+  /// Access the underlying raw-value.
+  ///
+  /// This is useful when density is wrapped in a `Tagged` type.
+  ///
+  public var value: Double { rawValue }
 }
 
 /// The units of measure for a ``Density`` type.
@@ -39,7 +44,7 @@ public enum DensityUnits: String, UnitOfMeasure, Codable, Sendable {
   }
 }
 
-public typealias DensityOf<T> = Density<T>
+public typealias DensityOf<T: DensityType> = Tagged<T, Density<T>>
 
 extension Density: NumberWithUnitOfMeasure {
 
@@ -48,7 +53,7 @@ extension Density: NumberWithUnitOfMeasure {
   public typealias Magnitude = Double.Magnitude
   public typealias Units = DensityUnits
 
-  public static func keyPath(for units: DensityUnits) -> WritableKeyPath<Density<T>, Double> {
+  public static func keyPath(for units: DensityUnits) -> WritableKeyPath<Self, Double> {
     \.rawValue
   }
 }
