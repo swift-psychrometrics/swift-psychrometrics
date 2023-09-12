@@ -54,6 +54,15 @@ test-watchos: clean
 test-swift:
 	swift test --enable-code-coverage
 
+test-linux:
+	@docker run \
+		--rm \
+		-v "$(PWD):$(PWD)" \
+		-w "$(PWD)" \
+		--platform linux/amd64 \
+		swift:5.6 \
+		swift package clean && swift test
+
 test-library: test-macos test-ios test-mac-catalyst test-tvos test-watchos
 
 format:
