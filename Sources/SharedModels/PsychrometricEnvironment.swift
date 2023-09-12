@@ -1,9 +1,8 @@
 import Dependencies
 import Foundation
-import SharedModels
 
 /// This controls the way psychrometric calculations get ran.  Whether they are for imperial
-/// or metric ``SharedModels/PsychrometricUnits``
+/// or metric ``PsychrometricUnits``
 ///
 public struct PsychrometricEnvironment {
 
@@ -105,7 +104,7 @@ extension PsychrometricEnvironment: DependencyKey {
 }
 
 extension DependencyValues {
-  
+
   /// Access the psychrometric environment as a dependency.
   ///
   public var psychrometricEnvironment: PsychrometricEnvironment {

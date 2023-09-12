@@ -1,7 +1,6 @@
 import Dependencies
-import SharedModels
-//import Psychrometrics
 import PsychrometricClientLive
+import SharedModels
 import TestSupport
 import XCTest
 
@@ -168,7 +167,7 @@ final class PressureTests: XCTestCase {
     ]
     
     for (temp, expected, tolerance) in tempsAndExpectation {
-      let pressure = try await client.saturationPressure(.init(temperature: temp, units: .imperial))
+      let pressure = try await client.saturationPressure(.dryBulb(temp, units: .imperial))
       XCTApproximatelyEqual(pressure.value, expected.value, tolerance: tolerance)
     }
   }
@@ -188,7 +187,7 @@ final class PressureTests: XCTestCase {
     ]
     
     for (temp, expected, tolerance) in tempsAndExpectation {
-      let pressure = try await client.saturationPressure(.init(temperature: temp, units: .metric))
+      let pressure = try await client.saturationPressure(.dryBulb(temp, units: .metric))
       XCTApproximatelyEqual(pressure.value, expected.value, tolerance: tolerance)
     }
   }

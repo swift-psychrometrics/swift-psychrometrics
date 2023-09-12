@@ -4,6 +4,9 @@ import SharedModels
 import XCTestDynamicOverlay
 
 extension DependencyValues {
+
+  /// Access the ``PsychrometricClient`` as a dependency.
+  ///
   public var psychrometricClient: PsychrometricClient {
     get { self[PsychrometricClient.self] }
     set { self[PsychrometricClient.self] = newValue }
@@ -42,10 +45,11 @@ extension PsychrometricClient: TestDependencyKey {
     wetBulb: unimplemented("\(Self.self).wetBulb", placeholder: .zero)
   )
 
-  /// Override a value with the given closure.
+  /// Override a calculation with the given closure.
   ///
   /// This is useful in tests or previews, instead of using a live client you can override the parts required for the test
-  /// or preview to work properly.
+  /// or preview to work properly. Just note that some of the methods / properties require multiple parts to be overriden
+  /// to work properly.
   ///
   /// - Parameters:
   ///   - keyPath: The key path to override.

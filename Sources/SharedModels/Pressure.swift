@@ -1,3 +1,4 @@
+import Dependencies
 import Foundation
 import Tagged
 
@@ -31,7 +32,7 @@ public struct Pressure<T: PressureType>: Hashable, Codable, Sendable {
 
 // MARK: - Pressure.Unit
 /// Represents the units of measure for ``Pressure``.
-public enum PressureUnit: String, Equatable, Hashable, CaseIterable, Sendable {
+public enum PressureUnit: String, Equatable, Hashable, CaseIterable, Codable, Sendable {
 
   public static func defaultFor(units: PsychrometricUnits) -> Self {
     switch units {
@@ -185,10 +186,6 @@ extension Tagged {
   }
 }
 
-// MARK: - Conversions
-
-// TODO: Move conversions somewhere else.
-
 extension Pressure {
 
   /// Access / calculate the pressure as atmosphere.
@@ -254,7 +251,6 @@ extension Pressure {
 extension PressureUnit: UnitOfMeasure {}
 
 extension Pressure: NumberWithUnitOfMeasure {
-
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias Magnitude = Double.Magnitude
@@ -281,9 +277,6 @@ extension Pressure: NumberWithUnitOfMeasure {
 }
 
 // MARK: - Pressure + Altitude
-
-// TODO: This needs moved somewhere else.
-
 extension Pressure {
 
   private struct Constants {
@@ -316,7 +309,8 @@ extension Pressure {
     altitude: Length,
     units: PsychrometricUnits? = nil
   ) {
-    let units = units ?? .imperial  // fix
+    @Dependency(\.psychrometricEnvironment) var environment
+    let units = units ?? environment.units
     let value = Constants(units: units).run(altitude: altitude)
     self.init(value, units: .defaultFor(units: units))
   }

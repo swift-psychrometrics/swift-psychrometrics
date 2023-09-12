@@ -75,11 +75,13 @@ extension Length {
   public static func meters(_ value: Double) -> Length {
     self.init(value, units: .meters)
   }
+
+  /// Create a new ``Length`` at sea-level.
+  public static var seaLevel: Self {
+    .feet(0)
+  }
 }
 
-// MARK: - Conversions
-
-// TODO: Move Conversions somewhere else.
 extension Length {
 
   /// Access / convert the length in centimeters.
@@ -150,9 +152,6 @@ extension Length {
     set { self = .meters(newValue) }
   }
 
-  public static var seaLevel: Self {
-    .feet(0)
-  }
 }
 
 extension Length.Unit: UnitOfMeasure {}

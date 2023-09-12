@@ -39,7 +39,7 @@ extension RelativeHumidity {
   public var fraction: Double {
     rawValue.rawValue / 100
   }
-  
+
   public static func fraction(_ value: Double) -> Self {
     .init(.init(value * 100))
   }

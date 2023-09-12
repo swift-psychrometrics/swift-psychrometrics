@@ -20,6 +20,8 @@ public struct Enthalpy<T: EnthalpyType>: Equatable, Codable, Sendable {
     self.rawValue = value
     self.units = units
   }
+
+  public var value: Double { rawValue }
 }
 
 public typealias EnthalpyOf<T: EnthalpyType> = Tagged<T, Enthalpy<T>>

@@ -2,32 +2,33 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-    pull_request:
-      branches:
-        - '*'
+  pull_request:
+  workflow_dispatch:
+
 jobs:
   build:
     name: MacOS
-    runs-on: macOS-11
+    runs-on: macos-13
+    strategy:
+      fail-fast: true
+      matrix:
+        xcode: ['15.0']
+        config: ['debug']
     steps:
-    - uses: actions/checkout@v2
-    - name: Run swift tests
-      run: make test
-    - name: Make code coverage report.
-      run: make code-cov
-    - name: Upload code coverage to Codecov.io
-      uses: codecov/codecov-action@v2
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        verbose: false
-        files: /tmp/swift-psychrometrics.lcov
-      
+      - name: Select Xcode ${{ matrix.xcode }}
+        run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
+      - uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "5.6"
+      - name: Swift Version
+        run: swift --version
+      - name: Run ${{ matrix.xcode }} Tests
+        run: make CONFIG=${{ matrix.config }} test-library
+
   ubuntu:
     name: Ubuntu
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Run tests
       run: make test-linux

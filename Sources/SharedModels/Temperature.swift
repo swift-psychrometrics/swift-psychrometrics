@@ -1,3 +1,4 @@
+import Dependencies
 import Foundation
 import Tagged
 
@@ -39,7 +40,6 @@ public struct Temperature<T: TemperatureType>: Hashable, Codable, Sendable {
   ///
   public var value: Double { rawValue }
 }
-
 
 /// Represents the units of measure for a ``Temperature``.
 public enum TemperatureUnit: String, Equatable, CaseIterable, Codable, Hashable, Sendable {
@@ -138,8 +138,6 @@ extension Tagged {
     .init(.init(value, units: .rankine))
   }
 }
-
-// TODO: Move Conversions somewhere else.
 
 extension Temperature {
 
@@ -240,8 +238,6 @@ extension Temperature: NumberWithUnitOfMeasure {
 
 extension Temperature {
 
-  // TODO: This needs moved somewhere else where it can use environment dependency.
-
   /// Create a ``Temperature`` as a function of the given altitude.
   ///
   ///  - Parameters:
@@ -250,8 +246,9 @@ extension Temperature {
     _ altitude: Length,
     units: PsychrometricUnits? = nil
   ) -> Temperature {
-    let units = units ?? .imperial  // fix.
-    let altitude = units.isImperial ? altitude.feet : altitude.meters
+    @Dependency(\.psychrometricEnvironment) var environment
+    let units = units ?? environment.units
+    let altitude = altitude[units.isImperial ? .feet : .meters]
     guard units.isImperial else {
       return .init(15 - 0.0065 * altitude, units: .defaultFor(units: units))
     }

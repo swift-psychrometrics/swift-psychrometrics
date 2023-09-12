@@ -1,7 +1,6 @@
 import Dependencies
 import Foundation
 @_exported import PsychrometricClient
-@_exported import PsychrometricEnvironment
 import SharedModels
 
 extension PsychrometricClient: DependencyKey {

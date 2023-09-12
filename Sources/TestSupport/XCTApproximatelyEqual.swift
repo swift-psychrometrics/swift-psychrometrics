@@ -1,5 +1,13 @@
 import XCTest
 
+/// Assert that a value is approximately equal to another within a given tolerance.
+///
+/// This is useful in tests where the calculations are expected to be within a tolerance and not
+/// required to be exactly equal.
+///
+/// This helps with rounding errors, especially when some of the calculations return very small
+/// decimal numbers.
+///
 public func XCTApproximatelyEqual<T>(
   _ lhs: T,
   _ rhs: T,
