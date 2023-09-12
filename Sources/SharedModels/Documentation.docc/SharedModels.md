@@ -17,11 +17,17 @@ and offer conversions to other units of measure commonly used in calculations.
 These types generally are all numeric types and support arithmetic operations.
 
 - ``Density``
+- ``DensityOf``
 - ``Enthalpy``
+- ``EnthalpyOf``
 - ``Length``
 - ``Humidity``
 - ``Pressure``
 - ``Temperature``
+- ``PsychrometricEnvironment``
+- ``PsychrometricProperties``
+
+### Specialized Types
 
 These types are specialized containers for psychrometric properties. Some of
 these types are built on top of the base types and are used to ensure that
@@ -52,6 +58,7 @@ all numeric types and support arithmetic operations.
 ### Volume Types
 
 - ``SpecificVolume`` 
+- ``SpecificVolumeOf``
 
 ### Units of Measure
 
@@ -64,12 +71,15 @@ These define the units of measures for the psychrometric types.
 - ``SpecificVolumeUnits``
 - ``TemperatureUnit``
 
+### Errors
+
+- ``ValidationError``
+
 ### Namespace Types
 
 These are types that do not have any properties, but are used as namespaces
 and tags for the specialized psychrometric types.
 
-- ``Air``
 - ``DewPointTemperature``
 - ``DryAir``
 - ``MoistAir``
@@ -91,3 +101,15 @@ that can be wrapped in the base types.
 - ``HumidityType``
 - ``PressureType``
 - ``TemperatureType``
+
+### Helper Protocols
+
+These protocols implement generic logic that is used for a lot of the base types.
+
+- ``Divisible``
+- ``NumericType``
+- ``NumberWithUnitOfMeasure``
+- ``NumericWithUnitOfMeasureRepresentable``
+- ``RawInitializable``
+- ``RawNumericType``
+- ``UnitOfMeasure``

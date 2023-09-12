@@ -3,6 +3,25 @@ import Foundation
 @_exported import SharedModels
 
 /// Performs calculations for different psychrometric properties.
+///
+/// You generally access the calculations through the `Dependency` mechanism.
+///
+/// ```swift
+/// @Dependency(\.psychrometricClient) var client
+/// ```
+///
+/// The properties exposed on the ``PsychrometricClient`` are the root calculations that
+/// are exposed, however many of the `Request` types have static helper methods exposed that may
+/// use other calculations to convert passed in parameters, so you may have to override more than
+/// one property in a test or preview context, depending on your use-case.
+///
+///  See ``PsychrometricClient/PsychrometricClient/override(_:closure:)`` on
+///  how to override these properties.
+///
+/// To learn more about how the dependency injection works, check out the
+/// [swift-dependencies](https://pointfreeco.github.io/swift-dependencies/main/documentation/dependencies/)
+/// documentation.
+///
 public struct PsychrometricClient {
 
   /// Perform degree of saturation calculations  / conversions
