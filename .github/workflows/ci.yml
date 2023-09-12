@@ -18,15 +18,11 @@ jobs:
     name: MacOS
     runs-on: macos-13
     steps:
+      - uses: actions/checkout@v3
       - name: Select Xcode 14.3.1
         run: sudo xcode-select -s /Applications/Xcode_14.3.1.app
-      - uses: swift-actions/setup-swift@v1
-        with:
-          swift-version: "5.6"
       - name: Swift Version
         run: swift --version
-      - name: Cat Makefile
-        run: cat < Makefile
       - name: Run tests
         run: make test-swift
 
