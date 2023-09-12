@@ -1,5 +1,4 @@
 [![CI](https://github.com/swift-psychrometrics/swift-psychrometrics/actions/workflows/ci.yml/badge.svg)](https://github.com/swift-psychrometrics/swift-psychrometrics/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/swift-psychrometrics/swift-psychrometrics/branch/main/graph/badge.svg?token=U7W35Y1SXU)](https://codecov.io/gh/swift-psychrometrics/swift-psychrometrics)
 [![documentation](https://img.shields.io/badge/Api-Documentation-orange)](https://github.com/swift-psychrometrics/swift-psychrometrics/wiki)
 
 # swift-psychrometrics
@@ -119,32 +118,6 @@ Some of these calculations do not yet support different units of measure.
 - Total Delivered Heat Quantity
 
 - Wet Bulb
-
-### CLI Utility
-
-This package ships with a command line utility that allows you to explore the different calculations.
-It currently is pretty generic and still a work in progress.
-So it does not support all the calculations or units of measure.
-
-To use the command line utility you can use the following command from the project root.
-```swift
-  PSYCHROMETRIC_CLI_ENABLED=1 swift run psychrometrics
-```
-Note:
-  To use or build the CLI utility you must pass `PSYCHROMETRIC_CLI_ENABLED=1` to the environment of the
-  command.
-
-Or to build the command line utility as an executable to put in your `PATH`.  The following command
-will build the executable in release mode and open a Finder window at the build location, you can then find
-and move the `psychrometrics` executable and put somewhere in your path.
-```
-make cli
-```
-
-### Playground Support
-
-This package ships with an `XCode Playground` in the `Examples` directory that you can use to explore
-the API's.
 
 ## Documentation
 
