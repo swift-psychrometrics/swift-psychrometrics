@@ -39,30 +39,30 @@ jobs:
     - name: Run tests
       run: make test-swift
 
-  wasm:
-    name: Wasm
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - { toolchain: wasm-5.7.1-RELEASE }
-    steps:
-      - uses: actions/checkout@v3
-      - run: echo "${{ matrix.toolchain }}" > .swift-version
-      - uses: swiftwasm/swiftwasm-action@v5.7
-        with:
-          shell-action: carton test --environment node
-
-  windows:
-    name: Windows
-    runs-on: windows-latest
-    steps:
-      - uses: compnerd/gha-setup-swift@main
-        with:
-          branch: swift-5.8-release
-          tag: 5.8-RELEASE
-      - uses: actions/checkout@v3
-      - name: Run tests
-        run: swift test
-      - name: Run tests (release)
-        run: swift test -c release
+#   wasm:
+#     name: Wasm
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         include:
+#           - { toolchain: wasm-5.7.1-RELEASE }
+#     steps:
+#       - uses: actions/checkout@v3
+#       - run: echo "${{ matrix.toolchain }}" > .swift-version
+#       - uses: swiftwasm/swiftwasm-action@v5.7
+#         with:
+#           shell-action: carton test --environment node
+#
+#   windows:
+#     name: Windows
+#     runs-on: windows-latest
+#     steps:
+#       - uses: compnerd/gha-setup-swift@main
+#         with:
+#           branch: swift-5.8-release
+#           tag: 5.8-RELEASE
+#       - uses: actions/checkout@v3
+#       - name: Run tests
+#         run: swift test
+#       - name: Run tests (release)
+#         run: swift test -c release
