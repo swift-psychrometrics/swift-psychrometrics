@@ -19,6 +19,13 @@ public struct PsychrometricEnvironment {
   /// The unit of measure.
   public var units: PsychrometricUnits = .imperial
 
+  /// Create a new environment instance.
+  ///
+  /// - Parameters:
+  ///   - maximumIterationCount: The iteration count for iterative methods.
+  ///   - minimumHumidityRatio: The minimum humidity ration acceptable.
+  ///   - temperatureTolerance: The temperature tolerance to break out of iterative methods.
+  ///   - units: The default unit of measure.
   public init(
     maximumIterationCount: Int = 100,
     minimumHumidityRatio: Double = 1e-7,
@@ -98,6 +105,9 @@ extension PsychrometricEnvironment: DependencyKey {
 }
 
 extension DependencyValues {
+  
+  /// Access the psychrometric environment as a dependency.
+  ///
   public var psychrometricEnvironment: PsychrometricEnvironment {
     get { self[PsychrometricEnvironment.self] }
     set { self[PsychrometricEnvironment.self] = newValue }

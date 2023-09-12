@@ -18,14 +18,14 @@ final class DensityTests: PsychrometricTestCase {
   func testDensityOfAir_imperial() async throws {
     @Dependency(\.psychrometricClient) var client;
     let density = try await client.density.dryAir(
-      .init(dryBulb: .fahrenheit(60), totalPressure: .psi(14.7))
+      .dryBulb(.fahrenheit(60), totalPressure: .psi(14.7))
     )
     XCTAssertEqual(
       round(density.value * 1000) / 1000,
       0.076
     )
     let density2 = try await client.density.dryAir(
-      .init(dryBulb: .fahrenheit(60), altitude: .seaLevel)
+      .dryBulb(.fahrenheit(60), altitude: .seaLevel)
     )
     XCTAssertEqual(
       round(density2.value * 1000) / 1000,
@@ -36,7 +36,7 @@ final class DensityTests: PsychrometricTestCase {
   func test_density_of_dryAir_metric() async throws {
     @Dependency(\.psychrometricClient) var client;
     let density = try await client.density.dryAir(
-      .init(dryBulb: .celsius(25), totalPressure: .pascals(101325), units: .metric)
+      .dryBulb(.celsius(25), totalPressure: .pascals(101325), units: .metric)
     )
     XCTApproximatelyEqual(density.rawValue, 1.18441, tolerance: 0.003)
   }

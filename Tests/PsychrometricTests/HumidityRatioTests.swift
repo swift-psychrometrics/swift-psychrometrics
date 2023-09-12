@@ -9,7 +9,7 @@ final class HumidityRatioTests: PsychrometricTestCase {
   func test_humidityRatio_as_mass() async throws {
     @Dependency(\.psychrometricClient) var client;
     
-    let ratio = try await client.humidityRatio(.waterMass(14.7, dryAirMass: 18.3))
+    let ratio = try await client.humidityRatio(.mass(water: 14.7, dryAir: 18.3))
     
     XCTAssertEqual(
       round(ratio.rawValue * 100) / 100,

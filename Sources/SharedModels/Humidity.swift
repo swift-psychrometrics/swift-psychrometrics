@@ -25,6 +25,10 @@ public struct Humidity<T: HumidityType>: Equatable, Codable, Sendable, RawInitia
     self.rawValue = value
   }
 
+  /// Access the underlying raw-value.
+  ///
+  /// This is useful when it is wrapped in a `Tagged` type.
+  ///
   public var value: Double { rawValue }
 }
 
@@ -34,6 +38,10 @@ extension RelativeHumidity {
   /// The relative humidity as a decimal.
   public var fraction: Double {
     rawValue.rawValue / 100
+  }
+  
+  public static func fraction(_ value: Double) -> Self {
+    .init(.init(value * 100))
   }
 }
 
