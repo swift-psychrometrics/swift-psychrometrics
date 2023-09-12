@@ -17,10 +17,6 @@ jobs:
   build:
     name: MacOS
     runs-on: macos-13
-    strategy:
-      fail-fast: true
-      matrix:
-        config: ['debug', 'release']
     steps:
       - name: Select Xcode 14.3.1
         run: sudo xcode-select -s /Applications/Xcode_14.3.1.app
@@ -29,6 +25,8 @@ jobs:
           swift-version: "5.6"
       - name: Swift Version
         run: swift --version
+      - name: Cat Makefile
+        run: cat < Makefile
       - name: Run tests
         run: make test-swift
 
