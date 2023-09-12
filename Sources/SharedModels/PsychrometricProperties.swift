@@ -1,19 +1,36 @@
 import Foundation
 
+/// A container for psychrometric properties of an air sample.
+///
+/// This is used to find / list many of the psychrometric properties of an air sample.
+///
 public struct PsychrometricProperties: Codable, Equatable, Sendable {
 
+  /// The total atmospheric pressure.
   public let atmosphericPressure: TotalPressure
+  /// The degree of saturation.
   public let degreeOfSaturation: DegreeOfSaturation
+  /// The density.
   public let density: DensityOf<MoistAir>
+  /// The dew point temperature.
   public let dewPoint: DewPoint
+  /// The dry bulb temperature.
   public let dryBulb: DryBulb
+  /// The enthalpy.
   public let enthalpy: EnthalpyOf<MoistAir>
+  /// The grains of moisture.
   public let grainsOfMoisture: GrainsOfMoisture
+  /// The humidity ratio.
   public let humidityRatio: HumidityRatio
+  /// The relative humidity.
   public let relativeHumidity: RelativeHumidity
-  public let vaporPressure: VaporPressure
+  /// The specific volume.
   public let specificVolume: SpecificVolumeOf<MoistAir>
+  /// The vapor pressure.
+  public let vaporPressure: VaporPressure
+  /// The wet bulb temperature.
   public let wetBulb: WetBulb
+  /// The units of measure.
   public let units: PsychrometricUnits
 
   public init(

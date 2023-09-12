@@ -2,14 +2,8 @@ import Tagged
 
 // This file holds namespaces for calculations that work on different types.
 
-/// Namespace for calculations that can work on dry air.
-public struct Air {}
-
 /// Represents types that can be used in density calculations / conversions.
 public protocol DensityType {}
-
-/// Namespace for calculations that can work on dry air.
-public struct DryAir: DensityType, EnthalpyType, TemperatureType {}
 
 /// Represents types that can be used in enthalpy calculations / conversions.
 public protocol EnthalpyType {}
@@ -17,28 +11,38 @@ public protocol EnthalpyType {}
 /// Represents types that can be used in humidity calculations / conversions.
 public protocol HumidityType {}
 
-/// Namespace for calculations that can work on moist air.
-public struct MoistAir: DensityType, EnthalpyType, TemperatureType {}
-
 /// Represents types that can be used in pressure calculations / conversions.
 public protocol PressureType {}
 
 /// Represents types that can be used in temperature calculations / conversions.
 public protocol TemperatureType {}
 
-/// Namespace for calculations that can work on water.
-public struct Water: DensityType {}
-
-public enum Total: PressureType {}
-
-public enum Saturation: PressureType {}
-
-public enum VaporType: PressureType {}
-
+/// A namespace for dew point temperature types.
 public enum DewPointTemperature: TemperatureType {}
 
-public enum Specific: TemperatureType {}
+/// Namespace for calculations that can work on dry air.
+public enum DryAir: DensityType, EnthalpyType, TemperatureType {}
 
+/// Namespace for calculations that can work on moist air.
+public enum MoistAir: DensityType, EnthalpyType, TemperatureType {}
+
+/// A namespace for relative humidity types.
 public enum Relative: HumidityType {}
 
+/// A namespace for humidity ratio.
 public enum Ratio: HumidityType {}
+
+/// A namespace for saturation pressure.
+public enum Saturation: PressureType {}
+
+/// A namespace for specific heat type.
+public enum Specific: TemperatureType {}
+
+/// A namespace for total pressure.
+public enum Total: PressureType {}
+
+/// A namespace for vapor pressure.
+public enum VaporType: PressureType {}
+
+/// Namespace for calculations that can work on water.
+public enum Water: DensityType {}

@@ -7,6 +7,10 @@ extension DependencyValues {
 
   /// Access the ``PsychrometricClient`` as a dependency.
   ///
+  /// ```swift
+  /// @Dependency(\.psychrometricClient) var client
+  /// ```
+  ///
   public var psychrometricClient: PsychrometricClient {
     get { self[PsychrometricClient.self] }
     set { self[PsychrometricClient.self] = newValue }
@@ -15,6 +19,12 @@ extension DependencyValues {
 
 extension PsychrometricClient: TestDependencyKey {
 
+  /// The test / unimplemented version of the ``PsychrometricClient`` dependency.
+  ///
+  /// This is used in test contexts and will fail when any of the calculations are accessed when they
+  /// have not been overridden.
+  ///
+  ///
   public static let testValue: Self = Self.init(
     degreeOfSaturation: unimplemented("\(Self.self).degreeOfSaturation", placeholder: .zero),
     density: .init(
@@ -44,6 +54,13 @@ extension PsychrometricClient: TestDependencyKey {
     vaporPressure: unimplemented("\(Self.self).vaporPressure", placeholder: .zero),
     wetBulb: unimplemented("\(Self.self).wetBulb", placeholder: .zero)
   )
+  
+  /// The preview / unimplemented version of the ``PsychrometricClient`` dependency.
+  ///
+  /// This is used in swift-ui preview contexts and will fail when any of the calculations are accessed when they
+  /// have not been overridden.
+  ///
+  public static var previewValue: PsychrometricClient { .testValue }
 
   /// Override a calculation with the given closure.
   ///

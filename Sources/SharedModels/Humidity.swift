@@ -2,7 +2,7 @@ import Foundation
 import Tagged
 
 /// Represents relative humidity as a percentage.  These are stored and initialized in their whole number state and you can access
-/// the decimal equivalent through the the ``RelativeHumidity.fraction `` property.
+/// the decimal equivalent through the the ``fraction`` property.
 ///
 /// - Note:
 ///     You typically do not create an instance using the `init` method, but create one using the `postfix` operator.
