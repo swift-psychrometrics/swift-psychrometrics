@@ -1,0 +1,13 @@
+version: 1
+build:
+  configs:
+    - documentation_targets: [PsychrometricClient, SharedModels]
+    - platform: ios
+      scheme: swift-psychrometrics-Package
+    - platform: macos
+      scheme: swift-psychrometrics-Package
+    - platform: tvos
+      scheme: swift-psychrometrics-Package
+    - platform: watchos
+      scheme: swift-psychrometrics-Package
+

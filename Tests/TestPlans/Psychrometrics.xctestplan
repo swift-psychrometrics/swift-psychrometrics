@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "A8BCFB61-DF9D-49E3-88C8-FDF74FFE3090",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "PsychrometricTests",
+        "name" : "PsychrometricTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SharedModelsTests",
+        "name" : "SharedModelsTests"
+      }
+    }
+  ],
+  "version" : 1
+}
