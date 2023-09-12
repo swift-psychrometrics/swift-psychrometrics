@@ -5,9 +5,9 @@ import Tagged
 /// Defined as the ratio of the mass of water vapor to the mass of dry air in the sample and is often represented
 /// by the symbol `W` in the ASHRAE Fundamentals (2017).
 ///
-/// This value can not be negative, so it will be set to ``PsychrometricEnvironment.minimumHumidityRatio`` if
+/// This value can not be negative, so it will be set to ``PsychrometricEnvironment/minimumHumidityRatio`` if
 /// initialized with a value that's out of range.  For methods that use a humidity ratio they should check that the humidity ratio
-/// is valid by calling ``HumidityRatio.ensureHumidityRatio(_:)``.
+/// is valid by calling ``HumidityRatio/ensureHumidityRatio(_:)``.
 ///
 public typealias HumidityRatio = Tagged<Ratio, Humidity<Ratio>>
 
