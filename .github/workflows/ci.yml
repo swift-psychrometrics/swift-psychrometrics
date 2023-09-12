@@ -2,28 +2,34 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
   pull_request:
+    branches:
+      - '*'
   workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     name: MacOS
     runs-on: macos-13
     strategy:
-      fail-fast: true
       matrix:
-        xcode: ['15.0']
-        config: ['debug']
+        config: ['debug', 'release']
     steps:
-      - name: Select Xcode ${{ matrix.xcode }}
-        run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
-      - uses: swift-actions/setup-swift@v1
-        with:
-          swift-version: "5.6"
+      - uses: actions/checkout@v3
+      - name: Select Xcode 14.3.1
+        run: sudo xcode-select -s /Applications/Xcode_14.3.1.app
       - name: Swift Version
         run: swift --version
-      - name: Run ${{ matrix.xcode }} Tests
-        run: make CONFIG=${{ matrix.config }} test-library
+      - name: Run tests
+        run: make test-swift
+      - name: Build platforms ${{ matrix.config }}
+        run: CONFIG=${{ matrix.config }} make build-all-platforms
 
   ubuntu:
     name: Ubuntu
@@ -31,4 +37,32 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Run tests
-      run: make test-linux
+      run: make test-swift
+
+#   wasm:
+#     name: Wasm
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         include:
+#           - { toolchain: wasm-5.7.1-RELEASE }
+#     steps:
+#       - uses: actions/checkout@v3
+#       - run: echo "${{ matrix.toolchain }}" > .swift-version
+#       - uses: swiftwasm/swiftwasm-action@v5.7
+#         with:
+#           shell-action: carton test --environment node
+#
+#   windows:
+#     name: Windows
+#     runs-on: windows-latest
+#     steps:
+#       - uses: compnerd/gha-setup-swift@main
+#         with:
+#           branch: swift-5.8-release
+#           tag: 5.8-RELEASE
+#       - uses: actions/checkout@v3
+#       - name: Run tests
+#         run: swift test
+#       - name: Run tests (release)
+#         run: swift test -c release
