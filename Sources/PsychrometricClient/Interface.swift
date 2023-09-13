@@ -709,7 +709,7 @@ extension PsychrometricClient.DensityClient.DryAirRequest {
 }
 
 extension PsychrometricClient.DensityClient.MoistAirRequest {
-  
+
   /// Create a new ``PsychrometricClient/DensityClient/MoistAirRequest`` for the given dry bulb temperature,
   /// relative humidity, and total pressure.
   ///
@@ -1146,7 +1146,7 @@ extension PsychrometricClient.HumidityRatioRequest {
       units: units
     )
   }
-  
+
   /// Create a new ``HumidityRatioRequest`` for the given parameters.
   ///
   ///  ### Other Overrides Needed
@@ -1189,7 +1189,7 @@ extension PsychrometricClient.HumidityRatioRequest {
   ///
   ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
   ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
-  ///  
+  ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature of the air.
   ///   - relativeHumidity: The humidity of the air.
