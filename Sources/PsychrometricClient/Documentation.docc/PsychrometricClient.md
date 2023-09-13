@@ -12,3 +12,4 @@ professionals and engineers, as well as by scientists and meteorologists.  This 
 ### Getting Started
 
 - <doc:GettingStarted>
+- <doc:OverridingCalculations>

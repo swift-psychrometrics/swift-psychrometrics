@@ -709,11 +709,20 @@ extension PsychrometricClient.DensityClient.DryAirRequest {
 }
 
 extension PsychrometricClient.DensityClient.MoistAirRequest {
+  
   /// Create a new ``PsychrometricClient/DensityClient/MoistAirRequest`` for the given dry bulb temperature,
   /// relative humidity, and total pressure.
   ///
   /// **Reference**:
   ///   ASHRAE - Fundamentals (2017) ch. 1 eq. 11
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///   - density: ``PsychrometricClient/PsychrometricClient/DensityClient/moistAir``
+  ///   - specificVolume: ``PsychrometricClient/PsychrometricClient/SpecificVolumeClient/moistAir``
+  ///
   ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature to calculate the density for.
@@ -748,6 +757,14 @@ extension PsychrometricClient.DensityClient.MoistAirRequest {
   ///
   /// **Reference**:
   ///   ASHRAE - Fundamentals (2017) ch. 1 eq. 11
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///   - density: ``PsychrometricClient/PsychrometricClient/DensityClient/moistAir``
+  ///   - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///   - specificVolume: ``PsychrometricClient/PsychrometricClient/SpecificVolumeClient/moistAir``
   ///
   /// - Parameters:
   ///   - temperature: The dry bulb temperature to calculate the density for.
@@ -785,6 +802,13 @@ extension PsychrometricClient.DensityClient.MoistAirRequest {
 extension PsychrometricClient.DewPointRequest {
   /// Creates a new ``DewPointRequest`` for the given dry bulb temperature and humidity.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - dewPoint: ``PsychrometricClient/PsychrometricClient/dewPoint``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
+  ///
   /// - Parameters:
   ///   - temperature: The dry bulb temperature.
   ///   - relativeHumidity: The relative humidity.
@@ -809,6 +833,13 @@ extension PsychrometricClient.DewPointRequest {
   }
 
   /// Create a new ``DewPointRequest`` for the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - dewPoint: ``PsychrometricClient/PsychrometricClient/dewPoint``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
   ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature.
@@ -842,6 +873,14 @@ extension PsychrometricClient.DewPointRequest {
   }
 
   /// Create a new ``DewPointRequest`` for the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - dewPoint: ``PsychrometricClient/PsychrometricClient/dewPoint``
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
   ///
   /// - Parameters:
   ///   - wetBulb: The wet bulb temperature.
@@ -887,6 +926,14 @@ extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
   ///
   /// **Reference**:  ASHRAE - Fundamentals (2017) ch. 1
   ///
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - saturationPressure: ``PsychrometricClient/PsychrometricClient/saturationPressure``
+  ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature.
   ///   - totalPressure: The total atmospheric pressure.
@@ -915,6 +962,13 @@ extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
   /// Create a new ``MoistAirRequest`` for the given temperature, relative humidity, and pressure.
   ///
   /// **Reference**:  ASHRAE - Fundamentals (2017) ch. 1
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - saturationPressure: ``PsychrometricClient/PsychrometricClient/saturationPressure``
   ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature to calculate the enthalpy for.
@@ -948,6 +1002,13 @@ extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
   ///
   /// **Reference**:  ASHRAE - Fundamentals (2017) ch. 1
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - saturationPressure: ``PsychrometricClient/PsychrometricClient/saturationPressure``
+  ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature to calculate the enthalpy for.
   ///   - relativeHumidity: The relative humidity to calculate the enthalpy for.
@@ -972,6 +1033,12 @@ extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
 extension PsychrometricClient.GrainsOfMoistureRequest {
   /// Create a new ``GrainsOfMoistureRequest`` with the given temperature, humidity, and altitude.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - grainsOfMoisture: ``PsychrometricClient/PsychrometricClient/grainsOfMoisture``
+  ///
   /// - Parameters:
   ///   - temperature: The temperature of the air.
   ///   - humidity: The relative humidity of the air.
@@ -993,6 +1060,13 @@ extension PsychrometricClient.GrainsOfMoistureRequest {
 extension PsychrometricClient.HumidityRatioRequest {
 
   /// Create a new ``HumidityRatioRequest`` for the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - saturationPressure: ``PsychrometricClient/PsychrometricClient/saturationPressure``
   ///
   ///  - Parameters:
   ///   - dewPoint: The dew point temperature.
@@ -1018,6 +1092,13 @@ extension PsychrometricClient.HumidityRatioRequest {
 
   /// Create a new ``HumidityRatioRequest`` for the given parameters.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - saturationPressure: ``PsychrometricClient/PsychrometricClient/saturationPressure``
+  ///
   ///  - Parameters:
   ///   - dewPoint: The dew point temperature.
   ///   - altitude: The altitude.
@@ -1035,6 +1116,13 @@ extension PsychrometricClient.HumidityRatioRequest {
   }
 
   /// Create a new ``HumidityRatioRequest`` for the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - saturationPressure: ``PsychrometricClient/PsychrometricClient/saturationPressure``
   ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature of the air.
@@ -1058,8 +1146,15 @@ extension PsychrometricClient.HumidityRatioRequest {
       units: units
     )
   }
-
+  
   /// Create a new ``HumidityRatioRequest`` for the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
   ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature of the air.
@@ -1088,6 +1183,13 @@ extension PsychrometricClient.HumidityRatioRequest {
 
   /// Create a new ``HumidityRatioRequest`` for the given parameters.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
+  ///  
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature of the air.
   ///   - relativeHumidity: The humidity of the air.
@@ -1109,6 +1211,12 @@ extension PsychrometricClient.HumidityRatioRequest {
 
   /// Create a new ``HumidityRatioRequest`` for the given parameters.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///
   /// - Parameters:
   ///   - totalPressure: The total pressure of the air.
   ///   - vaporPressure: The partial vapor pressure of the air.
@@ -1127,6 +1235,12 @@ extension PsychrometricClient.HumidityRatioRequest {
 
   /// Create a new ``HumidityRatioRequest`` for the given parameters.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///
   /// - Parameters:
   ///   - totalPressure: The total pressure of the air.
   ///   - saturationPressure: The saturation pressure of the air.
@@ -1144,6 +1258,12 @@ extension PsychrometricClient.HumidityRatioRequest {
   }
 
   /// Create a new ``HumidityRatioRequest`` for the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
   ///
   /// - Parameters:
   ///   - wetBulb: The wet bulb temperature.
@@ -1187,6 +1307,15 @@ extension PsychrometricClient.PsychrometricPropertiesRequest {
 
   /// Create a new ``PsychrometricPropertiesRequest`` with the given parameters.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - psychrometricProperties: ``PsychrometricClient/PsychrometricClient/psychrometricProperties``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
+  ///  - wetBulb: ``PsychrometricClient/PsychrometricClient/wetBulb``
+  ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature.
   ///   - relativeHumidity: The relative humidity.
@@ -1217,6 +1346,16 @@ extension PsychrometricClient.PsychrometricPropertiesRequest {
   }
   /// Create a new ``PsychrometricPropertiesRequest`` with the given parameters.
   ///
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - psychrometricProperties: ``PsychrometricClient/PsychrometricClient/psychrometricProperties``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
+  ///  - wetBulb: ``PsychrometricClient/PsychrometricClient/wetBulb``
+  ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature.
   ///   - relativeHumidity: The relative humidity.
@@ -1237,6 +1376,16 @@ extension PsychrometricClient.PsychrometricPropertiesRequest {
   }
 
   /// Create a new ``PsychrometricPropertiesRequest`` with the given parameters.
+  ///
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - psychrometricProperties: ``PsychrometricClient/PsychrometricClient/psychrometricProperties``
+  ///  - saturationPressure: ``PsychrometricClient/PsychrometricClient/saturationPressure``
+  ///  - wetBulb: ``PsychrometricClient/PsychrometricClient/wetBulb``
   ///
   /// - Parameters:
   ///   - dewPoint: The dew point temperature.
@@ -1275,6 +1424,15 @@ extension PsychrometricClient.PsychrometricPropertiesRequest {
   }
   /// Create a new ``PsychrometricPropertiesRequest`` with the given parameters.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - psychrometricProperties: ``PsychrometricClient/PsychrometricClient/psychrometricProperties``
+  ///  - saturationPressure: ``PsychrometricClient/PsychrometricClient/saturationPressure``
+  ///  - wetBulb: ``PsychrometricClient/PsychrometricClient/wetBulb``
+  ///
   /// - Parameters:
   ///   - dewPoint: The dew point temperature.
   ///   - dryBulb: The dry bulb temperature.
@@ -1295,6 +1453,12 @@ extension PsychrometricClient.PsychrometricPropertiesRequest {
   }
 
   /// Create a new ``PsychrometricPropertiesRequest`` with the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - psychrometricProperties: ``PsychrometricClient/PsychrometricClient/psychrometricProperties``
   ///
   /// - Parameters:
   ///   - wetBulb: The wet bulb temperature.
@@ -1321,6 +1485,13 @@ extension PsychrometricClient.PsychrometricPropertiesRequest {
 extension PsychrometricClient.RelativeHumidityRequest {
   /// Create a new ``RelativeHumidityRequest`` with the given parameters.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - relativeHumidity: ``PsychrometricClient/PsychrometricClient/relativeHumidity``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
+  ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature.
   ///   - humidityRatio: The humidity ratio.
@@ -1341,6 +1512,13 @@ extension PsychrometricClient.RelativeHumidityRequest {
   }
 
   /// Create a new ``RelativeHumidityRequest`` with the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - relativeHumidity: ``PsychrometricClient/PsychrometricClient/relativeHumidity``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
   ///
   /// - Parameters:
   ///   - totalPressure: The total pressure.
@@ -1369,6 +1547,14 @@ extension PsychrometricClient.RelativeHumidityRequest {
 extension PsychrometricClient.SpecificHumidityRequest {
   /// Create a new ``SpecificHumidityRequest`` with the given parameters.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - specificHumidity: ``PsychrometricClient/PsychrometricClient/specificHumidity``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
+  ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature.
   ///   - relativeHumidity: The relative humidity.
@@ -1394,6 +1580,14 @@ extension PsychrometricClient.SpecificHumidityRequest {
   }
   /// Create a new ``SpecificHumidityRequest`` with the given parameters.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - specificHumidity: ``PsychrometricClient/PsychrometricClient/specificHumidity``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
+  ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature.
   ///   - relativeHumidity: The relative humidity.
@@ -1418,6 +1612,14 @@ extension PsychrometricClient.SpecificHumidityRequest {
 extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
 
   /// Create a new ``MoistAirRequest`` with  the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - specificVolume: ``PsychrometricClient/PsychrometricClient/SpecificVolumeClient/moistAir``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
   ///
   /// - Parameters:
   ///   - dryBulb: The temperature to calculate the specific volume for.
@@ -1447,6 +1649,14 @@ extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
 
   /// Create a new ``MoistAirRequest`` with  the given parameters.
   ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - specificVolume: ``PsychrometricClient/PsychrometricClient/SpecificVolumeClient/moistAir``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
+  ///
   /// - Parameters:
   ///   - dryBulb: The temperature to calculate the specific volume for.
   ///   - relativeHumidity: The relative humidity to calculate the specific volume for.
@@ -1472,6 +1682,14 @@ extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
 extension PsychrometricClient.WetBulbRequest {
 
   /// Create a new ``WetBulbRequest`` with  the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
+  ///  - wetBulb: ``PsychrometricClient/PsychrometricClient/wetBulb``
   ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature.

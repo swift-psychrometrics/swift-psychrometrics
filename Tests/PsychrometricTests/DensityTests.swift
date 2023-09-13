@@ -53,5 +53,38 @@ final class DensityTests: PsychrometricTestCase {
     )
     XCTApproximatelyEqual(density, 1.08411986348219, tolerance: 0.0003)
   }
+  
+  func testDocumentation() async throws {
+    final class MyFeature: ObservableObject {
+      
+      @Dependency(\.psychrometricClient.density.water) var calculateWaterDensity
+      @Published var dryBulb: DryBulb
+      @Published var waterDensity: DensityOf<Water>? = nil
+      
+      init(dryBulb: DryBulb) {
+        self.dryBulb = dryBulb
+      }
+      
+      func calculateWaterDensityButtonTapped() async throws {
+        self.waterDensity = try await calculateWaterDensity(dryBulb)
+      }
+    }
+    
+    try await withDependencies {
+      $0.psychrometricClient.override(\.density.water, returning: 60)
+    } operation: {
+      let feature = MyFeature(dryBulb: 40)
+      
+      try await feature.calculateWaterDensityButtonTapped()
+      
+      XCTAssertNotNil(feature.waterDensity)
+      XCTAssertEqual(feature.waterDensity, 60)
+      
+      let liveClient = PsychrometricClient.liveValue
+      let liveDensity = try await liveClient.density.water(40)
+      XCTAssertNotEqual(feature.waterDensity, liveDensity)
+    }
+    
+  }
 
 }

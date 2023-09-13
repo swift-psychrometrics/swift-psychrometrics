@@ -61,3 +61,11 @@ final class MyFeature: ObservableObject {
   }
 }
 ```
+
+### Live Client
+
+Since the ``PsychrometricClient`` is an injectable `Dependency` then you need to load the 
+`PsychrometricClientLive` module in the root of your project in order for the live dependency /
+calculations to be available at runtime.  Familiarize yourself with the 
+[swift-dependencies](https://pointfreeco.github.io/swift-dependencies/main/documentation/dependencies/livepreviewtest)
+documentation for a better understanding of how the dependencies get resolved.
