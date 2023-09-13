@@ -1719,4 +1719,33 @@ extension PsychrometricClient.WetBulbRequest {
       units: units
     )
   }
+
+  /// Create a new ``WetBulbRequest`` with  the given parameters.
+  ///
+  ///  ### Other Overrides Needed
+  ///
+  ///   When overriding properties to for use without using the live client, the following properties need overriden.
+  ///
+  ///  - humidityRatio: ``PsychrometricClient/PsychrometricClient/humidityRatio``
+  ///  - vaporPressure: ``PsychrometricClient/PsychrometricClient/vaporPressure``
+  ///  - wetBulb: ``PsychrometricClient/PsychrometricClient/wetBulb``
+  ///
+  /// - Parameters:
+  ///   - dryBulb: The dry bulb temperature.
+  ///   - relativeHumidity: The relative humidity.
+  ///   - altitude:  The altitude of the project.
+  ///   - units: The unit of measure to solve for.
+  public static func dryBulb(
+    _ dryBulb: DryBulb,
+    relativeHumidity: RelativeHumidity,
+    altitude: Length,
+    units: PsychrometricUnits? = nil
+  ) async throws -> Self {
+    try await .dryBulb(
+      dryBulb,
+      relativeHumidity: relativeHumidity,
+      totalPressure: .init(altitude: altitude, units: units),
+      units: units
+    )
+  }
 }
