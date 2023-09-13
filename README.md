@@ -1,7 +1,6 @@
 [![CI](https://github.com/swift-psychrometrics/swift-psychrometrics/actions/workflows/ci.yml/badge.svg)](https://github.com/swift-psychrometrics/swift-psychrometrics/actions/workflows/ci.yml)
  [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fswift-psychrometrics%2Fswift-psychrometrics%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/swift-psychrometrics/swift-psychrometrics)
  [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fswift-psychrometrics%2Fswift-psychrometrics%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/swift-psychrometrics/swift-psychrometrics)
-[![documentation](https://img.shields.io/badge/Api-Documentation-orange)](https://github.com/swift-psychrometrics/swift-psychrometrics/wiki)
 
 # swift-psychrometrics
 
@@ -125,7 +124,7 @@ Some of these calculations do not yet support different units of measure.
 
 The documentation is currently being worked on / improved with more examples.
 
-[You can view the current api documentation here](https://github.com/swift-psychrometrics/swift-psychrometrics/wiki)
+[You can view the current api documentation here](https://swift-psychrometrics.github.io/swift-psychrometrics/documentation/psychrometricclient/)
 
 ## License
 

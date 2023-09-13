@@ -54,6 +54,7 @@ final class DensityTests: PsychrometricTestCase {
     XCTApproximatelyEqual(density, 1.08411986348219, tolerance: 0.0003)
   }
 
+  #if !os(Linux)
   func testDocumentation() async throws {
     final class MyFeature: ObservableObject {
 
@@ -86,5 +87,6 @@ final class DensityTests: PsychrometricTestCase {
     }
 
   }
+  #endif
 
 }
