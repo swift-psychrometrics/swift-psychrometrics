@@ -77,4 +77,20 @@ extension PsychrometricClient: TestDependencyKey {
   ) {
     self[keyPath: keyPath] = closure
   }
+  
+  /// Override a calculation with the given value.
+  ///
+  /// This is useful in tests or previews, instead of using a live client you can override the parts required for the test
+  /// or preview to work properly. Just note that some of the methods / properties require multiple parts to be overriden
+  /// to work properly.
+  ///
+  /// - Parameters:
+  ///   - keyPath: The key path to override.
+  ///   - value: The value to return, ignoring the incoming request.
+  public mutating func override<Request, Response>(
+    _ keyPath: WritableKeyPath<Self, (@Sendable (Request) async throws -> Response)>,
+    returning value: Response
+  ) {
+    self[keyPath: keyPath] = { _ in value }
+  }
 }

@@ -29,7 +29,7 @@ public struct ValidationError: Error, LocalizedError {
 extension ValidationError: CustomDebugStringConvertible {
   @inlinable
   public var debugDescription: String {
-    guard let label else { return summary }
+    guard let label = label else { return summary }
     return "\(label.description): \(summary)"
   }
 

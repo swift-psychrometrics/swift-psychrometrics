@@ -2,6 +2,7 @@ version: 1
 build:
   configs:
     - documentation_targets: [PsychrometricClient, SharedModels]
+      custom_documentation_parameters: [--include-extended-types]
     - platform: ios
       scheme: swift-psychrometrics-Package
     - platform: macos
