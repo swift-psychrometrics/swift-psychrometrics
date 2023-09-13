@@ -54,7 +54,7 @@ extension PsychrometricClient: TestDependencyKey {
     vaporPressure: unimplemented("\(Self.self).vaporPressure", placeholder: .zero),
     wetBulb: unimplemented("\(Self.self).wetBulb", placeholder: .zero)
   )
-  
+
   /// The preview / unimplemented version of the ``PsychrometricClient`` dependency.
   ///
   /// This is used in swift-ui preview contexts and will fail when any of the calculations are accessed when they
@@ -77,7 +77,7 @@ extension PsychrometricClient: TestDependencyKey {
   ) {
     self[keyPath: keyPath] = closure
   }
-  
+
   /// Override a calculation with the given value.
   ///
   /// This is useful in tests or previews, instead of using a live client you can override the parts required for the test

@@ -64,7 +64,7 @@ preview-documentation:
 	swift package \
 		--disable-sandbox \
 		preview-documentation \
-		--target "$(DOCC_TARGET)"
+		--target swift-psychrometrics
 
 .PHONY: preview-shared-models-documentation
 preview-shared-models-documentation:
