@@ -35,7 +35,7 @@ moist and dry air conditions, and a few calculations for water.
 Most of the types this library provides support basic mathematical operations (addition, subtraction,
 multiplication, and division).  These operations should for the most part be considered safe, however there
 is nothing that prevents a value to be operated on with a different unit of measure, which could lead to
-unexpected results.  This library will try to do the right thing and convert the units of measure (taking 
+unexpected results.  This library will try to do the right thing and convert the units of measure (taking
 the left hand side of an operation as precedence), but it is encouraged to operate on the underlying raw values
 of the type for less error-prone results.
 
@@ -47,13 +47,13 @@ The following units of measure are provided with the corresponding conversions.
   - Celsius
   - Rankine
   - Kelvin
-  
+
 - Length:
   - Feet
   - Inches
   - Meters
   - Centimeters
-  
+
 - Pressure:
   - Atmosphere
   - Bar
@@ -62,7 +62,7 @@ The following units of measure are provided with the corresponding conversions.
   - Pascals
   - PSIG
   - Torr
-  
+
 - Relative Humidity
 
 ### Calculations
@@ -79,7 +79,7 @@ Some of these calculations do not yet support different units of measure.
   - From temperature and relative humidity
   - From temperature and partial pressure (vapor pressure)
   - From temperature, humidity ratio, and pressure
-  
+
 - Enthalpy
   - Dry Air
   - Moist Air
@@ -124,7 +124,7 @@ Some of these calculations do not yet support different units of measure.
 
 The documentation is currently being worked on / improved with more examples.
 
-[You can view the current api documentation here](https://swift-psychrometrics.github.io/swift-psychrometrics/documentation/psychrometricclient/)
+<!--[You can view the current api documentation here](https://swift-psychrometrics.github.io/swift-psychrometrics/documentation/psychrometricclient/)-->
 
 ## License
 
