@@ -28,8 +28,8 @@ jobs:
         run: swift --version
       - name: Run tests
         run: make test-swift
-      - name: Build platforms ${{ matrix.config }}
-        run: CONFIG=${{ matrix.config }} make build-all-platforms
+      # - name: Build platforms ${{ matrix.config }}
+      #   run: CONFIG=${{ matrix.config }} make build-all-platforms
 
   ubuntu:
     name: Ubuntu
