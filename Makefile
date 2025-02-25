@@ -6,6 +6,7 @@ PLATFORM_MAC_CATALYST = macOS,variant=Mac Catalyst
 PLATFORM_TVOS = tvOS Simulator,name=Apple TV
 PLATFORM_WATCHOS = watchOS Simulator,name=Apple Watch Series 8 (45mm)
 SCHEME := swift-psychrometrics-Package
+DOCKER_SWIFT_VERSION := 6.0
 
 default: test-swift
 
@@ -36,7 +37,7 @@ test-linux:
 		-v "$(PWD):$(PWD)" \
 		-w "$(PWD)" \
 		--platform linux/amd64 \
-		swift:5.6 \
+		swift:$(DOCKER_SWIFT_VERSION) \
 		swift package clean && swift test
 
 .PHONY: format

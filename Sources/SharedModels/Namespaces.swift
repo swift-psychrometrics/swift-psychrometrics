@@ -3,22 +3,22 @@ import Tagged
 // This file holds namespaces for calculations that work on different types.
 
 /// Represents types that can be used in density calculations / conversions.
-public protocol DensityType {}
+public protocol DensityType: Sendable {}
 
 /// Represents types that can be used in enthalpy calculations / conversions.
-public protocol EnthalpyType {}
+public protocol EnthalpyType: Sendable {}
 
 /// Represents types that can be used in humidity calculations / conversions.
-public protocol HumidityType {}
+public protocol HumidityType: Sendable {}
 
 /// Represents types that can be used in pressure calculations / conversions.
-public protocol PressureType {}
+public protocol PressureType: Sendable {}
 
 /// Represents types that can be used in temperature calculations / conversions.
-public protocol TemperatureType {}
+public protocol TemperatureType: Sendable {}
 
 /// A namespace for dew point temperature types.
-public enum DewPointTemperature: TemperatureType {}
+public enum DewPointTemperature: TemperatureType, Sendable {}
 
 /// Namespace for calculations that can work on dry air.
 public enum DryAir: DensityType, EnthalpyType, TemperatureType {}

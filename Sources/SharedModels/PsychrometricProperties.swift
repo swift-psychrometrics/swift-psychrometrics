@@ -64,8 +64,8 @@ public struct PsychrometricProperties: Codable, Equatable, Sendable {
   }
 }
 
-extension PsychrometricProperties {
-  public static var zero = Self.init(
+public extension PsychrometricProperties {
+  static let zero = Self(
     atmosphericPressure: .zero,
     degreeOfSaturation: .zero,
     density: .zero,
