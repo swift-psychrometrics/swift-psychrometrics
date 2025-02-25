@@ -1,11 +1,12 @@
 CONFIG = debug
 DOCC_TARGET := PsychrometricClient
-PLATFORM_IOS = iOS Simulator,name=iPhone 14,OS=16.2
+PLATFORM_IOS = iOS Simulator,name=iPhone 15,OS=17.0
 PLATFORM_MACOS = macOS
 PLATFORM_MAC_CATALYST = macOS,variant=Mac Catalyst
-PLATFORM_TVOS = tvOS Simulator,name=Apple TV
-PLATFORM_WATCHOS = watchOS Simulator,name=Apple Watch Series 8 (45mm)
+PLATFORM_TVOS = tvOS Simulator,id=$(call udid_for,tvOS,TV)
+PLATFORM_WATCHOS = watchOS Simulator,id=$(call udid_for,watchOS,Watch)
 SCHEME := swift-psychrometrics-Package
+DOCKER_SWIFT_VERSION := 6.0
 
 default: test-swift
 
@@ -36,7 +37,7 @@ test-linux:
 		-v "$(PWD):$(PWD)" \
 		-w "$(PWD)" \
 		--platform linux/amd64 \
-		swift:5.6 \
+		swift:$(DOCKER_SWIFT_VERSION) \
 		swift package clean && swift test
 
 .PHONY: format
@@ -72,3 +73,8 @@ preview-shared-models-documentation:
 		--disable-sandbox \
 		preview-documentation \
 		--target SharedModels
+
+# Stolen from https://github.com/pointfreeco/swift-composable-architecture/blob/main/Makefile
+ define udid_for
+$(shell xcrun simctl list devices available '$(1)' | grep '$(2)' | sort -r | head -1 | awk -F '[()]' '{ print $$(NF-3) }')
+endef

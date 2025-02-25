@@ -3,7 +3,7 @@ import Foundation
 import SharedModels
 import XCTestDynamicOverlay
 
-extension DependencyValues {
+public extension DependencyValues {
 
   /// Access the ``PsychrometricClient`` as a dependency.
   ///
@@ -11,7 +11,7 @@ extension DependencyValues {
   /// @Dependency(\.psychrometricClient) var client
   /// ```
   ///
-  public var psychrometricClient: PsychrometricClient {
+  var psychrometricClient: PsychrometricClient {
     get { self[PsychrometricClient.self] }
     set { self[PsychrometricClient.self] = newValue }
   }
@@ -25,7 +25,7 @@ extension PsychrometricClient: TestDependencyKey {
   /// have not been overridden.
   ///
   ///
-  public static let testValue: Self = Self.init(
+  public static let testValue: Self = .init(
     degreeOfSaturation: unimplemented("\(Self.self).degreeOfSaturation", placeholder: .zero),
     density: .init(
       dryAir: unimplemented("\(Self.self).density.dryAir", placeholder: .zero),
@@ -40,7 +40,8 @@ extension PsychrometricClient: TestDependencyKey {
     grainsOfMoisture: unimplemented("\(Self.self).grainsOfMoisture", placeholder: .zero),
     humidityRatio: unimplemented("\(Self.self).humidityRatio", placeholder: .zero),
     psychrometricProperties: unimplemented(
-      "\(Self.self).psychrometricProperties", placeholder: .zero),
+      "\(Self.self).psychrometricProperties", placeholder: .zero
+    ),
     relativeHumidity: unimplemented("\(Self.self).relativeHumidity", placeholder: 0%),
     saturationPressure: unimplemented("\(Self.self).saturationPressure", placeholder: .zero),
     specificHeat: .init(
@@ -72,9 +73,9 @@ extension PsychrometricClient: TestDependencyKey {
   ///   - keyPath: The key path to override.
   ///   - closure: The closure to use when called.
   public mutating func override<Request, Response>(
-    _ keyPath: WritableKeyPath<Self, (@Sendable (Request) async throws -> Response)>,
+    _ keyPath: WritableKeyPath<Self, @Sendable (Request) async throws -> Response>,
     closure: @escaping @Sendable (Request) async throws -> Response
-  ) {
+  ) where Response: Sendable {
     self[keyPath: keyPath] = closure
   }
 
@@ -88,9 +89,9 @@ extension PsychrometricClient: TestDependencyKey {
   ///   - keyPath: The key path to override.
   ///   - value: The value to return, ignoring the incoming request.
   public mutating func override<Request, Response>(
-    _ keyPath: WritableKeyPath<Self, (@Sendable (Request) async throws -> Response)>,
+    _ keyPath: WritableKeyPath<Self, @Sendable (Request) async throws -> Response>,
     returning value: Response
-  ) {
+  ) where Response: Sendable {
     self[keyPath: keyPath] = { _ in value }
   }
 }

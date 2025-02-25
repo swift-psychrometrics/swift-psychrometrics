@@ -1,0 +1,11 @@
+disabled_rules:
+  - closing_brace
+  - fuction_body_length
+  - opening_brace
+  - nesting
+
+included:
+  - Sources
+  - Tests
+
+ignore_multiline_statement_conditions: true

@@ -4,7 +4,7 @@ import Foundation
 /// This controls the way psychrometric calculations get ran.  Whether they are for imperial
 /// or metric ``PsychrometricUnits``
 ///
-public struct PsychrometricEnvironment {
+public struct PsychrometricEnvironment: Sendable {
 
   /// Maximum iteration count for iterative methods.
   public var maximumIterationCount: Int = 100
@@ -103,11 +103,11 @@ extension PsychrometricEnvironment: DependencyKey {
   }
 }
 
-extension DependencyValues {
+public extension DependencyValues {
 
   /// Access the psychrometric environment as a dependency.
   ///
-  public var psychrometricEnvironment: PsychrometricEnvironment {
+  var psychrometricEnvironment: PsychrometricEnvironment {
     get { self[PsychrometricEnvironment.self] }
     set { self[PsychrometricEnvironment.self] = newValue }
   }

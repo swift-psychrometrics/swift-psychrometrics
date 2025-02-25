@@ -1,0 +1,11 @@
+--self init-only
+--indent 2
+--ifdef indent
+--trimwhitespace always
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections preserve
+--wrapconditions after-first
+--typeblanklines preserve
+--commas inline
+--stripunusedargs closure-only

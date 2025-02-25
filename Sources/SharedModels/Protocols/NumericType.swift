@@ -6,94 +6,90 @@ import Tagged
 /// and convert them to a unified type based on the units for the left side of the operation.  If you are programatically creating values then
 /// it is recommended to work on the underlying raw value of the type.
 public protocol NumericType: Codable, Comparable, Divisible, ExpressibleByFloatLiteral, Hashable,
-  Numeric
+  Numeric, Sendable
 {}
 
 /// Adds ``NumericType`` conformance to ``Double``.
 extension Double: NumericType {}
 
-extension NumericType where Self: RawInitializable, RawValue: NumericType {
-
-  public init?<T>(exactly source: T) where T: BinaryInteger {
-    guard let rawValue = RawValue.init(exactly: source) else {
+public extension NumericType where Self: RawInitializable, RawValue: NumericType {
+  init?<T>(exactly source: T) where T: BinaryInteger {
+    guard let rawValue = RawValue(exactly: source) else {
       return nil
     }
     self.init(rawValue)
   }
 
   /// See ``AdditiveArithmetic``.
-  public static func + (lhs: Self, rhs: Self) -> Self {
+  static func + (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue + rhs.rawValue)
   }
 
   /// See ``AdditiveArithmetic``.
-  public static func - (lhs: Self, rhs: Self) -> Self {
+  static func - (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue - rhs.rawValue)
   }
 
   /// See ``Numeric``.
-  public static func * (lhs: Self, rhs: Self) -> Self {
+  static func * (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue * rhs.rawValue)
   }
 
   /// See ``Numeric``.
-  public static func *= (lhs: inout Self, rhs: Self) {
+  static func *= (lhs: inout Self, rhs: Self) {
     lhs = .init(lhs.rawValue * rhs.rawValue)
   }
 
   /// See ``Divisible``.
-  public static func / (lhs: Self, rhs: Self) -> Self {
+  static func / (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue / rhs.rawValue)
   }
 
   /// See ``Divisible``.
-  public static func /= (lhs: inout Self, rhs: Self) {
+  static func /= (lhs: inout Self, rhs: Self) {
     lhs = .init(lhs.rawValue / rhs.rawValue)
   }
 
   /// - SeeAlso: ``Comparable``.
-  public static func < (lhs: Self, rhs: Self) -> Bool {
+  static func < (lhs: Self, rhs: Self) -> Bool {
     lhs.rawValue < rhs.rawValue
   }
 
   /// - SeeAlso: ``Equatable``.
-  public static func == (lhs: Self, rhs: Self) -> Bool {
+  static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.rawValue == rhs.rawValue
   }
 }
 
-extension NumericType
-where
+public extension NumericType
+  where
   Self: RawInitializable,
   RawValue: NumericType,
   Magnitude == RawValue.Magnitude
 {
-
-  public var magnitude: Magnitude {
+  var magnitude: Magnitude {
     rawValue.magnitude
   }
 }
 
-extension NumericType
-where
+public extension NumericType
+  where
   Self: RawInitializable,
   RawValue: NumericType,
   FloatLiteralType == RawValue.FloatLiteralType
 {
-
-  public init(floatLiteral value: FloatLiteralType) {
+  init(floatLiteral value: FloatLiteralType) {
     self.init(.init(floatLiteral: value))
   }
 }
 
-extension NumericType
-where
+public extension NumericType
+  where
   Self: RawInitializable,
   RawValue: NumericType,
   IntegerLiteralType == RawValue.IntegerLiteralType
 {
-
-  public init(integerLiteral value: IntegerLiteralType) {
+  init(integerLiteral value: IntegerLiteralType) {
     self.init(.init(integerLiteral: value))
   }
 }
@@ -102,6 +98,3 @@ where
 public protocol RawNumericType: NumericType, RawInitializable {}
 
 extension Tagged: NumericType where RawValue: NumericType {}
-//extension Tagged where RawValue: RawNumericType, RawValue: RawRepresentable, RawValue.FloatLiteralType == Double {
-//  public var double: Double { self.rawValue.rawValue }
-//}
