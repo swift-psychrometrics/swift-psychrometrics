@@ -670,14 +670,14 @@ public struct PsychrometricClient: Sendable {
 
 // MARK: - Extensions
 
-public extension PsychrometricClient.DensityClient.DryAirRequest {
+extension PsychrometricClient.DensityClient.DryAirRequest {
   /// Create a new ``DryAirRequest`` with the given parameters.
   ///
   /// - Parameters:
   ///   - dryBulb: The dry bulb temperature.
   ///   - altitude: The altitude of the project.
   ///   - units: The units of measure.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     altitude: Length = .seaLevel,
     units: PsychrometricUnits? = nil
@@ -690,7 +690,7 @@ public extension PsychrometricClient.DensityClient.DryAirRequest {
   }
 }
 
-public extension PsychrometricClient.DensityClient.MoistAirRequest {
+extension PsychrometricClient.DensityClient.MoistAirRequest {
   /// Create a new ``PsychrometricClient/DensityClient/MoistAirRequest`` for the given dry bulb temperature,
   /// relative humidity, and total pressure.
   ///
@@ -710,7 +710,7 @@ public extension PsychrometricClient.DensityClient.MoistAirRequest {
   ///   - humidityRatio: The humidity ratio to calculate the density for.
   ///   - pressure: The total atmospheric pressure to calculate the density for.
   ///   - units: The unit of measure to solve for.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     humidityRatio: HumidityRatio,
     totalPressure: TotalPressure,
@@ -752,7 +752,7 @@ public extension PsychrometricClient.DensityClient.MoistAirRequest {
   ///   - humidity: The relative humidity to calculate the density for.
   ///   - pressure: The total pressure to calculate the density for.
   ///   - units: The unit of measure to solve for.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     totalPressure: TotalPressure,
@@ -779,7 +779,7 @@ public extension PsychrometricClient.DensityClient.MoistAirRequest {
 
 // MARK: - Dew Point
 
-public extension PsychrometricClient.DewPointRequest {
+extension PsychrometricClient.DewPointRequest {
   /// Creates a new ``DewPointRequest`` for the given dry bulb temperature and humidity.
   ///
   ///  ### Other Overrides Needed
@@ -792,7 +792,7 @@ public extension PsychrometricClient.DewPointRequest {
   /// - Parameters:
   ///   - temperature: The dry bulb temperature.
   ///   - relativeHumidity: The relative humidity.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     units: PsychrometricUnits? = nil
@@ -826,7 +826,7 @@ public extension PsychrometricClient.DewPointRequest {
   ///   - humidityRatio: The humidity ratio.
   ///   - totalPressure: The atmospheric pressure.
   ///   - units: The units to solve for.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     humidityRatio: HumidityRatio,
     totalPressure: TotalPressure,
@@ -867,7 +867,7 @@ public extension PsychrometricClient.DewPointRequest {
   ///   - dryBulb: The dry bulb temperature.
   ///   - totalPressure: The atmospheric pressure.
   ///   - units: The units to solve for.
-  static func wetBulb(
+  public static func wetBulb(
     _ wetBulb: WetBulb,
     dryBulb: DryBulb,
     totalPressure: TotalPressure,
@@ -900,7 +900,7 @@ public extension PsychrometricClient.DewPointRequest {
 
 // MARK: - Enthalpy
 
-public extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
+extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
   /// Create a new ``MoistAirRequest`` for the given parameters.
   ///
   /// **Reference**:  ASHRAE - Fundamentals (2017) ch. 1
@@ -917,7 +917,7 @@ public extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
   ///   - dryBulb: The dry bulb temperature.
   ///   - totalPressure: The total atmospheric pressure.
   ///   - units: The units to solve for.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     totalPressure: TotalPressure,
     units: PsychrometricUnits? = nil
@@ -954,7 +954,7 @@ public extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
   ///   - relativeHumidity: The relative humidity to calculate the enthalpy for.
   ///   - totalPressure: The total atmospheric pressure to calculate the enthalpy for.
   ///   - units: The units to solve for.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     totalPressure: TotalPressure,
@@ -993,7 +993,7 @@ public extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
   ///   - relativeHumidity: The relative humidity to calculate the enthalpy for.
   ///   - altitude: The altitude to calculate the enthalpy for.
   ///   - units: The units to solve for.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     altitude: Length = .seaLevel,
@@ -1010,7 +1010,7 @@ public extension PsychrometricClient.EnthalpyClient.MoistAirRequest {
 
 // MARK: - Grains of Moisture
 
-public extension PsychrometricClient.GrainsOfMoistureRequest {
+extension PsychrometricClient.GrainsOfMoistureRequest {
   /// Create a new ``GrainsOfMoistureRequest`` with the given temperature, humidity, and altitude.
   ///
   ///  ### Other Overrides Needed
@@ -1023,7 +1023,7 @@ public extension PsychrometricClient.GrainsOfMoistureRequest {
   ///   - temperature: The temperature of the air.
   ///   - humidity: The relative humidity of the air.
   ///   - altitude: The altitude of the air.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     altitude: Length = .seaLevel
@@ -1038,7 +1038,7 @@ public extension PsychrometricClient.GrainsOfMoistureRequest {
 
 // MARK: - Humidity Ratio
 
-public extension PsychrometricClient.HumidityRatioRequest {
+extension PsychrometricClient.HumidityRatioRequest {
   /// Create a new ``HumidityRatioRequest`` for the given parameters.
   ///
   ///  ### Other Overrides Needed
@@ -1052,7 +1052,7 @@ public extension PsychrometricClient.HumidityRatioRequest {
   ///   - dewPoint: The dew point temperature.
   ///   - totalPressure: The total atmospheric pressure
   ///   - units: The units to solve for.
-  static func dewPoint(
+  public static func dewPoint(
     _ dewPoint: DewPoint,
     totalPressure: TotalPressure,
     units: PsychrometricUnits? = nil
@@ -1083,7 +1083,7 @@ public extension PsychrometricClient.HumidityRatioRequest {
   ///   - dewPoint: The dew point temperature.
   ///   - altitude: The altitude.
   ///   - units: The units to solve for.
-  static func dewPoint(
+  public static func dewPoint(
     _ dewPoint: DewPoint,
     altitude: Length,
     units: PsychrometricUnits? = nil
@@ -1108,7 +1108,7 @@ public extension PsychrometricClient.HumidityRatioRequest {
   ///   - dryBulb: The dry bulb temperature of the air.
   ///   - totalPressure: The total pressure of the air.
   ///   - units: The units for the calculation.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     totalPressure: TotalPressure,
     units: PsychrometricUnits? = nil
@@ -1141,7 +1141,7 @@ public extension PsychrometricClient.HumidityRatioRequest {
   ///   - relativeHumidity: The humidity of the air.
   ///   - totalPressure: The pressure of the air.
   ///   - units: The units for the calculation.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     totalPressure: TotalPressure,
@@ -1175,7 +1175,7 @@ public extension PsychrometricClient.HumidityRatioRequest {
   ///   - relativeHumidity: The humidity of the air.
   ///   - altitude: The altitude.
   ///   - units: The units for the calculation.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     altitude: Length = .seaLevel,
@@ -1201,7 +1201,7 @@ public extension PsychrometricClient.HumidityRatioRequest {
   ///   - totalPressure: The total pressure of the air.
   ///   - vaporPressure: The partial vapor pressure of the air.
   ///   - units: The units for the calculation.
-  static func totalPressure(
+  public static func totalPressure(
     _ totalPressure: TotalPressure,
     vaporPressure: VaporPressure,
     units: PsychrometricUnits? = nil
@@ -1225,7 +1225,7 @@ public extension PsychrometricClient.HumidityRatioRequest {
   ///   - totalPressure: The total pressure of the air.
   ///   - saturationPressure: The saturation pressure of the air.
   ///   - units: The units for the calculation.
-  static func totalPressure(
+  public static func totalPressure(
     _ totalPressure: TotalPressure,
     saturationPressure: SaturationPressure,
     units: PsychrometricUnits? = nil
@@ -1250,7 +1250,7 @@ public extension PsychrometricClient.HumidityRatioRequest {
   ///   - dryBulb: The dry bulb temperature.
   ///   - totalPressure: The total pressure of the air.
   ///   - units: The units for the calculation.
-  static func wetBulb(
+  public static func wetBulb(
     _ wetBulb: WetBulb,
     dryBulb: DryBulb,
     totalPressure: TotalPressure,
@@ -1284,7 +1284,7 @@ public extension PsychrometricClient.HumidityRatioRequest {
 
 // MARK: - Psychrometric Properties
 
-public extension PsychrometricClient.PsychrometricPropertiesRequest {
+extension PsychrometricClient.PsychrometricPropertiesRequest {
   /// Create a new ``PsychrometricPropertiesRequest`` with the given parameters.
   ///
   ///  ### Other Overrides Needed
@@ -1301,7 +1301,7 @@ public extension PsychrometricClient.PsychrometricPropertiesRequest {
   ///   - relativeHumidity: The relative humidity.
   ///   - totalPressure: The total pressure.
   ///   - units: The units of measure.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     totalPressure: TotalPressure,
@@ -1342,7 +1342,7 @@ public extension PsychrometricClient.PsychrometricPropertiesRequest {
   ///   - relativeHumidity: The relative humidity.
   ///   - altitude: The altitude of the project.
   ///   - units: The units of measure.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     altitude: Length = .seaLevel,
@@ -1373,7 +1373,7 @@ public extension PsychrometricClient.PsychrometricPropertiesRequest {
   ///   - dryBulb: The dry bulb temperature.
   ///   - totalPressure: The total pressure.
   ///   - units: The units of measure.
-  static func dewPoint(
+  public static func dewPoint(
     _ dewPoint: DewPoint,
     dryBulb: DryBulb,
     totalPressure: TotalPressure,
@@ -1420,7 +1420,7 @@ public extension PsychrometricClient.PsychrometricPropertiesRequest {
   ///   - dryBulb: The dry bulb temperature.
   ///   - altitude: The altitude of the project.
   ///   - units: The units of measure.
-  static func dewPoint(
+  public static func dewPoint(
     _ dewPoint: DewPoint,
     dryBulb: DryBulb,
     altitude: Length = .seaLevel,
@@ -1447,7 +1447,7 @@ public extension PsychrometricClient.PsychrometricPropertiesRequest {
   ///   - dryBulb: The dry bulb temperature.
   ///   - altitude: The altitude of the project.
   ///   - units: The units of measure.
-  static func wetBulb(
+  public static func wetBulb(
     _ wetBulb: WetBulb,
     dryBulb: DryBulb,
     altitude: Length = .seaLevel,
@@ -1464,7 +1464,7 @@ public extension PsychrometricClient.PsychrometricPropertiesRequest {
 
 // MARK: - Relative Humidity
 
-public extension PsychrometricClient.RelativeHumidityRequest {
+extension PsychrometricClient.RelativeHumidityRequest {
   /// Create a new ``RelativeHumidityRequest`` with the given parameters.
   ///
   ///  ### Other Overrides Needed
@@ -1479,7 +1479,7 @@ public extension PsychrometricClient.RelativeHumidityRequest {
   ///   - humidityRatio: The humidity ratio.
   ///   - totalPressure: The total pressure.
   ///   - units: The units of measure.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     humidityRatio: HumidityRatio,
     totalPressure: TotalPressure,
@@ -1507,7 +1507,7 @@ public extension PsychrometricClient.RelativeHumidityRequest {
   ///   - dryBulb: The dry bulb temperature.
   ///   - humidityRatio: The humidity ratio.
   ///   - units: The units of measure.
-  static func totalPressure(
+  public static func totalPressure(
     _ totalPressure: TotalPressure,
     dryBulb: DryBulb,
     humidityRatio: HumidityRatio,
@@ -1526,7 +1526,7 @@ public extension PsychrometricClient.RelativeHumidityRequest {
 
 // MARK: - Specific Humidity
 
-public extension PsychrometricClient.SpecificHumidityRequest {
+extension PsychrometricClient.SpecificHumidityRequest {
   /// Create a new ``SpecificHumidityRequest`` with the given parameters.
   ///
   ///  ### Other Overrides Needed
@@ -1542,7 +1542,7 @@ public extension PsychrometricClient.SpecificHumidityRequest {
   ///   - relativeHumidity: The relative humidity.
   ///   - totalPressure: The total pressure.
   ///   - units: The units of measure.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     totalPressure: TotalPressure,
@@ -1576,7 +1576,7 @@ public extension PsychrometricClient.SpecificHumidityRequest {
   ///   - relativeHumidity: The relative humidity.
   ///   - altitude: The altitude of the project.
   ///   - units: The units of measure.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     altitude: Length = .seaLevel,
     relativeHumidity: RelativeHumidity,
@@ -1593,7 +1593,7 @@ public extension PsychrometricClient.SpecificHumidityRequest {
 
 // MARK: - Specific Volume
 
-public extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
+extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
   /// Create a new ``MoistAirRequest`` with  the given parameters.
   ///
   ///  ### Other Overrides Needed
@@ -1609,7 +1609,7 @@ public extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
   ///   - relativeHumidity: The relative humidity to calculate the specific volume for.
   ///   - totalPressure: The altitude to calculate the specific volume for.
   ///   - units: The units of measure to solve for.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     totalPressure: TotalPressure,
@@ -1646,7 +1646,7 @@ public extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
   ///   - relativeHumidity: The relative humidity to calculate the specific volume for.
   ///   - altitude: The altitude to calculate the specific volume for.
   ///   - units: The unit of measure to solve for.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     altitude: Length = .seaLevel,
@@ -1663,7 +1663,7 @@ public extension PsychrometricClient.SpecificVolumeClient.MoistAirRequest {
 
 // MARK: - Wet Bulb
 
-public extension PsychrometricClient.WetBulbRequest {
+extension PsychrometricClient.WetBulbRequest {
   /// Create a new ``WetBulbRequest`` with  the given parameters.
   ///
   ///  ### Other Overrides Needed
@@ -1679,7 +1679,7 @@ public extension PsychrometricClient.WetBulbRequest {
   ///   - relativeHumidity: The relative humidity.
   ///   - totalPressure: The total pressure.
   ///   - units: The unit of measure to solve for.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     totalPressure: TotalPressure,
@@ -1718,7 +1718,7 @@ public extension PsychrometricClient.WetBulbRequest {
   ///   - relativeHumidity: The relative humidity.
   ///   - altitude:  The altitude of the project.
   ///   - units: The unit of measure to solve for.
-  static func dryBulb(
+  public static func dryBulb(
     _ dryBulb: DryBulb,
     relativeHumidity: RelativeHumidity,
     altitude: Length,

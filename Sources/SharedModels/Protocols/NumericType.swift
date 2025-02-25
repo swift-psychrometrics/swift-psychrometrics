@@ -12,8 +12,8 @@ public protocol NumericType: Codable, Comparable, Divisible, ExpressibleByFloatL
 /// Adds ``NumericType`` conformance to ``Double``.
 extension Double: NumericType {}
 
-public extension NumericType where Self: RawInitializable, RawValue: NumericType {
-  init?<T>(exactly source: T) where T: BinaryInteger {
+extension NumericType where Self: RawInitializable, RawValue: NumericType {
+  public init?<T>(exactly source: T) where T: BinaryInteger {
     guard let rawValue = RawValue(exactly: source) else {
       return nil
     }
@@ -21,75 +21,75 @@ public extension NumericType where Self: RawInitializable, RawValue: NumericType
   }
 
   /// See ``AdditiveArithmetic``.
-  static func + (lhs: Self, rhs: Self) -> Self {
+  public static func + (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue + rhs.rawValue)
   }
 
   /// See ``AdditiveArithmetic``.
-  static func - (lhs: Self, rhs: Self) -> Self {
+  public static func - (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue - rhs.rawValue)
   }
 
   /// See ``Numeric``.
-  static func * (lhs: Self, rhs: Self) -> Self {
+  public static func * (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue * rhs.rawValue)
   }
 
   /// See ``Numeric``.
-  static func *= (lhs: inout Self, rhs: Self) {
+  public static func *= (lhs: inout Self, rhs: Self) {
     lhs = .init(lhs.rawValue * rhs.rawValue)
   }
 
   /// See ``Divisible``.
-  static func / (lhs: Self, rhs: Self) -> Self {
+  public static func / (lhs: Self, rhs: Self) -> Self {
     .init(lhs.rawValue / rhs.rawValue)
   }
 
   /// See ``Divisible``.
-  static func /= (lhs: inout Self, rhs: Self) {
+  public static func /= (lhs: inout Self, rhs: Self) {
     lhs = .init(lhs.rawValue / rhs.rawValue)
   }
 
   /// - SeeAlso: ``Comparable``.
-  static func < (lhs: Self, rhs: Self) -> Bool {
+  public static func < (lhs: Self, rhs: Self) -> Bool {
     lhs.rawValue < rhs.rawValue
   }
 
   /// - SeeAlso: ``Equatable``.
-  static func == (lhs: Self, rhs: Self) -> Bool {
+  public static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.rawValue == rhs.rawValue
   }
 }
 
-public extension NumericType
-  where
+extension NumericType
+where
   Self: RawInitializable,
   RawValue: NumericType,
   Magnitude == RawValue.Magnitude
 {
-  var magnitude: Magnitude {
+  public var magnitude: Magnitude {
     rawValue.magnitude
   }
 }
 
-public extension NumericType
-  where
+extension NumericType
+where
   Self: RawInitializable,
   RawValue: NumericType,
   FloatLiteralType == RawValue.FloatLiteralType
 {
-  init(floatLiteral value: FloatLiteralType) {
+  public init(floatLiteral value: FloatLiteralType) {
     self.init(.init(floatLiteral: value))
   }
 }
 
-public extension NumericType
-  where
+extension NumericType
+where
   Self: RawInitializable,
   RawValue: NumericType,
   IntegerLiteralType == RawValue.IntegerLiteralType
 {
-  init(integerLiteral value: IntegerLiteralType) {
+  public init(integerLiteral value: IntegerLiteralType) {
     self.init(.init(integerLiteral: value))
   }
 }

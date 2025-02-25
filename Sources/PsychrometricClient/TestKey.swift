@@ -3,7 +3,7 @@ import Foundation
 import SharedModels
 import XCTestDynamicOverlay
 
-public extension DependencyValues {
+extension DependencyValues {
 
   /// Access the ``PsychrometricClient`` as a dependency.
   ///
@@ -11,7 +11,7 @@ public extension DependencyValues {
   /// @Dependency(\.psychrometricClient) var client
   /// ```
   ///
-  var psychrometricClient: PsychrometricClient {
+  public var psychrometricClient: PsychrometricClient {
     get { self[PsychrometricClient.self] }
     set { self[PsychrometricClient.self] = newValue }
   }

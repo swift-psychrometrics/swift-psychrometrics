@@ -103,11 +103,11 @@ extension PsychrometricEnvironment: DependencyKey {
   }
 }
 
-public extension DependencyValues {
+extension DependencyValues {
 
   /// Access the psychrometric environment as a dependency.
   ///
-  var psychrometricEnvironment: PsychrometricEnvironment {
+  public var psychrometricEnvironment: PsychrometricEnvironment {
     get { self[PsychrometricEnvironment.self] }
     set { self[PsychrometricEnvironment.self] = newValue }
   }
