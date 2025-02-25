@@ -1,6 +1,6 @@
 CONFIG = debug
 DOCC_TARGET := PsychrometricClient
-PLATFORM_IOS = iOS Simulator,name=iPhone 14,OS=16.2
+PLATFORM_IOS = iOS Simulator,name=iPhone 15,OS=17.0
 PLATFORM_MACOS = macOS
 PLATFORM_MAC_CATALYST = macOS,variant=Mac Catalyst
 PLATFORM_TVOS = tvOS Simulator,name=Apple TV
