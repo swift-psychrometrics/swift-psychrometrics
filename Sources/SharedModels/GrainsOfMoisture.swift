@@ -33,12 +33,16 @@ extension AbsoluteHumidity: NumberWithUnitOfMeasure {
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Units = AbsoluteHumidityUnit
 
-  public static func keyPath(for units: AbsoluteHumidityUnit) -> WritableKeyPath<AbsoluteHumidity, Double> {
+  public static func keyPath(for units: AbsoluteHumidityUnit) -> WritableKeyPath<
+    AbsoluteHumidity, Double
+  > {
     \.rawValue
   }
 }
 
-public enum AbsoluteHumidityUnit: String, Equatable, CaseIterable, Codable, Hashable, Sendable, UnitOfMeasure {
+public enum AbsoluteHumidityUnit: String, Equatable, CaseIterable, Codable, Hashable, Sendable,
+  UnitOfMeasure
+{
   case gramsPerCubicMeter = "g/m³"
   case grainsPerCubicFoot = "gr/ft³"
 
@@ -86,13 +90,17 @@ extension GrainsOfMoisture: NumberWithUnitOfMeasure {
   public typealias FloatLiteralType = Double.FloatLiteralType
   public typealias Units = GrainsOfMoistureUnit
 
-  public static func keyPath(for units: GrainsOfMoistureUnit) -> WritableKeyPath<GrainsOfMoisture, Double> {
+  public static func keyPath(for units: GrainsOfMoistureUnit) -> WritableKeyPath<
+    GrainsOfMoisture, Double
+  > {
     \.rawValue
   }
 }
 
 @available(*, deprecated, message: "use AbsoluteHumidityUnit instead")
-public enum GrainsOfMoistureUnit: String, Equatable, CaseIterable, Codable, Hashable, Sendable, UnitOfMeasure {
+public enum GrainsOfMoistureUnit: String, Equatable, CaseIterable, Codable, Hashable, Sendable,
+  UnitOfMeasure
+{
   case gramsPerCubicMeter = "g/m³"
   case grainsPerCubicFoot = "gr/ft³"
 
