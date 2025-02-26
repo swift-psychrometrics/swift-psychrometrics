@@ -6,6 +6,9 @@ import Foundation
 ///
 public struct PsychrometricProperties: Codable, Equatable, Sendable {
 
+  // The absolute humidity.
+  public let absoluteHumidity: AbsoluteHumidity
+
   /// The total atmospheric pressure.
   public let atmosphericPressure: TotalPressure
   /// The degree of saturation.
@@ -18,8 +21,11 @@ public struct PsychrometricProperties: Codable, Equatable, Sendable {
   public let dryBulb: DryBulb
   /// The enthalpy.
   public let enthalpy: EnthalpyOf<MoistAir>
+
   /// The grains of moisture.
+  @available(*, deprecated, message: "use absolute humidity instead.")
   public let grainsOfMoisture: GrainsOfMoisture
+
   /// The humidity ratio.
   public let humidityRatio: HumidityRatio
   /// The relative humidity.
@@ -34,6 +40,7 @@ public struct PsychrometricProperties: Codable, Equatable, Sendable {
   public let units: PsychrometricUnits
 
   public init(
+    absoluteHumidity: AbsoluteHumidity,
     atmosphericPressure: TotalPressure,
     degreeOfSaturation: DegreeOfSaturation,
     density: DensityOf<MoistAir>,
@@ -48,6 +55,7 @@ public struct PsychrometricProperties: Codable, Equatable, Sendable {
     wetBulb: WetBulb,
     units: PsychrometricUnits
   ) {
+    self.absoluteHumidity = absoluteHumidity
     self.atmosphericPressure = atmosphericPressure
     self.degreeOfSaturation = degreeOfSaturation
     self.density = density
@@ -64,8 +72,9 @@ public struct PsychrometricProperties: Codable, Equatable, Sendable {
   }
 }
 
-extension PsychrometricProperties {
-  public static let zero = Self(
+public extension PsychrometricProperties {
+  static let zero = Self(
+    absoluteHumidity: .zero,
     atmosphericPressure: .zero,
     degreeOfSaturation: .zero,
     density: .zero,

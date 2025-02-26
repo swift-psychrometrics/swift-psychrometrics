@@ -33,8 +33,8 @@ public struct Density<T: DensityType>: Codable, Equatable, Sendable {
 /// The units of measure for a ``Density`` type.
 public enum DensityUnits: String, UnitOfMeasure, Codable, Sendable {
 
-  case poundsPerCubicFoot = "lb/ft^3"
-  case kilogramPerCubicMeter = "kg/m^3"
+  case poundsPerCubicFoot = "lb/ft³"
+  case kilogramPerCubicMeter = "kg/m³"
 
   public static func defaultFor(units: PsychrometricUnits) -> Self {
     switch units {
