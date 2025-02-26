@@ -257,6 +257,19 @@ extension PsychrometricClient.GrainsOfMoistureRequest {
   }
 }
 
+private extension GrainsOfMoistureUnit {
+  var absoluteHumidityUnit: AbsoluteHumidityUnit {
+    switch self {
+    case .grainsPerCubicFoot: return .grainsPerCubicFoot
+    case .gramsPerCubicMeter: return .gramsPerCubicMeter
+    }
+  }
+}
+
+private extension GrainsOfMoisture {
+  var absoluteHumidity: AbsoluteHumidity { .init(rawValue, units: units.absoluteHumidityUnit) }
+}
+
 // MARK: - Humidity Ratio
 
 extension PsychrometricClient.HumidityRatioRequest {
@@ -452,7 +465,14 @@ extension PsychrometricClient.PsychrometricPropertiesRequest {
       units: units
     ).relativeHumdity(environment: environment)
 
+    let grains = try await PsychrometricClient.GrainsOfMoistureRequest.dryBulb(
+      dryBulb,
+      relativeHumidity: relativeHumidity,
+      totalPressure: totalPressure
+    ).grainsOfMoisture(environment: environment)
+
     return try await .init(
+      absoluteHumidity: grains.absoluteHumidity,
       atmosphericPressure: totalPressure,
       degreeOfSaturation: PsychrometricClient.DegreeOfSaturationRequest.dryBulb(
         dryBulb,
@@ -478,11 +498,7 @@ extension PsychrometricClient.PsychrometricPropertiesRequest {
         humidityRatio: humidityRatio,
         units: units
       ).enthalpy(environment: environment),
-      grainsOfMoisture: PsychrometricClient.GrainsOfMoistureRequest.dryBulb(
-        dryBulb,
-        relativeHumidity: relativeHumidity,
-        totalPressure: totalPressure
-      ).grainsOfMoisture(environment: environment),
+      grainsOfMoisture: grains,
       humidityRatio: humidityRatio,
       relativeHumidity: relativeHumidity,
       specificVolume: PsychrometricClient.SpecificVolumeClient.MoistAirRequest.dryBulb(
