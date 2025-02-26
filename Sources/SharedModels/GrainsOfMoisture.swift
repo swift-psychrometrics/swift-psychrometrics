@@ -1,5 +1,7 @@
 import Foundation
 
+// TODO: Deprecate and rename to AbsoluteHumidity
+
 /// Represents / calculates the grains of moisture for air.
 public struct GrainsOfMoisture: Codable, Equatable, Sendable {
 
@@ -13,17 +15,41 @@ public struct GrainsOfMoisture: Codable, Equatable, Sendable {
   public static let moleWeightRatio = (Self.moleWeightWater / Self.moleWeightAir)
 
   /// The grains per pound of air.
-  public var rawValue: Double
+  public private(set) var rawValue: Double
 
-  public init(_ value: Double) {
+  /// The units.
+  public private(set) var units: GrainsOfMoistureUnit
+
+  public init(_ value: Double, units: GrainsOfMoistureUnit) {
     self.rawValue = value
+    self.units = units
   }
+
+  public var value: Double { rawValue }
 
 }
 
-extension GrainsOfMoisture: RawNumericType {
-
+extension GrainsOfMoisture: NumberWithUnitOfMeasure {
   public typealias Magnitude = Double.Magnitude
   public typealias IntegerLiteralType = Double.IntegerLiteralType
   public typealias FloatLiteralType = Double.FloatLiteralType
+  public typealias Units = GrainsOfMoistureUnit
+
+  public static func keyPath(for units: GrainsOfMoistureUnit) -> WritableKeyPath<GrainsOfMoisture, Double> {
+    \.rawValue
+  }
+}
+
+public enum GrainsOfMoistureUnit: String, Equatable, CaseIterable, Codable, Hashable, Sendable, UnitOfMeasure {
+  case gramsPerCubicMeter = "g/m³"
+  case grainsPerCubicFoot = "gr/ft³"
+
+  public var symbol: String { rawValue }
+
+  public static func defaultFor(units: PsychrometricUnits) -> GrainsOfMoistureUnit {
+    switch units {
+    case .metric: return .gramsPerCubicMeter
+    case .imperial: return .grainsPerCubicFoot
+    }
+  }
 }
